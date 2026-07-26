@@ -108,6 +108,37 @@
   </div>
 </section>
 
+<section class="docs-section" id="troubleshooting">
+  <h2 class="ui-h2">Troubleshooting</h2>
+  <p class="docs-section-intro">Common first-time issues, in the order you're likely to hit them.</p>
+  <div class="ui-d-flex ui-flex-column ui-gap-3">
+    <div class="ui-card"><div class="ui-card-body">
+      <strong>Everything looks unstyled (no colors, no spacing).</strong>
+      <p class="ui-text-muted ui-mb-0">The CSS file isn't loading. Open your browser's devtools → Network tab and check that <span class="ui-code">ui-framework.min.css</span> returned 200, not 404. The path in your <span class="ui-code">&lt;link&gt;</span> tag is relative to the HTML file it's written in &mdash; a common mistake is copying a snippet without adjusting the path for where your file actually lives.</p>
+    </div></div>
+    <div class="ui-card"><div class="ui-card-body">
+      <strong>Clicking a button does nothing (modal, dropdown, tabs, etc.).</strong>
+      <p class="ui-text-muted ui-mb-0">The JavaScript file isn't loaded, or it's loaded <em>before</em> the HTML it needs to scan. Make sure <span class="ui-code">&lt;script src="...ui-framework.min.js"&gt;</span> comes right before <span class="ui-code">&lt;/body&gt;</span>, after all the markup it controls. Also check the browser console for errors &mdash; a JS error earlier on the page can stop the rest of the script from running.</p>
+    </div></div>
+    <div class="ui-card"><div class="ui-card-body">
+      <strong>A component's opening/closing ID doesn't match.</strong>
+      <p class="ui-text-muted ui-mb-0">Things like <span class="ui-code">data-ui-modal-open="#myModal"</span> must exactly match the target's <span class="ui-code">id="myModal"</span>, including the <span class="ui-code">#</span>. A typo here fails silently &mdash; no error, the button just does nothing.</p>
+    </div></div>
+    <div class="ui-card"><div class="ui-card-body">
+      <strong>A checkbox/radio/switch still looks like a plain browser checkbox.</strong>
+      <p class="ui-text-muted ui-mb-0">The <span class="ui-code">&lt;label&gt;</span> must come <em>immediately</em> after the <span class="ui-code">&lt;input&gt;</span> in the HTML (see <a href="components.html#selection">Selection</a>) &mdash; the styling is applied via a CSS sibling selector, so anything in between (a wrapping <span class="ui-code">&lt;div&gt;</span>, extra whitespace-only elements) breaks it.</p>
+    </div></div>
+    <div class="ui-card"><div class="ui-card-body">
+      <strong>A floating label isn't floating.</strong>
+      <p class="ui-text-muted ui-mb-0">The input needs <span class="ui-code">placeholder=" "</span> (a single space, not empty) for the CSS <span class="ui-code">:placeholder-shown</span> check to work, and the <span class="ui-code">&lt;label&gt;</span> must come after the input (see <a href="components.html#forms">Forms</a>).</p>
+    </div></div>
+    <div class="ui-card"><div class="ui-card-body">
+      <strong>Content I added with JavaScript doesn't work (new modal, new tabs, etc.).</strong>
+      <p class="ui-text-muted ui-mb-0">The framework only scans the page once, when it first loads. If your own script inserts new HTML afterward, call <span class="ui-code">UI.init(theNewElement)</span> to wire it up &mdash; see <a href="javascript.html#initialization">Initialization</a>.</p>
+    </div></div>
+  </div>
+</section>
+
       <footer class="docs-footer">UI Framework 1.1.0 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
     </main>
   </div>
