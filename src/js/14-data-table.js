@@ -29,21 +29,54 @@
     var sortDirection = "ascending";
     var query = "";
 
+    var showSearch = wrapper.getAttribute("data-ui-search") !== "false";
+    var showPageSizePicker = wrapper.getAttribute("data-ui-page-size-selector") !== "false";
+
     // Insert relative to `table` (not `wrapper`), since `data-ui-table` may
     // be on the <table> itself: a <nav> can't legally live inside a table,
     // and a node can't be inserted before itself.
-    if (wrapper.getAttribute("data-ui-search") !== "false") {
+    if (showSearch || showPageSizePicker) {
       var toolbar = document.createElement("div");
       toolbar.className = "ui-table-toolbar";
-      toolbar.innerHTML = '<input type="search" class="ui-control ui-control-sm ui-table-search" placeholder="' +
-        UI.escape(wrapper.getAttribute("data-ui-search-placeholder") || "Search") + '">';
-      table.parentNode.insertBefore(toolbar, table);
 
-      UI.q("input", toolbar).addEventListener("input", function () {
-        query = this.value.trim().toLowerCase();
-        currentPage = 1;
-        renderPage();
-      });
+      if (showPageSizePicker) {
+        var sizes = (wrapper.getAttribute("data-ui-page-sizes") || "5,10,25,50")
+          .split(",").map(function (value) { return Number(value.trim()); }).filter(Boolean);
+        if (sizes.indexOf(pageSize) === -1) sizes.push(pageSize);
+        sizes.sort(function (a, b) { return a - b; });
+
+        var sizeField = document.createElement("label");
+        sizeField.className = "ui-table-page-size";
+        sizeField.innerHTML = "Show " +
+          '<select class="ui-select ui-control-sm">' +
+          sizes.map(function (size) {
+            return '<option value="' + size + '"' + (size === pageSize ? " selected" : "") + ">" + size + "</option>";
+          }).join("") +
+          "</select> per page";
+        toolbar.appendChild(sizeField);
+
+        UI.q("select", sizeField).addEventListener("change", function () {
+          pageSize = Number(this.value) || pageSize;
+          currentPage = 1;
+          renderPage();
+        });
+      }
+
+      if (showSearch) {
+        var search = document.createElement("input");
+        search.type = "search";
+        search.className = "ui-control ui-control-sm ui-table-search";
+        search.placeholder = wrapper.getAttribute("data-ui-search-placeholder") || "Search";
+        toolbar.appendChild(search);
+
+        search.addEventListener("input", function () {
+          query = this.value.trim().toLowerCase();
+          currentPage = 1;
+          renderPage();
+        });
+      }
+
+      table.parentNode.insertBefore(toolbar, table);
     }
 
     var pagination = document.createElement("nav");

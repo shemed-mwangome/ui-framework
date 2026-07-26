@@ -17,6 +17,11 @@
 
 .ui-date-range-trigger:hover { border-color: var(--ui-border-strong); }
 
+/* The real <input> backing this trigger is display:none (interaction goes
+   through the popover), so a native validation bubble has nowhere visible
+   to anchor. Surface failed validation on the trigger itself instead. */
+.ui-date-range-trigger.ui-is-invalid { border-color: var(--ui-danger); }
+
 .ui-date-range-trigger::after {
   content: "";
   width: .5rem;
@@ -42,6 +47,7 @@
 }
 
 .ui-date-range.ui-open .ui-date-range-panel { display: flex; animation: ui-dropdown-in .14s ease; }
+.ui-date-picker-shell .ui-date-range-panel { min-width: 21rem; }
 
 .ui-date-range-presets {
   display: flex;

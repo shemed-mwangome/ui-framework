@@ -61,3 +61,10 @@ form[data-ui-save-next].ui-dirty .ui-save-next-dirty { display: inline-flex; }
   border: 0;
   min-width: 0;
 }
+
+.ui-draft-banner { margin-bottom: 1.25rem; }
+
+[data-ui-draft-status] {
+  color: var(--ui-muted);
+  font-size: .78rem;
+}

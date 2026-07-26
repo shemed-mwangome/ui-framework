@@ -82,9 +82,13 @@
         summary.classList.add("ui-multiselect-placeholder");
       } else if (display === "tags") {
         summary.classList.remove("ui-multiselect-placeholder");
+        var maxTags = Number(select.getAttribute("data-max-tags")) || 3;
+        var visible = selected.slice(0, maxTags);
+        var overflowCount = selected.length - visible.length;
+
         var tags = document.createElement("span");
         tags.className = "ui-multiselect-tags";
-        selected.forEach(function (option) {
+        visible.forEach(function (option) {
           var tag = document.createElement("span");
           tag.className = "ui-multiselect-tag";
           tag.innerHTML =
@@ -97,6 +101,15 @@
           });
           tags.appendChild(tag);
         });
+
+        if (overflowCount > 0) {
+          var overflow = document.createElement("span");
+          overflow.className = "ui-multiselect-tag ui-multiselect-tag-overflow";
+          overflow.textContent = "+" + overflowCount;
+          overflow.title = selected.slice(maxTags).map(function (option) { return option.text; }).join(", ");
+          tags.appendChild(overflow);
+        }
+
         summary.appendChild(tags);
       } else {
         summary.classList.remove("ui-multiselect-placeholder");

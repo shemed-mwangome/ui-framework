@@ -14,7 +14,7 @@
       <a class="docs-brand" href="index.html"><span class="docs-logo">UI</span><span>UI Framework</span></a>
     </div>
     <div class="ui-d-flex ui-align-center ui-gap-2">
-      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.0.0</span>
+      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.1.0</span>
       <button class="ui-btn ui-btn-sm ui-btn-outline-secondary" type="button" data-ui-theme-toggle>Theme</button>
     </div>
   </header>
@@ -26,7 +26,7 @@
       <a class="docs-sidebar-link" href="examples/dashboard.html">Dashboard</a>
       <a class="docs-sidebar-link" href="examples/form.html">Form workflow</a>
       <a class="docs-sidebar-link" href="examples/login.html">Login page</a>
-      <div class="docs-sidebar-title">On this page</div><a class="docs-sidebar-link" href="#initialization">Initialization</a><a class="docs-sidebar-link" href="#api">Public API</a><a class="docs-sidebar-link" href="#events">Events</a><a class="docs-sidebar-link" href="#dynamic">Dynamic content</a>
+      <div class="docs-sidebar-title">On this page</div><a class="docs-sidebar-link" href="#initialization">Initialization</a><a class="docs-sidebar-link" href="#api">Public API</a><a class="docs-sidebar-link" href="#howto">How to&hellip;</a><a class="docs-sidebar-link" href="#events">Events</a><a class="docs-sidebar-link" href="#dynamic">Dynamic content</a>
     </aside>
     <main class="docs-main">
 
@@ -44,19 +44,102 @@
 
 <section class="docs-section" id="api">
   <h2 class="ui-h2">Public APIs</h2>
+  <p class="docs-section-intro">Everything hangs off the global <span class="ui-code">UI</span> object. Most components also work purely through <span class="ui-code">data-ui-*</span> attributes with no JavaScript calls at all &mdash; these methods are for programmatic control.</p>
   <div class="ui-table-responsive"><table class="ui-table ui-table-striped"><thead><tr><th>API</th><th>Purpose</th></tr></thead><tbody>
+    <tr><td><span class="ui-code">UI.init(root)</span></td><td>Initialize components within newly inserted HTML</td></tr>
     <tr><td><span class="ui-code">UI.modal.open(element)</span></td><td>Open a modal</td></tr>
     <tr><td><span class="ui-code">UI.modal.close(element)</span></td><td>Close a modal</td></tr>
-    <tr><td><span class="ui-code">UI.offcanvas.open(element)</span></td><td>Open an offcanvas panel</td></tr>
-    <tr><td><span class="ui-code">UI.toast.show(options)</span></td><td>Create a toast</td></tr>
-    <tr><td><span class="ui-code">UI.alert.create(options)</span></td><td>Create an inline alert</td></tr>
-    <tr><td><span class="ui-code">UI.multiselect.build(select)</span></td><td>Enhance a multiple select</td></tr>
+    <tr><td><span class="ui-code">UI.offcanvas.open(element)</span> / <span class="ui-code">.close(element)</span></td><td>Open/close an offcanvas panel</td></tr>
+    <tr><td><span class="ui-code">UI.dropdown.toggle(element, force)</span> / <span class="ui-code">.closeAll()</span></td><td>Control a dropdown</td></tr>
+    <tr><td><span class="ui-code">UI.collapse.toggle(trigger, expanded)</span></td><td>Expand/collapse a panel or accordion item</td></tr>
+    <tr><td><span class="ui-code">UI.tabs.activate(tabElement)</span></td><td>Switch to a tab programmatically</td></tr>
+    <tr><td><span class="ui-code">UI.toast.show(options)</span> / <span class="ui-code">.remove(toast)</span></td><td>Create or dismiss a toast</td></tr>
+    <tr><td><span class="ui-code">UI.alert.create(options)</span> / <span class="ui-code">.close(alert)</span></td><td>Create or dismiss an inline alert</td></tr>
+    <tr><td><span class="ui-code">UI.confirm(options)</span></td><td>Promise-based confirmation modal; resolves <span class="ui-code">true</span>/<span class="ui-code">false</span></td></tr>
+    <tr><td><span class="ui-code">UI.multiselect.build(select)</span></td><td>Enhance a native multiple select</td></tr>
+    <tr><td><span class="ui-code">UI.dateRange.close()</span></td><td>Close any open date range popover</td></tr>
+    <tr><td><span class="ui-code">UI.datePicker.close()</span></td><td>Close any open date picker popover</td></tr>
+    <tr><td><span class="ui-code">UI.dateUtils</span></td><td>Shared date helpers (<span class="ui-code">parseISODate</span>, <span class="ui-code">formatISODate</span>, <span class="ui-code">addDays</span>, <span class="ui-code">addMonths</span>, etc.) used by both date components</td></tr>
+    <tr><td><span class="ui-code">UI.floatPanel(trigger, panel, options)</span></td><td>Position a popover relative to a trigger; flips above and escapes clipping. Returns a cleanup function</td></tr>
+    <tr><td><span class="ui-code">UI.saveNext.setDirty(form, dirty)</span></td><td>Manually mark a save-and-next form as having unsaved changes</td></tr>
+    <tr><td><span class="ui-code">UI.trapFocus(container, event)</span></td><td>Wrap Tab/Shift+Tab focus within a container (used internally by modal/offcanvas)</td></tr>
+    <tr><td><span class="ui-code">UI.focusable(root)</span></td><td>List focusable, visible elements within a container</td></tr>
+    <tr><td><span class="ui-code">UI.escape(value)</span></td><td>HTML-escape a string before inserting it via <span class="ui-code">innerHTML</span></td></tr>
+    <tr><td><span class="ui-code">UI.emit(element, name, detail)</span></td><td>Dispatch a bubbling, cancelable <span class="ui-code">CustomEvent</span></td></tr>
+    <tr><td><span class="ui-code">UI.register(initializer)</span></td><td>Register a function to run on <span class="ui-code">UI.init()</span> (for custom components)</td></tr>
   </tbody></table></div>
+</section>
+
+<section class="docs-section" id="howto">
+  <h2 class="ui-h2">How to&hellip;</h2>
+
+  <h3 class="ui-h3">Show a toast</h3>
+  <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>UI.toast.show({
+  type: &quot;success&quot;,       // success | danger | warning | info
+  title: &quot;Saved&quot;,
+  message: &quot;The record was saved successfully.&quot;,
+  duration: 4000,         // ms before auto-dismiss; 0 disables it
+  position: &quot;top-end&quot;     // top-start | top-end | top-center | bottom-start | bottom-end | bottom-center
+});</code></pre></div>
+
+  <h3 class="ui-h3 ui-mt-4">Show an inline alert</h3>
+  <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>UI.alert.create({
+  target: &quot;#messageArea&quot;, // selector or element; defaults to document.body
+  type: &quot;danger&quot;,
+  title: &quot;Validation failed&quot;,
+  message: &quot;Please correct the highlighted fields.&quot;,
+  dismissible: true,      // set false to hide the close button
+  prepend: true,          // insert before existing children instead of appending
+  duration: 0             // &gt; 0 to auto-dismiss like a toast
+});</code></pre></div>
+
+  <h3 class="ui-h3 ui-mt-4">Ask for confirmation before a destructive action</h3>
+  <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>UI.confirm({
+  title: &quot;Revoke licence&quot;,
+  message: &quot;This will immediately revoke the operator licence.&quot;,
+  variant: &quot;danger&quot;,       // primary | danger; danger focuses Cancel by default
+  confirmText: &quot;Revoke licence&quot;,
+  cancelText: &quot;Cancel&quot;
+}).then(function (confirmed) {
+  if (confirmed) {
+    // proceed with the revoke request
+  }
+});</code></pre></div>
+
+  <h3 class="ui-h3 ui-mt-4">Open and close a modal from code</h3>
+  <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>var modal = document.getElementById(&quot;assignModal&quot;);
+UI.modal.open(modal);
+// ...
+UI.modal.close(modal);</code></pre></div>
+
+  <h3 class="ui-h3 ui-mt-4">React to a date range or table change</h3>
+  <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>document.querySelector(&quot;[data-ui-date-range]&quot;)
+  .addEventListener(&quot;ui:daterange:change&quot;, function (event) {
+    console.log(event.detail.start, event.detail.end);
+  });
+
+document.querySelector(&quot;[data-ui-table]&quot;)
+  .addEventListener(&quot;ui:table:change&quot;, function (event) {
+    console.log(event.detail.page, event.detail.totalPages);
+  });</code></pre></div>
 </section>
 
 <section class="docs-section" id="events">
   <h2 class="ui-h2">Custom events</h2>
-  <p>Components emit bubbling events such as <span class="ui-code">ui:modal:shown</span>, <span class="ui-code">ui:modal:hidden</span>, <span class="ui-code">ui:offcanvas:shown</span>, <span class="ui-code">ui:tab:shown</span>, and <span class="ui-code">ui:alert:close</span>.</p>
+  <p>Components emit bubbling, cancelable events you can listen for on the element or via delegation on <span class="ui-code">document</span>.</p>
+  <div class="ui-table-responsive"><table class="ui-table ui-table-striped"><thead><tr><th>Event</th><th>Fires on</th><th>detail</th></tr></thead><tbody>
+    <tr><td><span class="ui-code">ui:modal:shown</span> / <span class="ui-code">ui:modal:hidden</span></td><td>the modal</td><td>&mdash;</td></tr>
+    <tr><td><span class="ui-code">ui:offcanvas:shown</span> / <span class="ui-code">ui:offcanvas:hidden</span></td><td>the offcanvas root</td><td>&mdash;</td></tr>
+    <tr><td><span class="ui-code">ui:tab:shown</span></td><td>the activated tab</td><td>&mdash;</td></tr>
+    <tr><td><span class="ui-code">ui:collapse:shown</span> / <span class="ui-code">ui:collapse:hidden</span></td><td>the panel</td><td>&mdash;</td></tr>
+    <tr><td><span class="ui-code">ui:alert:close</span> / <span class="ui-code">ui:alert:closed</span></td><td>the alert / <span class="ui-code">document</span></td><td>&mdash;</td></tr>
+    <tr><td><span class="ui-code">ui:daterange:change</span></td><td>the <span class="ui-code">[data-ui-date-range]</span> container</td><td><span class="ui-code">{ start, end }</span> (Date or null)</td></tr>
+    <tr><td><span class="ui-code">ui:datepicker:change</span></td><td>the <span class="ui-code">[data-ui-date-picker]</span> container</td><td><span class="ui-code">{ value }</span> (Date or null)</td></tr>
+    <tr><td><span class="ui-code">ui:stepper:change</span></td><td>the stepper form</td><td><span class="ui-code">{ step, total }</span></td></tr>
+    <tr><td><span class="ui-code">ui:savenext:submit</span> / <span class="ui-code">:success</span> / <span class="ui-code">:error</span></td><td>the save-next form</td><td><span class="ui-code">{ submitter }</span> (and <span class="ui-code">response</span>/<span class="ui-code">error</span>)</td></tr>
+    <tr><td><span class="ui-code">ui:draft:saved</span> / <span class="ui-code">:restored</span> / <span class="ui-code">:discarded</span></td><td>the draft form</td><td><span class="ui-code">{ savedAt }</span></td></tr>
+    <tr><td><span class="ui-code">ui:table:change</span></td><td>the <span class="ui-code">[data-ui-table]</span> wrapper</td><td><span class="ui-code">{ page, totalPages, visible, total }</span></td></tr>
+  </tbody></table></div>
   <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>document.addEventListener(&quot;ui:modal:shown&quot;, function (event) {
   console.log(&quot;Opened modal:&quot;, event.target.id);
 });</code></pre></div>
@@ -82,7 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
-      <footer class="docs-footer">UI Framework 1.0.0 · Dependency-free · Designed for safe use beside Bootstrap and legacy JSP themes.</footer>
+      <footer class="docs-footer">UI Framework 1.1.0 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
     </main>
   </div>
   <script src="../dist/ui-framework.js"></script>

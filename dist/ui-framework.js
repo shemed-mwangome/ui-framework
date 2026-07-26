@@ -1,5 +1,5 @@
 /*!
- * UI Framework v1.0.0
+ * UI Framework v1.1.0
  * Dependency-free JavaScript bundle.
  * License: MIT
  */
@@ -8,7 +8,7 @@
 
   var UI = window.UI || {};
 
-  UI.version = "1.0.0";
+  UI.version = "1.1.0";
   UI._initializers = UI._initializers || [];
 
   UI.q = function (selector, root) {
@@ -445,9 +445,13 @@
         summary.classList.add("ui-multiselect-placeholder");
       } else if (display === "tags") {
         summary.classList.remove("ui-multiselect-placeholder");
+        var maxTags = Number(select.getAttribute("data-max-tags")) || 3;
+        var visible = selected.slice(0, maxTags);
+        var overflowCount = selected.length - visible.length;
+
         var tags = document.createElement("span");
         tags.className = "ui-multiselect-tags";
-        selected.forEach(function (option) {
+        visible.forEach(function (option) {
           var tag = document.createElement("span");
           tag.className = "ui-multiselect-tag";
           tag.innerHTML =
@@ -460,6 +464,15 @@
           });
           tags.appendChild(tag);
         });
+
+        if (overflowCount > 0) {
+          var overflow = document.createElement("span");
+          overflow.className = "ui-multiselect-tag ui-multiselect-tag-overflow";
+          overflow.textContent = "+" + overflowCount;
+          overflow.title = selected.slice(maxTags).map(function (option) { return option.text; }).join(", ");
+          tags.appendChild(overflow);
+        }
+
         summary.appendChild(tags);
       } else {
         summary.classList.remove("ui-multiselect-placeholder");
@@ -549,7 +562,6 @@
 (function (window, document) {
   "use strict";
   var UI = window.UI;
-  var WEEKDAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
   function atMidnight(date) {
     return new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -594,15 +606,45 @@
   function endOfMonth(date) { return new Date(date.getFullYear(), date.getMonth() + 1, 0); }
   function sameDay(a, b) { return !!a && !!b && a.getTime() === b.getTime(); }
 
+  function buildCalendarDays(viewDate) {
+    var firstOfMonth = startOfMonth(viewDate);
+    var gridStart = addDays(firstOfMonth, -firstOfMonth.getDay());
+    var days = [];
+    for (var i = 0; i < 42; i++) days.push(addDays(gridStart, i));
+    return days;
+  }
+
+  UI.dateUtils = {
+    WEEKDAYS: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
+    atMidnight: atMidnight,
+    today: today,
+    parseISODate: parseISODate,
+    formatISODate: formatISODate,
+    formatDisplayDate: formatDisplayDate,
+    addDays: addDays,
+    addMonths: addMonths,
+    startOfMonth: startOfMonth,
+    endOfMonth: endOfMonth,
+    sameDay: sameDay,
+    buildCalendarDays: buildCalendarDays
+  };
+})(window, document);
+
+
+(function (window, document) {
+  "use strict";
+  var UI = window.UI;
+  var DU = UI.dateUtils;
+
   function presetRanges() {
-    var now = today();
+    var now = DU.today();
     return {
       today: [now, now],
-      yesterday: [addDays(now, -1), addDays(now, -1)],
-      last7: [addDays(now, -6), now],
-      last30: [addDays(now, -29), now],
-      thisMonth: [startOfMonth(now), now],
-      lastMonth: [startOfMonth(addMonths(now, -1)), endOfMonth(addMonths(now, -1))],
+      yesterday: [DU.addDays(now, -1), DU.addDays(now, -1)],
+      last7: [DU.addDays(now, -6), now],
+      last30: [DU.addDays(now, -29), now],
+      thisMonth: [DU.startOfMonth(now), now],
+      lastMonth: [DU.startOfMonth(DU.addMonths(now, -1)), DU.endOfMonth(DU.addMonths(now, -1))],
       thisYear: [new Date(now.getFullYear(), 0, 1), now]
     };
   }
@@ -617,24 +659,33 @@
     ["thisYear", "This year"]
   ];
 
-  function buildCalendarDays(viewDate) {
-    var firstOfMonth = startOfMonth(viewDate);
-    var gridStart = addDays(firstOfMonth, -firstOfMonth.getDay());
-    var days = [];
-    for (var i = 0; i < 42; i++) days.push(addDays(gridStart, i));
-    return days;
-  }
+  var SINGLE_INPUT_SEPARATOR = " - ";
 
   function State(container) {
     this.container = container;
     var inputs = UI.qa("input", container);
-    this.startInput = inputs[0];
-    this.endInput = inputs[1];
-    this.rangeStart = parseISODate(this.startInput.value);
-    this.rangeEnd = parseISODate(this.endInput.value);
-    this.viewDate = startOfMonth(this.rangeStart || this.rangeEnd || today());
-    this.minDate = parseISODate(container.getAttribute("data-min-date"));
-    this.maxDate = parseISODate(container.getAttribute("data-max-date"));
+    this.singleInput = inputs.length === 1;
+
+    if (this.singleInput) {
+      this.startInput = inputs[0];
+      this.endInput = inputs[0];
+      // A native <input type="date"> can only ever hold one ISO date, so it
+      // silently rejects a combined "start - end" value. Single-input mode
+      // needs a plain text field to hold both.
+      if (this.startInput.type === "date") this.startInput.type = "text";
+      var parts = (this.startInput.value || "").split(SINGLE_INPUT_SEPARATOR);
+      this.rangeStart = DU.parseISODate(parts[0]);
+      this.rangeEnd = DU.parseISODate(parts[1]);
+    } else {
+      this.startInput = inputs[0];
+      this.endInput = inputs[1];
+      this.rangeStart = DU.parseISODate(this.startInput.value);
+      this.rangeEnd = DU.parseISODate(this.endInput.value);
+    }
+
+    this.viewDate = DU.startOfMonth(this.rangeStart || this.rangeEnd || DU.today());
+    this.minDate = DU.parseISODate(container.getAttribute("data-min-date"));
+    this.maxDate = DU.parseISODate(container.getAttribute("data-max-date"));
     this.disabledDates = {};
     (container.getAttribute("data-disabled-dates") || "").split(",").forEach(function (value) {
       var trimmed = value.trim();
@@ -645,14 +696,14 @@
   State.prototype.isDisabled = function (date) {
     if (this.minDate && date < this.minDate) return true;
     if (this.maxDate && date > this.maxDate) return true;
-    return !!this.disabledDates[formatISODate(date)];
+    return !!this.disabledDates[DU.formatISODate(date)];
   };
 
   // The visible calendar spans state.viewDate and the month after it (a
   // two-month view). True when `date` falls outside that span, so callers
   // know they need to shift viewDate before the date's cell exists to focus.
   function isOutsideVisibleSpan(state, date) {
-    return date < state.viewDate || date >= addMonths(state.viewDate, 2);
+    return date < state.viewDate || date >= DU.addMonths(state.viewDate, 2);
   }
 
   function renderMonth(state, monthEl, monthDate) {
@@ -661,20 +712,20 @@
 
     var grid = UI.q(".ui-date-range-grid", monthEl);
     grid.innerHTML = "";
-    var todayDate = today();
+    var todayDate = DU.today();
 
-    buildCalendarDays(monthDate).forEach(function (day) {
+    DU.buildCalendarDays(monthDate).forEach(function (day) {
       var cell = document.createElement("button");
       cell.type = "button";
       cell.className = "ui-date-range-day";
       cell.textContent = day.getDate();
       cell.tabIndex = -1;
-      cell.setAttribute("data-ui-date", formatISODate(day));
+      cell.setAttribute("data-ui-date", DU.formatISODate(day));
 
       if (day.getMonth() !== monthDate.getMonth()) cell.classList.add("ui-outside");
-      if (sameDay(day, todayDate)) cell.classList.add("ui-today");
-      if (sameDay(day, state.rangeStart)) cell.classList.add("ui-range-start");
-      if (sameDay(day, state.rangeEnd)) cell.classList.add("ui-range-end");
+      if (DU.sameDay(day, todayDate)) cell.classList.add("ui-today");
+      if (DU.sameDay(day, state.rangeStart)) cell.classList.add("ui-range-start");
+      if (DU.sameDay(day, state.rangeEnd)) cell.classList.add("ui-range-end");
       if (state.rangeStart && state.rangeEnd && day > state.rangeStart && day < state.rangeEnd) {
         cell.classList.add("ui-in-range");
       }
@@ -692,12 +743,12 @@
     var trigger = UI.q(".ui-date-range-trigger .ui-date-range-value", container);
     if (trigger) {
       trigger.textContent = state.rangeStart && state.rangeEnd
-        ? formatDisplayDate(state.rangeStart) + " – " + formatDisplayDate(state.rangeEnd)
+        ? DU.formatDisplayDate(state.rangeStart) + " – " + DU.formatDisplayDate(state.rangeEnd)
         : container.getAttribute("data-ui-placeholder") || "Select date range";
     }
 
     UI.qa(".ui-date-range-month", container).forEach(function (monthEl, index) {
-      renderMonth(state, monthEl, addMonths(state.viewDate, index));
+      renderMonth(state, monthEl, DU.addMonths(state.viewDate, index));
     });
 
     var clearButton = UI.q("[data-ui-range-clear]", container);
@@ -705,10 +756,17 @@
   }
 
   function applyRange(state) {
-    state.startInput.value = state.rangeStart ? formatISODate(state.rangeStart) : "";
-    state.endInput.value = state.rangeEnd ? formatISODate(state.rangeEnd) : "";
-    state.startInput.dispatchEvent(new Event("change", { bubbles: true }));
-    state.endInput.dispatchEvent(new Event("change", { bubbles: true }));
+    if (state.singleInput) {
+      state.startInput.value = (state.rangeStart && state.rangeEnd)
+        ? DU.formatISODate(state.rangeStart) + SINGLE_INPUT_SEPARATOR + DU.formatISODate(state.rangeEnd)
+        : "";
+      state.startInput.dispatchEvent(new Event("change", { bubbles: true }));
+    } else {
+      state.startInput.value = state.rangeStart ? DU.formatISODate(state.rangeStart) : "";
+      state.endInput.value = state.rangeEnd ? DU.formatISODate(state.rangeEnd) : "";
+      state.startInput.dispatchEvent(new Event("change", { bubbles: true }));
+      state.endInput.dispatchEvent(new Event("change", { bubbles: true }));
+    }
     UI.emit(state.container, "ui:daterange:change", { start: state.rangeStart, end: state.rangeEnd });
   }
 
@@ -725,7 +783,7 @@
   }
 
   function focusDate(state, date) {
-    var cell = UI.q('[data-ui-date="' + formatISODate(date) + '"]', state.container);
+    var cell = UI.q('[data-ui-date="' + DU.formatISODate(date) + '"]', state.container);
     if (cell) cell.focus();
   }
 
@@ -737,9 +795,9 @@
     var panel = UI.q(".ui-date-range-panel", container);
     if (trigger && panel) container._uiFloatCleanup = UI.floatPanel(trigger, panel);
 
-    var focusTarget = state.rangeStart || today();
+    var focusTarget = state.rangeStart || DU.today();
     if (isOutsideVisibleSpan(state, focusTarget)) {
-      state.viewDate = startOfMonth(focusTarget);
+      state.viewDate = DU.startOfMonth(focusTarget);
       render(state);
     }
     focusDate(state, focusTarget);
@@ -782,7 +840,7 @@
         '<span class="ui-date-range-calendar-title"></span>' +
         '<button type="button" class="ui-date-range-nav" data-ui-cal-next aria-label="Next month">›</button>' +
       "</div>" +
-      '<div class="ui-date-range-weekdays">' + WEEKDAYS.map(function (day) { return "<span>" + day + "</span>"; }).join("") + "</div>" +
+      '<div class="ui-date-range-weekdays">' + DU.WEEKDAYS.map(function (day) { return "<span>" + day + "</span>"; }).join("") + "</div>" +
       '<div class="ui-date-range-grid" role="grid"></div>'
     );
   }
@@ -791,14 +849,21 @@
     if (container.dataset.uiReady) return;
     container.dataset.uiReady = "true";
 
-    UI.qa("input", container).forEach(function (input) { input.classList.add("ui-date-range-native"); });
-
     var trigger = document.createElement("button");
     trigger.type = "button";
     trigger.className = "ui-date-range-trigger";
     trigger.setAttribute("aria-haspopup", "dialog");
     trigger.setAttribute("aria-expanded", "false");
     trigger.innerHTML = '<span class="ui-date-range-value"></span>';
+
+    // The native inputs are hidden, so a failed reportValidity() (e.g. from
+    // a stepper form's "Next" gating) has no visible field to anchor its
+    // bubble to. Surface that state on the trigger instead.
+    UI.qa("input", container).forEach(function (input) {
+      input.classList.add("ui-date-range-native");
+      input.addEventListener("invalid", function () { trigger.classList.add("ui-is-invalid"); });
+      input.addEventListener("change", function () { trigger.classList.remove("ui-is-invalid"); });
+    });
 
     var panel = document.createElement("div");
     panel.className = "ui-date-range-panel";
@@ -852,16 +917,16 @@
     panel.addEventListener("click", function (event) {
       var cell = UI.closest(event.target, "[data-ui-date]");
       if (cell) {
-        if (!cell.classList.contains("ui-disabled")) pickDay(state, parseISODate(cell.getAttribute("data-ui-date")));
+        if (!cell.classList.contains("ui-disabled")) pickDay(state, DU.parseISODate(cell.getAttribute("data-ui-date")));
         return;
       }
       if (UI.closest(event.target, "[data-ui-cal-prev]")) {
-        state.viewDate = addMonths(state.viewDate, -1);
+        state.viewDate = DU.addMonths(state.viewDate, -1);
         render(state);
         return;
       }
       if (UI.closest(event.target, "[data-ui-cal-next]")) {
-        state.viewDate = addMonths(state.viewDate, 1);
+        state.viewDate = DU.addMonths(state.viewDate, 1);
         render(state);
         return;
       }
@@ -875,7 +940,7 @@
         if (!range) return;
         state.rangeStart = range[0];
         state.rangeEnd = range[1];
-        state.viewDate = startOfMonth(state.rangeEnd);
+        state.viewDate = DU.startOfMonth(state.rangeEnd);
         render(state);
         applyRange(state);
         closeAll();
@@ -885,7 +950,7 @@
     panel.addEventListener("keydown", function (event) {
       var cell = UI.closest(event.target, "[data-ui-date]");
       if (!cell) return;
-      var currentDate = parseISODate(cell.getAttribute("data-ui-date"));
+      var currentDate = DU.parseISODate(cell.getAttribute("data-ui-date"));
       var delta = null;
       if (event.key === "ArrowLeft") delta = -1;
       else if (event.key === "ArrowRight") delta = 1;
@@ -896,9 +961,9 @@
 
       if (delta !== null) {
         event.preventDefault();
-        var nextDate = addDays(currentDate, delta);
+        var nextDate = DU.addDays(currentDate, delta);
         if (isOutsideVisibleSpan(state, nextDate)) {
-          state.viewDate = startOfMonth(nextDate);
+          state.viewDate = DU.startOfMonth(nextDate);
           render(state);
         }
         focusDate(state, nextDate);
@@ -908,9 +973,9 @@
       if (event.key === "PageUp" || event.key === "PageDown") {
         event.preventDefault();
         var monthDelta = event.key === "PageUp" ? -1 : 1;
-        state.viewDate = addMonths(state.viewDate, monthDelta);
+        state.viewDate = DU.addMonths(state.viewDate, monthDelta);
         render(state);
-        focusDate(state, addMonths(currentDate, monthDelta));
+        focusDate(state, DU.addMonths(currentDate, monthDelta));
         return;
       }
 
@@ -946,6 +1011,295 @@
   });
 
   UI.dateRange = { close: closeAll };
+  UI.register(init);
+})(window, document);
+
+
+(function (window, document) {
+  "use strict";
+  var UI = window.UI;
+  var DU = UI.dateUtils;
+
+  var PRESET_LABELS = [
+    ["yesterday", "Yesterday"],
+    ["today", "Today"],
+    ["tomorrow", "Tomorrow"]
+  ];
+
+  function presetDates() {
+    var now = DU.today();
+    return {
+      yesterday: DU.addDays(now, -1),
+      today: now,
+      tomorrow: DU.addDays(now, 1)
+    };
+  }
+
+  function State(container) {
+    this.container = container;
+    this.input = UI.q("input", container);
+    this.value = DU.parseISODate(this.input.value);
+    this.viewDate = DU.startOfMonth(this.value || DU.today());
+    this.minDate = DU.parseISODate(container.getAttribute("data-min-date"));
+    this.maxDate = DU.parseISODate(container.getAttribute("data-max-date"));
+    this.disabledDates = {};
+    (container.getAttribute("data-disabled-dates") || "").split(",").forEach(function (entry) {
+      var trimmed = entry.trim();
+      if (trimmed) this.disabledDates[trimmed] = true;
+    }, this);
+  }
+
+  State.prototype.isDisabled = function (date) {
+    if (this.minDate && date < this.minDate) return true;
+    if (this.maxDate && date > this.maxDate) return true;
+    return !!this.disabledDates[DU.formatISODate(date)];
+  };
+
+  function render(state) {
+    var container = state.container;
+    var trigger = UI.q(".ui-date-range-trigger .ui-date-range-value", container);
+    if (trigger) {
+      trigger.textContent = state.value
+        ? DU.formatDisplayDate(state.value)
+        : container.getAttribute("data-ui-placeholder") || "Select date";
+    }
+
+    var title = UI.q(".ui-date-range-calendar-title", container);
+    if (title) title.textContent = state.viewDate.toLocaleDateString(undefined, { month: "long", year: "numeric" });
+
+    var grid = UI.q(".ui-date-range-grid", container);
+    grid.innerHTML = "";
+    var todayDate = DU.today();
+
+    DU.buildCalendarDays(state.viewDate).forEach(function (day) {
+      var cell = document.createElement("button");
+      cell.type = "button";
+      cell.className = "ui-date-range-day";
+      cell.textContent = day.getDate();
+      cell.tabIndex = -1;
+      cell.setAttribute("data-ui-date", DU.formatISODate(day));
+
+      if (day.getMonth() !== state.viewDate.getMonth()) cell.classList.add("ui-outside");
+      if (DU.sameDay(day, todayDate)) cell.classList.add("ui-today");
+      if (DU.sameDay(day, state.value)) cell.classList.add("ui-range-start");
+      if (state.isDisabled(day)) {
+        cell.classList.add("ui-disabled");
+        cell.setAttribute("aria-disabled", "true");
+      }
+
+      grid.appendChild(cell);
+    });
+
+    var clearButton = UI.q("[data-ui-range-clear]", container);
+    if (clearButton) clearButton.hidden = !state.value;
+  }
+
+  function applyValue(state) {
+    state.input.value = state.value ? DU.formatISODate(state.value) : "";
+    state.input.dispatchEvent(new Event("change", { bubbles: true }));
+    UI.emit(state.container, "ui:datepicker:change", { value: state.value });
+  }
+
+  function closeAll() {
+    UI.qa(".ui-date-picker.ui-open").forEach(function (container) {
+      container.classList.remove("ui-open");
+      var trigger = UI.q(".ui-date-range-trigger", container);
+      if (trigger) trigger.setAttribute("aria-expanded", "false");
+      if (container._uiFloatCleanup) {
+        container._uiFloatCleanup();
+        container._uiFloatCleanup = null;
+      }
+    });
+  }
+
+  function focusDate(state, date) {
+    var cell = UI.q('[data-ui-date="' + DU.formatISODate(date) + '"]', state.container);
+    if (cell) cell.focus();
+  }
+
+  function open(container, state) {
+    closeAll();
+    container.classList.add("ui-open");
+    var trigger = UI.q(".ui-date-range-trigger", container);
+    if (trigger) trigger.setAttribute("aria-expanded", "true");
+    var panel = UI.q(".ui-date-range-panel", container);
+    if (trigger && panel) container._uiFloatCleanup = UI.floatPanel(trigger, panel);
+
+    var focusTarget = state.value || DU.today();
+    if (DU.startOfMonth(focusTarget).getTime() !== state.viewDate.getTime()) {
+      state.viewDate = DU.startOfMonth(focusTarget);
+      render(state);
+    }
+    focusDate(state, focusTarget);
+  }
+
+  function pickDay(state, date) {
+    if (state.isDisabled(date)) return;
+    state.value = date;
+    render(state);
+    applyValue(state);
+    closeAll();
+  }
+
+  function clearValue(state) {
+    state.value = null;
+    render(state);
+    applyValue(state);
+  }
+
+  function build(container) {
+    if (container.dataset.uiReady) return;
+    container.dataset.uiReady = "true";
+    container.classList.add("ui-date-range", "ui-date-picker-shell");
+
+    var input = UI.q("input", container);
+    input.classList.add("ui-date-range-native");
+
+    var trigger = document.createElement("button");
+    trigger.type = "button";
+    trigger.className = "ui-date-range-trigger";
+    trigger.setAttribute("aria-haspopup", "dialog");
+    trigger.setAttribute("aria-expanded", "false");
+    trigger.innerHTML = '<span class="ui-date-range-value"></span>';
+
+    // The native input is hidden, so a failed reportValidity() has no
+    // visible field to anchor its bubble to. Surface it on the trigger.
+    input.addEventListener("invalid", function () { trigger.classList.add("ui-is-invalid"); });
+    input.addEventListener("change", function () { trigger.classList.remove("ui-is-invalid"); });
+
+    var panel = document.createElement("div");
+    panel.className = "ui-date-range-panel";
+
+    var presets = document.createElement("div");
+    presets.className = "ui-date-range-presets";
+    PRESET_LABELS.forEach(function (entry) {
+      var button = document.createElement("button");
+      button.type = "button";
+      button.className = "ui-date-range-preset";
+      button.textContent = entry[1];
+      button.setAttribute("data-ui-preset", entry[0]);
+      presets.appendChild(button);
+    });
+
+    var clearButton = document.createElement("button");
+    clearButton.type = "button";
+    clearButton.className = "ui-date-range-preset ui-date-range-clear";
+    clearButton.textContent = "Clear";
+    clearButton.setAttribute("data-ui-range-clear", "");
+    presets.appendChild(clearButton);
+
+    var calendar = document.createElement("div");
+    calendar.className = "ui-date-range-month";
+    calendar.innerHTML =
+      '<div class="ui-date-range-calendar-header">' +
+        '<button type="button" class="ui-date-range-nav" data-ui-cal-prev aria-label="Previous month">‹</button>' +
+        '<span class="ui-date-range-calendar-title"></span>' +
+        '<button type="button" class="ui-date-range-nav" data-ui-cal-next aria-label="Next month">›</button>' +
+      "</div>" +
+      '<div class="ui-date-range-weekdays">' + DU.WEEKDAYS.map(function (day) { return "<span>" + day + "</span>"; }).join("") + "</div>" +
+      '<div class="ui-date-range-grid" role="grid"></div>';
+
+    panel.appendChild(presets);
+    panel.appendChild(calendar);
+    container.appendChild(trigger);
+    container.appendChild(panel);
+
+    var state = new State(container);
+    render(state);
+
+    trigger.addEventListener("click", function () {
+      if (container.classList.contains("ui-open")) closeAll();
+      else open(container, state);
+    });
+
+    panel.addEventListener("click", function (event) {
+      var cell = UI.closest(event.target, "[data-ui-date]");
+      if (cell) {
+        if (!cell.classList.contains("ui-disabled")) pickDay(state, DU.parseISODate(cell.getAttribute("data-ui-date")));
+        return;
+      }
+      if (UI.closest(event.target, "[data-ui-cal-prev]")) {
+        state.viewDate = DU.addMonths(state.viewDate, -1);
+        render(state);
+        return;
+      }
+      if (UI.closest(event.target, "[data-ui-cal-next]")) {
+        state.viewDate = DU.addMonths(state.viewDate, 1);
+        render(state);
+        return;
+      }
+      if (UI.closest(event.target, "[data-ui-range-clear]")) {
+        clearValue(state);
+        return;
+      }
+      var preset = UI.closest(event.target, "[data-ui-preset]");
+      if (preset) {
+        var date = presetDates()[preset.getAttribute("data-ui-preset")];
+        if (!date || state.isDisabled(date)) return;
+        state.viewDate = DU.startOfMonth(date);
+        pickDay(state, date);
+      }
+    });
+
+    panel.addEventListener("keydown", function (event) {
+      var cell = UI.closest(event.target, "[data-ui-date]");
+      if (!cell) return;
+      var currentDate = DU.parseISODate(cell.getAttribute("data-ui-date"));
+      var delta = null;
+      if (event.key === "ArrowLeft") delta = -1;
+      else if (event.key === "ArrowRight") delta = 1;
+      else if (event.key === "ArrowUp") delta = -7;
+      else if (event.key === "ArrowDown") delta = 7;
+      else if (event.key === "Home") delta = -currentDate.getDay();
+      else if (event.key === "End") delta = 6 - currentDate.getDay();
+
+      if (delta !== null) {
+        event.preventDefault();
+        var nextDate = DU.addDays(currentDate, delta);
+        if (DU.startOfMonth(nextDate).getTime() !== state.viewDate.getTime()) {
+          state.viewDate = DU.startOfMonth(nextDate);
+          render(state);
+        }
+        focusDate(state, nextDate);
+        return;
+      }
+
+      if (event.key === "PageUp" || event.key === "PageDown") {
+        event.preventDefault();
+        var monthDelta = event.key === "PageUp" ? -1 : 1;
+        state.viewDate = DU.addMonths(state.viewDate, monthDelta);
+        render(state);
+        focusDate(state, DU.addMonths(currentDate, monthDelta));
+        return;
+      }
+
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        if (!cell.classList.contains("ui-disabled")) pickDay(state, currentDate);
+      }
+    });
+  }
+
+  function init(root) {
+    UI.qa("[data-ui-date-picker]", root).forEach(build);
+  }
+
+  document.addEventListener("click", function (event) {
+    var path = typeof event.composedPath === "function" ? event.composedPath() : [event.target];
+    var insideDatePicker = path.some(function (node) {
+      return node.nodeType === 1 && node.classList && node.classList.contains("ui-date-picker-shell");
+    });
+    if (!insideDatePicker) closeAll();
+  });
+
+  document.addEventListener("keydown", function (event) {
+    if (event.key !== "Escape") return;
+    if (!UI.q(".ui-date-picker-shell.ui-open")) return;
+    closeAll();
+    event.stopImmediatePropagation();
+  });
+
+  UI.datePicker = { close: closeAll };
   UI.register(init);
 })(window, document);
 
@@ -1137,16 +1491,33 @@
         zone.addEventListener(name, function () { zone.classList.remove("ui-dragover"); });
       });
 
-      input.addEventListener("change", function () {
+      function removeFile(index) {
+        var transfer = new DataTransfer();
+        Array.prototype.forEach.call(input.files || [], function (file, i) {
+          if (i !== index) transfer.items.add(file);
+        });
+        input.files = transfer.files;
+        input.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+
+      function renderPreview() {
         if (!preview) return;
         preview.innerHTML = "";
-        Array.prototype.forEach.call(input.files || [], function (file) {
+        Array.prototype.forEach.call(input.files || [], function (file, index) {
           var item = document.createElement("div");
           item.className = "ui-file-item";
-          item.textContent = file.name + " · " + Math.max(1, Math.round(file.size / 1024)) + " KB";
+          item.innerHTML =
+            '<span class="ui-file-item-name">' + UI.escape(file.name) + " · " + Math.max(1, Math.round(file.size / 1024)) + " KB</span>" +
+            '<button type="button" class="ui-file-item-remove" aria-label="Remove ' + UI.escape(file.name) + '">&times;</button>';
+          item.querySelector(".ui-file-item-remove").addEventListener("click", function (event) {
+            event.stopPropagation();
+            removeFile(index);
+          });
           preview.appendChild(item);
         });
-      });
+      }
+
+      input.addEventListener("change", renderPreview);
     });
   }
 
@@ -1233,7 +1604,11 @@
     if (!position || !total) return;
 
     var bar = UI.q(".ui-save-next-progress .ui-progress-bar", form);
-    if (bar) bar.style.setProperty("--ui-progress-value", Math.round((position / total) * 100) + "%");
+    if (bar) {
+      var percent = Math.max(0, Math.min(100, Math.round((position / total) * 100)));
+      bar.className = bar.className.replace(/\bui-progress-w-\d+\b/g, "").trim();
+      bar.classList.add("ui-progress-w-" + percent);
+    }
 
     var positionEl = UI.q("[data-ui-save-next-position]", form);
     if (positionEl) positionEl.textContent = position;
@@ -1279,8 +1654,8 @@
 
   function init(root) {
     UI.qa("form[data-ui-save-next]", root).forEach(function (form) {
-      if (form.dataset.uiReady) return;
-      form.dataset.uiReady = "true";
+      if (form.dataset.uiSaveNextReady) return;
+      form.dataset.uiSaveNextReady = "true";
 
       syncProgress(form);
       setDirty(form, false);
@@ -1427,21 +1802,54 @@
     var sortDirection = "ascending";
     var query = "";
 
+    var showSearch = wrapper.getAttribute("data-ui-search") !== "false";
+    var showPageSizePicker = wrapper.getAttribute("data-ui-page-size-selector") !== "false";
+
     // Insert relative to `table` (not `wrapper`), since `data-ui-table` may
     // be on the <table> itself: a <nav> can't legally live inside a table,
     // and a node can't be inserted before itself.
-    if (wrapper.getAttribute("data-ui-search") !== "false") {
+    if (showSearch || showPageSizePicker) {
       var toolbar = document.createElement("div");
       toolbar.className = "ui-table-toolbar";
-      toolbar.innerHTML = '<input type="search" class="ui-control ui-control-sm ui-table-search" placeholder="' +
-        UI.escape(wrapper.getAttribute("data-ui-search-placeholder") || "Search") + '">';
-      table.parentNode.insertBefore(toolbar, table);
 
-      UI.q("input", toolbar).addEventListener("input", function () {
-        query = this.value.trim().toLowerCase();
-        currentPage = 1;
-        renderPage();
-      });
+      if (showPageSizePicker) {
+        var sizes = (wrapper.getAttribute("data-ui-page-sizes") || "5,10,25,50")
+          .split(",").map(function (value) { return Number(value.trim()); }).filter(Boolean);
+        if (sizes.indexOf(pageSize) === -1) sizes.push(pageSize);
+        sizes.sort(function (a, b) { return a - b; });
+
+        var sizeField = document.createElement("label");
+        sizeField.className = "ui-table-page-size";
+        sizeField.innerHTML = "Show " +
+          '<select class="ui-select ui-control-sm">' +
+          sizes.map(function (size) {
+            return '<option value="' + size + '"' + (size === pageSize ? " selected" : "") + ">" + size + "</option>";
+          }).join("") +
+          "</select> per page";
+        toolbar.appendChild(sizeField);
+
+        UI.q("select", sizeField).addEventListener("change", function () {
+          pageSize = Number(this.value) || pageSize;
+          currentPage = 1;
+          renderPage();
+        });
+      }
+
+      if (showSearch) {
+        var search = document.createElement("input");
+        search.type = "search";
+        search.className = "ui-control ui-control-sm ui-table-search";
+        search.placeholder = wrapper.getAttribute("data-ui-search-placeholder") || "Search";
+        toolbar.appendChild(search);
+
+        search.addEventListener("input", function () {
+          query = this.value.trim().toLowerCase();
+          currentPage = 1;
+          renderPage();
+        });
+      }
+
+      table.parentNode.insertBefore(toolbar, table);
     }
 
     var pagination = document.createElement("nav");
@@ -1538,6 +1946,206 @@
   function init(root) {
     UI.qa("[data-ui-table]", root).forEach(build);
   }
+
+  UI.register(init);
+})(window, document);
+
+
+(function (window, document) {
+  "use strict";
+  var UI = window.UI;
+  var STORAGE_PREFIX = "ui-draft:";
+  var AUTOSAVE_DELAY = 800;
+
+  function storageKey(form) {
+    return STORAGE_PREFIX + (form.getAttribute("data-ui-draft-key") || form.id || form.getAttribute("action") || window.location.pathname);
+  }
+
+  function safeStorage() {
+    try {
+      window.localStorage.setItem("__ui_draft_test__", "1");
+      window.localStorage.removeItem("__ui_draft_test__");
+      return window.localStorage;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function serialize(form) {
+    var data = {};
+    new FormData(form).forEach(function (value, key) {
+      if (value instanceof File) return;
+      if (!data[key]) data[key] = [];
+      data[key].push(value);
+    });
+    return data;
+  }
+
+  function restoreFields(form, data) {
+    Object.keys(data).forEach(function (key) {
+      var values = data[key];
+      var fields = UI.qa('[name="' + key.replace(/"/g, '\\"') + '"]', form);
+      if (!fields.length) return;
+
+      if (fields[0].type === "checkbox" || fields[0].type === "radio") {
+        fields.forEach(function (field) { field.checked = values.indexOf(field.value) !== -1; });
+      } else if (fields[0].tagName === "SELECT" && fields[0].multiple) {
+        Array.prototype.forEach.call(fields[0].options, function (option) {
+          option.selected = values.indexOf(option.value) !== -1;
+        });
+      } else {
+        fields[0].value = values[0];
+      }
+      fields[0].dispatchEvent(new Event("change", { bubbles: true }));
+    });
+  }
+
+  function relativeTime(timestamp) {
+    var seconds = Math.round((Date.now() - timestamp) / 1000);
+    if (seconds < 60) return "just now";
+    var minutes = Math.round(seconds / 60);
+    if (minutes < 60) return minutes + (minutes === 1 ? " minute ago" : " minutes ago");
+    var hours = Math.round(minutes / 60);
+    return hours + (hours === 1 ? " hour ago" : " hours ago");
+  }
+
+  // Best-effort remote sync. The server contract:
+  //   GET  <url>  -> 200 {fields, savedAt} | 404 (no draft)
+  //   POST <url>  <- {fields, savedAt}     -> any 2xx
+  //   DELETE <url>                         -> any 2xx
+  // Network/server failures never block the local (localStorage) draft from
+  // working -- they're swallowed and reported via ui:draft:sync-error.
+  function remoteGet(url) {
+    return fetch(url, { headers: { Accept: "application/json" } })
+      .then(function (response) { return response.ok ? response.json() : null; })
+      .catch(function () { return null; });
+  }
+
+  function remoteSave(form, url, record) {
+    fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(record)
+    }).then(function (response) {
+      if (!response.ok) throw new Error("Draft sync failed with status " + response.status);
+    }).catch(function (error) {
+      UI.emit(form, "ui:draft:sync-error", { error: error });
+    });
+  }
+
+  function remoteDiscard(url) {
+    fetch(url, { method: "DELETE" }).catch(function () {});
+  }
+
+  function build(form) {
+    if (form.dataset.uiDraftReady) return;
+    form.dataset.uiDraftReady = "true";
+
+    var storage = safeStorage();
+    if (!storage) return;
+    var key = storageKey(form);
+    var url = form.getAttribute("data-ui-draft-url");
+
+    function readLocalDraft() {
+      try {
+        return JSON.parse(storage.getItem(key));
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function setStatus(text) {
+      var status = UI.q("[data-ui-draft-status]", form);
+      if (status) status.textContent = text || "";
+    }
+
+    function save() {
+      var record = { fields: serialize(form), savedAt: Date.now() };
+      storage.setItem(key, JSON.stringify(record));
+      setStatus("Draft saved " + new Date(record.savedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
+      UI.emit(form, "ui:draft:saved", { savedAt: record.savedAt });
+      if (url) remoteSave(form, url, record);
+    }
+
+    function discard() {
+      storage.removeItem(key);
+      setStatus("");
+      UI.emit(form, "ui:draft:discarded", {});
+      if (url) remoteDiscard(url);
+    }
+
+    var saveTimer = null;
+    form.addEventListener("input", function () {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(save, AUTOSAVE_DELAY);
+    });
+
+    // Auto-discarding on the raw submit event assumes the submission always
+    // goes through. Apps that gate submission behind an async confirm or
+    // validation step (submit handler calls preventDefault(), decides
+    // later) should set data-ui-draft-auto-discard="false" and call
+    // UI.draft.discard(form) themselves once the submission actually
+    // succeeds -- otherwise the draft is wiped even if the user cancels.
+    form.addEventListener("submit", function () {
+      clearTimeout(saveTimer);
+      if (form.getAttribute("data-ui-draft-auto-discard") !== "false") discard();
+    });
+
+    form._uiDraftSave = save;
+    form._uiDraftDiscard = discard;
+
+    function showBanner(draft) {
+      var banner = document.createElement("div");
+      banner.className = "ui-alert ui-alert-info ui-draft-banner";
+      banner.setAttribute("role", "alert");
+      banner.innerHTML =
+        '<div class="ui-alert-icon">i</div>' +
+        '<div><div class="ui-alert-title">Unsaved draft found</div>' +
+        '<p class="ui-alert-message">You have a draft saved ' + UI.escape(relativeTime(draft.savedAt)) + '.</p>' +
+        '<div class="ui-d-flex ui-gap-2 ui-mt-2">' +
+        '<button type="button" class="ui-btn ui-btn-sm ui-btn-primary" data-ui-draft-restore>Restore draft</button>' +
+        '<button type="button" class="ui-btn ui-btn-sm ui-btn-outline-secondary" data-ui-draft-discard>Discard</button>' +
+        "</div></div>";
+      form.parentNode.insertBefore(banner, form);
+
+      banner.querySelector("[data-ui-draft-restore]").addEventListener("click", function () {
+        restoreFields(form, draft.fields);
+        banner.remove();
+        UI.emit(form, "ui:draft:restored", { savedAt: draft.savedAt });
+      });
+      banner.querySelector("[data-ui-draft-discard]").addEventListener("click", function () {
+        discard();
+        banner.remove();
+      });
+    }
+
+    var localDraft = readLocalDraft();
+
+    if (!url) {
+      if (localDraft && localDraft.fields) showBanner(localDraft);
+      return;
+    }
+
+    // With a remote URL configured, reconcile local vs. server before
+    // showing anything -- whichever was saved more recently wins (e.g. the
+    // user continued on a different device).
+    remoteGet(url).then(function (remoteDraft) {
+      var winner = localDraft;
+      if (remoteDraft && remoteDraft.fields) {
+        if (!winner || remoteDraft.savedAt > winner.savedAt) winner = remoteDraft;
+      }
+      if (winner && winner.fields) showBanner(winner);
+    });
+  }
+
+  function init(root) {
+    UI.qa("form[data-ui-draft]", root).forEach(build);
+  }
+
+  UI.draft = {
+    save: function (form) { if (form && form._uiDraftSave) form._uiDraftSave(); },
+    discard: function (form) { if (form && form._uiDraftDiscard) form._uiDraftDiscard(); }
+  };
 
   UI.register(init);
 })(window, document);

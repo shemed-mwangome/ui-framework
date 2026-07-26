@@ -30,13 +30,15 @@ CSS_ORDER = [
 JS_ORDER = [
     "00-core.js", "01-alert.js", "02-collapse-accordion.js",
     "03-dropdown.js", "04-tabs.js", "08-multiselect.js",
-    "12-date-range.js", "05-modal.js", "06-offcanvas.js",
+    "15-date-utils.js", "12-date-range.js", "16-date-picker.js",
+    "05-modal.js", "06-offcanvas.js",
     "07-toast.js", "09-upload-theme.js", "10-confirm.js",
     "11-save-next.js", "13-stepper-form.js", "14-data-table.js",
+    "17-draft.js",
 ]
 
 CSS_BANNER = """/*!
- * UI Framework v1.0.0
+ * UI Framework v1.1.0
  * Original dependency-free CSS/JavaScript framework.
  * Prefix: ui-
  * License: MIT
@@ -44,7 +46,7 @@ CSS_BANNER = """/*!
 """
 
 JS_BANNER = """/*!
- * UI Framework v1.0.0
+ * UI Framework v1.1.0
  * Dependency-free JavaScript bundle.
  * License: MIT
  */

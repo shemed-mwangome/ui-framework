@@ -1,11 +1,11 @@
 /*!
- * UI Framework v1.0.0
+ * UI Framework v1.1.0
  * Original dependency-free CSS/JavaScript framework.
  * Prefix: ui-
  * License: MIT
  */
 /*!
- * UI Framework 1.0.0
+ * UI Framework 1.1.0
  * Design tokens and themes
  */
 :root {
@@ -355,6 +355,12 @@
   grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--ui-grid-min)), 1fr));
   gap: var(--ui-grid-gap);
 }
+
+/* Column-width modifiers: avoids inline style="--ui-grid-min:..." (blocked under a strict style-src CSP). */
+.ui-css-grid-xs { --ui-grid-min: 10rem; }
+.ui-css-grid-sm { --ui-grid-min: 12rem; }
+.ui-css-grid-lg { --ui-grid-min: 16rem; }
+.ui-css-grid-xl { --ui-grid-min: 18rem; }
 
 .ui-grid {
   --ui-grid-columns: 12;
@@ -927,6 +933,35 @@ textarea.ui-control { min-height: 7rem; resize: vertical; }
   transform: translateY(-.65rem) scale(.8);
 }
 
+/*
+ * Outlined variant: the label rests centered inside the control like a
+ * placeholder, then floats up to sit directly on the top border on focus
+ * or when filled. The label's own background (matching the control's)
+ * masks the border segment behind it, faking a notch in the outline.
+ */
+.ui-floating-outline > .ui-control {
+  height: 3.25rem;
+  padding: 0 .75rem;
+}
+
+.ui-floating-outline > .ui-label {
+  top: 50%;
+  left: .6rem;
+  padding: 0 .3rem;
+  background: transparent;
+  line-height: 1.2;
+  transform-origin: 0 50%;
+  transform: translateY(-50%);
+  transition: transform var(--ui-transition-fast), color var(--ui-transition-fast), background var(--ui-transition-fast);
+}
+
+.ui-floating-outline > .ui-control:focus ~ .ui-label,
+.ui-floating-outline > .ui-control:not(:placeholder-shown) ~ .ui-label {
+  top: 0;
+  background: var(--ui-surface);
+  transform: translateY(-50%) scale(.8);
+}
+
 .ui-range {
   width: 100%;
   accent-color: var(--ui-primary);
@@ -1411,8 +1446,19 @@ input[type="checkbox"].ui-switch-danger + label { --ui-switch-color: var(--ui-da
 .ui-table-caption { padding: .65rem 0; color: var(--ui-muted); text-align: left; caption-side: bottom; }
 .ui-table-empty { padding: 2.5rem !important; color: var(--ui-muted); text-align: center !important; }
 
-.ui-table-toolbar { display: flex; justify-content: flex-end; margin-bottom: .75rem; }
+.ui-table-toolbar { display: flex; align-items: center; justify-content: space-between; gap: .75rem; flex-wrap: wrap; margin-bottom: .75rem; }
 .ui-table-search { max-width: 16rem; }
+
+.ui-table-page-size {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  color: var(--ui-text-soft);
+  font-size: .82rem;
+  white-space: nowrap;
+}
+
+.ui-table-page-size .ui-select { width: auto; }
 
 .ui-table-sortable {
   position: relative;
@@ -1441,6 +1487,44 @@ input[type="checkbox"].ui-switch-danger + label { --ui-switch-color: var(--ui-da
 .ui-table-pagination { margin-top: .85rem; display: flex; justify-content: flex-end; }
 .ui-table-empty-row td { padding: 2.5rem; color: var(--ui-muted); text-align: center; }
 
+/* Minimal: no header fill, just a stronger rule under the header row. */
+.ui-table-minimal thead th {
+  background: transparent;
+  border-bottom: 2px solid var(--ui-border-strong);
+}
+
+/* Dark header: common admin-dashboard look. */
+.ui-table-dark-header thead th {
+  background: var(--ui-dark);
+  color: var(--ui-light);
+  border-bottom-color: var(--ui-dark);
+}
+
+/* Card rows: each row floats as its own rounded, shadowed card. Needs
+   separate borders (not collapse) so spacing and per-row radius work. */
+.ui-table-card-rows {
+  border-collapse: separate;
+  border-spacing: 0 .6rem;
+}
+
+.ui-table-card-rows thead th { background: transparent; border-bottom: 0; padding-bottom: .35rem; }
+
+.ui-table-card-rows tbody tr { background: var(--ui-surface); box-shadow: var(--ui-shadow-1); }
+
+.ui-table-card-rows tbody td { border: solid var(--ui-border); border-width: 1px 0; }
+
+.ui-table-card-rows tbody td:first-child {
+  border-left: 1px solid var(--ui-border);
+  border-top-left-radius: var(--ui-radius-2);
+  border-bottom-left-radius: var(--ui-radius-2);
+}
+
+.ui-table-card-rows tbody td:last-child {
+  border-right: 1px solid var(--ui-border);
+  border-top-right-radius: var(--ui-radius-2);
+  border-bottom-right-radius: var(--ui-radius-2);
+}
+
 
 .ui-navbar {
   min-height: 3.75rem;
@@ -1451,6 +1535,53 @@ input[type="checkbox"].ui-switch-danger + label { --ui-switch-color: var(--ui-da
   align-items: center;
   gap: 1rem;
 }
+
+.ui-navbar-sticky { position: sticky; top: 0; z-index: var(--ui-z-sticky); box-shadow: var(--ui-shadow-2); }
+
+.ui-navbar-dark,
+.ui-navbar-primary { border-bottom-color: transparent; }
+.ui-navbar-dark { background: var(--ui-dark); }
+.ui-navbar-primary { background: var(--ui-primary); }
+
+.ui-navbar-dark .ui-navbar-brand,
+.ui-navbar-primary .ui-navbar-brand,
+.ui-navbar-dark .ui-nav-link,
+.ui-navbar-primary .ui-nav-link { color: rgba(255, 255, 255, .85); }
+
+.ui-navbar-dark .ui-nav-link:hover,
+.ui-navbar-dark .ui-nav-link.ui-active,
+.ui-navbar-primary .ui-nav-link:hover,
+.ui-navbar-primary .ui-nav-link.ui-active {
+  background: rgba(255, 255, 255, .12);
+  color: #fff;
+}
+
+.ui-navbar-search {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  min-width: 12rem;
+  max-width: 22rem;
+  margin-inline: auto;
+  padding: .4rem .75rem;
+  border-radius: var(--ui-radius-pill);
+  background: var(--ui-surface-muted);
+}
+
+.ui-navbar-dark .ui-navbar-search,
+.ui-navbar-primary .ui-navbar-search { background: rgba(255, 255, 255, .14); }
+
+.ui-navbar-search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  outline: 0;
+}
+
+.ui-navbar-dark .ui-navbar-search input::placeholder,
+.ui-navbar-primary .ui-navbar-search input::placeholder { color: rgba(255, 255, 255, .65); }
 
 .ui-navbar-brand {
   color: var(--ui-text);
@@ -1577,6 +1708,52 @@ input[type="checkbox"].ui-switch-danger + label { --ui-switch-color: var(--ui-da
 
 .ui-tab-panel { padding-block: 1rem; }
 .ui-tab-panel[hidden] { display: none !important; }
+
+/* Pill tabs: no underline, active tab gets a filled pill background. */
+.ui-tabs-pill { border-bottom: 0; gap: .35rem; }
+.ui-tabs-pill .ui-tab { border-radius: var(--ui-radius-pill); }
+.ui-tabs-pill .ui-tab[aria-selected="true"],
+.ui-tabs-pill .ui-tab.ui-active { background: var(--ui-primary); color: #fff; }
+.ui-tabs-pill .ui-tab[aria-selected="true"]::after,
+.ui-tabs-pill .ui-tab.ui-active::after { display: none; }
+
+/* Boxed tabs: bordered, connecting visually to the panel below. */
+.ui-tabs-boxed { gap: 0; border-bottom: 1px solid var(--ui-border); }
+.ui-tabs-boxed .ui-tab {
+  border: 1px solid transparent;
+  border-radius: var(--ui-radius-2) var(--ui-radius-2) 0 0;
+  margin-bottom: -1px;
+}
+.ui-tabs-boxed .ui-tab[aria-selected="true"],
+.ui-tabs-boxed .ui-tab.ui-active {
+  border-color: var(--ui-border);
+  border-bottom-color: var(--ui-surface);
+  background: var(--ui-surface);
+}
+.ui-tabs-boxed .ui-tab[aria-selected="true"]::after,
+.ui-tabs-boxed .ui-tab.ui-active::after { display: none; }
+
+/* Vertical tabs: sidebar-style list, panel sits beside it. */
+.ui-tabs-vertical {
+  flex-direction: column;
+  gap: .15rem;
+  border-bottom: 0;
+  border-right: 1px solid var(--ui-border);
+  padding-right: .75rem;
+  overflow-x: visible;
+}
+.ui-tabs-vertical .ui-tab { border-radius: var(--ui-radius-2); text-align: left; }
+.ui-tabs-vertical .ui-tab[aria-selected="true"],
+.ui-tabs-vertical .ui-tab.ui-active { background: var(--ui-primary-soft); }
+.ui-tabs-vertical .ui-tab[aria-selected="true"]::after,
+.ui-tabs-vertical .ui-tab.ui-active::after {
+  left: auto;
+  top: .5rem;
+  bottom: .5rem;
+  right: -1px;
+  width: 2px;
+  height: auto;
+}
 
 .ui-sidebar {
   width: 16rem;
@@ -1994,6 +2171,7 @@ body.ui-overlay-open { overflow: hidden; }
 .ui-multiselect-tag { max-width: 10rem; padding: .2rem .45rem; border-radius: var(--ui-radius-pill); background: var(--ui-primary-soft); color: var(--ui-primary); display: inline-flex; align-items: center; gap: .25rem; font-size: .72rem; }
 .ui-multiselect-tag-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ui-multiselect-tag-remove { border: 0; padding: 0; background: transparent; color: inherit; cursor: pointer; line-height: 1; }
+.ui-multiselect-tag-overflow { background: var(--ui-surface-muted); color: var(--ui-muted); font-weight: 700; }
 
 
 .ui-progress {
@@ -2013,6 +2191,109 @@ body.ui-overlay-open { overflow: hidden; }
   background: var(--ui-progress-color);
   transition: width var(--ui-transition-slow);
 }
+
+/* Width utilities: avoids inline style="--ui-progress-value:N%" (blocked under a strict style-src CSP). */
+.ui-progress-w-0 { --ui-progress-value: 0%; }
+.ui-progress-w-1 { --ui-progress-value: 1%; }
+.ui-progress-w-2 { --ui-progress-value: 2%; }
+.ui-progress-w-3 { --ui-progress-value: 3%; }
+.ui-progress-w-4 { --ui-progress-value: 4%; }
+.ui-progress-w-5 { --ui-progress-value: 5%; }
+.ui-progress-w-6 { --ui-progress-value: 6%; }
+.ui-progress-w-7 { --ui-progress-value: 7%; }
+.ui-progress-w-8 { --ui-progress-value: 8%; }
+.ui-progress-w-9 { --ui-progress-value: 9%; }
+.ui-progress-w-10 { --ui-progress-value: 10%; }
+.ui-progress-w-11 { --ui-progress-value: 11%; }
+.ui-progress-w-12 { --ui-progress-value: 12%; }
+.ui-progress-w-13 { --ui-progress-value: 13%; }
+.ui-progress-w-14 { --ui-progress-value: 14%; }
+.ui-progress-w-15 { --ui-progress-value: 15%; }
+.ui-progress-w-16 { --ui-progress-value: 16%; }
+.ui-progress-w-17 { --ui-progress-value: 17%; }
+.ui-progress-w-18 { --ui-progress-value: 18%; }
+.ui-progress-w-19 { --ui-progress-value: 19%; }
+.ui-progress-w-20 { --ui-progress-value: 20%; }
+.ui-progress-w-21 { --ui-progress-value: 21%; }
+.ui-progress-w-22 { --ui-progress-value: 22%; }
+.ui-progress-w-23 { --ui-progress-value: 23%; }
+.ui-progress-w-24 { --ui-progress-value: 24%; }
+.ui-progress-w-25 { --ui-progress-value: 25%; }
+.ui-progress-w-26 { --ui-progress-value: 26%; }
+.ui-progress-w-27 { --ui-progress-value: 27%; }
+.ui-progress-w-28 { --ui-progress-value: 28%; }
+.ui-progress-w-29 { --ui-progress-value: 29%; }
+.ui-progress-w-30 { --ui-progress-value: 30%; }
+.ui-progress-w-31 { --ui-progress-value: 31%; }
+.ui-progress-w-32 { --ui-progress-value: 32%; }
+.ui-progress-w-33 { --ui-progress-value: 33%; }
+.ui-progress-w-34 { --ui-progress-value: 34%; }
+.ui-progress-w-35 { --ui-progress-value: 35%; }
+.ui-progress-w-36 { --ui-progress-value: 36%; }
+.ui-progress-w-37 { --ui-progress-value: 37%; }
+.ui-progress-w-38 { --ui-progress-value: 38%; }
+.ui-progress-w-39 { --ui-progress-value: 39%; }
+.ui-progress-w-40 { --ui-progress-value: 40%; }
+.ui-progress-w-41 { --ui-progress-value: 41%; }
+.ui-progress-w-42 { --ui-progress-value: 42%; }
+.ui-progress-w-43 { --ui-progress-value: 43%; }
+.ui-progress-w-44 { --ui-progress-value: 44%; }
+.ui-progress-w-45 { --ui-progress-value: 45%; }
+.ui-progress-w-46 { --ui-progress-value: 46%; }
+.ui-progress-w-47 { --ui-progress-value: 47%; }
+.ui-progress-w-48 { --ui-progress-value: 48%; }
+.ui-progress-w-49 { --ui-progress-value: 49%; }
+.ui-progress-w-50 { --ui-progress-value: 50%; }
+.ui-progress-w-51 { --ui-progress-value: 51%; }
+.ui-progress-w-52 { --ui-progress-value: 52%; }
+.ui-progress-w-53 { --ui-progress-value: 53%; }
+.ui-progress-w-54 { --ui-progress-value: 54%; }
+.ui-progress-w-55 { --ui-progress-value: 55%; }
+.ui-progress-w-56 { --ui-progress-value: 56%; }
+.ui-progress-w-57 { --ui-progress-value: 57%; }
+.ui-progress-w-58 { --ui-progress-value: 58%; }
+.ui-progress-w-59 { --ui-progress-value: 59%; }
+.ui-progress-w-60 { --ui-progress-value: 60%; }
+.ui-progress-w-61 { --ui-progress-value: 61%; }
+.ui-progress-w-62 { --ui-progress-value: 62%; }
+.ui-progress-w-63 { --ui-progress-value: 63%; }
+.ui-progress-w-64 { --ui-progress-value: 64%; }
+.ui-progress-w-65 { --ui-progress-value: 65%; }
+.ui-progress-w-66 { --ui-progress-value: 66%; }
+.ui-progress-w-67 { --ui-progress-value: 67%; }
+.ui-progress-w-68 { --ui-progress-value: 68%; }
+.ui-progress-w-69 { --ui-progress-value: 69%; }
+.ui-progress-w-70 { --ui-progress-value: 70%; }
+.ui-progress-w-71 { --ui-progress-value: 71%; }
+.ui-progress-w-72 { --ui-progress-value: 72%; }
+.ui-progress-w-73 { --ui-progress-value: 73%; }
+.ui-progress-w-74 { --ui-progress-value: 74%; }
+.ui-progress-w-75 { --ui-progress-value: 75%; }
+.ui-progress-w-76 { --ui-progress-value: 76%; }
+.ui-progress-w-77 { --ui-progress-value: 77%; }
+.ui-progress-w-78 { --ui-progress-value: 78%; }
+.ui-progress-w-79 { --ui-progress-value: 79%; }
+.ui-progress-w-80 { --ui-progress-value: 80%; }
+.ui-progress-w-81 { --ui-progress-value: 81%; }
+.ui-progress-w-82 { --ui-progress-value: 82%; }
+.ui-progress-w-83 { --ui-progress-value: 83%; }
+.ui-progress-w-84 { --ui-progress-value: 84%; }
+.ui-progress-w-85 { --ui-progress-value: 85%; }
+.ui-progress-w-86 { --ui-progress-value: 86%; }
+.ui-progress-w-87 { --ui-progress-value: 87%; }
+.ui-progress-w-88 { --ui-progress-value: 88%; }
+.ui-progress-w-89 { --ui-progress-value: 89%; }
+.ui-progress-w-90 { --ui-progress-value: 90%; }
+.ui-progress-w-91 { --ui-progress-value: 91%; }
+.ui-progress-w-92 { --ui-progress-value: 92%; }
+.ui-progress-w-93 { --ui-progress-value: 93%; }
+.ui-progress-w-94 { --ui-progress-value: 94%; }
+.ui-progress-w-95 { --ui-progress-value: 95%; }
+.ui-progress-w-96 { --ui-progress-value: 96%; }
+.ui-progress-w-97 { --ui-progress-value: 97%; }
+.ui-progress-w-98 { --ui-progress-value: 98%; }
+.ui-progress-w-99 { --ui-progress-value: 99%; }
+.ui-progress-w-100 { --ui-progress-value: 100%; }
 
 .ui-progress-sm { --ui-progress-height: .35rem; }
 .ui-progress-lg { --ui-progress-height: 1rem; }
@@ -2114,6 +2395,21 @@ body.ui-overlay-open { overflow: hidden; }
 .ui-upload-help { color: var(--ui-muted); font-size: .8rem; }
 .ui-upload-preview { margin-top: .75rem; display: flex; flex-wrap: wrap; gap: .5rem; }
 .ui-file-item { padding: .55rem .7rem; border: 1px solid var(--ui-border); border-radius: var(--ui-radius-2); background: var(--ui-surface); display: flex; align-items: center; gap: .5rem; font-size: .8rem; }
+
+.ui-file-item-remove {
+  width: 1.1rem;
+  height: 1.1rem;
+  border: 0;
+  border-radius: 50%;
+  padding: 0;
+  background: transparent;
+  color: var(--ui-muted);
+  line-height: 1;
+  cursor: pointer;
+  flex: 0 0 auto;
+}
+
+.ui-file-item-remove:hover { background: var(--ui-danger-soft); color: var(--ui-danger); }
 
 .ui-empty-state {
   padding: 2.5rem 1.5rem;
@@ -2278,6 +2574,13 @@ form[data-ui-save-next].ui-dirty .ui-save-next-dirty { display: inline-flex; }
   min-width: 0;
 }
 
+.ui-draft-banner { margin-bottom: 1.25rem; }
+
+[data-ui-draft-status] {
+  color: var(--ui-muted);
+  font-size: .78rem;
+}
+
 
 .ui-date-range { position: relative; display: inline-block; }
 .ui-date-range-native { display: none; }
@@ -2297,6 +2600,11 @@ form[data-ui-save-next].ui-dirty .ui-save-next-dirty { display: inline-flex; }
 }
 
 .ui-date-range-trigger:hover { border-color: var(--ui-border-strong); }
+
+/* The real <input> backing this trigger is display:none (interaction goes
+   through the popover), so a native validation bubble has nowhere visible
+   to anchor. Surface failed validation on the trigger itself instead. */
+.ui-date-range-trigger.ui-is-invalid { border-color: var(--ui-danger); }
 
 .ui-date-range-trigger::after {
   content: "";
@@ -2323,6 +2631,7 @@ form[data-ui-save-next].ui-dirty .ui-save-next-dirty { display: inline-flex; }
 }
 
 .ui-date-range.ui-open .ui-date-range-panel { display: flex; animation: ui-dropdown-in .14s ease; }
+.ui-date-picker-shell .ui-date-range-panel { min-width: 21rem; }
 
 .ui-date-range-presets {
   display: flex;

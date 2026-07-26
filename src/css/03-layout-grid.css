@@ -63,6 +63,12 @@
   gap: var(--ui-grid-gap);
 }
 
+/* Column-width modifiers: avoids inline style="--ui-grid-min:..." (blocked under a strict style-src CSP). */
+.ui-css-grid-xs { --ui-grid-min: 10rem; }
+.ui-css-grid-sm { --ui-grid-min: 12rem; }
+.ui-css-grid-lg { --ui-grid-min: 16rem; }
+.ui-css-grid-xl { --ui-grid-min: 18rem; }
+
 .ui-grid {
   --ui-grid-columns: 12;
   --ui-grid-gap: 1rem;

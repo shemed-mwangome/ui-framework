@@ -13,7 +13,11 @@
     if (!position || !total) return;
 
     var bar = UI.q(".ui-save-next-progress .ui-progress-bar", form);
-    if (bar) bar.style.setProperty("--ui-progress-value", Math.round((position / total) * 100) + "%");
+    if (bar) {
+      var percent = Math.max(0, Math.min(100, Math.round((position / total) * 100)));
+      bar.className = bar.className.replace(/\bui-progress-w-\d+\b/g, "").trim();
+      bar.classList.add("ui-progress-w-" + percent);
+    }
 
     var positionEl = UI.q("[data-ui-save-next-position]", form);
     if (positionEl) positionEl.textContent = position;
@@ -59,8 +63,8 @@
 
   function init(root) {
     UI.qa("form[data-ui-save-next]", root).forEach(function (form) {
-      if (form.dataset.uiReady) return;
-      form.dataset.uiReady = "true";
+      if (form.dataset.uiSaveNextReady) return;
+      form.dataset.uiSaveNextReady = "true";
 
       syncProgress(form);
       setDirty(form, false);
