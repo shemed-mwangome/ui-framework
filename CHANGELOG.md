@@ -2,6 +2,7 @@
 
 ## 1.1.0 — 2026-07-26
 
+- Added a real beginner path: `quick-start.html` (open directly in a browser, no server) is now linked from the README and the docs homepage instead of sitting undiscoverable at the repo root; added a plain-language "how it works" primer and a troubleshooting section (unstyled page, dead buttons, mismatched modal IDs, checkbox/floating-label markup order, dynamically-inserted content) to `docs/getting-started.html`
 - Added `data-ui-draft-url` for save-draft: optionally syncs to a server endpoint (`GET`/`POST`/`DELETE`) in addition to `localStorage`, reconciling by whichever copy has the newer `savedAt` on load; sync failures are non-blocking and reported via `ui:draft:sync-error`
 - Added `UI.confirm()`, a promise-based confirmation modal replacing `window.confirm()`, with a `danger` variant for destructive actions
 - Added a "Save & next" form toolbar (`data-ui-save-next`) for moving through a sequence of records, with an unsaved-changes guard, Ctrl/Cmd+Enter shortcut, and optional AJAX submit mode
