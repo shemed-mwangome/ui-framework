@@ -14,7 +14,7 @@
       <a class="docs-brand" href="index.html"><span class="docs-logo">UI</span><span>UI Framework</span></a>
     </div>
     <div class="ui-d-flex ui-align-center ui-gap-2">
-      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.1.0</span>
+      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.2.0</span>
       <button class="ui-btn ui-btn-sm ui-btn-outline-secondary" type="button" data-ui-theme-toggle>Theme</button>
     </div>
   </header>
@@ -26,7 +26,7 @@
       <a class="docs-sidebar-link" href="examples/dashboard.html">Dashboard</a>
       <a class="docs-sidebar-link" href="examples/form.html">Form workflow</a>
       <a class="docs-sidebar-link" href="examples/login.html">Login page</a>
-      <div class="docs-sidebar-title">On this page</div><a class="docs-sidebar-link" href="#buttons">Buttons</a><a class="docs-sidebar-link" href="#typography">Typography</a><a class="docs-sidebar-link" href="#forms">Forms</a><a class="docs-sidebar-link" href="#selection">Selection</a><a class="docs-sidebar-link" href="#save-next">Multi-step form</a><a class="docs-sidebar-link" href="#draft">Save draft</a><a class="docs-sidebar-link" href="#alerts">Alerts</a><a class="docs-sidebar-link" href="#cards">Cards</a><a class="docs-sidebar-link" href="#images">Images</a><a class="docs-sidebar-link" href="#tables">Tables</a><a class="docs-sidebar-link" href="#data-table">Smart tables</a><a class="docs-sidebar-link" href="#navigation">Navigation</a><a class="docs-sidebar-link" href="#tabs">Tabs</a><a class="docs-sidebar-link" href="#dropdown">Dropdown</a><a class="docs-sidebar-link" href="#accordion">Accordion</a><a class="docs-sidebar-link" href="#modal">Modal</a><a class="docs-sidebar-link" href="#confirm">Confirm dialog</a><a class="docs-sidebar-link" href="#toast">Toast</a><a class="docs-sidebar-link" href="#multiselect">Multi-select</a><a class="docs-sidebar-link" href="#date-range">Date range</a><a class="docs-sidebar-link" href="#date-picker">Date picker</a><a class="docs-sidebar-link" href="#loaders">Loaders</a><a class="docs-sidebar-link" href="#upload">Upload</a><a class="docs-sidebar-link" href="#empty-stepper">Workflow UI</a><a class="docs-sidebar-link" href="#offcanvas">Offcanvas</a><a class="docs-sidebar-link" href="#tooltips">Tooltips</a>
+      <div class="docs-sidebar-title">On this page</div><a class="docs-sidebar-link" href="#buttons">Buttons</a><a class="docs-sidebar-link" href="#typography">Typography</a><a class="docs-sidebar-link" href="#forms">Forms</a><a class="docs-sidebar-link" href="#selection">Selection</a><a class="docs-sidebar-link" href="#multiselect">Multi-select</a><a class="docs-sidebar-link" href="#date-range">Date range</a><a class="docs-sidebar-link" href="#date-picker">Date picker</a><a class="docs-sidebar-link" href="#upload">Upload</a><a class="docs-sidebar-link" href="#save-next">Multi-step form</a><a class="docs-sidebar-link" href="#draft">Save draft</a><a class="docs-sidebar-link" href="#alerts">Alerts</a><a class="docs-sidebar-link" href="#cards">Cards</a><a class="docs-sidebar-link" href="#images">Images</a><a class="docs-sidebar-link" href="#tables">Tables</a><a class="docs-sidebar-link" href="#data-table">Smart tables</a><a class="docs-sidebar-link" href="#navigation">Navigation</a><a class="docs-sidebar-link" href="#tabs">Tabs</a><a class="docs-sidebar-link" href="#dropdown">Dropdown</a><a class="docs-sidebar-link" href="#accordion">Accordion</a><a class="docs-sidebar-link" href="#modal">Modal</a><a class="docs-sidebar-link" href="#confirm">Confirm dialog</a><a class="docs-sidebar-link" href="#offcanvas">Offcanvas</a><a class="docs-sidebar-link" href="#tooltips">Tooltips</a><a class="docs-sidebar-link" href="#toast">Toast</a><a class="docs-sidebar-link" href="#loaders">Loaders</a><a class="docs-sidebar-link" href="#empty-stepper">Workflow UI</a>
     </aside>
     <main class="docs-main">
 
@@ -57,7 +57,8 @@
   <pre class="ui-code-block"><code>&lt;button class=&quot;ui-btn ui-btn-primary&quot;&gt;Primary&lt;/button&gt;
 &lt;button class=&quot;ui-btn ui-btn-success&quot;&gt;Success&lt;/button&gt;
 &lt;button class=&quot;ui-btn ui-btn-outline-primary&quot;&gt;Outline&lt;/button&gt;
-&lt;button class=&quot;ui-btn ui-btn-primary ui-btn-pill&quot;&gt;Pill&lt;/button&gt;</code></pre>
+&lt;button class=&quot;ui-btn ui-btn-primary ui-btn-pill&quot;&gt;Pill&lt;/button&gt;
+&lt;button class=&quot;ui-btn ui-btn-primary ui-btn-loading&quot;&gt;Loading&lt;/button&gt;</code></pre>
 </div>
 
 <h3 class="ui-h3 ui-mt-5">More button variants</h3>
@@ -279,6 +280,146 @@
 </section>
 
 
+<section class="docs-section" id="multiselect">
+  <h2 class="ui-h2">Multi-select with checkboxes</h2>
+  <p class="docs-section-intro">Enhance a native multiple select. The original select remains in the form and receives selected values. In tags display mode, selecting more than <code class="ui-code">data-max-tags</code> (default 3) collapses the rest into a single "+N" chip so the trigger doesn't grow unbounded &mdash; try "Select all" below.</p>
+
+<div class="docs-demo">
+<div style="max-width:520px">
+  <label class="ui-label" for="officers">Inspection officers</label>
+  <select id="officers" name="officersIds" multiple data-ui-multiselect data-display="tags" data-max-tags="3" data-placeholder="Select officers" data-search="true" data-select-all="true">
+    <option value="1">Asha M.</option>
+    <option value="2">Baraka J.</option>
+    <option value="3">Neema K.</option>
+    <option value="4">Selemani M.</option>
+    <option value="5">Cleo N.</option>
+    <option value="6">Fatuma R.</option>
+    <option value="7">George T.</option>
+  </select>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;select name=&quot;officersIds&quot;
+        multiple
+        data-ui-multiselect
+        data-display=&quot;tags&quot;
+        data-max-tags=&quot;3&quot;
+        data-placeholder=&quot;Select officers&quot;
+        data-search=&quot;true&quot;
+        data-select-all=&quot;true&quot;&gt;
+  &lt;option value=&quot;1&quot;&gt;Asha M.&lt;/option&gt;
+  &lt;option value=&quot;2&quot;&gt;Baraka J.&lt;/option&gt;
+&lt;/select&gt;</code></pre>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="date-range">
+  <h2 class="ui-h2">Date range</h2>
+  <p class="docs-section-intro">A two-month calendar popover with quick presets, built over two native <code class="ui-code">&lt;input type="date"&gt;</code> fields so the chosen range still posts with a plain HTML form. Supports full keyboard navigation (arrow keys, Home/End, Page Up/Down, Enter), <code class="ui-code">data-min-date</code>/<code class="ui-code">data-max-date</code> bounds, <code class="ui-code">data-disabled-dates</code>, and a clear button — smart-positioned so it flips above the field and escapes clipping when opened near the edge of the screen or inside a scrollable container.</p>
+
+<div class="docs-demo">
+<div class="ui-date-range" data-ui-date-range data-ui-placeholder="Select date range">
+  <input type="date" name="reportStart" aria-label="Start date">
+  <input type="date" name="reportEnd" aria-label="End date">
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-date-range&quot; data-ui-date-range
+     data-ui-placeholder=&quot;Select date range&quot;
+     data-min-date=&quot;2026-01-01&quot;
+     data-max-date=&quot;2026-12-31&quot;
+     data-disabled-dates=&quot;2026-12-25,2026-01-01&quot;&gt;
+  &lt;input type=&quot;date&quot; name=&quot;reportStart&quot; aria-label=&quot;Start date&quot;&gt;
+  &lt;input type=&quot;date&quot; name=&quot;reportEnd&quot; aria-label=&quot;End date&quot;&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+document.querySelector(&quot;[data-ui-date-range]&quot;)
+  .addEventListener(&quot;ui:daterange:change&quot;, function (event) {
+    console.log(event.detail.start, event.detail.end);
+  });
+&lt;/script&gt;</code></pre>
+</div>
+
+<p class="docs-section-intro">Prefer a single form field over two? Wrap just one <code class="ui-code">&lt;input&gt;</code> instead of two &mdash; the component detects this and stores the range as one machine-parseable value (<code class="ui-code">YYYY-MM-DD - YYYY-MM-DD</code>) in it. Use <code class="ui-code">type="text"</code>, since a native <code class="ui-code">type="date"</code> input can only ever hold a single date and would silently reject the combined value.</p>
+
+<div class="docs-demo">
+<div class="ui-date-range" data-ui-date-range data-ui-placeholder="Select date range">
+  <input type="text" name="reportRange">
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-date-range&quot; data-ui-date-range&gt;
+  &lt;input type=&quot;text&quot; name=&quot;reportRange&quot;&gt;
+&lt;/div&gt;
+&lt;!-- posts as reportRange=2026-07-20 - 2026-07-26 --&gt;</code></pre>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="date-picker">
+  <h2 class="ui-h2">Date picker</h2>
+  <p class="docs-section-intro">The single-date counterpart to the date range picker: one month, one native <code class="ui-code">&lt;input type="date"&gt;</code>, and simple Yesterday/Today/Tomorrow presets. Shares the same keyboard navigation, positioning, <code class="ui-code">data-min-date</code>/<code class="ui-code">data-max-date</code>/<code class="ui-code">data-disabled-dates</code>, and clear button as the range picker.</p>
+
+<div class="docs-demo">
+<div class="ui-date-picker" data-ui-date-picker data-ui-placeholder="Select date">
+  <input type="date" name="inspectionDate" aria-label="Inspection date">
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-date-picker&quot; data-ui-date-picker
+     data-ui-placeholder=&quot;Select date&quot;&gt;
+  &lt;input type=&quot;date&quot; name=&quot;inspectionDate&quot; aria-label=&quot;Inspection date&quot;&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+document.querySelector(&quot;[data-ui-date-picker]&quot;)
+  .addEventListener(&quot;ui:datepicker:change&quot;, function (event) {
+    console.log(event.detail.value);
+  });
+&lt;/script&gt;</code></pre>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="upload">
+  <h2 class="ui-h2">File upload</h2>
+  <p class="docs-section-intro">A drag-and-drop friendly upload zone that lists selected files without dependencies.</p>
+
+<div class="docs-demo">
+<div class="ui-upload" data-ui-upload>
+  <input type="file" multiple aria-label="Upload documents">
+  <div>
+    <div class="ui-empty-icon">⇧</div>
+    <div class="ui-upload-title">Drop files here or click to browse</div>
+    <div class="ui-upload-help">PDF, PNG, JPG, DOCX</div>
+    <div class="ui-upload-preview"></div>
+  </div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-upload&quot; data-ui-upload&gt;
+  &lt;input type=&quot;file&quot; multiple&gt;
+  &lt;div&gt;
+    &lt;div class=&quot;ui-upload-title&quot;&gt;Drop files here&lt;/div&gt;
+    &lt;div class=&quot;ui-upload-help&quot;&gt;PDF, PNG, JPG, DOCX&lt;/div&gt;
+    &lt;div class=&quot;ui-upload-preview&quot;&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+</div>
+
+</section>
+
+
 <section class="docs-section" id="save-next">
   <h2 class="ui-h2">Multi-step form with save &amp; next</h2>
   <p class="docs-section-intro">A stepper wizard (<code class="ui-code">data-ui-stepper-form</code>) composed with the save &amp; next toolbar (<code class="ui-code">data-ui-save-next</code>) on the same form. "Next" validates the current step natively before advancing; the last step's submit button is the same "Save &amp; next" button the record toolbar already understands, so the unsaved-changes guard, Ctrl/Cmd+Enter shortcut, and optional AJAX mode all apply for free.</p>
@@ -427,7 +568,6 @@
   <div class="ui-alert ui-alert-danger ui-alert-outline">
     <div class="ui-alert-icon">!</div><div><div class="ui-alert-title">Validation failed</div><p class="ui-alert-message">Please correct the highlighted fields.</p></div>
   </div>
-  <div class="ui-d-flex ui-gap-2 ui-align-center"><span class="ui-badge ui-badge-success">Approved</span><span class="ui-badge ui-badge-secondary">Draft</span><span class="ui-badge ui-badge-soft-danger ui-badge-pill">Rejected</span><span class="ui-dot ui-dot-success"></span> Online<span class="ui-dot ui-dot-warning"></span> Away</div>
 </div>
 </div>
 <div class="docs-code-wrap">
@@ -439,8 +579,66 @@
     &lt;p class=&quot;ui-alert-message&quot;&gt;The record is now available.&lt;/p&gt;
   &lt;/div&gt;
   &lt;button class=&quot;ui-alert-close&quot; data-ui-alert-close&gt;&amp;times;&lt;/button&gt;
-&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+</div>
 
+<h3 class="ui-h3 ui-mt-5">All alert colors &times; all three styles</h3>
+<p class="docs-section-intro">Every color (<span class="ui-code">success</span>/<span class="ui-code">danger</span>/<span class="ui-code">warning</span>/<span class="ui-code">info</span>) works with any of the three background styles: the default soft tint, <span class="ui-code">.ui-alert-outline</span> (border only), and <span class="ui-code">.ui-alert-solid</span> (filled). Mix in <span class="ui-code">.ui-alert-sm</span>/<span class="ui-code">.ui-alert-lg</span> for padding and <span class="ui-code">.ui-alert-shadow</span> for elevation.</p>
+
+<div class="docs-demo">
+<div class="ui-css-grid ui-css-grid-sm">
+  <div class="ui-alert ui-alert-success ui-alert-sm ui-mb-0">Soft success</div>
+  <div class="ui-alert ui-alert-danger ui-alert-sm ui-mb-0">Soft danger</div>
+  <div class="ui-alert ui-alert-warning ui-alert-sm ui-mb-0">Soft warning</div>
+  <div class="ui-alert ui-alert-info ui-alert-sm ui-mb-0">Soft info</div>
+  <div class="ui-alert ui-alert-success ui-alert-outline ui-alert-sm ui-mb-0">Outline success</div>
+  <div class="ui-alert ui-alert-danger ui-alert-outline ui-alert-sm ui-mb-0">Outline danger</div>
+  <div class="ui-alert ui-alert-warning ui-alert-outline ui-alert-sm ui-mb-0">Outline warning</div>
+  <div class="ui-alert ui-alert-info ui-alert-outline ui-alert-sm ui-mb-0">Outline info</div>
+  <div class="ui-alert ui-alert-success ui-alert-solid ui-alert-sm ui-mb-0">Solid success</div>
+  <div class="ui-alert ui-alert-danger ui-alert-solid ui-alert-sm ui-mb-0">Solid danger</div>
+  <div class="ui-alert ui-alert-warning ui-alert-solid ui-alert-sm ui-mb-0">Solid warning</div>
+  <div class="ui-alert ui-alert-info ui-alert-solid ui-alert-sm ui-mb-0">Solid info</div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-alert ui-alert-warning&quot;&gt;Soft warning&lt;/div&gt;
+&lt;div class=&quot;ui-alert ui-alert-warning ui-alert-outline&quot;&gt;Outline warning&lt;/div&gt;
+&lt;div class=&quot;ui-alert ui-alert-warning ui-alert-solid&quot;&gt;Solid warning&lt;/div&gt;</code></pre>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">Badges and status dots</h3>
+<p class="docs-section-intro">Badges come in solid and <span class="ui-code">.ui-badge-soft-*</span> styles, all four colors plus <span class="ui-code">secondary</span>, and an optional <span class="ui-code">.ui-badge-pill</span>. <span class="ui-code">.ui-dot</span> is a small standalone status indicator (no label) for table rows or lists.</p>
+
+<div class="docs-demo">
+<div class="ui-d-flex ui-flex-column ui-gap-3">
+  <div class="ui-d-flex ui-flex-wrap ui-gap-2 ui-align-center">
+    <span class="ui-badge ui-badge-primary">Primary</span>
+    <span class="ui-badge ui-badge-secondary">Secondary</span>
+    <span class="ui-badge ui-badge-success">Success</span>
+    <span class="ui-badge ui-badge-danger">Danger</span>
+    <span class="ui-badge ui-badge-warning">Warning</span>
+    <span class="ui-badge ui-badge-info">Info</span>
+  </div>
+  <div class="ui-d-flex ui-flex-wrap ui-gap-2 ui-align-center">
+    <span class="ui-badge ui-badge-soft-primary ui-badge-pill">Soft primary</span>
+    <span class="ui-badge ui-badge-soft-success ui-badge-pill">Approved</span>
+    <span class="ui-badge ui-badge-soft-danger ui-badge-pill">Rejected</span>
+    <span class="ui-badge ui-badge-soft-warning ui-badge-pill">Pending</span>
+  </div>
+  <div class="ui-d-flex ui-flex-wrap ui-gap-3 ui-align-center">
+    <span><span class="ui-dot ui-dot-success"></span> Online</span>
+    <span><span class="ui-dot ui-dot-warning"></span> Away</span>
+    <span><span class="ui-dot ui-dot-danger"></span> Busy</span>
+    <span><span class="ui-dot ui-dot-info"></span> Info</span>
+  </div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;span class=&quot;ui-badge ui-badge-success&quot;&gt;Success&lt;/span&gt;
+&lt;span class=&quot;ui-badge ui-badge-soft-success ui-badge-pill&quot;&gt;Approved&lt;/span&gt;
 &lt;span class=&quot;ui-dot ui-dot-success&quot;&gt;&lt;/span&gt; Online</code></pre>
 </div>
 
@@ -958,225 +1156,6 @@
 </section>
 
 
-<section class="docs-section" id="toast">
-  <h2 class="ui-h2">Toast notifications</h2>
-  <p class="docs-section-intro">Create floating messages through the JavaScript API with configurable type, position, and duration.</p>
-
-<div class="docs-demo">
-<div class="ui-d-flex ui-flex-wrap ui-gap-2">
-  <button class="ui-btn ui-btn-success" onclick="UI.toast.show({type:'success',title:'Saved',message:'The changes were saved.'})">Success toast</button>
-  <button class="ui-btn ui-btn-danger" onclick="UI.toast.show({type:'danger',title:'Error',message:'The request failed.'})">Error toast</button>
-  <button class="ui-btn ui-btn-info" onclick="UI.toast.show({type:'info',title:'Information',message:'A new report is ready.',position:'bottom-end'})">Bottom toast</button>
-</div>
-</div>
-<div class="docs-code-wrap">
-  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
-  <pre class="ui-code-block"><code>UI.toast.show({
-  type: &quot;success&quot;,
-  title: &quot;Saved&quot;,
-  message: &quot;The changes were saved.&quot;,
-  duration: 4000,
-  position: &quot;top-end&quot;
-});</code></pre>
-</div>
-
-</section>
-
-
-<section class="docs-section" id="multiselect">
-  <h2 class="ui-h2">Multi-select with checkboxes</h2>
-  <p class="docs-section-intro">Enhance a native multiple select. The original select remains in the form and receives selected values. In tags display mode, selecting more than <code class="ui-code">data-max-tags</code> (default 3) collapses the rest into a single "+N" chip so the trigger doesn't grow unbounded &mdash; try "Select all" below.</p>
-
-<div class="docs-demo">
-<div style="max-width:520px">
-  <label class="ui-label" for="officers">Inspection officers</label>
-  <select id="officers" name="officersIds" multiple data-ui-multiselect data-display="tags" data-max-tags="3" data-placeholder="Select officers" data-search="true" data-select-all="true">
-    <option value="1">Asha M.</option>
-    <option value="2">Baraka J.</option>
-    <option value="3">Neema K.</option>
-    <option value="4">Selemani M.</option>
-    <option value="5">Cleo N.</option>
-    <option value="6">Fatuma R.</option>
-    <option value="7">George T.</option>
-  </select>
-</div>
-</div>
-<div class="docs-code-wrap">
-  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
-  <pre class="ui-code-block"><code>&lt;select name=&quot;officersIds&quot;
-        multiple
-        data-ui-multiselect
-        data-display=&quot;tags&quot;
-        data-max-tags=&quot;3&quot;
-        data-placeholder=&quot;Select officers&quot;
-        data-search=&quot;true&quot;
-        data-select-all=&quot;true&quot;&gt;
-  &lt;option value=&quot;1&quot;&gt;Asha M.&lt;/option&gt;
-  &lt;option value=&quot;2&quot;&gt;Baraka J.&lt;/option&gt;
-&lt;/select&gt;</code></pre>
-</div>
-
-</section>
-
-
-<section class="docs-section" id="date-range">
-  <h2 class="ui-h2">Date range</h2>
-  <p class="docs-section-intro">A two-month calendar popover with quick presets, built over two native <code class="ui-code">&lt;input type="date"&gt;</code> fields so the chosen range still posts with a plain HTML form. Supports full keyboard navigation (arrow keys, Home/End, Page Up/Down, Enter), <code class="ui-code">data-min-date</code>/<code class="ui-code">data-max-date</code> bounds, <code class="ui-code">data-disabled-dates</code>, and a clear button — smart-positioned so it flips above the field and escapes clipping when opened near the edge of the screen or inside a scrollable container.</p>
-
-<div class="docs-demo">
-<div class="ui-date-range" data-ui-date-range data-ui-placeholder="Select date range">
-  <input type="date" name="reportStart" aria-label="Start date">
-  <input type="date" name="reportEnd" aria-label="End date">
-</div>
-</div>
-<div class="docs-code-wrap">
-  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
-  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-date-range&quot; data-ui-date-range
-     data-ui-placeholder=&quot;Select date range&quot;
-     data-min-date=&quot;2026-01-01&quot;
-     data-max-date=&quot;2026-12-31&quot;
-     data-disabled-dates=&quot;2026-12-25,2026-01-01&quot;&gt;
-  &lt;input type=&quot;date&quot; name=&quot;reportStart&quot; aria-label=&quot;Start date&quot;&gt;
-  &lt;input type=&quot;date&quot; name=&quot;reportEnd&quot; aria-label=&quot;End date&quot;&gt;
-&lt;/div&gt;
-
-&lt;script&gt;
-document.querySelector(&quot;[data-ui-date-range]&quot;)
-  .addEventListener(&quot;ui:daterange:change&quot;, function (event) {
-    console.log(event.detail.start, event.detail.end);
-  });
-&lt;/script&gt;</code></pre>
-</div>
-
-<p class="docs-section-intro">Prefer a single form field over two? Wrap just one <code class="ui-code">&lt;input&gt;</code> instead of two &mdash; the component detects this and stores the range as one machine-parseable value (<code class="ui-code">YYYY-MM-DD - YYYY-MM-DD</code>) in it. Use <code class="ui-code">type="text"</code>, since a native <code class="ui-code">type="date"</code> input can only ever hold a single date and would silently reject the combined value.</p>
-
-<div class="docs-demo">
-<div class="ui-date-range" data-ui-date-range data-ui-placeholder="Select date range">
-  <input type="text" name="reportRange">
-</div>
-</div>
-<div class="docs-code-wrap">
-  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
-  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-date-range&quot; data-ui-date-range&gt;
-  &lt;input type=&quot;text&quot; name=&quot;reportRange&quot;&gt;
-&lt;/div&gt;
-&lt;!-- posts as reportRange=2026-07-20 - 2026-07-26 --&gt;</code></pre>
-</div>
-
-</section>
-
-
-<section class="docs-section" id="date-picker">
-  <h2 class="ui-h2">Date picker</h2>
-  <p class="docs-section-intro">The single-date counterpart to the date range picker: one month, one native <code class="ui-code">&lt;input type="date"&gt;</code>, and simple Yesterday/Today/Tomorrow presets. Shares the same keyboard navigation, positioning, <code class="ui-code">data-min-date</code>/<code class="ui-code">data-max-date</code>/<code class="ui-code">data-disabled-dates</code>, and clear button as the range picker.</p>
-
-<div class="docs-demo">
-<div class="ui-date-picker" data-ui-date-picker data-ui-placeholder="Select date">
-  <input type="date" name="inspectionDate" aria-label="Inspection date">
-</div>
-</div>
-<div class="docs-code-wrap">
-  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
-  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-date-picker&quot; data-ui-date-picker
-     data-ui-placeholder=&quot;Select date&quot;&gt;
-  &lt;input type=&quot;date&quot; name=&quot;inspectionDate&quot; aria-label=&quot;Inspection date&quot;&gt;
-&lt;/div&gt;
-
-&lt;script&gt;
-document.querySelector(&quot;[data-ui-date-picker]&quot;)
-  .addEventListener(&quot;ui:datepicker:change&quot;, function (event) {
-    console.log(event.detail.value);
-  });
-&lt;/script&gt;</code></pre>
-</div>
-
-</section>
-
-
-<section class="docs-section" id="loaders">
-  <h2 class="ui-h2">Progress, spinners, and skeletons</h2>
-  <p class="docs-section-intro">Use determinate progress bars, striped animation, spinners, pulse indicators, and skeleton placeholders.</p>
-
-<div class="docs-demo">
-<div class="ui-d-flex ui-flex-column ui-gap-4">
-  <div class="ui-progress ui-progress-success ui-progress-striped ui-progress-animated"><div class="ui-progress-bar ui-progress-w-72"></div></div>
-  <div class="ui-d-flex ui-align-center ui-gap-4"><span class="ui-spinner"></span><span class="ui-spinner ui-spinner-success ui-spinner-lg"></span><span class="ui-pulse"></span></div>
-  <div class="ui-card" style="max-width:340px"><div class="ui-card-body"><div class="ui-skeleton ui-skeleton-title"></div><div class="ui-skeleton ui-skeleton-text"></div><div class="ui-skeleton ui-skeleton-text" style="width:70%"></div></div></div>
-</div>
-</div>
-<div class="docs-code-wrap">
-  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
-  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-progress ui-progress-success&quot;&gt;
-  &lt;div class=&quot;ui-progress-bar&quot; style=&quot;--ui-progress-value:72%&quot;&gt;&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;span class=&quot;ui-spinner&quot;&gt;&lt;/span&gt;
-&lt;div class=&quot;ui-skeleton ui-skeleton-text&quot;&gt;&lt;/div&gt;</code></pre>
-</div>
-
-</section>
-
-
-<section class="docs-section" id="upload">
-  <h2 class="ui-h2">File upload</h2>
-  <p class="docs-section-intro">A drag-and-drop friendly upload zone that lists selected files without dependencies.</p>
-
-<div class="docs-demo">
-<div class="ui-upload" data-ui-upload>
-  <input type="file" multiple aria-label="Upload documents">
-  <div>
-    <div class="ui-empty-icon">⇧</div>
-    <div class="ui-upload-title">Drop files here or click to browse</div>
-    <div class="ui-upload-help">PDF, PNG, JPG, DOCX</div>
-    <div class="ui-upload-preview"></div>
-  </div>
-</div>
-</div>
-<div class="docs-code-wrap">
-  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
-  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-upload&quot; data-ui-upload&gt;
-  &lt;input type=&quot;file&quot; multiple&gt;
-  &lt;div&gt;
-    &lt;div class=&quot;ui-upload-title&quot;&gt;Drop files here&lt;/div&gt;
-    &lt;div class=&quot;ui-upload-help&quot;&gt;PDF, PNG, JPG, DOCX&lt;/div&gt;
-    &lt;div class=&quot;ui-upload-preview&quot;&gt;&lt;/div&gt;
-  &lt;/div&gt;
-&lt;/div&gt;</code></pre>
-</div>
-
-</section>
-
-
-<section class="docs-section" id="empty-stepper">
-  <h2 class="ui-h2">Empty states, stepper, and timeline</h2>
-  <p class="docs-section-intro">Communicate no-data states and display workflow or audit progress.</p>
-
-<div class="docs-demo">
-<div class="ui-d-flex ui-flex-column ui-gap-5">
-  <div class="ui-stepper">
-    <div class="ui-step ui-complete"><div class="ui-step-marker">1</div><div class="ui-step-label">Details</div></div>
-    <div class="ui-step ui-active"><div class="ui-step-marker">2</div><div class="ui-step-label">Review</div></div>
-    <div class="ui-step"><div class="ui-step-marker">3</div><div class="ui-step-label">Complete</div></div>
-  </div>
-  <div class="ui-empty-state"><div class="ui-empty-icon">⌕</div><h3 class="ui-empty-title">No records found</h3><p class="ui-empty-message">Try changing the filters or create a new record.</p><button class="ui-btn ui-btn-primary">Create record</button></div>
-  <div class="ui-timeline"><div class="ui-timeline-item"><div class="ui-timeline-time">10:30</div><div class="ui-timeline-title">Submitted</div><div class="ui-timeline-body">The application entered review.</div></div><div class="ui-timeline-item"><div class="ui-timeline-time">12:15</div><div class="ui-timeline-title">Approved</div><div class="ui-timeline-body">Supervisor approval completed.</div></div></div>
-</div>
-</div>
-<div class="docs-code-wrap">
-  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
-  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-stepper&quot;&gt;
-  &lt;div class=&quot;ui-step ui-complete&quot;&gt;...&lt;/div&gt;
-  &lt;div class=&quot;ui-step ui-active&quot;&gt;...&lt;/div&gt;
-  &lt;div class=&quot;ui-step&quot;&gt;...&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div class=&quot;ui-empty-state&quot;&gt;...&lt;/div&gt;
-&lt;div class=&quot;ui-timeline&quot;&gt;...&lt;/div&gt;</code></pre>
-</div>
-
-</section>
-
-
 <section class="docs-section" id="offcanvas">
   <h2 class="ui-h2">Offcanvas</h2>
   <p class="docs-section-intro">Slide a navigation or detail panel from the left or right side of the viewport.</p>
@@ -1228,8 +1207,103 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 </section>
 
 
+<section class="docs-section" id="toast">
+  <h2 class="ui-h2">Toast notifications</h2>
+  <p class="docs-section-intro">Create floating messages through the JavaScript API with configurable type, position, and duration.</p>
 
-      <footer class="docs-footer">UI Framework 1.1.0 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
+<div class="docs-demo">
+<div class="ui-d-flex ui-flex-wrap ui-gap-2">
+  <button class="ui-btn ui-btn-success" onclick="UI.toast.show({type:'success',title:'Saved',message:'The changes were saved.'})">Success toast</button>
+  <button class="ui-btn ui-btn-danger" onclick="UI.toast.show({type:'danger',title:'Error',message:'The request failed.'})">Error toast</button>
+  <button class="ui-btn ui-btn-info" onclick="UI.toast.show({type:'info',title:'Information',message:'A new report is ready.',position:'bottom-end'})">Bottom toast</button>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>UI.toast.show({
+  type: &quot;success&quot;,
+  title: &quot;Saved&quot;,
+  message: &quot;The changes were saved.&quot;,
+  duration: 4000,
+  position: &quot;top-end&quot;
+});</code></pre>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="loaders">
+  <h2 class="ui-h2">Progress, spinners, and skeletons</h2>
+  <p class="docs-section-intro">Use determinate progress bars, striped animation, spinners, pulse indicators, and skeleton placeholders.</p>
+
+<div class="docs-demo">
+<div class="ui-d-flex ui-flex-column ui-gap-4">
+  <div class="ui-progress ui-progress-success ui-progress-striped ui-progress-animated"><div class="ui-progress-bar ui-progress-w-72"></div></div>
+  <div class="ui-d-flex ui-align-center ui-gap-4">
+    <span class="ui-spinner"></span>
+    <span class="ui-spinner ui-spinner-sm ui-spinner-danger"></span>
+    <span class="ui-spinner ui-spinner-lg ui-spinner-success"></span>
+    <span class="ui-pulse"></span>
+  </div>
+  <div class="ui-css-grid ui-css-grid-sm">
+    <div class="ui-card"><div class="ui-card-body"><div class="ui-skeleton ui-skeleton-title"></div><div class="ui-skeleton ui-skeleton-text"></div><div class="ui-skeleton ui-skeleton-text ui-w-75"></div></div></div>
+    <div class="ui-card"><div class="ui-card-body ui-d-flex ui-align-center ui-gap-3"><div class="ui-skeleton ui-skeleton-circle"></div><div class="ui-flex-fill"><div class="ui-skeleton ui-skeleton-text"></div><div class="ui-skeleton ui-skeleton-text ui-w-50"></div></div></div></div>
+  </div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-progress ui-progress-success&quot;&gt;
+  &lt;div class=&quot;ui-progress-bar ui-progress-w-72&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;span class=&quot;ui-spinner&quot;&gt;&lt;/span&gt;
+&lt;span class=&quot;ui-spinner ui-spinner-sm ui-spinner-danger&quot;&gt;&lt;/span&gt;
+&lt;span class=&quot;ui-spinner ui-spinner-lg ui-spinner-success&quot;&gt;&lt;/span&gt;
+&lt;span class=&quot;ui-pulse&quot;&gt;&lt;/span&gt;
+
+&lt;div class=&quot;ui-skeleton ui-skeleton-title&quot;&gt;&lt;/div&gt;
+&lt;div class=&quot;ui-skeleton ui-skeleton-text&quot;&gt;&lt;/div&gt;
+&lt;div class=&quot;ui-skeleton ui-skeleton-circle&quot;&gt;&lt;/div&gt;</code></pre>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="empty-stepper">
+  <h2 class="ui-h2">Empty states, stepper, and timeline</h2>
+  <p class="docs-section-intro">Communicate no-data states and display workflow or audit progress.</p>
+
+<div class="docs-demo">
+<div class="ui-d-flex ui-flex-column ui-gap-5">
+  <div class="ui-stepper">
+    <div class="ui-step ui-complete"><div class="ui-step-marker">1</div><div class="ui-step-label">Details</div></div>
+    <div class="ui-step ui-active"><div class="ui-step-marker">2</div><div class="ui-step-label">Review</div></div>
+    <div class="ui-step"><div class="ui-step-marker">3</div><div class="ui-step-label">Complete</div></div>
+  </div>
+  <div class="ui-empty-state"><div class="ui-empty-icon">⌕</div><h3 class="ui-empty-title">No records found</h3><p class="ui-empty-message">Try changing the filters or create a new record.</p><button class="ui-btn ui-btn-primary">Create record</button></div>
+  <div class="ui-timeline"><div class="ui-timeline-item"><div class="ui-timeline-time">10:30</div><div class="ui-timeline-title">Submitted</div><div class="ui-timeline-body">The application entered review.</div></div><div class="ui-timeline-item"><div class="ui-timeline-time">12:15</div><div class="ui-timeline-title">Approved</div><div class="ui-timeline-body">Supervisor approval completed.</div></div></div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-stepper&quot;&gt;
+  &lt;div class=&quot;ui-step ui-complete&quot;&gt;...&lt;/div&gt;
+  &lt;div class=&quot;ui-step ui-active&quot;&gt;...&lt;/div&gt;
+  &lt;div class=&quot;ui-step&quot;&gt;...&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;ui-empty-state&quot;&gt;...&lt;/div&gt;
+&lt;div class=&quot;ui-timeline&quot;&gt;...&lt;/div&gt;</code></pre>
+</div>
+
+</section>
+
+
+
+
+
+      <footer class="docs-footer">UI Framework 1.2.0 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
     </main>
   </div>
   <script src="../dist/ui-framework.js"></script>

@@ -177,7 +177,7 @@
 
 .ui-skeleton-text { height: .8rem; margin-bottom: .55rem; }
 .ui-skeleton-title { width: 55%; height: 1.25rem; margin-bottom: .8rem; }
-.ui-skeleton-circle { aspect-ratio: 1; border-radius: 50%; }
+.ui-skeleton-circle { width: 2.5rem; aspect-ratio: 1; border-radius: 50%; flex: none; }
 
 @keyframes ui-spin { to { transform: rotate(360deg); } }
 @keyframes ui-pulse { 70% { box-shadow: 0 0 0 .65rem transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }

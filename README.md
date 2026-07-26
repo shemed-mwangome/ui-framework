@@ -1,4 +1,4 @@
-# UI Framework 1.1.0
+# UI Framework 1.2.0
 
 A complete, dependency-free CSS and JavaScript UI framework designed for
 server-rendered applications, static HTML, and legacy projects that already
