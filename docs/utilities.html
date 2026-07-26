@@ -26,24 +26,37 @@
       <a class="docs-sidebar-link" href="examples/dashboard.html">Dashboard</a>
       <a class="docs-sidebar-link" href="examples/form.html">Form workflow</a>
       <a class="docs-sidebar-link" href="examples/login.html">Login page</a>
-      <div class="docs-sidebar-title">On this page</div><a class="docs-sidebar-link" href="#spacing">Spacing</a><a class="docs-sidebar-link" href="#flex">Display & flex</a><a class="docs-sidebar-link" href="#text">Text & colors</a><a class="docs-sidebar-link" href="#effects">Effects</a>
+      <div class="docs-sidebar-title">On this page</div><a class="docs-sidebar-link" href="#spacing">Spacing</a><a class="docs-sidebar-link" href="#sizing">Sizing & position</a><a class="docs-sidebar-link" href="#flex">Display & flex</a><a class="docs-sidebar-link" href="#text">Text & colors</a><a class="docs-sidebar-link" href="#effects">Borders, radius & shadows</a><a class="docs-sidebar-link" href="#visibility">Visibility & misc</a>
     </aside>
     <main class="docs-main">
 
 <section class="docs-hero">
   <div class="docs-kicker">Utility-first helpers</div>
   <h1 class="ui-display-2">Compose layouts directly in markup.</h1>
-  <p class="ui-lead">Utilities cover display, flexbox, spacing, sizing, typography, colors, borders, shadows, visibility, and interactions.</p>
+  <p class="ui-lead">Utilities cover display, flexbox, spacing, sizing, typography, colors, borders, shadows, visibility, and interactions. Every utility below carries <span class="ui-code">!important</span>, so it always wins over component classes &mdash; that's deliberate, the same convention Bootstrap uses, so a utility applied inline in markup never has to fight specificity with a component's own CSS.</p>
 </section>
 
 <section class="docs-section" id="spacing">
   <h2 class="ui-h2">Spacing</h2>
-  <p>Use values <span class="ui-code">0</span> through <span class="ui-code">8</span>.</p>
-  <div class="ui-table-responsive"><table class="ui-table ui-table-striped"><thead><tr><th>Pattern</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
-    <tr><td><span class="ui-code">ui-m-*</span></td><td>Margin on all sides</td><td>ui-m-4</td></tr>
-    <tr><td><span class="ui-code">ui-mx-*</span></td><td>Horizontal margin</td><td>ui-mx-auto</td></tr>
-    <tr><td><span class="ui-code">ui-p-*</span></td><td>Padding on all sides</td><td>ui-p-5</td></tr>
-    <tr><td><span class="ui-code">ui-gap-*</span></td><td>Flex/grid gap</td><td>ui-gap-3</td></tr>
+  <p class="docs-section-intro">Every pattern below accepts <span class="ui-code">0</span> through <span class="ui-code">8</span> (0, .25rem, .5rem, .75rem, 1rem, 1.5rem, 2rem, 3rem, 4rem), plus <span class="ui-code">ui-mx-auto</span> for horizontal centering.</p>
+  <div class="ui-table-responsive"><table class="ui-table ui-table-striped"><thead><tr><th>Pattern</th><th>Property</th><th>Example</th></tr></thead><tbody>
+    <tr><td><span class="ui-code">ui-m-*</span></td><td>margin (all sides)</td><td><span class="ui-code">ui-m-4</span></td></tr>
+    <tr><td><span class="ui-code">ui-mt-*</span> / <span class="ui-code">ui-mb-*</span></td><td>margin-top / margin-bottom</td><td><span class="ui-code">ui-mt-2</span></td></tr>
+    <tr><td><span class="ui-code">ui-ms-*</span> / <span class="ui-code">ui-me-*</span></td><td>margin-left / margin-right</td><td><span class="ui-code">ui-me-3</span></td></tr>
+    <tr><td><span class="ui-code">ui-mx-*</span> / <span class="ui-code">ui-my-*</span></td><td>margin-inline / margin-block</td><td><span class="ui-code">ui-mx-auto</span></td></tr>
+    <tr><td><span class="ui-code">ui-p-*</span>, <span class="ui-code">ui-pt-*</span>, <span class="ui-code">ui-pb-*</span>, <span class="ui-code">ui-ps-*</span>, <span class="ui-code">ui-pe-*</span>, <span class="ui-code">ui-px-*</span>, <span class="ui-code">ui-py-*</span></td><td>same pattern, for padding</td><td><span class="ui-code">ui-p-5</span></td></tr>
+    <tr><td><span class="ui-code">ui-gap-*</span></td><td>flex/grid gap</td><td><span class="ui-code">ui-gap-3</span></td></tr>
+  </tbody></table></div>
+</section>
+
+<section class="docs-section" id="sizing">
+  <h2 class="ui-h2">Sizing & position</h2>
+  <div class="ui-table-responsive"><table class="ui-table ui-table-striped"><thead><tr><th>Class</th><th>Effect</th></tr></thead><tbody>
+    <tr><td><span class="ui-code">ui-w-25</span> / <span class="ui-code">ui-w-50</span> / <span class="ui-code">ui-w-75</span> / <span class="ui-code">ui-w-100</span></td><td>width: 25% / 50% / 75% / 100%</td></tr>
+    <tr><td><span class="ui-code">ui-h-100</span></td><td>height: 100%</td></tr>
+    <tr><td><span class="ui-code">ui-min-vh-100</span></td><td>min-height: 100vh (full viewport)</td></tr>
+    <tr><td><span class="ui-code">ui-position-relative</span> / <span class="ui-code">-absolute</span> / <span class="ui-code">-fixed</span> / <span class="ui-code">-sticky</span></td><td>position property</td></tr>
+    <tr><td><span class="ui-code">ui-overflow-auto</span> / <span class="ui-code">-hidden</span></td><td>overflow property</td></tr>
   </tbody></table></div>
 </section>
 
@@ -55,6 +68,15 @@
     </div>
   </div>
   <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>ui-d-flex ui-justify-between ui-align-center ui-gap-3</code></pre></div>
+
+  <div class="ui-table-responsive ui-mt-4"><table class="ui-table ui-table-striped"><thead><tr><th>Class</th><th>Effect</th></tr></thead><tbody>
+    <tr><td><span class="ui-code">ui-d-none</span> / <span class="ui-code">-block</span> / <span class="ui-code">-inline</span> / <span class="ui-code">-inline-block</span> / <span class="ui-code">-flex</span> / <span class="ui-code">-inline-flex</span> / <span class="ui-code">-grid</span></td><td>the <span class="ui-code">display</span> property</td></tr>
+    <tr><td><span class="ui-code">ui-flex-row</span> / <span class="ui-code">-column</span></td><td>flex-direction</td></tr>
+    <tr><td><span class="ui-code">ui-flex-wrap</span> / <span class="ui-code">-nowrap</span></td><td>flex-wrap</td></tr>
+    <tr><td><span class="ui-code">ui-flex-fill</span> / <span class="ui-code">-grow-1</span> / <span class="ui-code">-shrink-0</span></td><td>flex sizing shorthand</td></tr>
+    <tr><td><span class="ui-code">ui-justify-start</span> / <span class="ui-code">-center</span> / <span class="ui-code">-end</span> / <span class="ui-code">-between</span> / <span class="ui-code">-around</span></td><td>justify-content</td></tr>
+    <tr><td><span class="ui-code">ui-align-start</span> / <span class="ui-code">-center</span> / <span class="ui-code">-end</span> / <span class="ui-code">-stretch</span></td><td>align-items</td></tr>
+  </tbody></table></div>
 </section>
 
 <section class="docs-section" id="text">
@@ -63,7 +85,22 @@
     <div class="ui-p-3 ui-border ui-rounded-3 ui-text-primary ui-fw-bold">Primary bold</div>
     <div class="ui-p-3 ui-border ui-rounded-3 ui-text-success ui-text-uppercase">Success uppercase</div>
     <div class="ui-p-3 ui-border ui-rounded-3 ui-text-muted ui-fs-5">Muted small text</div>
+    <div class="ui-p-3 ui-border ui-rounded-3 ui-text-danger">Danger</div>
+    <div class="ui-p-3 ui-border ui-rounded-3 ui-text-warning">Warning</div>
+    <div class="ui-p-3 ui-border ui-rounded-3 ui-text-info">Info</div>
+    <div class="ui-p-3 ui-border ui-rounded-3 ui-text-secondary">Secondary</div>
+    <div class="ui-p-3 ui-bg-primary ui-rounded-3 ui-text-white">White on primary</div>
   </div>
+
+  <div class="ui-table-responsive ui-mt-4"><table class="ui-table ui-table-striped"><thead><tr><th>Class</th><th>Effect</th></tr></thead><tbody>
+    <tr><td><span class="ui-code">ui-text-primary</span> / <span class="ui-code">-secondary</span> / <span class="ui-code">-success</span> / <span class="ui-code">-danger</span> / <span class="ui-code">-warning</span> / <span class="ui-code">-info</span> / <span class="ui-code">-muted</span> / <span class="ui-code">-white</span></td><td>text color</td></tr>
+    <tr><td><span class="ui-code">ui-bg-primary</span> / <span class="ui-code">-success</span> / <span class="ui-code">-danger</span> / <span class="ui-code">-warning</span> / <span class="ui-code">-info</span> / <span class="ui-code">-surface</span> / <span class="ui-code">-soft</span> / <span class="ui-code">-muted</span></td><td>background color (color variants also set white/dark text automatically)</td></tr>
+    <tr><td><span class="ui-code">ui-fw-normal</span> / <span class="ui-code">-medium</span> / <span class="ui-code">-semibold</span> / <span class="ui-code">-bold</span></td><td>font-weight 400 / 500 / 600 / 700</td></tr>
+    <tr><td><span class="ui-code">ui-fs-1</span>&ndash;<span class="ui-code">ui-fs-6</span></td><td>font-size, largest (2rem) to smallest (.75rem)</td></tr>
+    <tr><td><span class="ui-code">ui-text-uppercase</span> / <span class="ui-code">-lowercase</span> / <span class="ui-code">-capitalize</span></td><td>text-transform</td></tr>
+    <tr><td><span class="ui-code">ui-text-start</span> / <span class="ui-code">-center</span> / <span class="ui-code">-end</span></td><td>text-align</td></tr>
+    <tr><td><span class="ui-code">ui-text-wrap</span> / <span class="ui-code">-nowrap</span> / <span class="ui-code">-truncate</span></td><td>white-space wrapping (<span class="ui-code">-truncate</span> also ellipsizes overflow)</td></tr>
+  </tbody></table></div>
 </section>
 
 <section class="docs-section" id="effects">
@@ -72,7 +109,27 @@
     <div class="ui-p-5 ui-bg-surface ui-border ui-rounded-1">Radius 1</div>
     <div class="ui-p-5 ui-bg-surface ui-shadow-2 ui-rounded-3">Shadow 2</div>
     <div class="ui-p-5 ui-bg-surface ui-border ui-rounded-4 ui-hover-lift">Hover lift</div>
+    <div class="ui-p-5 ui-bg-surface ui-border ui-rounded-circle ui-text-center">Circle</div>
+    <div class="ui-p-5 ui-bg-surface ui-border ui-rounded-pill ui-text-center">Pill</div>
+    <div class="ui-p-5 ui-bg-surface ui-border ui-hover-scale ui-text-center">Hover scale</div>
   </div>
+  <div class="ui-table-responsive ui-mt-4"><table class="ui-table ui-table-striped"><thead><tr><th>Class</th><th>Effect</th></tr></thead><tbody>
+    <tr><td><span class="ui-code">ui-border</span> / <span class="ui-code">ui-border-0</span></td><td>add / remove a 1px border</td></tr>
+    <tr><td><span class="ui-code">ui-rounded-0</span>&ndash;<span class="ui-code">ui-rounded-4</span>, <span class="ui-code">-circle</span>, <span class="ui-code">-pill</span></td><td>border-radius scale plus fully round/pill shapes</td></tr>
+    <tr><td><span class="ui-code">ui-shadow-0</span>&ndash;<span class="ui-code">ui-shadow-3</span></td><td>box-shadow scale (<span class="ui-code">-0</span> removes it)</td></tr>
+    <tr><td><span class="ui-code">ui-hover-lift</span> / <span class="ui-code">ui-hover-scale</span></td><td>subtle transform on <span class="ui-code">:hover</span></td></tr>
+    <tr><td><span class="ui-code">ui-transition</span></td><td>applies the framework's default transition to <span class="ui-code">all</span> properties</td></tr>
+  </tbody></table></div>
+</section>
+
+<section class="docs-section" id="visibility">
+  <h2 class="ui-h2">Visibility and misc</h2>
+  <div class="ui-table-responsive"><table class="ui-table ui-table-striped"><thead><tr><th>Class</th><th>Effect</th></tr></thead><tbody>
+    <tr><td><span class="ui-code">ui-visible</span> / <span class="ui-code">ui-invisible</span></td><td><span class="ui-code">visibility</span> (keeps layout space, unlike <span class="ui-code">ui-d-none</span>)</td></tr>
+    <tr><td><span class="ui-code">ui-opacity-25</span> / <span class="ui-code">-50</span> / <span class="ui-code">-75</span> / <span class="ui-code">-100</span></td><td>opacity</td></tr>
+    <tr><td><span class="ui-code">ui-sr-only</span></td><td>visually hidden but present for screen readers</td></tr>
+    <tr><td><span class="ui-code">ui-focusable-sr-only</span></td><td>like <span class="ui-code">ui-sr-only</span>, but reveals on focus (skip links)</td></tr>
+  </tbody></table></div>
 </section>
 
       <footer class="docs-footer">UI Framework 1.1.0 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>

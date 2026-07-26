@@ -92,31 +92,52 @@
 
 @media (min-width: 36rem) {
   .ui-col-sm { flex: 1 0 0%; }
+  .ui-col-sm-auto { flex: 0 0 auto; width: auto; }
+  .ui-col-sm-1 { flex: 0 0 auto; width: 8.333333%; }
+  .ui-col-sm-2 { flex: 0 0 auto; width: 16.666667%; }
+  .ui-col-sm-3 { flex: 0 0 auto; width: 25%; }
   .ui-col-sm-4 { flex: 0 0 auto; width: 33.333333%; }
+  .ui-col-sm-5 { flex: 0 0 auto; width: 41.666667%; }
   .ui-col-sm-6 { flex: 0 0 auto; width: 50%; }
+  .ui-col-sm-7 { flex: 0 0 auto; width: 58.333333%; }
   .ui-col-sm-8 { flex: 0 0 auto; width: 66.666667%; }
+  .ui-col-sm-9 { flex: 0 0 auto; width: 75%; }
+  .ui-col-sm-10 { flex: 0 0 auto; width: 83.333333%; }
+  .ui-col-sm-11 { flex: 0 0 auto; width: 91.666667%; }
   .ui-col-sm-12 { flex: 0 0 auto; width: 100%; }
 }
 
 @media (min-width: 48rem) {
   .ui-col-md { flex: 1 0 0%; }
+  .ui-col-md-auto { flex: 0 0 auto; width: auto; }
+  .ui-col-md-1 { flex: 0 0 auto; width: 8.333333%; }
+  .ui-col-md-2 { flex: 0 0 auto; width: 16.666667%; }
   .ui-col-md-3 { flex: 0 0 auto; width: 25%; }
   .ui-col-md-4 { flex: 0 0 auto; width: 33.333333%; }
+  .ui-col-md-5 { flex: 0 0 auto; width: 41.666667%; }
   .ui-col-md-6 { flex: 0 0 auto; width: 50%; }
+  .ui-col-md-7 { flex: 0 0 auto; width: 58.333333%; }
   .ui-col-md-8 { flex: 0 0 auto; width: 66.666667%; }
   .ui-col-md-9 { flex: 0 0 auto; width: 75%; }
+  .ui-col-md-10 { flex: 0 0 auto; width: 83.333333%; }
+  .ui-col-md-11 { flex: 0 0 auto; width: 91.666667%; }
   .ui-col-md-12 { flex: 0 0 auto; width: 100%; }
 }
 
 @media (min-width: 64rem) {
   .ui-col-lg { flex: 1 0 0%; }
+  .ui-col-lg-auto { flex: 0 0 auto; width: auto; }
+  .ui-col-lg-1 { flex: 0 0 auto; width: 8.333333%; }
   .ui-col-lg-2 { flex: 0 0 auto; width: 16.666667%; }
   .ui-col-lg-3 { flex: 0 0 auto; width: 25%; }
   .ui-col-lg-4 { flex: 0 0 auto; width: 33.333333%; }
+  .ui-col-lg-5 { flex: 0 0 auto; width: 41.666667%; }
   .ui-col-lg-6 { flex: 0 0 auto; width: 50%; }
+  .ui-col-lg-7 { flex: 0 0 auto; width: 58.333333%; }
   .ui-col-lg-8 { flex: 0 0 auto; width: 66.666667%; }
   .ui-col-lg-9 { flex: 0 0 auto; width: 75%; }
   .ui-col-lg-10 { flex: 0 0 auto; width: 83.333333%; }
+  .ui-col-lg-11 { flex: 0 0 auto; width: 91.666667%; }
   .ui-col-lg-12 { flex: 0 0 auto; width: 100%; }
 }
 

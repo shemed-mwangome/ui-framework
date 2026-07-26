@@ -26,29 +26,52 @@
       <a class="docs-sidebar-link" href="examples/dashboard.html">Dashboard</a>
       <a class="docs-sidebar-link" href="examples/form.html">Form workflow</a>
       <a class="docs-sidebar-link" href="examples/login.html">Login page</a>
-      <div class="docs-sidebar-title">On this page</div><a class="docs-sidebar-link" href="#containers">Containers</a><a class="docs-sidebar-link" href="#flex-grid">Flex grid</a><a class="docs-sidebar-link" href="#css-grid">CSS grid</a><a class="docs-sidebar-link" href="#gutters">Gutters</a>
+      <div class="docs-sidebar-title">On this page</div><a class="docs-sidebar-link" href="#containers">Containers</a><a class="docs-sidebar-link" href="#flex-grid">Flex grid</a><a class="docs-sidebar-link" href="#explicit-grid">Explicit CSS grid</a><a class="docs-sidebar-link" href="#css-grid">Automatic CSS grid</a><a class="docs-sidebar-link" href="#gutters">Gutters</a>
     </aside>
     <main class="docs-main">
 
 <section class="docs-hero">
   <div class="docs-kicker">Mobile-first layout</div>
   <h1 class="ui-display-2">Responsive flex and CSS grids.</h1>
-  <p class="ui-lead">Build conventional 12-column layouts or automatic card grids using a small set of predictable classes.</p>
+  <p class="ui-lead">Build conventional 12-column layouts or automatic card grids using a small set of predictable classes. Three grid systems are available &mdash; pick whichever fits the layout: the 12-column flex grid for classic responsive forms/dashboards, the explicit CSS grid for fixed multi-column layouts with row support, or the automatic CSS grid for "as many cards as fit" layouts.</p>
 </section>
 
 <section class="docs-section" id="containers">
   <h2 class="ui-h2">Containers</h2>
-  <p class="docs-section-intro">Use fluid or width-constrained containers: <span class="ui-code">ui-container-fluid</span>, <span class="ui-code">ui-container-md</span>, <span class="ui-code">ui-container-lg</span>, <span class="ui-code">ui-container-xl</span>.</p>
+  <p class="docs-section-intro">Width-constrained wrappers that center content and add side padding. <span class="ui-code">ui-container-fluid</span> is always 100% wide; the others cap out at a breakpoint and stay fluid below it.</p>
+
+<div class="docs-demo">
+<div class="ui-d-flex ui-flex-column ui-gap-2">
+  <div class="ui-container-sm ui-bg-soft ui-p-2 ui-text-center">ui-container-sm (36rem)</div>
+  <div class="ui-container-md ui-bg-soft ui-p-2 ui-text-center">ui-container-md (48rem)</div>
+  <div class="ui-container-lg ui-bg-soft ui-p-2 ui-text-center">ui-container-lg (64rem)</div>
+  <div class="ui-container-xl ui-bg-soft ui-p-2 ui-text-center">ui-container-xl (75rem)</div>
+  <div class="ui-container-xxl ui-bg-soft ui-p-2 ui-text-center">ui-container-xxl (87.5rem)</div>
+  <div class="ui-container-fluid ui-bg-soft ui-p-2 ui-text-center">ui-container-fluid (always 100%)</div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-container-lg&quot;&gt;...&lt;/div&gt;
+&lt;div class=&quot;ui-container-fluid&quot;&gt;...&lt;/div&gt;</code></pre>
+</div>
+
 </section>
 
 <section class="docs-section" id="flex-grid">
   <h2 class="ui-h2">12-column flex grid</h2>
+  <p class="docs-section-intro">A <span class="ui-code">.ui-row</span> wrapping any number of <span class="ui-code">.ui-col-*</span> children. Unsuffixed classes (<span class="ui-code">ui-col-6</span>) apply at all widths; <span class="ui-code">-sm-</span>/<span class="ui-code">-md-</span>/<span class="ui-code">-lg-</span> apply from that breakpoint up. Every breakpoint has the full <span class="ui-code">1</span>&ndash;<span class="ui-code">12</span> range plus <span class="ui-code">auto</span> (content-sized) and the bare form (equal-width, grows to fill).</p>
 
 <div class="docs-demo">
 <div class="ui-row ui-g-2">
-  <div class="ui-col-12 ui-col-md-4"><div class="ui-alert ui-alert-info">Column 4</div></div>
-  <div class="ui-col-12 ui-col-md-4"><div class="ui-alert ui-alert-success">Column 4</div></div>
-  <div class="ui-col-12 ui-col-md-4"><div class="ui-alert ui-alert-warning">Column 4</div></div>
+  <div class="ui-col-12 ui-col-md-4"><div class="ui-alert ui-alert-info ui-mb-0">Column 4</div></div>
+  <div class="ui-col-12 ui-col-md-4"><div class="ui-alert ui-alert-success ui-mb-0">Column 4</div></div>
+  <div class="ui-col-12 ui-col-md-4"><div class="ui-alert ui-alert-warning ui-mb-0">Column 4</div></div>
+</div>
+<div class="ui-row ui-g-2 ui-mt-2">
+  <div class="ui-col"><div class="ui-alert ui-alert-info ui-mb-0">Equal (ui-col)</div></div>
+  <div class="ui-col"><div class="ui-alert ui-alert-info ui-mb-0">Equal (ui-col)</div></div>
+  <div class="ui-col-auto"><div class="ui-alert ui-alert-success ui-mb-0">Content-sized (ui-col-auto)</div></div>
 </div>
 </div>
 <div class="docs-code-wrap">
@@ -57,6 +80,49 @@
   &lt;div class=&quot;ui-col-12 ui-col-md-4&quot;&gt;...&lt;/div&gt;
   &lt;div class=&quot;ui-col-12 ui-col-md-4&quot;&gt;...&lt;/div&gt;
   &lt;div class=&quot;ui-col-12 ui-col-md-4&quot;&gt;...&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;ui-row ui-g-2&quot;&gt;
+  &lt;div class=&quot;ui-col&quot;&gt;...&lt;/div&gt;      &lt;!-- grows equally --&gt;
+  &lt;div class=&quot;ui-col&quot;&gt;...&lt;/div&gt;
+  &lt;div class=&quot;ui-col-auto&quot;&gt;...&lt;/div&gt; &lt;!-- sized to content --&gt;
+&lt;/div&gt;</code></pre>
+</div>
+
+  <div class="ui-table-responsive ui-mt-4">
+    <table class="ui-table ui-table-bordered ui-table-sm">
+      <thead><tr><th>Prefix</th><th>Applies from</th><th>Numbered classes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="ui-code">ui-col-*</span></td><td>all widths</td><td><span class="ui-code">ui-col</span>, <span class="ui-code">ui-col-auto</span>, <span class="ui-code">ui-col-1</span>&ndash;<span class="ui-code">ui-col-12</span></td></tr>
+        <tr><td><span class="ui-code">ui-col-sm-*</span></td><td>&ge; 36rem (576px)</td><td>same set</td></tr>
+        <tr><td><span class="ui-code">ui-col-md-*</span></td><td>&ge; 48rem (768px)</td><td>same set</td></tr>
+        <tr><td><span class="ui-code">ui-col-lg-*</span></td><td>&ge; 64rem (1024px)</td><td>same set</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</section>
+
+<section class="docs-section" id="explicit-grid">
+  <h2 class="ui-h2">Explicit CSS grid</h2>
+  <p class="docs-section-intro">A true 12-column CSS grid (<span class="ui-code">.ui-grid</span>) with <span class="ui-code">.ui-span-1</span>&ndash;<span class="ui-code">.ui-span-12</span> children. Unlike the flex grid, items can wrap to a new row without extra markup, and <span class="ui-code">--ui-grid-columns</span> can change the column count. Below <span class="ui-code">48rem</span> every spanned item automatically becomes full-width.</p>
+
+<div class="docs-demo">
+<div class="ui-grid">
+  <div class="ui-span-4"><div class="ui-alert ui-alert-info ui-mb-0">span 4</div></div>
+  <div class="ui-span-4"><div class="ui-alert ui-alert-success ui-mb-0">span 4</div></div>
+  <div class="ui-span-4"><div class="ui-alert ui-alert-warning ui-mb-0">span 4</div></div>
+  <div class="ui-span-8"><div class="ui-alert ui-alert-danger ui-mb-0">span 8</div></div>
+  <div class="ui-span-4"><div class="ui-alert ui-alert-info ui-mb-0">span 4</div></div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-grid&quot;&gt;
+  &lt;div class=&quot;ui-span-4&quot;&gt;...&lt;/div&gt;
+  &lt;div class=&quot;ui-span-4&quot;&gt;...&lt;/div&gt;
+  &lt;div class=&quot;ui-span-4&quot;&gt;...&lt;/div&gt;
+  &lt;div class=&quot;ui-span-8&quot;&gt;...&lt;/div&gt;
 &lt;/div&gt;</code></pre>
 </div>
 
@@ -64,7 +130,7 @@
 
 <section class="docs-section" id="css-grid">
   <h2 class="ui-h2">Automatic CSS grid</h2>
-  <p class="docs-section-intro">Set a minimum card width through <span class="ui-code">--ui-grid-min</span>. The layout automatically creates as many columns as fit.</p>
+  <p class="docs-section-intro">Fills a row with as many equal-width columns as fit, each at least <span class="ui-code">--ui-grid-min</span> wide, wrapping the rest to new rows &mdash; no breakpoints to manage. Use the <span class="ui-code">ui-css-grid-xs</span>/<span class="ui-code">-sm</span>/<span class="ui-code">-lg</span>/<span class="ui-code">-xl</span> modifiers to change the minimum column width (avoids an inline <span class="ui-code">style</span> attribute, which a strict CSP may block).</p>
 
 <div class="docs-demo">
 <div class="ui-css-grid ui-css-grid-xs">
@@ -76,7 +142,7 @@
 </div>
 <div class="docs-code-wrap">
   <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
-  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-css-grid&quot; style=&quot;--ui-grid-min: 150px&quot;&gt;
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-css-grid ui-css-grid-xs&quot;&gt;
   &lt;div class=&quot;ui-card&quot;&gt;...&lt;/div&gt;
   &lt;div class=&quot;ui-card&quot;&gt;...&lt;/div&gt;
   &lt;div class=&quot;ui-card&quot;&gt;...&lt;/div&gt;
@@ -87,7 +153,30 @@
 
 <section class="docs-section" id="gutters">
   <h2 class="ui-h2">Gutters</h2>
-  <p>Use <span class="ui-code">ui-g-0</span> through <span class="ui-code">ui-g-5</span> on rows. CSS grids use <span class="ui-code">--ui-grid-gap</span>.</p>
+  <p class="docs-section-intro">Use <span class="ui-code">ui-g-0</span> through <span class="ui-code">ui-g-5</span> on a <span class="ui-code">.ui-row</span> to control the flex grid's spacing. CSS grids (both explicit and automatic) use <span class="ui-code">--ui-grid-gap</span> instead.</p>
+
+<div class="docs-demo">
+<div class="ui-d-flex ui-flex-column ui-gap-3">
+  <div class="ui-row ui-g-0">
+    <div class="ui-col-4"><div class="ui-alert ui-alert-info ui-mb-0">g-0</div></div>
+    <div class="ui-col-4"><div class="ui-alert ui-alert-info ui-mb-0">g-0</div></div>
+    <div class="ui-col-4"><div class="ui-alert ui-alert-info ui-mb-0">g-0</div></div>
+  </div>
+  <div class="ui-row ui-g-4">
+    <div class="ui-col-4"><div class="ui-alert ui-alert-success ui-mb-0">g-4</div></div>
+    <div class="ui-col-4"><div class="ui-alert ui-alert-success ui-mb-0">g-4</div></div>
+    <div class="ui-col-4"><div class="ui-alert ui-alert-success ui-mb-0">g-4</div></div>
+  </div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-row ui-g-4&quot;&gt;...&lt;/div&gt;
+
+&lt;style&gt;.wide-gap { --ui-grid-gap: 2rem; }&lt;/style&gt;
+&lt;div class=&quot;ui-grid wide-gap&quot;&gt;...&lt;/div&gt;</code></pre>
+</div>
+
 </section>
 
       <footer class="docs-footer">UI Framework 1.1.0 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
