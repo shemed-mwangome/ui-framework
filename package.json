@@ -1,0 +1,30 @@
+{
+  "name": "ui-framework",
+  "version": "1.0.0",
+  "description": "A dependency-free, prefix-safe CSS and JavaScript UI framework for JSP, server-rendered and static applications.",
+  "main": "dist/ui-framework.js",
+  "style": "dist/ui-framework.css",
+  "files": [
+    "dist",
+    "src",
+    "docs",
+    "examples",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "python3 build.py",
+    "docs": "python3 -m http.server 8080"
+  },
+  "keywords": [
+    "css",
+    "ui",
+    "components",
+    "jsp",
+    "design-system",
+    "grid",
+    "modal",
+    "toast"
+  ],
+  "license": "MIT"
+}

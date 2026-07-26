@@ -1,0 +1,65 @@
+{
+  "version": "1.0.0",
+  "prefix": "ui-",
+  "cssModules": [
+    "00-tokens.css",
+    "01-base.css",
+    "02-typography.css",
+    "03-layout-grid.css",
+    "04-utilities.css",
+    "05-buttons.css",
+    "06-forms.css",
+    "07-selection.css",
+    "08-images-media.css",
+    "09-cards-list.css",
+    "10-alerts-badges.css",
+    "11-tables.css",
+    "12-navigation.css",
+    "13-dropdown-accordion.css",
+    "14-modal-offcanvas.css",
+    "15-toast-tooltip.css",
+    "16-multiselect.css",
+    "17-progress-loaders.css",
+    "18-upload-empty-stepper.css",
+    "19-print.css",
+    "20-form-flow.css",
+    "21-date-range.css"
+  ],
+  "jsModules": [
+    "00-core.js",
+    "01-alert.js",
+    "02-collapse-accordion.js",
+    "03-dropdown.js",
+    "04-tabs.js",
+    "08-multiselect.js",
+    "12-date-range.js",
+    "05-modal.js",
+    "06-offcanvas.js",
+    "07-toast.js",
+    "09-upload-theme.js",
+    "10-confirm.js",
+    "11-save-next.js",
+    "13-stepper-form.js",
+    "14-data-table.js"
+  ],
+  "bundles": [
+    "dist/ui-framework.css",
+    "dist/ui-framework.min.css",
+    "dist/ui-framework.js",
+    "dist/ui-framework.min.js"
+  ],
+  "documentation": [
+    "docs/index.html",
+    "docs/getting-started.html",
+    "docs/layout.html",
+    "docs/components.html",
+    "docs/utilities.html",
+    "docs/javascript.html"
+  ],
+  "examples": [
+    "docs/examples/dashboard.html",
+    "docs/examples/form.html",
+    "docs/examples/login.html",
+    "examples/jsp-integration.jsp"
+  ]
+}

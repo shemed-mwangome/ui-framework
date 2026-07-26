@@ -1,0 +1,63 @@
+.ui-save-next-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: var(--ui-z-sticky);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+  padding: .85rem 1rem;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-3);
+  background: var(--ui-surface);
+  box-shadow: var(--ui-shadow-2);
+}
+
+.ui-save-next-info {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  min-width: 11rem;
+  color: var(--ui-text-soft);
+  font-size: .85rem;
+  white-space: nowrap;
+}
+
+.ui-save-next-progress { width: 6rem; flex: 0 0 auto; }
+
+.ui-save-next-actions {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+
+.ui-save-next-dirty {
+  display: none;
+  align-items: center;
+  gap: .35rem;
+  color: var(--ui-warning);
+  font-size: .78rem;
+  font-weight: 600;
+}
+
+.ui-save-next-dirty::before {
+  content: "";
+  width: .45rem;
+  height: .45rem;
+  border-radius: 50%;
+  background: var(--ui-warning);
+}
+
+form[data-ui-save-next].ui-dirty .ui-save-next-dirty { display: inline-flex; }
+
+[data-ui-stepper-form] .ui-stepper { margin-bottom: 1.75rem; }
+
+[data-ui-stepper-form] fieldset[data-ui-step] {
+  margin: 0 0 1.5rem;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}

@@ -1,0 +1,149 @@
+/* Label-based custom checkboxes and radios. Input must be immediately followed by label. */
+input[type="checkbox"].ui-checkbox,
+input[type="radio"].ui-radio,
+input[type="checkbox"].ui-switch {
+  display: block !important;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+input[type="checkbox"].ui-checkbox + label {
+  --ui-check-size: 1.35rem;
+  --ui-check-color: var(--ui-primary);
+  --ui-check-radius: var(--ui-radius-1);
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  margin: 0;
+  color: var(--ui-text);
+  cursor: pointer;
+  user-select: none;
+}
+
+input[type="checkbox"].ui-checkbox + label::before {
+  content: "";
+  width: var(--ui-check-size);
+  height: var(--ui-check-size);
+  flex: 0 0 var(--ui-check-size);
+  border: 1.5px solid var(--ui-check-color);
+  border-radius: var(--ui-check-radius);
+  background: var(--ui-surface);
+  box-shadow: inset 0 0 0 2px var(--ui-surface);
+  transition: background var(--ui-transition-fast),
+              border-color var(--ui-transition-fast),
+              box-shadow var(--ui-transition-fast),
+              transform var(--ui-transition-fast);
+}
+
+input[type="checkbox"].ui-checkbox:checked + label::before {
+  background:
+    linear-gradient(135deg, transparent 42%, #fff 42% 53%, transparent 53%) 34% 58% / 35% 45% no-repeat,
+    linear-gradient(45deg, transparent 43%, #fff 43% 56%, transparent 56%) 67% 45% / 55% 70% no-repeat,
+    var(--ui-check-color);
+  border-color: var(--ui-check-color);
+}
+
+input[type="checkbox"].ui-checkbox:indeterminate + label::before {
+  background:
+    linear-gradient(#fff, #fff) center / 55% 2px no-repeat,
+    var(--ui-check-color);
+}
+
+input[type="checkbox"].ui-checkbox:focus-visible + label::before,
+input[type="radio"].ui-radio:focus-visible + label::before,
+input[type="checkbox"].ui-switch:focus-visible + label::before {
+  box-shadow: var(--ui-focus-ring);
+}
+
+input[type="checkbox"].ui-checkbox:disabled + label,
+input[type="radio"].ui-radio:disabled + label,
+input[type="checkbox"].ui-switch:disabled + label {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+input[type="checkbox"].ui-checkbox-sm + label { --ui-check-size: 1rem; font-size: .8125rem; }
+input[type="checkbox"].ui-checkbox-lg + label { --ui-check-size: 1.75rem; }
+input[type="checkbox"].ui-checkbox-xl + label { --ui-check-size: 2.1rem; }
+input[type="checkbox"].ui-checkbox-success + label { --ui-check-color: var(--ui-success); }
+input[type="checkbox"].ui-checkbox-danger + label { --ui-check-color: var(--ui-danger); }
+input[type="checkbox"].ui-checkbox-warning + label { --ui-check-color: var(--ui-warning); }
+input[type="checkbox"].ui-checkbox-circle + label { --ui-check-radius: 50%; }
+
+input[type="radio"].ui-radio + label {
+  --ui-radio-size: 1.35rem;
+  --ui-radio-color: var(--ui-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  margin: 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+input[type="radio"].ui-radio + label::before {
+  content: "";
+  width: var(--ui-radio-size);
+  height: var(--ui-radio-size);
+  flex: 0 0 var(--ui-radio-size);
+  border: 1.5px solid var(--ui-radio-color);
+  border-radius: 50%;
+  background: var(--ui-surface);
+  box-shadow: inset 0 0 0 .3rem var(--ui-surface);
+  transition: background var(--ui-transition-fast), box-shadow var(--ui-transition-fast);
+}
+
+input[type="radio"].ui-radio:checked + label::before {
+  background: var(--ui-radio-color);
+}
+
+input[type="radio"].ui-radio-sm + label { --ui-radio-size: 1rem; font-size: .8125rem; }
+input[type="radio"].ui-radio-lg + label { --ui-radio-size: 1.75rem; }
+input[type="radio"].ui-radio-success + label { --ui-radio-color: var(--ui-success); }
+input[type="radio"].ui-radio-danger + label { --ui-radio-color: var(--ui-danger); }
+
+input[type="checkbox"].ui-switch + label {
+  --ui-switch-w: 2.75rem;
+  --ui-switch-h: 1.5rem;
+  --ui-switch-color: var(--ui-success);
+  position: relative;
+  min-height: var(--ui-switch-h);
+  padding-left: calc(var(--ui-switch-w) + .6rem);
+  display: inline-flex;
+  align-items: center;
+  color: var(--ui-text);
+  cursor: pointer;
+  user-select: none;
+}
+
+input[type="checkbox"].ui-switch + label::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: var(--ui-switch-w);
+  height: var(--ui-switch-h);
+  border-radius: var(--ui-radius-pill);
+  background: var(--ui-border-strong);
+  transition: background var(--ui-transition-fast), box-shadow var(--ui-transition-fast);
+}
+
+input[type="checkbox"].ui-switch + label::after {
+  content: "";
+  position: absolute;
+  left: .18rem;
+  width: calc(var(--ui-switch-h) - .36rem);
+  height: calc(var(--ui-switch-h) - .36rem);
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: var(--ui-shadow-1);
+  transition: transform var(--ui-transition-fast);
+}
+
+input[type="checkbox"].ui-switch:checked + label::before { background: var(--ui-switch-color); }
+input[type="checkbox"].ui-switch:checked + label::after { transform: translateX(calc(var(--ui-switch-w) - var(--ui-switch-h))); }
+input[type="checkbox"].ui-switch-lg + label { --ui-switch-w: 3.5rem; --ui-switch-h: 1.85rem; }
+input[type="checkbox"].ui-switch-primary + label { --ui-switch-color: var(--ui-primary); }
+input[type="checkbox"].ui-switch-danger + label { --ui-switch-color: var(--ui-danger); }

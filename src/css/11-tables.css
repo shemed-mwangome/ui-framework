@@ -1,0 +1,74 @@
+.ui-table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: var(--ui-radius-3);
+  -webkit-overflow-scrolling: touch;
+}
+
+.ui-table {
+  width: 100%;
+  margin-bottom: 0;
+  border-collapse: collapse;
+  border-color: var(--ui-border);
+  background: var(--ui-surface);
+  color: var(--ui-text);
+}
+
+.ui-table th,
+.ui-table td {
+  padding: .75rem;
+  border-bottom: 1px solid var(--ui-border);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.ui-table thead th {
+  background: var(--ui-surface-soft);
+  color: var(--ui-text-soft);
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .025em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.ui-table tbody tr:last-child td { border-bottom: 0; }
+.ui-table-bordered th,
+.ui-table-bordered td { border: 1px solid var(--ui-border); }
+.ui-table-striped tbody tr:nth-child(even) { background: var(--ui-surface-soft); }
+.ui-table-hover tbody tr:hover { background: var(--ui-primary-soft); }
+.ui-table-sm th,
+.ui-table-sm td { padding: .45rem .55rem; font-size: .82rem; }
+.ui-table-sticky thead th { position: sticky; top: 0; z-index: 1; box-shadow: 0 1px 0 var(--ui-border); }
+.ui-table-caption { padding: .65rem 0; color: var(--ui-muted); text-align: left; caption-side: bottom; }
+.ui-table-empty { padding: 2.5rem !important; color: var(--ui-muted); text-align: center !important; }
+
+.ui-table-toolbar { display: flex; justify-content: flex-end; margin-bottom: .75rem; }
+.ui-table-search { max-width: 16rem; }
+
+.ui-table-sortable {
+  position: relative;
+  padding-right: 1.35rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.ui-table-sortable::after {
+  content: "";
+  position: absolute;
+  right: .5rem;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border-left: .3rem solid transparent;
+  border-right: .3rem solid transparent;
+  border-top: .35rem solid var(--ui-subtle);
+  transform: translateY(-50%);
+  opacity: .6;
+}
+
+.ui-table-sortable[aria-sort="ascending"]::after { border-top: 0; border-bottom: .35rem solid var(--ui-primary); opacity: 1; }
+.ui-table-sortable[aria-sort="descending"]::after { border-top: .35rem solid var(--ui-primary); opacity: 1; }
+
+.ui-table-pagination { margin-top: .85rem; display: flex; justify-content: flex-end; }
+.ui-table-empty-row td { padding: 2.5rem; color: var(--ui-muted); text-align: center; }

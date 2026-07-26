@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2563eb"/>
+      <stop offset="1" stop-color="#7c3aed"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" rx="28" fill="url(#g)"/>
+  <circle cx="650" cy="110" r="55" fill="#fff" opacity=".85"/>
+  <path d="M0 395 190 215l115 120 90-85 205 190 90-80 110 110v30H0z" fill="#fff" opacity=".82"/>
+  <text x="45" y="75" fill="#fff" font-family="Arial" font-size="30" font-weight="700">UI Framework Image</text>
+</svg>

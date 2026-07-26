@@ -1,0 +1,360 @@
+# UI Framework 1.0.0
+
+A complete, dependency-free CSS and JavaScript UI framework designed for
+server-rendered applications, JSP pages, static HTML, and legacy projects that
+already use Bootstrap, CoreUI, or a custom `master.css`.
+
+All framework classes use the `ui-` prefix. Interactive behavior uses
+`data-ui-*` attributes.
+
+## What is included
+
+### Two delivery styles
+
+1. **Single-file distribution**
+   - `dist/ui-framework.css`
+   - `dist/ui-framework.min.css`
+   - `dist/ui-framework.js`
+   - `dist/ui-framework.min.js`
+
+2. **Reusable modular components**
+   - Individual CSS files under `src/css`
+   - Individual JavaScript files under `src/js`
+   - `build.py` to recreate the bundled distribution
+
+### Component catalogue
+
+- Design tokens and light/dark themes
+- Typography
+- Mobile-first 12-column flex grid
+- Automatic CSS grid
+- Utility classes
+- Buttons and button groups
+- Form controls, floating labels, validation, input groups and file inputs
+- Checkboxes, radios and switches
+- Images, figures, avatars and media objects
+- Cards, list groups and dashboard statistics
+- Alerts and badges
+- Responsive tables
+- Navbar, breadcrumb, pagination, tabs and sidebar navigation
+- Dropdowns
+- Accordion and collapse
+- Modal and offcanvas
+- Toast notifications and tooltips
+- Multi-select with checkboxes, search, select-all and tags
+- Progress bars, spinners, pulse and skeleton loading
+- Upload areas
+- Empty states
+- Stepper and timeline
+- Print helpers
+- Save & next form toolbar with an unsaved-changes guard, and a multi-step form wizard built on top of it
+- Date range picker with quick presets, two-month view, and keyboard navigation
+- Promise-based confirmation dialog (`UI.confirm()`)
+- Smart tables: client-side search, column sorting, and pagination over a plain `.ui-table`
+
+## Quick start: bundled files
+
+Load the CSS after your existing theme and the JavaScript before `</body>`.
+
+```jsp
+<link rel="stylesheet"
+      href="<c:url value='/ui/static/ui-framework/dist/ui-framework.min.css'/>">
+
+<main class="ui-scope">
+    <!-- New UI Framework components -->
+</main>
+
+<script src="<c:url value='/ui/static/ui-framework/dist/ui-framework.min.js'/>"></script>
+```
+
+The optional `ui-scope` class applies the framework's base typography and box
+sizing to a wrapper. Individual `ui-*` component classes work without it.
+
+## Modular loading
+
+Always load tokens first. Load `00-core.js` before interactive modules.
+
+```html
+<link rel="stylesheet" href="src/css/00-tokens.css">
+<link rel="stylesheet" href="src/css/05-buttons.css">
+<link rel="stylesheet" href="src/css/06-forms.css">
+<link rel="stylesheet" href="src/css/14-modal-offcanvas.css">
+
+<script src="src/js/00-core.js"></script>
+<script src="src/js/05-modal.js"></script>
+```
+
+## Build
+
+```bash
+python3 build.py
+```
+
+## Documentation
+
+Open `docs/index.html` directly, or run (from the project root, so
+`../dist/...` references inside the docs resolve correctly):
+
+```bash
+python3 -m http.server 8080
+```
+
+Then visit `http://localhost:8080/docs/`.
+
+The documentation includes:
+
+- Overview
+- Installation and JSP integration
+- Layout and grid guide
+- Live examples for every major component
+- Utility reference
+- JavaScript API
+- Complete dashboard, form workflow and login examples
+
+## Custom theme
+
+Override tokens after loading the framework:
+
+```css
+:root {
+    --ui-primary: #143b6b;
+    --ui-primary-hover: #0d2d55;
+    --ui-success: #3cb371;
+    --ui-radius-3: 8px;
+    --ui-font-sans: "Open Sans", Arial, sans-serif;
+}
+```
+
+Dark theme:
+
+```html
+<html data-ui-theme="dark">
+```
+
+Or use the built-in toggle:
+
+```html
+<button type="button" data-ui-theme-toggle>Change theme</button>
+```
+
+## Custom checkbox
+
+The input must immediately precede its label:
+
+```html
+<input id="assignAll"
+       type="checkbox"
+       class="ui-checkbox ui-checkbox-lg ui-checkbox-success">
+
+<label for="assignAll">Actions</label>
+```
+
+The component explicitly overrides legacy `display:none` checkbox rules while
+keeping the real input visually hidden and keyboard-accessible.
+
+## Multi-select
+
+Use a native `<select multiple>`. It stays in the form and receives all selected
+values.
+
+```html
+<select name="officersIds"
+        multiple
+        data-ui-multiselect
+        data-display="tags"
+        data-placeholder="Select officers"
+        data-search="true"
+        data-select-all="true">
+    <option value="1">Asha M.</option>
+    <option value="2">Baraka J.</option>
+</select>
+```
+
+## Save & next forms
+
+Works as a plain form post; add `data-ui-ajax="true"` to submit via `fetch()`
+instead of a full page reload.
+
+```html
+<form data-ui-save-next
+      data-ui-position="3" data-ui-total="12"
+      data-ui-prev-url="/premises/2/edit"
+      data-ui-next-url="/premises/4/edit"
+      action="/premises/3" method="post">
+    ...fields...
+    <div class="ui-save-next-bar">
+        <div class="ui-save-next-info">
+            <div class="ui-progress ui-save-next-progress"><div class="ui-progress-bar"></div></div>
+            Record <span data-ui-save-next-position>3</span> of <span data-ui-save-next-total>12</span>
+            <span class="ui-save-next-dirty">Unsaved</span>
+        </div>
+        <div class="ui-save-next-actions">
+            <button type="button" data-ui-save-next-prev>‹ Previous</button>
+            <button type="submit" name="uiSaveNextAction" value="save">Save</button>
+            <button type="submit" name="uiSaveNextAction" value="save-next"
+                    data-ui-save-next-submit>Save &amp; next ›</button>
+        </div>
+    </div>
+</form>
+```
+
+Ctrl/Cmd+Enter triggers "Save & next" from anywhere in the form. Leaving the
+page (or clicking Previous) with unsaved changes prompts for confirmation.
+
+Add `data-ui-stepper-form` to the same `<form>` to turn it into a multi-step
+wizard: wrap each step in `<fieldset data-ui-step>` (all but the first
+`hidden`), add a `.ui-stepper` progress header, and give the wizard its own
+`data-ui-step-back` / `data-ui-step-next` buttons alongside the existing
+`data-ui-save-next-submit` button, which only appears on the last step.
+"Next" validates the current step's fields natively (via `reportValidity()`)
+before advancing, so nothing extra is required beyond marking fields
+`required`.
+
+```html
+<form data-ui-stepper-form data-ui-save-next
+      data-ui-position="4" data-ui-total="12"
+      action="/applications/4" method="post">
+
+    <div class="ui-stepper" data-ui-stepper>
+        <div class="ui-step"><div class="ui-step-marker">1</div><div class="ui-step-label">Applicant</div></div>
+        <div class="ui-step"><div class="ui-step-marker">2</div><div class="ui-step-label">Premises</div></div>
+    </div>
+
+    <fieldset data-ui-step>...step 1 fields...</fieldset>
+    <fieldset data-ui-step hidden>...step 2 fields...</fieldset>
+
+    <div class="ui-save-next-bar">
+        <div class="ui-save-next-actions">
+            <button type="button" data-ui-step-back hidden>‹ Back</button>
+            <button type="button" data-ui-step-next>Next ›</button>
+            <button type="submit" name="uiSaveNextAction" value="save-next"
+                    data-ui-save-next-submit hidden>Save &amp; next ›</button>
+        </div>
+    </div>
+</form>
+```
+
+## Date range picker
+
+A two-month calendar popover with quick presets, built over two native
+`<input type="date">` fields so the chosen range still posts with a plain
+HTML form even without JavaScript. Supports full keyboard navigation (arrow
+keys, Home/End, Page Up/Down, Enter), `data-min-date` / `data-max-date`
+bounds, `data-disabled-dates` (comma-separated ISO dates), and a clear
+button. The popover is positioned with `UI.floatPanel()` (see below), so it
+flips above the field and escapes clipping automatically.
+
+```html
+<div class="ui-date-range" data-ui-date-range data-ui-placeholder="Select date range"
+     data-min-date="2026-01-01" data-max-date="2026-12-31"
+     data-disabled-dates="2026-12-25,2026-01-01">
+    <input type="date" name="reportStart" aria-label="Start date">
+    <input type="date" name="reportEnd" aria-label="End date">
+</div>
+```
+
+```javascript
+document.querySelector("[data-ui-date-range]")
+    .addEventListener("ui:daterange:change", function (event) {
+        console.log(event.detail.start, event.detail.end);
+    });
+```
+
+## Floating panels
+
+`UI.floatPanel(trigger, panel, options)` positions any popover (dropdown
+menu, multi-select menu, date range panel) with `position: fixed` computed
+from the trigger's live viewport coordinates, so it escapes clipping by a
+scrollable ancestor (e.g. a `.ui-modal-body`) and flips above the trigger
+when there isn't room below. Pass `{ align: "end" }` to right-align, or
+`{ matchWidth: true }` to match the trigger's width. Returns a cleanup
+function to call when the panel closes.
+
+## Smart tables
+
+Add `data-ui-table` to enhance any `.ui-table` with client-side search,
+column sorting, and pagination. Mark sortable headers with
+`data-ui-sort="text"|"number"|"date"` (omit or set to `"false"` for a
+non-sortable column like an actions column); give a `<td>`
+`data-ui-sort-value` when its sort key differs from its display text (e.g. a
+raw ISO date behind a friendly display format).
+
+```html
+<div data-ui-table data-ui-page-size="10">
+  <table class="ui-table ui-table-striped ui-table-hover">
+    <thead>
+      <tr>
+        <th data-ui-sort="text">Premise</th>
+        <th data-ui-sort="date">Applied</th>
+        <th data-ui-sort="false">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Premise One</td>
+        <td data-ui-sort-value="2026-01-04">4 Jan 2026</td>
+        <td><button>Open</button></td>
+      </tr>
+      ...
+    </tbody>
+  </table>
+</div>
+```
+
+Search and sorting run against the full row set before paging, so results
+stay correct across pages. Listen for `ui:table:change` on the wrapper for
+the current page, total pages, and visible/total row counts.
+
+## JavaScript examples
+
+```javascript
+UI.toast.show({
+    type: "success",
+    title: "Saved",
+    message: "The record was saved successfully."
+});
+
+UI.alert.create({
+    target: "#messageArea",
+    type: "danger",
+    title: "Validation failed",
+    message: "Please correct the highlighted fields."
+});
+
+UI.modal.open(document.getElementById("assignModal"));
+
+UI.confirm({
+    title: "Revoke licence",
+    message: "This will immediately revoke the operator licence.",
+    variant: "danger",
+    confirmText: "Revoke licence"
+}).then(function (confirmed) {
+    if (confirmed) {
+        // proceed with the revoke request
+    }
+});
+```
+
+## Design approach
+
+The framework uses an original implementation with:
+
+- Base component plus modifier classes
+- Mobile-first responsive breakpoints
+- A 12-column grid
+- CSS custom-property design tokens
+- Utility classes for common layout and spacing work
+- Accessible data-attribute-driven JavaScript components
+- A strict `ui-` prefix to minimize collisions
+
+No Bootstrap, Tailwind, Material, jQuery, or third-party runtime is required.
+
+## Browser support
+
+Designed for current versions of Chrome, Edge, Firefox, and Safari. The
+framework uses modern CSS custom properties, `color-mix()`, `closest()`,
+`CustomEvent`, and standard DOM APIs.
+
+## License
+
+MIT

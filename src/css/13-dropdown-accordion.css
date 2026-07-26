@@ -1,0 +1,94 @@
+.ui-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.ui-dropdown-menu {
+  position: absolute;
+  z-index: var(--ui-z-dropdown);
+  top: calc(100% + .35rem);
+  left: 0;
+  min-width: 12rem;
+  padding: .35rem;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-3);
+  background: var(--ui-surface);
+  box-shadow: var(--ui-shadow-3);
+  display: none;
+}
+
+.ui-dropdown-end .ui-dropdown-menu { right: 0; left: auto; }
+.ui-dropdown.ui-open > .ui-dropdown-menu { display: block; animation: ui-dropdown-in .14s ease; }
+
+.ui-dropdown-item {
+  width: 100%;
+  padding: .55rem .65rem;
+  border: 0;
+  border-radius: var(--ui-radius-2);
+  background: transparent;
+  color: var(--ui-text);
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.ui-dropdown-item:hover,
+.ui-dropdown-item:focus { outline: 0; background: var(--ui-surface-soft); color: var(--ui-primary); }
+.ui-dropdown-divider { height: 1px; margin: .35rem 0; background: var(--ui-border); }
+.ui-dropdown-header { padding: .45rem .65rem; color: var(--ui-muted); font-size: .72rem; font-weight: 700; text-transform: uppercase; }
+
+.ui-accordion {
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-3);
+  overflow: hidden;
+}
+
+.ui-accordion-item + .ui-accordion-item { border-top: 1px solid var(--ui-border); }
+
+.ui-accordion-button {
+  width: 100%;
+  padding: .85rem 1rem;
+  border: 0;
+  background: var(--ui-surface);
+  color: var(--ui-text);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ui-accordion-button::after {
+  content: "";
+  width: .55rem;
+  height: .55rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform var(--ui-transition-fast);
+}
+
+.ui-accordion-button[aria-expanded="true"] {
+  background: var(--ui-primary-soft);
+  color: var(--ui-primary);
+}
+
+.ui-accordion-button[aria-expanded="true"]::after { transform: rotate(225deg); }
+
+.ui-accordion-panel {
+  padding: 0 1rem 1rem;
+  background: var(--ui-surface);
+  color: var(--ui-text-soft);
+}
+
+.ui-collapse:not(.ui-show) { display: none; }
+
+@keyframes ui-dropdown-in {
+  from { opacity: 0; transform: translateY(-.25rem); }
+  to { opacity: 1; transform: translateY(0); }
+}

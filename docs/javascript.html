@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en" data-ui-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>JavaScript API · UI Framework</title>
+  <link rel="stylesheet" href="../dist/ui-framework.css">
+  <link rel="stylesheet" href="assets/docs.css">
+</head>
+<body class="ui-scope docs-body">
+  <header class="docs-topbar">
+    <div class="ui-d-flex ui-align-center ui-gap-2">
+      <button class="ui-btn ui-btn-icon ui-btn-ghost docs-mobile-menu" type="button" data-docs-menu aria-label="Open documentation menu">☰</button>
+      <a class="docs-brand" href="index.html"><span class="docs-logo">UI</span><span>UI Framework</span></a>
+    </div>
+    <div class="ui-d-flex ui-align-center ui-gap-2">
+      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.0.0</span>
+      <button class="ui-btn ui-btn-sm ui-btn-outline-secondary" type="button" data-ui-theme-toggle>Theme</button>
+    </div>
+  </header>
+  <div class="docs-layout">
+    <aside class="docs-sidebar">
+      <div class="docs-sidebar-title">Documentation</div>
+      <a class="docs-sidebar-link" href="index.html">Overview</a><a class="docs-sidebar-link" href="getting-started.html">Getting started</a><a class="docs-sidebar-link" href="layout.html">Layout & grid</a><a class="docs-sidebar-link" href="components.html">Components</a><a class="docs-sidebar-link" href="utilities.html">Utilities</a><a class="docs-sidebar-link active" href="javascript.html">JavaScript API</a>
+      <div class="docs-sidebar-title">Examples</div>
+      <a class="docs-sidebar-link" href="examples/dashboard.html">Dashboard</a>
+      <a class="docs-sidebar-link" href="examples/form.html">Form workflow</a>
+      <a class="docs-sidebar-link" href="examples/login.html">Login page</a>
+      <div class="docs-sidebar-title">On this page</div><a class="docs-sidebar-link" href="#initialization">Initialization</a><a class="docs-sidebar-link" href="#api">Public API</a><a class="docs-sidebar-link" href="#events">Events</a><a class="docs-sidebar-link" href="#dynamic">Dynamic content</a>
+    </aside>
+    <main class="docs-main">
+
+<section class="docs-hero">
+  <div class="docs-kicker">Dependency-free interactions</div>
+  <h1 class="ui-display-2">Declarative data attributes and a small JavaScript API.</h1>
+  <p class="ui-lead">Most interactions work through <span class="ui-code">data-ui-*</span> attributes. Programmatic APIs are exposed through the global <span class="ui-code">UI</span> object.</p>
+</section>
+
+<section class="docs-section" id="initialization">
+  <h2 class="ui-h2">Initialization</h2>
+  <p>The bundle automatically initializes components at DOM ready. Initialize newly inserted HTML manually:</p>
+  <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>UI.init(document.querySelector(&quot;#newContent&quot;));</code></pre></div>
+</section>
+
+<section class="docs-section" id="api">
+  <h2 class="ui-h2">Public APIs</h2>
+  <div class="ui-table-responsive"><table class="ui-table ui-table-striped"><thead><tr><th>API</th><th>Purpose</th></tr></thead><tbody>
+    <tr><td><span class="ui-code">UI.modal.open(element)</span></td><td>Open a modal</td></tr>
+    <tr><td><span class="ui-code">UI.modal.close(element)</span></td><td>Close a modal</td></tr>
+    <tr><td><span class="ui-code">UI.offcanvas.open(element)</span></td><td>Open an offcanvas panel</td></tr>
+    <tr><td><span class="ui-code">UI.toast.show(options)</span></td><td>Create a toast</td></tr>
+    <tr><td><span class="ui-code">UI.alert.create(options)</span></td><td>Create an inline alert</td></tr>
+    <tr><td><span class="ui-code">UI.multiselect.build(select)</span></td><td>Enhance a multiple select</td></tr>
+  </tbody></table></div>
+</section>
+
+<section class="docs-section" id="events">
+  <h2 class="ui-h2">Custom events</h2>
+  <p>Components emit bubbling events such as <span class="ui-code">ui:modal:shown</span>, <span class="ui-code">ui:modal:hidden</span>, <span class="ui-code">ui:offcanvas:shown</span>, <span class="ui-code">ui:tab:shown</span>, and <span class="ui-code">ui:alert:close</span>.</p>
+  <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>document.addEventListener(&quot;ui:modal:shown&quot;, function (event) {
+  console.log(&quot;Opened modal:&quot;, event.target.id);
+});</code></pre></div>
+</section>
+
+<section class="docs-section" id="dynamic">
+  <h2 class="ui-h2">Dynamic content</h2>
+  <button class="ui-btn ui-btn-primary" id="createDynamicAlert">Create an alert</button>
+  <div id="dynamicTarget" class="ui-d-flex ui-flex-column ui-gap-2 ui-mt-3"></div>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.getElementById("createDynamicAlert").addEventListener("click", function () {
+    UI.alert.create({
+      target: "#dynamicTarget",
+      type: "success",
+      title: "Created dynamically",
+      message: "The JavaScript API inserted this alert.",
+      prepend: true
+    });
+  });
+});
+</script>
+
+      <footer class="docs-footer">UI Framework 1.0.0 · Dependency-free · Designed for safe use beside Bootstrap and legacy JSP themes.</footer>
+    </main>
+  </div>
+  <script src="../dist/ui-framework.js"></script>
+  <script src="assets/docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>UI Framework Quick Start</title>
+  <link rel="stylesheet" href="dist/ui-framework.min.css">
+</head>
+<body class="ui-scope">
+  <main class="ui-container-lg ui-py-6">
+    <div class="ui-card">
+      <div class="ui-card-header">
+        <h1 class="ui-card-title">UI Framework is ready</h1>
+      </div>
+      <div class="ui-card-body">
+        <div class="ui-alert ui-alert-success ui-mb-4">
+          <div class="ui-alert-icon">✓</div>
+          <div>
+            <div class="ui-alert-title">Installation successful</div>
+            <p class="ui-alert-message">The single CSS and JavaScript bundles are loaded.</p>
+          </div>
+        </div>
+
+        <button class="ui-btn ui-btn-primary"
+                onclick="UI.toast.show({type:'success',title:'Working',message:'JavaScript components are available.'})">
+          Test toast
+        </button>
+      </div>
+    </div>
+  </main>
+  <script src="dist/ui-framework.min.js"></script>
+</body>
+</html>

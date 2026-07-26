@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en" data-ui-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Login · UI Framework Example</title>
+  <link rel="stylesheet" href="../../dist/ui-framework.css">
+  <style>
+.login-wrap{min-height:100vh;display:grid;grid-template-columns:1.15fr .85fr}
+.login-brand{padding:3rem;background:linear-gradient(135deg,#0f172a,#1d4ed8 65%,#7c3aed);display:flex;align-items:center}
+.login-brand-inner{max-width:40rem;margin:auto}
+.login-logo{width:3.5rem;height:3.5rem;border-radius:1rem;background:#fff;color:#2563eb;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.25rem;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+.login-form{padding:2rem;background:var(--ui-surface-soft);display:flex;align-items:center;justify-content:center}
+.login-card{width:min(100%,28rem);padding:2rem;border:1px solid var(--ui-border);border-radius:1.25rem;background:var(--ui-surface);box-shadow:var(--ui-shadow-3)}
+@media(max-width:52rem){.login-wrap{grid-template-columns:1fr}.login-brand{display:none}.login-form{min-height:100vh}}
+</style>
+</head>
+<body class="ui-scope">
+
+<main class="login-wrap">
+  <section class="login-brand">
+    <div class="login-brand-inner">
+      <div class="login-logo">UI</div>
+      <h1 class="ui-display-2 ui-text-white ui-mt-4">Secure administration made clear.</h1>
+      <p class="ui-lead ui-text-white ui-opacity-75">A complete login example using form controls, validation, checkbox, button, alert, and responsive layout components.</p>
+    </div>
+  </section>
+  <section class="login-form">
+    <div class="login-card">
+      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">GBT Portal</span>
+      <h2 class="ui-h2 ui-mt-4">Welcome back</h2>
+      <p class="ui-text-muted">Sign in with your organization account.</p>
+      <form id="loginForm">
+        <div class="ui-form-group"><label class="ui-label">Username</label><input class="ui-control ui-control-lg" autocomplete="username" required placeholder="username"></div>
+        <div class="ui-form-group"><label class="ui-label">Password</label><input class="ui-control ui-control-lg" type="password" autocomplete="current-password" required placeholder="••••••••"></div>
+        <div class="ui-d-flex ui-justify-between ui-align-center ui-mb-4"><div><input id="remember" class="ui-checkbox ui-checkbox-sm" type="checkbox"><label for="remember">Remember me</label></div><a class="ui-small" href="#">Forgot password?</a></div>
+        <button class="ui-btn ui-btn-primary ui-btn-lg ui-btn-block" type="submit">Sign in</button>
+      </form>
+      <div class="ui-alert ui-alert-info ui-alert-sm ui-mt-4"><div class="ui-alert-icon">i</div><div><p class="ui-alert-message">Contact ICT support when your account is locked.</p></div></div>
+    </div>
+  </section>
+</main>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.getElementById("loginForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+    UI.toast.show({type:"success",title:"Signed in",message:"Welcome to the administration portal."});
+  });
+});
+</script>
+
+<script src="../../dist/ui-framework.js"></script>
+</body>
+</html>
