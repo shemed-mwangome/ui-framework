@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.2.0 — 2026-07-27
+
+- Fixed the Buttons demo's copy-paste code sample missing the `ui-btn-loading` line, even though the loading button was shown live
+- Fixed `.ui-skeleton-circle` having no explicit width (only `aspect-ratio: 1`), so used alone as a flex item it would collapse to invisible; it now has a sensible default size and `flex: none`
+- Fixed the last remaining inline `style="--ui-progress-value:...` / `style="width:...` in the Loaders demo that was missed in the earlier CSP-safety pass
+- Rewrote the Alerts and badges section: all 4 colors shown against all 3 styles (soft/outline/solid) in one matrix, plus a dedicated badges-and-dots section covering every solid/soft badge color and all 4 status dot colors (previously only 2-3 of each were ever shown)
+- Reorganized the components doc into grouped, logical flow: all form/input components now sit together (Forms → Selection → Multi-select → Date range → Date picker → Upload), followed by form workflows (Multi-step form, Save draft), then content display, navigation, overlays, and loaders — instead of date/multiselect/confirm being scattered near the end regardless of topic
+- Added clear visual demarcation (borders, and a solid highlight on the fluid variant) to the Containers demo, where every size previously used the same faint background with no visible edge
+
 ## 1.1.0 — 2026-07-26
 
 - Fixed the responsive flex grid only defining some column numbers at each breakpoint (e.g. no `.ui-col-md-5`, `.ui-col-lg-1`); `sm`/`md`/`lg` now each get the full `1`–`12` + `auto` range, matching the unprefixed set
