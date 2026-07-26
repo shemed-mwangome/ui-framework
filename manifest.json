@@ -52,6 +52,7 @@
     "dist/ui-framework.min.js"
   ],
   "documentation": [
+    "quick-start.html",
     "docs/index.html",
     "docs/getting-started.html",
     "docs/layout.html",

@@ -7,6 +7,12 @@ use Bootstrap, CoreUI, or a custom `master.css`.
 All framework classes use the `ui-` prefix. Interactive behavior uses
 `data-ui-*` attributes.
 
+New to the framework? Open [`quick-start.html`](quick-start.html) directly in
+a browser (no server needed) to confirm it works, then read
+[`docs/getting-started.html`](docs/getting-started.html) — it includes a
+plain-language "how it works" primer and a troubleshooting section for
+common first-time issues.
+
 ## What is included
 
 ### Two delivery styles
