@@ -2,6 +2,9 @@
 
 ## 1.1.0 — 2026-07-26
 
+- Fixed the responsive flex grid only defining some column numbers at each breakpoint (e.g. no `.ui-col-md-5`, `.ui-col-lg-1`); `sm`/`md`/`lg` now each get the full `1`–`12` + `auto` range, matching the unprefixed set
+- Documented a large set of classes that existed but had no live example anywhere: typography scale (new dedicated section: `ui-h1`–`ui-h6`, `ui-display-1/2`, `ui-blockquote`, `ui-mark`), button groups and outline-danger/success button variants, input groups, status dots, more card/list-group variants (`ui-card-img-top`, `ui-card-footer`, `ui-card-border-*`, `ui-list-group-flush`, `ui-list-group-item-action`), modal size variants (`sm`/`lg`/`xl`/`fullscreen`), the valid feedback state (`ui-is-valid`/`ui-feedback-valid`) alongside the existing invalid one, checkbox/radio/switch color and size completeness, the previously-undocumented explicit CSS grid (`ui-grid`/`ui-span-1`–`12`), and container sizes; expanded the Utilities page from a handful of examples to full reference tables for every utility category
+
 - Added a real beginner path: `quick-start.html` (open directly in a browser, no server) is now linked from the README and the docs homepage instead of sitting undiscoverable at the repo root; added a plain-language "how it works" primer and a troubleshooting section (unstyled page, dead buttons, mismatched modal IDs, checkbox/floating-label markup order, dynamically-inserted content) to `docs/getting-started.html`
 - Added `data-ui-draft-url` for save-draft: optionally syncs to a server endpoint (`GET`/`POST`/`DELETE`) in addition to `localStorage`, reconciling by whichever copy has the newer `savedAt` on load; sync failures are non-blocking and reported via `ui:draft:sync-error`
 - Added `UI.confirm()`, a promise-based confirmation modal replacing `window.confirm()`, with a `danger` variant for destructive actions

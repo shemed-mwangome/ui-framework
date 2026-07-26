@@ -26,7 +26,7 @@
       <a class="docs-sidebar-link" href="examples/dashboard.html">Dashboard</a>
       <a class="docs-sidebar-link" href="examples/form.html">Form workflow</a>
       <a class="docs-sidebar-link" href="examples/login.html">Login page</a>
-      <div class="docs-sidebar-title">On this page</div><a class="docs-sidebar-link" href="#buttons">Buttons</a><a class="docs-sidebar-link" href="#forms">Forms</a><a class="docs-sidebar-link" href="#selection">Selection</a><a class="docs-sidebar-link" href="#save-next">Multi-step form</a><a class="docs-sidebar-link" href="#draft">Save draft</a><a class="docs-sidebar-link" href="#alerts">Alerts</a><a class="docs-sidebar-link" href="#cards">Cards</a><a class="docs-sidebar-link" href="#images">Images</a><a class="docs-sidebar-link" href="#tables">Tables</a><a class="docs-sidebar-link" href="#data-table">Smart tables</a><a class="docs-sidebar-link" href="#navigation">Navigation</a><a class="docs-sidebar-link" href="#tabs">Tabs</a><a class="docs-sidebar-link" href="#dropdown">Dropdown</a><a class="docs-sidebar-link" href="#accordion">Accordion</a><a class="docs-sidebar-link" href="#modal">Modal</a><a class="docs-sidebar-link" href="#confirm">Confirm dialog</a><a class="docs-sidebar-link" href="#toast">Toast</a><a class="docs-sidebar-link" href="#multiselect">Multi-select</a><a class="docs-sidebar-link" href="#date-range">Date range</a><a class="docs-sidebar-link" href="#date-picker">Date picker</a><a class="docs-sidebar-link" href="#loaders">Loaders</a><a class="docs-sidebar-link" href="#upload">Upload</a><a class="docs-sidebar-link" href="#empty-stepper">Workflow UI</a><a class="docs-sidebar-link" href="#offcanvas">Offcanvas</a><a class="docs-sidebar-link" href="#tooltips">Tooltips</a>
+      <div class="docs-sidebar-title">On this page</div><a class="docs-sidebar-link" href="#buttons">Buttons</a><a class="docs-sidebar-link" href="#typography">Typography</a><a class="docs-sidebar-link" href="#forms">Forms</a><a class="docs-sidebar-link" href="#selection">Selection</a><a class="docs-sidebar-link" href="#save-next">Multi-step form</a><a class="docs-sidebar-link" href="#draft">Save draft</a><a class="docs-sidebar-link" href="#alerts">Alerts</a><a class="docs-sidebar-link" href="#cards">Cards</a><a class="docs-sidebar-link" href="#images">Images</a><a class="docs-sidebar-link" href="#tables">Tables</a><a class="docs-sidebar-link" href="#data-table">Smart tables</a><a class="docs-sidebar-link" href="#navigation">Navigation</a><a class="docs-sidebar-link" href="#tabs">Tabs</a><a class="docs-sidebar-link" href="#dropdown">Dropdown</a><a class="docs-sidebar-link" href="#accordion">Accordion</a><a class="docs-sidebar-link" href="#modal">Modal</a><a class="docs-sidebar-link" href="#confirm">Confirm dialog</a><a class="docs-sidebar-link" href="#toast">Toast</a><a class="docs-sidebar-link" href="#multiselect">Multi-select</a><a class="docs-sidebar-link" href="#date-range">Date range</a><a class="docs-sidebar-link" href="#date-picker">Date picker</a><a class="docs-sidebar-link" href="#loaders">Loaders</a><a class="docs-sidebar-link" href="#upload">Upload</a><a class="docs-sidebar-link" href="#empty-stepper">Workflow UI</a><a class="docs-sidebar-link" href="#offcanvas">Offcanvas</a><a class="docs-sidebar-link" href="#tooltips">Tooltips</a>
     </aside>
     <main class="docs-main">
 
@@ -60,6 +60,65 @@
 &lt;button class=&quot;ui-btn ui-btn-primary ui-btn-pill&quot;&gt;Pill&lt;/button&gt;</code></pre>
 </div>
 
+<h3 class="ui-h3 ui-mt-5">More button variants</h3>
+<p class="docs-section-intro">Every color has an <span class="ui-code">ui-btn-outline-*</span> counterpart (<span class="ui-code">primary</span>/<span class="ui-code">secondary</span>/<span class="ui-code">success</span>/<span class="ui-code">danger</span> shown here); <span class="ui-code">ui-btn-square</span> removes rounding; <span class="ui-code">ui-btn-group</span> joins adjacent buttons into one connected control (a common toolbar/segmented-control pattern).</p>
+
+<div class="docs-demo">
+<div class="ui-d-flex ui-flex-wrap ui-align-center ui-gap-3">
+  <button class="ui-btn ui-btn-outline-secondary">Outline secondary</button>
+  <button class="ui-btn ui-btn-outline-success">Outline success</button>
+  <button class="ui-btn ui-btn-outline-danger">Outline danger</button>
+  <button class="ui-btn ui-btn-primary ui-btn-square">Square</button>
+  <div class="ui-btn-group" role="group">
+    <button class="ui-btn ui-btn-outline-secondary">Day</button>
+    <button class="ui-btn ui-btn-outline-secondary ui-active">Week</button>
+    <button class="ui-btn ui-btn-outline-secondary">Month</button>
+  </div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;button class=&quot;ui-btn ui-btn-outline-danger&quot;&gt;Outline danger&lt;/button&gt;
+
+&lt;div class=&quot;ui-btn-group&quot; role=&quot;group&quot;&gt;
+  &lt;button class=&quot;ui-btn ui-btn-outline-secondary&quot;&gt;Day&lt;/button&gt;
+  &lt;button class=&quot;ui-btn ui-btn-outline-secondary ui-active&quot;&gt;Week&lt;/button&gt;
+  &lt;button class=&quot;ui-btn ui-btn-outline-secondary&quot;&gt;Month&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="typography">
+  <h2 class="ui-h2">Typography</h2>
+  <p class="docs-section-intro">A heading scale independent of the actual <span class="ui-code">&lt;h1&gt;</span>&ndash;<span class="ui-code">&lt;h6&gt;</span> tag you use (so document outline and visual size can differ), plus a lead paragraph style, blockquote, and inline mark/code.</p>
+
+<div class="docs-demo">
+<div class="ui-d-flex ui-flex-column ui-gap-2">
+  <div class="ui-display-1">Display 1</div>
+  <div class="ui-display-2">Display 2</div>
+  <div class="ui-h1">Heading 1</div>
+  <div class="ui-h2">Heading 2</div>
+  <div class="ui-h3">Heading 3</div>
+  <div class="ui-h4">Heading 4</div>
+  <div class="ui-h5">Heading 5</div>
+  <div class="ui-h6">Heading 6</div>
+  <p class="ui-lead ui-mb-0">A lead paragraph, slightly larger and softer than body text, for section intros.</p>
+  <blockquote class="ui-blockquote">A blockquote for quoted or callout text.</blockquote>
+  <p class="ui-mb-0">Regular text with <mark class="ui-mark">highlighted</mark> and <code class="ui-code">inline code</code>.</p>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-display-1&quot;&gt;Display 1&lt;/div&gt;
+&lt;h1 class=&quot;ui-h3&quot;&gt;A real h1 that looks like an h3&lt;/h1&gt;
+&lt;p class=&quot;ui-lead&quot;&gt;Section intro text.&lt;/p&gt;
+&lt;blockquote class=&quot;ui-blockquote&quot;&gt;Quoted text.&lt;/blockquote&gt;
+&lt;mark class=&quot;ui-mark&quot;&gt;highlighted&lt;/mark&gt;
+&lt;code class=&quot;ui-code&quot;&gt;inline code&lt;/code&gt;</code></pre>
+</div>
+
 </section>
 
 
@@ -82,9 +141,13 @@
       <select class="ui-select" id="department"><option>ICT</option><option>Finance</option></select>
     </div>
   </div>
-  <div class="ui-col-12">
+  <div class="ui-col-12 ui-col-md-6">
     <input class="ui-control ui-is-invalid" value="Invalid value">
     <div class="ui-feedback-invalid">Please correct this value.</div>
+  </div>
+  <div class="ui-col-12 ui-col-md-6">
+    <input class="ui-control ui-is-valid" value="Valid value">
+    <div class="ui-feedback-valid">Looks good.</div>
   </div>
 </div>
 </div>
@@ -99,7 +162,40 @@
 &lt;select class=&quot;ui-select&quot;&gt;
   &lt;option&gt;ICT&lt;/option&gt;
   &lt;option&gt;Finance&lt;/option&gt;
-&lt;/select&gt;</code></pre>
+&lt;/select&gt;
+
+&lt;input class=&quot;ui-control ui-is-invalid&quot;&gt;
+&lt;div class=&quot;ui-feedback-invalid&quot;&gt;Please correct this value.&lt;/div&gt;
+
+&lt;input class=&quot;ui-control ui-is-valid&quot;&gt;
+&lt;div class=&quot;ui-feedback-valid&quot;&gt;Looks good.&lt;/div&gt;</code></pre>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">Input groups</h3>
+<p class="docs-section-intro"><span class="ui-code">.ui-input-group</span> joins an <span class="ui-code">.ui-input-addon</span> (a static label) with a <span class="ui-code">.ui-control</span> into one connected control.</p>
+
+<div class="docs-demo">
+<div class="ui-row ui-g-2">
+  <div class="ui-col-12 ui-col-md-6">
+    <div class="ui-input-group">
+      <span class="ui-input-addon">TZS</span>
+      <input class="ui-control" placeholder="Amount">
+    </div>
+  </div>
+  <div class="ui-col-12 ui-col-md-6">
+    <div class="ui-input-group">
+      <input class="ui-control" placeholder="username">
+      <span class="ui-input-addon">@gbt.go.tz</span>
+    </div>
+  </div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-input-group&quot;&gt;
+  &lt;span class=&quot;ui-input-addon&quot;&gt;TZS&lt;/span&gt;
+  &lt;input class=&quot;ui-control&quot; placeholder=&quot;Amount&quot;&gt;
+&lt;/div&gt;</code></pre>
 </div>
 
 <h3 class="ui-h3 ui-mt-5">Floating labels</h3>
@@ -157,6 +253,27 @@
 
 &lt;input id=&quot;switch1&quot; class=&quot;ui-switch ui-switch-primary&quot; type=&quot;checkbox&quot;&gt;
 &lt;label for=&quot;switch1&quot;&gt;Enable notifications&lt;/label&gt;</code></pre>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">Every size and color</h3>
+<p class="docs-section-intro">Checkbox: <span class="ui-code">-sm</span>/<span class="ui-code">-lg</span>/<span class="ui-code">-xl</span>, <span class="ui-code">-success</span>/<span class="ui-code">-danger</span>/<span class="ui-code">-warning</span>, and <span class="ui-code">-circle</span> for a round instead of rounded-square shape. Radio and switch follow the same <span class="ui-code">-sm</span>/<span class="ui-code">-lg</span> and color pattern.</p>
+
+<div class="docs-demo">
+<div class="ui-d-flex ui-flex-wrap ui-gap-4 ui-align-center">
+  <div><input id="checkXl" class="ui-checkbox ui-checkbox-xl ui-checkbox-danger" type="checkbox" checked><label for="checkXl">XL danger</label></div>
+  <div><input id="checkWarn" class="ui-checkbox ui-checkbox-warning" type="checkbox" checked><label for="checkWarn">Warning</label></div>
+  <div><input id="checkCircle" class="ui-checkbox ui-checkbox-circle ui-checkbox-success" type="checkbox" checked><label for="checkCircle">Circle</label></div>
+  <div><input id="radioSm" class="ui-radio ui-radio-sm ui-radio-danger" type="radio" name="demoRadio2" checked><label for="radioSm">Small danger radio</label></div>
+  <div><input id="radioLg" class="ui-radio ui-radio-lg" type="radio" name="demoRadio3" checked><label for="radioLg">Large radio</label></div>
+  <div><input id="switchLg" class="ui-switch ui-switch-lg ui-switch-danger" type="checkbox" checked><label for="switchLg">Large danger switch</label></div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;input class=&quot;ui-checkbox ui-checkbox-xl ui-checkbox-danger&quot; type=&quot;checkbox&quot;&gt;
+&lt;input class=&quot;ui-checkbox ui-checkbox-circle ui-checkbox-success&quot; type=&quot;checkbox&quot;&gt;
+&lt;input class=&quot;ui-radio ui-radio-sm ui-radio-danger&quot; type=&quot;radio&quot;&gt;
+&lt;input class=&quot;ui-switch ui-switch-lg ui-switch-danger&quot; type=&quot;checkbox&quot;&gt;</code></pre>
 </div>
 
 </section>
@@ -310,7 +427,7 @@
   <div class="ui-alert ui-alert-danger ui-alert-outline">
     <div class="ui-alert-icon">!</div><div><div class="ui-alert-title">Validation failed</div><p class="ui-alert-message">Please correct the highlighted fields.</p></div>
   </div>
-  <div class="ui-d-flex ui-gap-2"><span class="ui-badge ui-badge-success">Approved</span><span class="ui-badge ui-badge-soft-danger ui-badge-pill">Rejected</span></div>
+  <div class="ui-d-flex ui-gap-2 ui-align-center"><span class="ui-badge ui-badge-success">Approved</span><span class="ui-badge ui-badge-secondary">Draft</span><span class="ui-badge ui-badge-soft-danger ui-badge-pill">Rejected</span><span class="ui-dot ui-dot-success"></span> Online<span class="ui-dot ui-dot-warning"></span> Away</div>
 </div>
 </div>
 <div class="docs-code-wrap">
@@ -322,6 +439,39 @@
     &lt;p class=&quot;ui-alert-message&quot;&gt;The record is now available.&lt;/p&gt;
   &lt;/div&gt;
   &lt;button class=&quot;ui-alert-close&quot; data-ui-alert-close&gt;&amp;times;&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;span class=&quot;ui-dot ui-dot-success&quot;&gt;&lt;/span&gt; Online</code></pre>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">Solid alerts, action rows, and lists</h3>
+<p class="docs-section-intro"><span class="ui-code">.ui-alert-solid</span> fills the background instead of tinting it; <span class="ui-code">.ui-alert-actions</span> holds buttons; <span class="ui-code">.ui-alert-list</span> is a bulleted list styled to match. <span class="ui-code">.ui-alert-sm</span>/<span class="ui-code">.ui-alert-lg</span> control padding.</p>
+
+<div class="docs-demo">
+<div class="ui-alert ui-alert-danger ui-alert-solid">
+  <div class="ui-alert-icon">!</div>
+  <div>
+    <div class="ui-alert-title">3 fields need attention</div>
+    <ul class="ui-alert-list"><li>Premise name is required</li><li>End date must be after start date</li></ul>
+    <div class="ui-alert-actions">
+      <button class="ui-btn ui-btn-sm ui-btn-ghost">Review</button>
+    </div>
+  </div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-alert ui-alert-danger ui-alert-solid&quot;&gt;
+  &lt;div class=&quot;ui-alert-icon&quot;&gt;!&lt;/div&gt;
+  &lt;div&gt;
+    &lt;div class=&quot;ui-alert-title&quot;&gt;3 fields need attention&lt;/div&gt;
+    &lt;ul class=&quot;ui-alert-list&quot;&gt;
+      &lt;li&gt;Premise name is required&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;div class=&quot;ui-alert-actions&quot;&gt;
+      &lt;button class=&quot;ui-btn ui-btn-sm ui-btn-outline-secondary&quot;&gt;Review&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
 &lt;/div&gt;</code></pre>
 </div>
 
@@ -347,6 +497,38 @@
     &lt;p class=&quot;ui-card-subtitle&quot;&gt;Reusable content card&lt;/p&gt;
   &lt;/div&gt;
 &lt;/article&gt;</code></pre>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">More card and list variants</h3>
+<p class="docs-section-intro">Card border colors (<span class="ui-code">ui-card-border-success</span>/<span class="ui-code">-danger</span>/<span class="ui-code">-warning</span>), a <span class="ui-code">ui-card-img-top</span> image slot and <span class="ui-code">ui-card-footer</span>, a clickable <span class="ui-code">ui-list-group-item-action</span>, and a borderless <span class="ui-code">ui-list-group-flush</span> for dropping straight into a card body.</p>
+
+<div class="docs-demo">
+<div class="ui-css-grid ui-css-grid-sm">
+  <article class="ui-card ui-card-border-danger">
+    <img class="ui-card-img-top" src="assets/placeholder-landscape.svg" alt="">
+    <div class="ui-card-body"><h3 class="ui-card-title">Non-compliant premise</h3></div>
+    <div class="ui-card-footer">Last inspected 3 days ago</div>
+  </article>
+  <div class="ui-card">
+    <ul class="ui-list-group ui-list-group-flush">
+      <li class="ui-list-group-item ui-list-group-item-action">View details</li>
+      <li class="ui-list-group-item ui-list-group-item-action">Assign officer</li>
+      <li class="ui-list-group-item ui-list-group-item-action ui-active">Revoke licence</li>
+    </ul>
+  </div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;article class=&quot;ui-card ui-card-border-danger&quot;&gt;
+  &lt;img class=&quot;ui-card-img-top&quot; src=&quot;photo.jpg&quot; alt=&quot;&quot;&gt;
+  &lt;div class=&quot;ui-card-body&quot;&gt;&lt;h3 class=&quot;ui-card-title&quot;&gt;...&lt;/h3&gt;&lt;/div&gt;
+  &lt;div class=&quot;ui-card-footer&quot;&gt;Last inspected 3 days ago&lt;/div&gt;
+&lt;/article&gt;
+
+&lt;ul class=&quot;ui-list-group ui-list-group-flush&quot;&gt;
+  &lt;li class=&quot;ui-list-group-item ui-list-group-item-action&quot;&gt;View details&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
 </div>
 
 </section>
@@ -692,7 +874,33 @@
   <p class="docs-section-intro">Small, default, large, extra-large, and fullscreen dialog sizes with focus trapping, Escape handling, and backdrop closing.</p>
 
 <div class="docs-demo">
-<button class="ui-btn ui-btn-primary" type="button" data-ui-modal-open="#componentModal">Open modal</button>
+<div class="ui-d-flex ui-flex-wrap ui-gap-2">
+<button class="ui-btn ui-btn-outline-primary" type="button" data-ui-modal-open="#sizeSmModal">Small</button>
+<button class="ui-btn ui-btn-primary" type="button" data-ui-modal-open="#componentModal">Large (default demo)</button>
+<button class="ui-btn ui-btn-outline-primary" type="button" data-ui-modal-open="#sizeXlModal">Extra-large</button>
+<button class="ui-btn ui-btn-outline-primary" type="button" data-ui-modal-open="#sizeFsModal">Fullscreen</button>
+</div>
+<div class="ui-modal ui-modal-sm" id="sizeSmModal" aria-hidden="true">
+  <div class="ui-backdrop"></div>
+  <div class="ui-modal-dialog" role="dialog" aria-modal="true">
+    <div class="ui-modal-header"><h3 class="ui-modal-title">ui-modal-sm</h3><button class="ui-modal-close" data-ui-modal-close>&times;</button></div>
+    <div class="ui-modal-body">A compact dialog for a short confirmation or single field.</div>
+  </div>
+</div>
+<div class="ui-modal ui-modal-xl" id="sizeXlModal" aria-hidden="true">
+  <div class="ui-backdrop"></div>
+  <div class="ui-modal-dialog" role="dialog" aria-modal="true">
+    <div class="ui-modal-header"><h3 class="ui-modal-title">ui-modal-xl</h3><button class="ui-modal-close" data-ui-modal-close>&times;</button></div>
+    <div class="ui-modal-body">Room for a wide form, a table, or side-by-side content.</div>
+  </div>
+</div>
+<div class="ui-modal ui-modal-fullscreen" id="sizeFsModal" aria-hidden="true">
+  <div class="ui-backdrop"></div>
+  <div class="ui-modal-dialog" role="dialog" aria-modal="true">
+    <div class="ui-modal-header"><h3 class="ui-modal-title">ui-modal-fullscreen</h3><button class="ui-modal-close" data-ui-modal-close>&times;</button></div>
+    <div class="ui-modal-body">Fills the entire viewport &mdash; useful for a multi-step wizard on mobile.</div>
+  </div>
+</div>
 <div class="ui-modal ui-modal-lg" id="componentModal" aria-hidden="true">
   <div class="ui-backdrop"></div>
   <div class="ui-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="componentModalTitle" tabindex="-1">
@@ -713,7 +921,10 @@
     &lt;div class=&quot;ui-modal-body&quot;&gt;...&lt;/div&gt;
     &lt;div class=&quot;ui-modal-footer&quot;&gt;...&lt;/div&gt;
   &lt;/div&gt;
-&lt;/div&gt;</code></pre>
+&lt;/div&gt;
+
+&lt;!-- size classes: ui-modal-sm, ui-modal-lg, ui-modal-xl, ui-modal-fullscreen
+     (omit for the default width) --&gt;</code></pre>
 </div>
 
 </section>
