@@ -33,6 +33,21 @@
 .ui-upload-preview { margin-top: .75rem; display: flex; flex-wrap: wrap; gap: .5rem; }
 .ui-file-item { padding: .55rem .7rem; border: 1px solid var(--ui-border); border-radius: var(--ui-radius-2); background: var(--ui-surface); display: flex; align-items: center; gap: .5rem; font-size: .8rem; }
 
+.ui-file-item-remove {
+  width: 1.1rem;
+  height: 1.1rem;
+  border: 0;
+  border-radius: 50%;
+  padding: 0;
+  background: transparent;
+  color: var(--ui-muted);
+  line-height: 1;
+  cursor: pointer;
+  flex: 0 0 auto;
+}
+
+.ui-file-item-remove:hover { background: var(--ui-danger-soft); color: var(--ui-danger); }
+
 .ui-empty-state {
   padding: 2.5rem 1.5rem;
   border: 1px dashed var(--ui-border-strong);

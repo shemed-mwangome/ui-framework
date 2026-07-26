@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "prefix": "ui-",
   "cssModules": [
     "00-tokens.css",
@@ -32,7 +32,9 @@
     "03-dropdown.js",
     "04-tabs.js",
     "08-multiselect.js",
+    "15-date-utils.js",
     "12-date-range.js",
+    "16-date-picker.js",
     "05-modal.js",
     "06-offcanvas.js",
     "07-toast.js",
@@ -40,7 +42,8 @@
     "10-confirm.js",
     "11-save-next.js",
     "13-stepper-form.js",
-    "14-data-table.js"
+    "14-data-table.js",
+    "17-draft.js"
   ],
   "bundles": [
     "dist/ui-framework.css",

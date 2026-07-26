@@ -1,7 +1,7 @@
 {
   "name": "ui-framework",
-  "version": "1.0.0",
-  "description": "A dependency-free, prefix-safe CSS and JavaScript UI framework for JSP, server-rendered and static applications.",
+  "version": "1.1.0",
+  "description": "A dependency-free, prefix-safe CSS and JavaScript UI framework for server-rendered and static applications.",
   "main": "dist/ui-framework.js",
   "style": "dist/ui-framework.css",
   "files": [
@@ -20,11 +20,12 @@
     "css",
     "ui",
     "components",
-    "jsp",
     "design-system",
     "grid",
     "modal",
-    "toast"
+    "toast",
+    "data-table",
+    "date-picker"
   ],
   "license": "MIT"
 }

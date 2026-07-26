@@ -167,6 +167,35 @@ textarea.ui-control { min-height: 7rem; resize: vertical; }
   transform: translateY(-.65rem) scale(.8);
 }
 
+/*
+ * Outlined variant: the label rests centered inside the control like a
+ * placeholder, then floats up to sit directly on the top border on focus
+ * or when filled. The label's own background (matching the control's)
+ * masks the border segment behind it, faking a notch in the outline.
+ */
+.ui-floating-outline > .ui-control {
+  height: 3.25rem;
+  padding: 0 .75rem;
+}
+
+.ui-floating-outline > .ui-label {
+  top: 50%;
+  left: .6rem;
+  padding: 0 .3rem;
+  background: transparent;
+  line-height: 1.2;
+  transform-origin: 0 50%;
+  transform: translateY(-50%);
+  transition: transform var(--ui-transition-fast), color var(--ui-transition-fast), background var(--ui-transition-fast);
+}
+
+.ui-floating-outline > .ui-control:focus ~ .ui-label,
+.ui-floating-outline > .ui-control:not(:placeholder-shown) ~ .ui-label {
+  top: 0;
+  background: var(--ui-surface);
+  transform: translateY(-50%) scale(.8);
+}
+
 .ui-range {
   width: 100%;
   accent-color: var(--ui-primary);

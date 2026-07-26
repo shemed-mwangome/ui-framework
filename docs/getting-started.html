@@ -14,7 +14,7 @@
       <a class="docs-brand" href="index.html"><span class="docs-logo">UI</span><span>UI Framework</span></a>
     </div>
     <div class="ui-d-flex ui-align-center ui-gap-2">
-      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.0.0</span>
+      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.1.0</span>
       <button class="ui-btn ui-btn-sm ui-btn-outline-secondary" type="button" data-ui-theme-toggle>Theme</button>
     </div>
   </header>
@@ -26,14 +26,14 @@
       <a class="docs-sidebar-link" href="examples/dashboard.html">Dashboard</a>
       <a class="docs-sidebar-link" href="examples/form.html">Form workflow</a>
       <a class="docs-sidebar-link" href="examples/login.html">Login page</a>
-      <div class="docs-sidebar-title">On this page</div><a class="docs-sidebar-link" href="#bundle">Single bundle</a><a class="docs-sidebar-link" href="#modular">Modules</a><a class="docs-sidebar-link" href="#jsp">JSP</a><a class="docs-sidebar-link" href="#theme">Theming</a>
+      <div class="docs-sidebar-title">On this page</div><a class="docs-sidebar-link" href="#bundle">Single bundle</a><a class="docs-sidebar-link" href="#modular">Modules</a><a class="docs-sidebar-link" href="#server">Server-side integration</a><a class="docs-sidebar-link" href="#theme">Theming</a>
     </aside>
     <main class="docs-main">
 
 <section class="docs-hero">
   <div class="docs-kicker">Installation</div>
   <h1 class="ui-display-2">Start without changing your existing theme.</h1>
-  <p class="ui-lead">The framework uses the <span class="ui-code">ui-</span> prefix and scoped base styles, making it suitable for legacy JSP applications that already use Bootstrap, CoreUI, or custom master styles.</p>
+  <p class="ui-lead">The framework uses the <span class="ui-code">ui-</span> prefix and scoped base styles, making it suitable for any server-rendered application &mdash; JSP, PHP, Rails, Django, or plain static HTML &mdash; that already uses Bootstrap, CoreUI, or custom master styles.</p>
 </section>
 
 <section class="docs-section" id="bundle">
@@ -61,17 +61,17 @@
 &lt;script src=&quot;/ui/static/ui-framework/src/js/05-modal.js&quot;&gt;&lt;/script&gt;</code></pre></div>
 </section>
 
-<section class="docs-section" id="jsp">
-  <h2 class="ui-h2">JSP integration</h2>
-  <p class="docs-section-intro">Load the framework after your existing CSS. Wrap new content in <span class="ui-code">ui-scope</span> to apply the optional base typography safely.</p>
-  <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>&lt;link rel=&quot;stylesheet&quot;
-      href=&quot;&lt;c:url value=&#x27;/ui/static/ui-framework/dist/ui-framework.min.css&#x27;/&gt;&quot;&gt;
+<section class="docs-section" id="server">
+  <h2 class="ui-h2">Server-side integration</h2>
+  <p class="docs-section-intro">Load the framework after your existing CSS. Wrap new content in <span class="ui-code">ui-scope</span> to apply the optional base typography safely. The paths below are plain HTML &mdash; substitute your own templating syntax (JSTL's <span class="ui-code">&lt;c:url&gt;</span>, Thymeleaf, PHP includes, an asset helper, etc.) to resolve them.</p>
+  <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>&lt;link rel=&quot;stylesheet&quot; href=&quot;/static/ui-framework/dist/ui-framework.min.css&quot;&gt;
 
 &lt;main class=&quot;ui-scope&quot;&gt;
     &lt;!-- UI Framework components --&gt;
 &lt;/main&gt;
 
-&lt;script src=&quot;&lt;c:url value=&#x27;/ui/static/ui-framework/dist/ui-framework.min.js&#x27;/&gt;&quot;&gt;&lt;/script&gt;</code></pre></div>
+&lt;script src=&quot;/static/ui-framework/dist/ui-framework.min.js&quot;&gt;&lt;/script&gt;</code></pre></div>
+  <p class="docs-section-intro">See <span class="ui-code">examples/jsp-integration.jsp</span> in the repository for one worked example.</p>
 </section>
 
 <section class="docs-section" id="theme">
@@ -92,7 +92,7 @@
   </div>
 </section>
 
-      <footer class="docs-footer">UI Framework 1.0.0 · Dependency-free · Designed for safe use beside Bootstrap and legacy JSP themes.</footer>
+      <footer class="docs-footer">UI Framework 1.1.0 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
     </main>
   </div>
   <script src="../dist/ui-framework.js"></script>

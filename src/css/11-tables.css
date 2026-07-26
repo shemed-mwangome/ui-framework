@@ -43,8 +43,19 @@
 .ui-table-caption { padding: .65rem 0; color: var(--ui-muted); text-align: left; caption-side: bottom; }
 .ui-table-empty { padding: 2.5rem !important; color: var(--ui-muted); text-align: center !important; }
 
-.ui-table-toolbar { display: flex; justify-content: flex-end; margin-bottom: .75rem; }
+.ui-table-toolbar { display: flex; align-items: center; justify-content: space-between; gap: .75rem; flex-wrap: wrap; margin-bottom: .75rem; }
 .ui-table-search { max-width: 16rem; }
+
+.ui-table-page-size {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  color: var(--ui-text-soft);
+  font-size: .82rem;
+  white-space: nowrap;
+}
+
+.ui-table-page-size .ui-select { width: auto; }
 
 .ui-table-sortable {
   position: relative;
@@ -72,3 +83,41 @@
 
 .ui-table-pagination { margin-top: .85rem; display: flex; justify-content: flex-end; }
 .ui-table-empty-row td { padding: 2.5rem; color: var(--ui-muted); text-align: center; }
+
+/* Minimal: no header fill, just a stronger rule under the header row. */
+.ui-table-minimal thead th {
+  background: transparent;
+  border-bottom: 2px solid var(--ui-border-strong);
+}
+
+/* Dark header: common admin-dashboard look. */
+.ui-table-dark-header thead th {
+  background: var(--ui-dark);
+  color: var(--ui-light);
+  border-bottom-color: var(--ui-dark);
+}
+
+/* Card rows: each row floats as its own rounded, shadowed card. Needs
+   separate borders (not collapse) so spacing and per-row radius work. */
+.ui-table-card-rows {
+  border-collapse: separate;
+  border-spacing: 0 .6rem;
+}
+
+.ui-table-card-rows thead th { background: transparent; border-bottom: 0; padding-bottom: .35rem; }
+
+.ui-table-card-rows tbody tr { background: var(--ui-surface); box-shadow: var(--ui-shadow-1); }
+
+.ui-table-card-rows tbody td { border: solid var(--ui-border); border-width: 1px 0; }
+
+.ui-table-card-rows tbody td:first-child {
+  border-left: 1px solid var(--ui-border);
+  border-top-left-radius: var(--ui-radius-2);
+  border-bottom-left-radius: var(--ui-radius-2);
+}
+
+.ui-table-card-rows tbody td:last-child {
+  border-right: 1px solid var(--ui-border);
+  border-top-right-radius: var(--ui-radius-2);
+  border-bottom-right-radius: var(--ui-radius-2);
+}

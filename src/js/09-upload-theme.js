@@ -17,16 +17,33 @@
         zone.addEventListener(name, function () { zone.classList.remove("ui-dragover"); });
       });
 
-      input.addEventListener("change", function () {
+      function removeFile(index) {
+        var transfer = new DataTransfer();
+        Array.prototype.forEach.call(input.files || [], function (file, i) {
+          if (i !== index) transfer.items.add(file);
+        });
+        input.files = transfer.files;
+        input.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+
+      function renderPreview() {
         if (!preview) return;
         preview.innerHTML = "";
-        Array.prototype.forEach.call(input.files || [], function (file) {
+        Array.prototype.forEach.call(input.files || [], function (file, index) {
           var item = document.createElement("div");
           item.className = "ui-file-item";
-          item.textContent = file.name + " · " + Math.max(1, Math.round(file.size / 1024)) + " KB";
+          item.innerHTML =
+            '<span class="ui-file-item-name">' + UI.escape(file.name) + " · " + Math.max(1, Math.round(file.size / 1024)) + " KB</span>" +
+            '<button type="button" class="ui-file-item-remove" aria-label="Remove ' + UI.escape(file.name) + '">&times;</button>';
+          item.querySelector(".ui-file-item-remove").addEventListener("click", function (event) {
+            event.stopPropagation();
+            removeFile(index);
+          });
           preview.appendChild(item);
         });
-      });
+      }
+
+      input.addEventListener("change", renderPreview);
     });
   }
 

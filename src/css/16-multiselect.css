@@ -93,3 +93,4 @@
 .ui-multiselect-tag { max-width: 10rem; padding: .2rem .45rem; border-radius: var(--ui-radius-pill); background: var(--ui-primary-soft); color: var(--ui-primary); display: inline-flex; align-items: center; gap: .25rem; font-size: .72rem; }
 .ui-multiselect-tag-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ui-multiselect-tag-remove { border: 0; padding: 0; background: transparent; color: inherit; cursor: pointer; line-height: 1; }
+.ui-multiselect-tag-overflow { background: var(--ui-surface-muted); color: var(--ui-muted); font-weight: 700; }
