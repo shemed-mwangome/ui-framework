@@ -1,0 +1,76 @@
+.ui-card {
+  --ui-card-radius: var(--ui-radius-4);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-card-radius);
+  background: var(--ui-surface);
+  color: var(--ui-text);
+  box-shadow: var(--ui-shadow-1);
+  overflow: hidden;
+}
+
+.ui-card-header,
+.ui-card-footer {
+  padding: .9rem 1rem;
+  background: var(--ui-surface-soft);
+}
+
+.ui-card-header { border-bottom: 1px solid var(--ui-border); }
+.ui-card-footer { border-top: 1px solid var(--ui-border); }
+.ui-card-body { padding: 1rem; }
+.ui-card-title { margin: 0 0 .35rem; font-size: 1.05rem; font-weight: 700; }
+.ui-card-subtitle { margin: 0; color: var(--ui-muted); font-size: .85rem; }
+.ui-card-img-top { width: 100%; display: block; }
+.ui-card-border-primary { border-top: .25rem solid var(--ui-primary); }
+.ui-card-border-success { border-top: .25rem solid var(--ui-success); }
+.ui-card-border-danger { border-top: .25rem solid var(--ui-danger); }
+.ui-card-hover { transition: transform var(--ui-transition), box-shadow var(--ui-transition); }
+.ui-card-hover:hover { transform: translateY(-3px); box-shadow: var(--ui-shadow-3); }
+
+.ui-list-group {
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-3);
+  overflow: hidden;
+  list-style: none;
+}
+
+.ui-list-group-item {
+  padding: .75rem 1rem;
+  border-bottom: 1px solid var(--ui-border);
+  background: var(--ui-surface);
+  color: var(--ui-text);
+  display: block;
+  text-decoration: none;
+}
+
+.ui-list-group-item:last-child { border-bottom: 0; }
+.ui-list-group-item-action { cursor: pointer; transition: background var(--ui-transition-fast), color var(--ui-transition-fast); }
+.ui-list-group-item-action:hover { background: var(--ui-surface-soft); color: var(--ui-primary); }
+.ui-list-group-item.ui-active { background: var(--ui-primary); color: #fff; }
+.ui-list-group-flush { border-inline: 0; border-radius: 0; }
+
+.ui-stat {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  padding: 1rem;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-3);
+  background: var(--ui-surface);
+}
+
+.ui-stat-icon {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--ui-radius-3);
+  background: var(--ui-primary-soft);
+  color: var(--ui-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.ui-stat-value { font-size: 1.5rem; font-weight: 700; line-height: 1; }
+.ui-stat-label { margin-top: .25rem; color: var(--ui-muted); font-size: .8rem; }

@@ -1,0 +1,114 @@
+/*!
+ * UI Framework 1.0.0
+ * Design tokens and themes
+ */
+:root {
+  color-scheme: light;
+
+  --ui-font-sans: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --ui-font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+
+  --ui-primary: #2563eb;
+  --ui-primary-hover: #1d4ed8;
+  --ui-primary-active: #1e40af;
+  --ui-secondary: #64748b;
+  --ui-success: #16a34a;
+  --ui-danger: #dc2626;
+  --ui-warning: #f59e0b;
+  --ui-info: #0891b2;
+  --ui-dark: #0f172a;
+  --ui-light: #f8fafc;
+  --ui-white: #ffffff;
+
+  --ui-text: #172033;
+  --ui-text-soft: #334155;
+  --ui-muted: #64748b;
+  --ui-subtle: #94a3b8;
+  --ui-border: #d8e0ea;
+  --ui-border-strong: #b8c3d1;
+  --ui-surface: #ffffff;
+  --ui-surface-soft: #f8fafc;
+  --ui-surface-muted: #f1f5f9;
+  --ui-overlay: rgba(15, 23, 42, .58);
+
+  --ui-primary-soft: #eff6ff;
+  --ui-success-soft: #f0fdf4;
+  --ui-danger-soft: #fef2f2;
+  --ui-warning-soft: #fffbeb;
+  --ui-info-soft: #ecfeff;
+
+  --ui-radius-0: 0;
+  --ui-radius-1: .25rem;
+  --ui-radius-2: .375rem;
+  --ui-radius-3: .5rem;
+  --ui-radius-4: .75rem;
+  --ui-radius-5: 1rem;
+  --ui-radius-pill: 999rem;
+
+  --ui-shadow-1: 0 1px 2px rgba(15, 23, 42, .06);
+  --ui-shadow-2: 0 4px 12px rgba(15, 23, 42, .10);
+  --ui-shadow-3: 0 12px 30px rgba(15, 23, 42, .14);
+  --ui-shadow-4: 0 24px 60px rgba(15, 23, 42, .20);
+
+  --ui-space-0: 0;
+  --ui-space-1: .25rem;
+  --ui-space-2: .5rem;
+  --ui-space-3: .75rem;
+  --ui-space-4: 1rem;
+  --ui-space-5: 1.5rem;
+  --ui-space-6: 2rem;
+  --ui-space-7: 3rem;
+  --ui-space-8: 4rem;
+
+  --ui-control-sm: 2rem;
+  --ui-control-md: 2.5rem;
+  --ui-control-lg: 3rem;
+
+  --ui-container-sm: 36rem;
+  --ui-container-md: 48rem;
+  --ui-container-lg: 64rem;
+  --ui-container-xl: 75rem;
+  --ui-container-xxl: 87.5rem;
+
+  --ui-transition-fast: 120ms ease;
+  --ui-transition: 200ms ease;
+  --ui-transition-slow: 320ms ease;
+
+  --ui-focus-ring: 0 0 0 .2rem rgba(37, 99, 235, .20);
+
+  --ui-z-dropdown: 1000;
+  --ui-z-sticky: 1020;
+  --ui-z-fixed: 1030;
+  --ui-z-offcanvas: 1040;
+  --ui-z-backdrop: 1050;
+  --ui-z-modal: 1060;
+  --ui-z-popover: 1070;
+  --ui-z-tooltip: 1080;
+  --ui-z-toast: 1090;
+}
+
+[data-ui-theme="dark"],
+.ui-theme-dark {
+  color-scheme: dark;
+  --ui-text: #e5edf7;
+  --ui-text-soft: #cbd5e1;
+  --ui-muted: #94a3b8;
+  --ui-subtle: #64748b;
+  --ui-border: #334155;
+  --ui-border-strong: #475569;
+  --ui-surface: #111827;
+  --ui-surface-soft: #172033;
+  --ui-surface-muted: #1e293b;
+  --ui-overlay: rgba(0, 0, 0, .68);
+
+  --ui-primary-soft: rgba(37, 99, 235, .16);
+  --ui-success-soft: rgba(22, 163, 74, .14);
+  --ui-danger-soft: rgba(220, 38, 38, .14);
+  --ui-warning-soft: rgba(245, 158, 11, .14);
+  --ui-info-soft: rgba(8, 145, 178, .14);
+
+  --ui-shadow-1: 0 1px 2px rgba(0, 0, 0, .20);
+  --ui-shadow-2: 0 4px 12px rgba(0, 0, 0, .28);
+  --ui-shadow-3: 0 12px 30px rgba(0, 0, 0, .34);
+  --ui-shadow-4: 0 24px 60px rgba(0, 0, 0, .44);
+}

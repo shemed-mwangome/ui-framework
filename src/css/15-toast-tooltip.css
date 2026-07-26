@@ -1,0 +1,96 @@
+.ui-toast-container {
+  position: fixed;
+  z-index: var(--ui-z-toast);
+  width: min(23rem, calc(100vw - 2rem));
+  display: flex;
+  flex-direction: column;
+  gap: .65rem;
+  pointer-events: none;
+}
+
+.ui-toast-top-end { top: 1rem; right: 1rem; }
+.ui-toast-top-start { top: 1rem; left: 1rem; }
+.ui-toast-bottom-end { right: 1rem; bottom: 1rem; }
+.ui-toast-bottom-start { left: 1rem; bottom: 1rem; }
+.ui-toast-top-center { top: 1rem; left: 50%; transform: translateX(-50%); }
+.ui-toast-bottom-center { bottom: 1rem; left: 50%; transform: translateX(-50%); }
+
+.ui-toast {
+  --ui-toast-accent: var(--ui-primary);
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: .65rem;
+  padding: .8rem .8rem .8rem 1rem;
+  border: 1px solid var(--ui-border);
+  border-left: .25rem solid var(--ui-toast-accent);
+  border-radius: var(--ui-radius-3);
+  background: var(--ui-surface);
+  color: var(--ui-text);
+  box-shadow: var(--ui-shadow-3);
+  overflow: hidden;
+  pointer-events: auto;
+  animation: ui-toast-in .2s ease;
+}
+
+.ui-toast-success { --ui-toast-accent: var(--ui-success); }
+.ui-toast-danger { --ui-toast-accent: var(--ui-danger); }
+.ui-toast-warning { --ui-toast-accent: var(--ui-warning); }
+.ui-toast-info { --ui-toast-accent: var(--ui-info); }
+.ui-toast-icon { color: var(--ui-toast-accent); font-weight: 800; }
+.ui-toast-title { margin: 0 0 .15rem; font-size: .9rem; font-weight: 700; }
+.ui-toast-message { margin: 0; color: var(--ui-muted); font-size: .8rem; line-height: 1.4; }
+.ui-toast-close { width: 1.7rem; height: 1.7rem; padding: 0; border: 0; border-radius: 50%; background: transparent; color: var(--ui-muted); cursor: pointer; font-size: 1.1rem; }
+.ui-toast-close:hover { background: var(--ui-surface-muted); }
+.ui-toast-progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: .18rem;
+  width: 100%;
+  background: var(--ui-toast-accent);
+  transform-origin: left;
+  animation: ui-toast-progress linear forwards;
+}
+.ui-toast.ui-leaving { animation: ui-toast-out .18s ease forwards; }
+
+[data-ui-tooltip] { position: relative; }
+
+[data-ui-tooltip]::after {
+  content: attr(data-ui-tooltip);
+  position: absolute;
+  z-index: var(--ui-z-tooltip);
+  left: 50%;
+  bottom: calc(100% + .5rem);
+  max-width: 15rem;
+  padding: .4rem .55rem;
+  border-radius: var(--ui-radius-1);
+  background: var(--ui-dark);
+  color: #fff;
+  font-size: .72rem;
+  line-height: 1.35;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, .25rem);
+  transition: opacity var(--ui-transition-fast), transform var(--ui-transition-fast), visibility var(--ui-transition-fast);
+}
+
+[data-ui-tooltip]:hover::after,
+[data-ui-tooltip]:focus-visible::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+
+@keyframes ui-toast-in {
+  from { opacity: 0; transform: translateX(1rem); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes ui-toast-out {
+  to { opacity: 0; transform: translateX(1rem); }
+}
+@keyframes ui-toast-progress {
+  to { transform: scaleX(0); }
+}

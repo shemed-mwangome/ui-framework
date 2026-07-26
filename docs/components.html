@@ -1,0 +1,817 @@
+<!doctype html>
+<html lang="en" data-ui-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Components · UI Framework</title>
+  <link rel="stylesheet" href="../dist/ui-framework.css">
+  <link rel="stylesheet" href="assets/docs.css">
+</head>
+<body class="ui-scope docs-body">
+  <header class="docs-topbar">
+    <div class="ui-d-flex ui-align-center ui-gap-2">
+      <button class="ui-btn ui-btn-icon ui-btn-ghost docs-mobile-menu" type="button" data-docs-menu aria-label="Open documentation menu">☰</button>
+      <a class="docs-brand" href="index.html"><span class="docs-logo">UI</span><span>UI Framework</span></a>
+    </div>
+    <div class="ui-d-flex ui-align-center ui-gap-2">
+      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.0.0</span>
+      <button class="ui-btn ui-btn-sm ui-btn-outline-secondary" type="button" data-ui-theme-toggle>Theme</button>
+    </div>
+  </header>
+  <div class="docs-layout">
+    <aside class="docs-sidebar">
+      <div class="docs-sidebar-title">Documentation</div>
+      <a class="docs-sidebar-link" href="index.html">Overview</a><a class="docs-sidebar-link" href="getting-started.html">Getting started</a><a class="docs-sidebar-link" href="layout.html">Layout & grid</a><a class="docs-sidebar-link active" href="components.html">Components</a><a class="docs-sidebar-link" href="utilities.html">Utilities</a><a class="docs-sidebar-link" href="javascript.html">JavaScript API</a>
+      <div class="docs-sidebar-title">Examples</div>
+      <a class="docs-sidebar-link" href="examples/dashboard.html">Dashboard</a>
+      <a class="docs-sidebar-link" href="examples/form.html">Form workflow</a>
+      <a class="docs-sidebar-link" href="examples/login.html">Login page</a>
+      <div class="docs-sidebar-title">On this page</div><a class="docs-sidebar-link" href="#buttons">Buttons</a><a class="docs-sidebar-link" href="#forms">Forms</a><a class="docs-sidebar-link" href="#selection">Selection</a><a class="docs-sidebar-link" href="#alerts">Alerts</a><a class="docs-sidebar-link" href="#cards">Cards</a><a class="docs-sidebar-link" href="#images">Images</a><a class="docs-sidebar-link" href="#tables">Tables</a><a class="docs-sidebar-link" href="#data-table">Smart tables</a><a class="docs-sidebar-link" href="#navigation">Navigation</a><a class="docs-sidebar-link" href="#tabs">Tabs</a><a class="docs-sidebar-link" href="#dropdown">Dropdown</a><a class="docs-sidebar-link" href="#accordion">Accordion</a><a class="docs-sidebar-link" href="#modal">Modal</a><a class="docs-sidebar-link" href="#toast">Toast</a><a class="docs-sidebar-link" href="#multiselect">Multi-select</a><a class="docs-sidebar-link" href="#loaders">Loaders</a><a class="docs-sidebar-link" href="#upload">Upload</a><a class="docs-sidebar-link" href="#empty-stepper">Workflow UI</a><a class="docs-sidebar-link" href="#offcanvas">Offcanvas</a><a class="docs-sidebar-link" href="#tooltips">Tooltips</a><a class="docs-sidebar-link" href="#save-next">Multi-step form</a><a class="docs-sidebar-link" href="#date-range">Date range</a><a class="docs-sidebar-link" href="#confirm">Confirm dialog</a>
+    </aside>
+    <main class="docs-main">
+
+<section class="docs-hero">
+  <div class="docs-kicker">Component catalogue</div>
+  <h1 class="ui-display-2">Live examples for every major component.</h1>
+  <p class="ui-lead">Each example uses the same classes available in both the bundled and modular distributions.</p>
+</section>
+
+<section class="docs-section" id="buttons">
+  <h2 class="ui-h2">Buttons</h2>
+  <p class="docs-section-intro">Combine a base class with color, size, outline, pill, block, icon, and loading modifiers.</p>
+
+<div class="docs-demo">
+<div class="ui-d-flex ui-flex-wrap ui-gap-2">
+  <button class="ui-btn ui-btn-primary">Primary</button>
+  <button class="ui-btn ui-btn-success">Success</button>
+  <button class="ui-btn ui-btn-danger">Danger</button>
+  <button class="ui-btn ui-btn-warning">Warning</button>
+  <button class="ui-btn ui-btn-outline-primary">Outline</button>
+  <button class="ui-btn ui-btn-ghost">Ghost</button>
+  <button class="ui-btn ui-btn-primary ui-btn-pill">Pill</button>
+  <button class="ui-btn ui-btn-primary ui-btn-loading">Loading</button>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;button class=&quot;ui-btn ui-btn-primary&quot;&gt;Primary&lt;/button&gt;
+&lt;button class=&quot;ui-btn ui-btn-success&quot;&gt;Success&lt;/button&gt;
+&lt;button class=&quot;ui-btn ui-btn-outline-primary&quot;&gt;Outline&lt;/button&gt;
+&lt;button class=&quot;ui-btn ui-btn-primary ui-btn-pill&quot;&gt;Pill&lt;/button&gt;</code></pre>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="forms">
+  <h2 class="ui-h2">Form controls</h2>
+  <p class="docs-section-intro">Text fields, selects, floating labels, validation states, input groups, ranges, and file controls.</p>
+
+<div class="docs-demo">
+<div class="ui-row ui-g-2">
+  <div class="ui-col-12 ui-col-md-6">
+    <div class="ui-form-group">
+      <label class="ui-label ui-label-required" for="fullName">Full name</label>
+      <input class="ui-control" id="fullName" placeholder="Enter full name">
+      <small class="ui-help">Use your official name.</small>
+    </div>
+  </div>
+  <div class="ui-col-12 ui-col-md-6">
+    <div class="ui-form-group">
+      <label class="ui-label" for="department">Department</label>
+      <select class="ui-select" id="department"><option>ICT</option><option>Finance</option></select>
+    </div>
+  </div>
+  <div class="ui-col-12">
+    <input class="ui-control ui-is-invalid" value="Invalid value">
+    <div class="ui-feedback-invalid">Please correct this value.</div>
+  </div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-form-group&quot;&gt;
+  &lt;label class=&quot;ui-label ui-label-required&quot; for=&quot;fullName&quot;&gt;Full name&lt;/label&gt;
+  &lt;input class=&quot;ui-control&quot; id=&quot;fullName&quot; placeholder=&quot;Enter full name&quot;&gt;
+  &lt;small class=&quot;ui-help&quot;&gt;Use your official name.&lt;/small&gt;
+&lt;/div&gt;
+
+&lt;select class=&quot;ui-select&quot;&gt;
+  &lt;option&gt;ICT&lt;/option&gt;
+  &lt;option&gt;Finance&lt;/option&gt;
+&lt;/select&gt;</code></pre>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="selection">
+  <h2 class="ui-h2">Checkboxes, radios, and switches</h2>
+  <p class="docs-section-intro">Custom controls are label-based and coexist with global legacy checkbox rules. The label must immediately follow the input.</p>
+
+<div class="docs-demo">
+<div class="ui-d-flex ui-flex-column ui-gap-3">
+  <div><input id="check1" class="ui-checkbox ui-checkbox-lg ui-checkbox-success" type="checkbox" checked><label for="check1">Large success checkbox</label></div>
+  <div><input id="radio1" class="ui-radio ui-radio-success" type="radio" name="demoRadio" checked><label for="radio1">Selected radio</label></div>
+  <div><input id="switch1" class="ui-switch ui-switch-primary" type="checkbox" checked><label for="switch1">Enable notifications</label></div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;input id=&quot;check1&quot;
+       class=&quot;ui-checkbox ui-checkbox-lg ui-checkbox-success&quot;
+       type=&quot;checkbox&quot;&gt;
+&lt;label for=&quot;check1&quot;&gt;Large success checkbox&lt;/label&gt;
+
+&lt;input id=&quot;switch1&quot; class=&quot;ui-switch ui-switch-primary&quot; type=&quot;checkbox&quot;&gt;
+&lt;label for=&quot;switch1&quot;&gt;Enable notifications&lt;/label&gt;</code></pre>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="alerts">
+  <h2 class="ui-h2">Alerts and badges</h2>
+  <p class="docs-section-intro">Use semantic color modifiers, optional icons, actions, dismiss buttons, outlines, solids, and auto-dismiss behavior.</p>
+
+<div class="docs-demo">
+<div class="ui-d-flex ui-flex-column ui-gap-2" id="alertDemo">
+  <div class="ui-alert ui-alert-success ui-alert-shadow">
+    <div class="ui-alert-icon">✓</div><div><div class="ui-alert-title">Saved successfully</div><p class="ui-alert-message">The record is now available.</p></div>
+    <button class="ui-alert-close" data-ui-alert-close>&times;</button>
+  </div>
+  <div class="ui-alert ui-alert-danger ui-alert-outline">
+    <div class="ui-alert-icon">!</div><div><div class="ui-alert-title">Validation failed</div><p class="ui-alert-message">Please correct the highlighted fields.</p></div>
+  </div>
+  <div class="ui-d-flex ui-gap-2"><span class="ui-badge ui-badge-success">Approved</span><span class="ui-badge ui-badge-soft-danger ui-badge-pill">Rejected</span></div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-alert ui-alert-success ui-alert-shadow&quot;&gt;
+  &lt;div class=&quot;ui-alert-icon&quot;&gt;✓&lt;/div&gt;
+  &lt;div&gt;
+    &lt;div class=&quot;ui-alert-title&quot;&gt;Saved successfully&lt;/div&gt;
+    &lt;p class=&quot;ui-alert-message&quot;&gt;The record is now available.&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;button class=&quot;ui-alert-close&quot; data-ui-alert-close&gt;&amp;times;&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="cards">
+  <h2 class="ui-h2">Cards, list groups, and stats</h2>
+  <p class="docs-section-intro">Create panels, summary cards, action lists, and dashboard counters.</p>
+
+<div class="docs-demo">
+<div class="ui-css-grid" style="--ui-grid-min:220px">
+  <article class="ui-card ui-card-hover ui-card-border-primary"><div class="ui-card-body"><h3 class="ui-card-title">Operator profile</h3><p class="ui-card-subtitle">Reusable content card</p></div></article>
+  <div class="ui-stat"><div class="ui-stat-icon">✓</div><div><div class="ui-stat-value">128</div><div class="ui-stat-label">Approved licences</div></div></div>
+  <ul class="ui-list-group"><li class="ui-list-group-item">First item</li><li class="ui-list-group-item ui-active">Active item</li></ul>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;article class=&quot;ui-card ui-card-hover ui-card-border-primary&quot;&gt;
+  &lt;div class=&quot;ui-card-body&quot;&gt;
+    &lt;h3 class=&quot;ui-card-title&quot;&gt;Operator profile&lt;/h3&gt;
+    &lt;p class=&quot;ui-card-subtitle&quot;&gt;Reusable content card&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/article&gt;</code></pre>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="images">
+  <h2 class="ui-h2">Images and avatars</h2>
+  <p class="docs-section-intro">Responsive images, cover/contain fitting, thumbnails, circular images, figures, hover effects, and status avatars.</p>
+
+<div class="docs-demo">
+<div class="ui-d-flex ui-flex-wrap ui-align-center ui-gap-4">
+  <figure class="ui-figure" style="max-width:260px">
+    <img class="ui-img ui-img-rounded ui-img-shadow ui-img-hover-zoom" src="assets/placeholder-landscape.svg" alt="Placeholder landscape">
+    <figcaption class="ui-figure-caption">Rounded image with shadow</figcaption>
+  </figure>
+  <span class="ui-avatar ui-avatar-xl ui-avatar-status ui-avatar-online"><img src="assets/avatar.svg" alt="User avatar"></span>
+  <img class="ui-img ui-img-circle ui-img-thumbnail" style="width:100px" src="assets/avatar.svg" alt="Circular image">
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;img class=&quot;ui-img ui-img-rounded ui-img-shadow&quot;
+     src=&quot;photo.jpg&quot;
+     alt=&quot;Description&quot;&gt;
+
+&lt;span class=&quot;ui-avatar ui-avatar-xl ui-avatar-status ui-avatar-online&quot;&gt;
+  &lt;img src=&quot;avatar.jpg&quot; alt=&quot;User avatar&quot;&gt;
+&lt;/span&gt;</code></pre>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="tables">
+  <h2 class="ui-h2">Tables</h2>
+  <p class="docs-section-intro">Responsive wrappers, borders, stripes, hover states, compact rows, sticky headers, and empty states.</p>
+
+<div class="docs-demo">
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped ui-table-hover">
+    <thead><tr><th>Premise</th><th>Status</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td>Premise One</td><td><span class="ui-badge ui-badge-success">Approved</span></td><td><button class="ui-btn ui-btn-sm ui-btn-outline-primary">Open</button></td></tr>
+      <tr><td>Premise Two</td><td><span class="ui-badge ui-badge-warning">Pending</span></td><td><button class="ui-btn ui-btn-sm ui-btn-outline-primary">Review</button></td></tr>
+    </tbody>
+  </table>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-table-responsive&quot;&gt;
+  &lt;table class=&quot;ui-table ui-table-striped ui-table-hover&quot;&gt;
+    &lt;thead&gt;...&lt;/thead&gt;
+    &lt;tbody&gt;...&lt;/tbody&gt;
+  &lt;/table&gt;
+&lt;/div&gt;</code></pre>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="data-table">
+  <h2 class="ui-h2">Smart tables</h2>
+  <p class="docs-section-intro">Enhance any <code class="ui-code">.ui-table</code> with client-side search, column sorting, and pagination by adding <code class="ui-code">data-ui-table</code>. Mark sortable headers with <code class="ui-code">data-ui-sort="text"|"number"|"date"</code>; give a cell <code class="ui-code">data-ui-sort-value</code> when its sort key differs from its display text.</p>
+
+<div class="docs-demo">
+<div data-ui-table data-ui-page-size="5">
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped ui-table-hover">
+    <thead><tr><th data-ui-sort="text">Premise</th><th data-ui-sort="text">Status</th><th data-ui-sort="date">Applied</th><th data-ui-sort="false">Action</th></tr></thead>
+    <tbody>
+      <tr><td>Premise One</td><td><span class="ui-badge ui-badge-success">Approved</span></td><td data-ui-sort-value="2026-01-04">4 Jan 2026</td><td><button class="ui-btn ui-btn-sm ui-btn-outline-primary">Open</button></td></tr>
+      <tr><td>Premise Two</td><td><span class="ui-badge ui-badge-warning">Pending</span></td><td data-ui-sort-value="2026-02-11">11 Feb 2026</td><td><button class="ui-btn ui-btn-sm ui-btn-outline-primary">Review</button></td></tr>
+      <tr><td>Premise Three</td><td><span class="ui-badge ui-badge-danger">Rejected</span></td><td data-ui-sort-value="2026-01-22">22 Jan 2026</td><td><button class="ui-btn ui-btn-sm ui-btn-outline-primary">Open</button></td></tr>
+      <tr><td>Premise Four</td><td><span class="ui-badge ui-badge-success">Approved</span></td><td data-ui-sort-value="2026-03-02">2 Mar 2026</td><td><button class="ui-btn ui-btn-sm ui-btn-outline-primary">Open</button></td></tr>
+      <tr><td>Premise Five</td><td><span class="ui-badge ui-badge-warning">Pending</span></td><td data-ui-sort-value="2026-02-27">27 Feb 2026</td><td><button class="ui-btn ui-btn-sm ui-btn-outline-primary">Review</button></td></tr>
+      <tr><td>Premise Six</td><td><span class="ui-badge ui-badge-success">Approved</span></td><td data-ui-sort-value="2026-01-30">30 Jan 2026</td><td><button class="ui-btn ui-btn-sm ui-btn-outline-primary">Open</button></td></tr>
+      <tr><td>Premise Seven</td><td><span class="ui-badge ui-badge-danger">Rejected</span></td><td data-ui-sort-value="2026-03-14">14 Mar 2026</td><td><button class="ui-btn ui-btn-sm ui-btn-outline-primary">Open</button></td></tr>
+      <tr><td>Premise Eight</td><td><span class="ui-badge ui-badge-success">Approved</span></td><td data-ui-sort-value="2026-02-05">5 Feb 2026</td><td><button class="ui-btn ui-btn-sm ui-btn-outline-primary">Open</button></td></tr>
+      <tr><td>Premise Nine</td><td><span class="ui-badge ui-badge-warning">Pending</span></td><td data-ui-sort-value="2026-03-19">19 Mar 2026</td><td><button class="ui-btn ui-btn-sm ui-btn-outline-primary">Review</button></td></tr>
+      <tr><td>Premise Ten</td><td><span class="ui-badge ui-badge-success">Approved</span></td><td data-ui-sort-value="2026-01-08">8 Jan 2026</td><td><button class="ui-btn ui-btn-sm ui-btn-outline-primary">Open</button></td></tr>
+      <tr><td>Premise Eleven</td><td><span class="ui-badge ui-badge-danger">Rejected</span></td><td data-ui-sort-value="2026-02-18">18 Feb 2026</td><td><button class="ui-btn ui-btn-sm ui-btn-outline-primary">Open</button></td></tr>
+      <tr><td>Premise Twelve</td><td><span class="ui-badge ui-badge-success">Approved</span></td><td data-ui-sort-value="2026-03-27">27 Mar 2026</td><td><button class="ui-btn ui-btn-sm ui-btn-outline-primary">Open</button></td></tr>
+    </tbody>
+  </table>
+</div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div data-ui-table data-ui-page-size=&quot;5&quot;&gt;
+  &lt;div class=&quot;ui-table-responsive&quot;&gt;
+    &lt;table class=&quot;ui-table ui-table-striped ui-table-hover&quot;&gt;
+      &lt;thead&gt;
+        &lt;tr&gt;
+          &lt;th data-ui-sort=&quot;text&quot;&gt;Premise&lt;/th&gt;
+          &lt;th data-ui-sort=&quot;text&quot;&gt;Status&lt;/th&gt;
+          &lt;th data-ui-sort=&quot;date&quot;&gt;Applied&lt;/th&gt;
+          &lt;th data-ui-sort=&quot;false&quot;&gt;Action&lt;/th&gt;
+        &lt;/tr&gt;
+      &lt;/thead&gt;
+      &lt;tbody&gt;
+        &lt;tr&gt;
+          &lt;td&gt;Premise One&lt;/td&gt;
+          &lt;td&gt;Approved&lt;/td&gt;
+          &lt;td data-ui-sort-value=&quot;2026-01-04&quot;&gt;4 Jan 2026&lt;/td&gt;
+          &lt;td&gt;&lt;button&gt;Open&lt;/button&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+        ...
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="navigation">
+  <h2 class="ui-h2">Navigation and pagination</h2>
+  <p class="docs-section-intro">Navbar, links, breadcrumb, tabs, sidebar navigation, and pagination styles.</p>
+
+<div class="docs-demo">
+<div class="ui-card">
+  <nav class="ui-navbar">
+    <a class="ui-navbar-brand" href="#">GBT Portal</a>
+    <ul class="ui-navbar-nav"><li><a class="ui-nav-link ui-active" href="#">Dashboard</a></li><li><a class="ui-nav-link" href="#">Reports</a></li></ul>
+  </nav>
+  <div class="ui-card-body">
+    <ol class="ui-breadcrumb"><li class="ui-breadcrumb-item">Home</li><li class="ui-breadcrumb-item">Compliance</li><li class="ui-breadcrumb-item">Schedule</li></ol>
+    <ul class="ui-pagination ui-mt-4"><li><a class="ui-page-link ui-disabled" href="#">‹</a></li><li><a class="ui-page-link ui-active" href="#">1</a></li><li><a class="ui-page-link" href="#">2</a></li><li><a class="ui-page-link" href="#">›</a></li></ul>
+  </div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;nav class=&quot;ui-navbar&quot;&gt;
+  &lt;a class=&quot;ui-navbar-brand&quot; href=&quot;#&quot;&gt;GBT Portal&lt;/a&gt;
+  &lt;a class=&quot;ui-nav-link ui-active&quot; href=&quot;#&quot;&gt;Dashboard&lt;/a&gt;
+&lt;/nav&gt;
+
+&lt;ul class=&quot;ui-pagination&quot;&gt;
+  &lt;li&gt;&lt;a class=&quot;ui-page-link ui-active&quot; href=&quot;#&quot;&gt;1&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a class=&quot;ui-page-link&quot; href=&quot;#&quot;&gt;2&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="tabs">
+  <h2 class="ui-h2">Tabs</h2>
+  <p class="docs-section-intro">Accessible tabs support mouse and arrow-key navigation.</p>
+
+<div class="docs-demo">
+<div>
+  <div class="ui-tabs" role="tablist">
+    <button class="ui-tab ui-active" role="tab" aria-selected="true" aria-controls="tabProfile" data-ui-tab>Profile</button>
+    <button class="ui-tab" role="tab" aria-selected="false" aria-controls="tabSecurity" data-ui-tab>Security</button>
+  </div>
+  <section class="ui-tab-panel" id="tabProfile" role="tabpanel">Profile content</section>
+  <section class="ui-tab-panel" id="tabSecurity" role="tabpanel" hidden>Security content</section>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-tabs&quot; role=&quot;tablist&quot;&gt;
+  &lt;button class=&quot;ui-tab ui-active&quot;
+          role=&quot;tab&quot;
+          aria-selected=&quot;true&quot;
+          aria-controls=&quot;profile&quot;
+          data-ui-tab&gt;Profile&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;section class=&quot;ui-tab-panel&quot; id=&quot;profile&quot; role=&quot;tabpanel&quot;&gt;...&lt;/section&gt;</code></pre>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="dropdown">
+  <h2 class="ui-h2">Dropdown</h2>
+  <p class="docs-section-intro">Dependency-free dropdowns close when clicking outside or pressing Escape.</p>
+
+<div class="docs-demo">
+<div class="ui-dropdown">
+  <button class="ui-btn ui-btn-primary" type="button" data-ui-dropdown aria-expanded="false">Actions ▾</button>
+  <div class="ui-dropdown-menu">
+    <div class="ui-dropdown-header">Record actions</div>
+    <button class="ui-dropdown-item">View details</button>
+    <button class="ui-dropdown-item">Edit record</button>
+    <div class="ui-dropdown-divider"></div>
+    <button class="ui-dropdown-item ui-text-danger">Delete</button>
+  </div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-dropdown&quot;&gt;
+  &lt;button class=&quot;ui-btn ui-btn-primary&quot;
+          data-ui-dropdown
+          aria-expanded=&quot;false&quot;&gt;Actions&lt;/button&gt;
+  &lt;div class=&quot;ui-dropdown-menu&quot;&gt;
+    &lt;button class=&quot;ui-dropdown-item&quot;&gt;View details&lt;/button&gt;
+    &lt;button class=&quot;ui-dropdown-item&quot;&gt;Edit&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="accordion">
+  <h2 class="ui-h2">Accordion and collapse</h2>
+  <p class="docs-section-intro">Create single-open or multi-open accordion groups.</p>
+
+<div class="docs-demo">
+<div class="ui-accordion">
+  <div class="ui-accordion-item">
+    <button class="ui-accordion-button" aria-expanded="true" aria-controls="accOne">General information</button>
+    <div class="ui-accordion-panel ui-collapse ui-show" id="accOne">The first panel is open.</div>
+  </div>
+  <div class="ui-accordion-item">
+    <button class="ui-accordion-button" aria-expanded="false" aria-controls="accTwo">Additional details</button>
+    <div class="ui-accordion-panel ui-collapse" id="accTwo" hidden>The second panel content.</div>
+  </div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-accordion&quot;&gt;
+  &lt;div class=&quot;ui-accordion-item&quot;&gt;
+    &lt;button class=&quot;ui-accordion-button&quot;
+            aria-expanded=&quot;true&quot;
+            aria-controls=&quot;panelOne&quot;&gt;General information&lt;/button&gt;
+    &lt;div class=&quot;ui-accordion-panel ui-collapse ui-show&quot; id=&quot;panelOne&quot;&gt;...&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="modal">
+  <h2 class="ui-h2">Modal</h2>
+  <p class="docs-section-intro">Small, default, large, extra-large, and fullscreen dialog sizes with focus trapping, Escape handling, and backdrop closing.</p>
+
+<div class="docs-demo">
+<button class="ui-btn ui-btn-primary" type="button" data-ui-modal-open="#componentModal">Open modal</button>
+<div class="ui-modal ui-modal-lg" id="componentModal" aria-hidden="true">
+  <div class="ui-backdrop"></div>
+  <div class="ui-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="componentModalTitle" tabindex="-1">
+    <div class="ui-modal-header"><h3 class="ui-modal-title" id="componentModalTitle">Assign team</h3><button class="ui-modal-close" data-ui-modal-close>&times;</button></div>
+    <div class="ui-modal-body"><p>Modal content can contain forms, tables, tabs, and other components.</p><input class="ui-control" placeholder="Focus is trapped inside the dialog"></div>
+    <div class="ui-modal-footer"><button class="ui-btn ui-btn-outline-secondary" data-ui-modal-close>Cancel</button><button class="ui-btn ui-btn-primary">Save</button></div>
+  </div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;button data-ui-modal-open=&quot;#myModal&quot;&gt;Open modal&lt;/button&gt;
+
+&lt;div class=&quot;ui-modal ui-modal-lg&quot; id=&quot;myModal&quot; aria-hidden=&quot;true&quot;&gt;
+  &lt;div class=&quot;ui-backdrop&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;ui-modal-dialog&quot; role=&quot;dialog&quot; aria-modal=&quot;true&quot;&gt;
+    &lt;div class=&quot;ui-modal-header&quot;&gt;...&lt;/div&gt;
+    &lt;div class=&quot;ui-modal-body&quot;&gt;...&lt;/div&gt;
+    &lt;div class=&quot;ui-modal-footer&quot;&gt;...&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="toast">
+  <h2 class="ui-h2">Toast notifications</h2>
+  <p class="docs-section-intro">Create floating messages through the JavaScript API with configurable type, position, and duration.</p>
+
+<div class="docs-demo">
+<div class="ui-d-flex ui-flex-wrap ui-gap-2">
+  <button class="ui-btn ui-btn-success" onclick="UI.toast.show({type:'success',title:'Saved',message:'The changes were saved.'})">Success toast</button>
+  <button class="ui-btn ui-btn-danger" onclick="UI.toast.show({type:'danger',title:'Error',message:'The request failed.'})">Error toast</button>
+  <button class="ui-btn ui-btn-info" onclick="UI.toast.show({type:'info',title:'Information',message:'A new report is ready.',position:'bottom-end'})">Bottom toast</button>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>UI.toast.show({
+  type: &quot;success&quot;,
+  title: &quot;Saved&quot;,
+  message: &quot;The changes were saved.&quot;,
+  duration: 4000,
+  position: &quot;top-end&quot;
+});</code></pre>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="multiselect">
+  <h2 class="ui-h2">Multi-select with checkboxes</h2>
+  <p class="docs-section-intro">Enhance a native multiple select. The original select remains in the form and receives selected values.</p>
+
+<div class="docs-demo">
+<div style="max-width:520px">
+  <label class="ui-label" for="officers">Inspection officers</label>
+  <select id="officers" name="officersIds" multiple data-ui-multiselect data-display="tags" data-placeholder="Select officers" data-search="true" data-select-all="true">
+    <option value="1">Asha M.</option>
+    <option value="2">Baraka J.</option>
+    <option value="3">Neema K.</option>
+    <option value="4">Selemani M.</option>
+  </select>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;select name=&quot;officersIds&quot;
+        multiple
+        data-ui-multiselect
+        data-display=&quot;tags&quot;
+        data-placeholder=&quot;Select officers&quot;
+        data-search=&quot;true&quot;
+        data-select-all=&quot;true&quot;&gt;
+  &lt;option value=&quot;1&quot;&gt;Asha M.&lt;/option&gt;
+  &lt;option value=&quot;2&quot;&gt;Baraka J.&lt;/option&gt;
+&lt;/select&gt;</code></pre>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="loaders">
+  <h2 class="ui-h2">Progress, spinners, and skeletons</h2>
+  <p class="docs-section-intro">Use determinate progress bars, striped animation, spinners, pulse indicators, and skeleton placeholders.</p>
+
+<div class="docs-demo">
+<div class="ui-d-flex ui-flex-column ui-gap-4">
+  <div class="ui-progress ui-progress-success ui-progress-striped ui-progress-animated"><div class="ui-progress-bar" style="--ui-progress-value:72%"></div></div>
+  <div class="ui-d-flex ui-align-center ui-gap-4"><span class="ui-spinner"></span><span class="ui-spinner ui-spinner-success ui-spinner-lg"></span><span class="ui-pulse"></span></div>
+  <div class="ui-card" style="max-width:340px"><div class="ui-card-body"><div class="ui-skeleton ui-skeleton-title"></div><div class="ui-skeleton ui-skeleton-text"></div><div class="ui-skeleton ui-skeleton-text" style="width:70%"></div></div></div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-progress ui-progress-success&quot;&gt;
+  &lt;div class=&quot;ui-progress-bar&quot; style=&quot;--ui-progress-value:72%&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;span class=&quot;ui-spinner&quot;&gt;&lt;/span&gt;
+&lt;div class=&quot;ui-skeleton ui-skeleton-text&quot;&gt;&lt;/div&gt;</code></pre>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="upload">
+  <h2 class="ui-h2">File upload</h2>
+  <p class="docs-section-intro">A drag-and-drop friendly upload zone that lists selected files without dependencies.</p>
+
+<div class="docs-demo">
+<div class="ui-upload" data-ui-upload>
+  <input type="file" multiple aria-label="Upload documents">
+  <div>
+    <div class="ui-empty-icon">⇧</div>
+    <div class="ui-upload-title">Drop files here or click to browse</div>
+    <div class="ui-upload-help">PDF, PNG, JPG, DOCX</div>
+    <div class="ui-upload-preview"></div>
+  </div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-upload&quot; data-ui-upload&gt;
+  &lt;input type=&quot;file&quot; multiple&gt;
+  &lt;div&gt;
+    &lt;div class=&quot;ui-upload-title&quot;&gt;Drop files here&lt;/div&gt;
+    &lt;div class=&quot;ui-upload-help&quot;&gt;PDF, PNG, JPG, DOCX&lt;/div&gt;
+    &lt;div class=&quot;ui-upload-preview&quot;&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="empty-stepper">
+  <h2 class="ui-h2">Empty states, stepper, and timeline</h2>
+  <p class="docs-section-intro">Communicate no-data states and display workflow or audit progress.</p>
+
+<div class="docs-demo">
+<div class="ui-d-flex ui-flex-column ui-gap-5">
+  <div class="ui-stepper">
+    <div class="ui-step ui-complete"><div class="ui-step-marker">1</div><div class="ui-step-label">Details</div></div>
+    <div class="ui-step ui-active"><div class="ui-step-marker">2</div><div class="ui-step-label">Review</div></div>
+    <div class="ui-step"><div class="ui-step-marker">3</div><div class="ui-step-label">Complete</div></div>
+  </div>
+  <div class="ui-empty-state"><div class="ui-empty-icon">⌕</div><h3 class="ui-empty-title">No records found</h3><p class="ui-empty-message">Try changing the filters or create a new record.</p><button class="ui-btn ui-btn-primary">Create record</button></div>
+  <div class="ui-timeline"><div class="ui-timeline-item"><div class="ui-timeline-time">10:30</div><div class="ui-timeline-title">Submitted</div><div class="ui-timeline-body">The application entered review.</div></div><div class="ui-timeline-item"><div class="ui-timeline-time">12:15</div><div class="ui-timeline-title">Approved</div><div class="ui-timeline-body">Supervisor approval completed.</div></div></div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-stepper&quot;&gt;
+  &lt;div class=&quot;ui-step ui-complete&quot;&gt;...&lt;/div&gt;
+  &lt;div class=&quot;ui-step ui-active&quot;&gt;...&lt;/div&gt;
+  &lt;div class=&quot;ui-step&quot;&gt;...&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;ui-empty-state&quot;&gt;...&lt;/div&gt;
+&lt;div class=&quot;ui-timeline&quot;&gt;...&lt;/div&gt;</code></pre>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="offcanvas">
+  <h2 class="ui-h2">Offcanvas</h2>
+  <p class="docs-section-intro">Slide a navigation or detail panel from the left or right side of the viewport.</p>
+
+<div class="docs-demo">
+<button class="ui-btn ui-btn-outline-primary" data-ui-offcanvas-open="#detailsCanvas">Open offcanvas</button>
+<div class="ui-offcanvas-root" id="detailsCanvas" aria-hidden="true">
+  <div class="ui-backdrop"></div>
+  <aside class="ui-offcanvas ui-offcanvas-end" tabindex="-1">
+    <div class="ui-offcanvas-header"><strong>Record details</strong><button class="ui-modal-close" data-ui-offcanvas-close>&times;</button></div>
+    <div class="ui-offcanvas-body"><p>Offcanvas content appears here.</p><ul class="ui-list-group"><li class="ui-list-group-item">Status: Active</li><li class="ui-list-group-item">Region: Dar es Salaam</li></ul></div>
+  </aside>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;button data-ui-offcanvas-open=&quot;#detailsCanvas&quot;&gt;Open&lt;/button&gt;
+
+&lt;div class=&quot;ui-offcanvas-root&quot; id=&quot;detailsCanvas&quot; aria-hidden=&quot;true&quot;&gt;
+  &lt;div class=&quot;ui-backdrop&quot;&gt;&lt;/div&gt;
+  &lt;aside class=&quot;ui-offcanvas ui-offcanvas-end&quot;&gt;
+    &lt;div class=&quot;ui-offcanvas-header&quot;&gt;...&lt;/div&gt;
+    &lt;div class=&quot;ui-offcanvas-body&quot;&gt;...&lt;/div&gt;
+  &lt;/aside&gt;
+&lt;/div&gt;</code></pre>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="tooltips">
+  <h2 class="ui-h2">Tooltips</h2>
+  <p class="docs-section-intro">Use a data attribute for lightweight CSS-only tooltips.</p>
+
+<div class="docs-demo">
+<div class="ui-d-flex ui-gap-3">
+  <button class="ui-btn ui-btn-primary" data-ui-tooltip="Save the current record">Hover me</button>
+  <span tabindex="0" class="ui-badge ui-badge-info" data-ui-tooltip="Additional information">Information</span>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;button class=&quot;ui-btn ui-btn-primary&quot;
+        data-ui-tooltip=&quot;Save the current record&quot;&gt;
+  Hover me
+&lt;/button&gt;</code></pre>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="save-next">
+  <h2 class="ui-h2">Multi-step form with save &amp; next</h2>
+  <p class="docs-section-intro">A stepper wizard (<code class="ui-code">data-ui-stepper-form</code>) composed with the save &amp; next toolbar (<code class="ui-code">data-ui-save-next</code>) on the same form. "Next" validates the current step natively before advancing; the last step's submit button is the same "Save &amp; next" button the record toolbar already understands, so the unsaved-changes guard, Ctrl/Cmd+Enter shortcut, and optional AJAX mode all apply for free.</p>
+
+<div class="docs-demo">
+<form data-ui-stepper-form data-ui-save-next
+      data-ui-position="4" data-ui-total="12"
+      data-ui-prev-url="#save-next" data-ui-next-url="#save-next"
+      action="#" method="post"
+      onsubmit="event.preventDefault(); UI.toast.show({type:'info', title:'Demo only', message:'This documentation form does not submit anywhere.'}); return false;">
+
+  <div class="ui-stepper" data-ui-stepper>
+    <div class="ui-step"><div class="ui-step-marker">1</div><div class="ui-step-label">Applicant</div></div>
+    <div class="ui-step"><div class="ui-step-marker">2</div><div class="ui-step-label">Premises</div></div>
+    <div class="ui-step"><div class="ui-step-marker">3</div><div class="ui-step-label">Documents</div></div>
+    <div class="ui-step"><div class="ui-step-marker">4</div><div class="ui-step-label">Review</div></div>
+  </div>
+
+  <fieldset data-ui-step>
+    <div class="ui-form-group">
+      <label class="ui-label ui-label-required" for="applicantName">Applicant name</label>
+      <input class="ui-control" id="applicantName" name="applicantName" required>
+    </div>
+  </fieldset>
+
+  <fieldset data-ui-step hidden>
+    <div class="ui-form-group">
+      <label class="ui-label ui-label-required" for="premiseAddress">Premises address</label>
+      <input class="ui-control" id="premiseAddress" name="premiseAddress" required>
+    </div>
+  </fieldset>
+
+  <fieldset data-ui-step hidden>
+    <div class="ui-form-group">
+      <label class="ui-label" for="docsUpload">Supporting documents</label>
+      <input class="ui-control" id="docsUpload" name="docsUpload" type="file">
+    </div>
+  </fieldset>
+
+  <fieldset data-ui-step hidden>
+    <p class="ui-text-muted">Review the details, then submit.</p>
+  </fieldset>
+
+  <div class="ui-save-next-bar">
+    <div class="ui-save-next-info">
+      <div class="ui-progress ui-save-next-progress"><div class="ui-progress-bar"></div></div>
+      <span>Record <span data-ui-save-next-position>4</span> of <span data-ui-save-next-total>12</span></span>
+      <span class="ui-save-next-dirty">Unsaved</span>
+    </div>
+    <div class="ui-save-next-actions">
+      <button type="button" class="ui-btn ui-btn-outline-secondary" data-ui-save-next-prev>‹ Previous record</button>
+      <button type="button" class="ui-btn ui-btn-outline-secondary" data-ui-step-back hidden>‹ Back</button>
+      <button type="button" class="ui-btn ui-btn-primary" data-ui-step-next>Next ›</button>
+      <button type="submit" class="ui-btn ui-btn-primary" name="uiSaveNextAction" value="save-next" data-ui-save-next-submit hidden>Save &amp; next ›</button>
+    </div>
+  </div>
+</form>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;form data-ui-stepper-form data-ui-save-next
+      data-ui-position=&quot;4&quot; data-ui-total=&quot;12&quot;
+      data-ui-prev-url=&quot;/applications/3/edit&quot;
+      data-ui-next-url=&quot;/applications/5/edit&quot;
+      action=&quot;/applications/4&quot; method=&quot;post&quot;&gt;
+
+  &lt;div class=&quot;ui-stepper&quot; data-ui-stepper&gt;
+    &lt;div class=&quot;ui-step&quot;&gt;&lt;div class=&quot;ui-step-marker&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;ui-step-label&quot;&gt;Applicant&lt;/div&gt;&lt;/div&gt;
+    &lt;div class=&quot;ui-step&quot;&gt;&lt;div class=&quot;ui-step-marker&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;ui-step-label&quot;&gt;Premises&lt;/div&gt;&lt;/div&gt;
+    &lt;div class=&quot;ui-step&quot;&gt;&lt;div class=&quot;ui-step-marker&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;ui-step-label&quot;&gt;Documents&lt;/div&gt;&lt;/div&gt;
+    &lt;div class=&quot;ui-step&quot;&gt;&lt;div class=&quot;ui-step-marker&quot;&gt;4&lt;/div&gt;&lt;div class=&quot;ui-step-label&quot;&gt;Review&lt;/div&gt;&lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;fieldset data-ui-step&gt;...step 1 fields, required as needed...&lt;/fieldset&gt;
+  &lt;fieldset data-ui-step hidden&gt;...step 2 fields...&lt;/fieldset&gt;
+  &lt;fieldset data-ui-step hidden&gt;...step 3 fields...&lt;/fieldset&gt;
+  &lt;fieldset data-ui-step hidden&gt;...review summary...&lt;/fieldset&gt;
+
+  &lt;div class=&quot;ui-save-next-bar&quot;&gt;
+    &lt;div class=&quot;ui-save-next-info&quot;&gt;
+      &lt;div class=&quot;ui-progress ui-save-next-progress&quot;&gt;&lt;div class=&quot;ui-progress-bar&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+      Record &lt;span data-ui-save-next-position&gt;4&lt;/span&gt; of &lt;span data-ui-save-next-total&gt;12&lt;/span&gt;
+      &lt;span class=&quot;ui-save-next-dirty&quot;&gt;Unsaved&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;ui-save-next-actions&quot;&gt;
+      &lt;button type=&quot;button&quot; data-ui-save-next-prev&gt;‹ Previous record&lt;/button&gt;
+      &lt;button type=&quot;button&quot; data-ui-step-back hidden&gt;‹ Back&lt;/button&gt;
+      &lt;button type=&quot;button&quot; data-ui-step-next&gt;Next ›&lt;/button&gt;
+      &lt;button type=&quot;submit&quot; name=&quot;uiSaveNextAction&quot; value=&quot;save-next&quot;
+              data-ui-save-next-submit hidden&gt;Save &amp; next ›&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/form&gt;
+
+&lt;!-- add data-ui-ajax=&quot;true&quot; on the form to submit via fetch()
+     instead of a full page post, and listen for ui:savenext:success /
+     ui:savenext:error on the form. --&gt;</code></pre>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="date-range">
+  <h2 class="ui-h2">Date range</h2>
+  <p class="docs-section-intro">A two-month calendar popover with quick presets, built over two native <code class="ui-code">&lt;input type="date"&gt;</code> fields so the chosen range still posts with a plain HTML form. Supports full keyboard navigation (arrow keys, Home/End, Page Up/Down, Enter), <code class="ui-code">data-min-date</code>/<code class="ui-code">data-max-date</code> bounds, <code class="ui-code">data-disabled-dates</code>, and a clear button — smart-positioned so it flips above the field and escapes clipping when opened near the edge of the screen or inside a scrollable container.</p>
+
+<div class="docs-demo">
+<div class="ui-date-range" data-ui-date-range data-ui-placeholder="Select date range">
+  <input type="date" name="reportStart" aria-label="Start date">
+  <input type="date" name="reportEnd" aria-label="End date">
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-date-range&quot; data-ui-date-range
+     data-ui-placeholder=&quot;Select date range&quot;
+     data-min-date=&quot;2026-01-01&quot;
+     data-max-date=&quot;2026-12-31&quot;
+     data-disabled-dates=&quot;2026-12-25,2026-01-01&quot;&gt;
+  &lt;input type=&quot;date&quot; name=&quot;reportStart&quot; aria-label=&quot;Start date&quot;&gt;
+  &lt;input type=&quot;date&quot; name=&quot;reportEnd&quot; aria-label=&quot;End date&quot;&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+document.querySelector(&quot;[data-ui-date-range]&quot;)
+  .addEventListener(&quot;ui:daterange:change&quot;, function (event) {
+    console.log(event.detail.start, event.detail.end);
+  });
+&lt;/script&gt;</code></pre>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="confirm">
+  <h2 class="ui-h2">Confirm dialog</h2>
+  <p class="docs-section-intro">A promise-based confirmation modal for destructive actions, replacing <code class="ui-code">window.confirm()</code>. Reuses the modal's focus trap, Escape handling, and backdrop click.</p>
+
+<div class="docs-demo">
+<div class="ui-d-flex ui-gap-3">
+  <button class="ui-btn ui-btn-outline-secondary" type="button" onclick="UI.confirm({title:'Approve application', message:'Mark this licence application as approved?'}).then(function(ok){ UI.toast.show({type: ok ? 'success' : 'info', title: ok ? 'Approved' : 'Cancelled', message: ok ? 'The application was approved.' : 'No changes were made.'}); })">Approve application</button>
+  <button class="ui-btn ui-btn-danger" type="button" onclick="UI.confirm({title:'Revoke licence', message:'This will immediately revoke the operator licence. This cannot be undone.', variant:'danger', confirmText:'Revoke licence'}).then(function(ok){ if (ok) UI.toast.show({type:'danger', title:'Licence revoked', message:'The operator licence was revoked.'}); })">Revoke licence</button>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>UI.confirm({
+  title: &quot;Revoke licence&quot;,
+  message: &quot;This will immediately revoke the operator licence. &quot; +
+           &quot;This cannot be undone.&quot;,
+  variant: &quot;danger&quot;,
+  confirmText: &quot;Revoke licence&quot;
+}).then(function (confirmed) {
+  if (confirmed) {
+    // proceed with the revoke request
+  }
+});</code></pre>
+</div>
+
+</section>
+
+      <footer class="docs-footer">UI Framework 1.0.0 · Dependency-free · Designed for safe use beside Bootstrap and legacy JSP themes.</footer>
+    </main>
+  </div>
+  <script src="../dist/ui-framework.js"></script>
+  <script src="assets/docs.js"></script>
+</body>
+</html>

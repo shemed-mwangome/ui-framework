@@ -1,0 +1,91 @@
+/* Scoped base styles. Add .ui-scope to a page wrapper or body. */
+.ui-scope,
+.ui-scope *,
+.ui-scope *::before,
+.ui-scope *::after {
+  box-sizing: border-box;
+}
+
+.ui-scope {
+  margin: 0;
+  color: var(--ui-text);
+  background: var(--ui-surface-soft);
+  font-family: var(--ui-font-sans);
+  font-size: 1rem;
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+.ui-scope :where(img, svg) {
+  vertical-align: middle;
+}
+
+/*
+ * :where() keeps these resets at the same specificity as a single
+ * component class (e.g. .ui-btn, .ui-control, .ui-nav-link), so any
+ * component's own color/font declarations win via normal cascade order
+ * (component CSS loads after this file) instead of being shadowed by the
+ * extra element-selector specificity that .ui-scope <element> would add.
+ */
+.ui-scope :where(button, input, select, textarea) {
+  font: inherit;
+}
+
+.ui-scope :where(a) {
+  color: var(--ui-primary);
+}
+
+.ui-scope :where(a):hover {
+  color: var(--ui-primary-hover);
+}
+
+.ui-scope [hidden] {
+  display: none !important;
+}
+
+.ui-scope ::selection {
+  color: #fff;
+  background: var(--ui-primary);
+}
+
+.ui-sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.ui-focusable-sr-only:not(:focus):not(:focus-within) {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+}
+
+.ui-icon {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  flex: 0 0 auto;
+  fill: currentColor;
+  stroke: currentColor;
+  vertical-align: -.125em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-scope *,
+  .ui-scope *::before,
+  .ui-scope *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

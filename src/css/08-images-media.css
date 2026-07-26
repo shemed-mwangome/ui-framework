@@ -1,0 +1,79 @@
+.ui-img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.ui-img-fluid { width: 100%; height: auto; }
+.ui-img-cover { width: 100%; height: 100%; object-fit: cover; }
+.ui-img-contain { width: 100%; height: 100%; object-fit: contain; }
+.ui-img-rounded { border-radius: var(--ui-radius-4); }
+.ui-img-circle { aspect-ratio: 1; border-radius: 50%; object-fit: cover; }
+.ui-img-thumbnail { padding: .25rem; border: 1px solid var(--ui-border); border-radius: var(--ui-radius-2); background: var(--ui-surface); }
+.ui-img-shadow { box-shadow: var(--ui-shadow-3); }
+.ui-img-grayscale { filter: grayscale(1); }
+.ui-img-muted { opacity: .65; }
+.ui-img-hover-zoom { transition: transform var(--ui-transition); }
+.ui-img-hover-zoom:hover { transform: scale(1.04); }
+.ui-img-hover-bright { transition: filter var(--ui-transition); }
+.ui-img-hover-bright:hover { filter: brightness(1.1); }
+
+.ui-figure { margin: 0; }
+.ui-figure-caption { margin-top: .5rem; color: var(--ui-muted); font-size: .8125rem; }
+
+.ui-avatar {
+  --ui-avatar-size: 2.5rem;
+  position: relative;
+  width: var(--ui-avatar-size);
+  height: var(--ui-avatar-size);
+  display: inline-flex;
+  flex: 0 0 var(--ui-avatar-size);
+}
+
+.ui-avatar > img,
+.ui-avatar > .ui-avatar-fallback {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.ui-avatar-fallback {
+  background: var(--ui-primary-soft);
+  color: var(--ui-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.ui-avatar-sm { --ui-avatar-size: 1.8rem; }
+.ui-avatar-lg { --ui-avatar-size: 3.5rem; }
+.ui-avatar-xl { --ui-avatar-size: 5rem; }
+
+.ui-avatar-status::after {
+  content: "";
+  position: absolute;
+  right: 1%;
+  bottom: 1%;
+  width: 27%;
+  height: 27%;
+  border: 2px solid var(--ui-surface);
+  border-radius: 50%;
+  background: var(--ui-secondary);
+}
+
+.ui-avatar-online::after { background: var(--ui-success); }
+.ui-avatar-away::after { background: var(--ui-warning); }
+.ui-avatar-busy::after { background: var(--ui-danger); }
+
+.ui-media {
+  display: flex;
+  align-items: flex-start;
+  gap: .75rem;
+}
+
+.ui-media-body {
+  min-width: 0;
+  flex: 1 1 auto;
+}

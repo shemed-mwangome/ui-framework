@@ -1,0 +1,30 @@
+@media print {
+  .ui-no-print,
+  .ui-navbar,
+  .ui-sidebar,
+  .ui-toast-container,
+  .ui-modal,
+  .ui-offcanvas-root {
+    display: none !important;
+  }
+
+  .ui-print-only { display: block !important; }
+
+  .ui-scope {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  .ui-card,
+  .ui-table {
+    box-shadow: none !important;
+    break-inside: avoid;
+  }
+
+  .ui-table thead { display: table-header-group; }
+
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: .75em;
+  }
+}

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en" data-ui-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Utilities · UI Framework</title>
+  <link rel="stylesheet" href="../dist/ui-framework.css">
+  <link rel="stylesheet" href="assets/docs.css">
+</head>
+<body class="ui-scope docs-body">
+  <header class="docs-topbar">
+    <div class="ui-d-flex ui-align-center ui-gap-2">
+      <button class="ui-btn ui-btn-icon ui-btn-ghost docs-mobile-menu" type="button" data-docs-menu aria-label="Open documentation menu">☰</button>
+      <a class="docs-brand" href="index.html"><span class="docs-logo">UI</span><span>UI Framework</span></a>
+    </div>
+    <div class="ui-d-flex ui-align-center ui-gap-2">
+      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.0.0</span>
+      <button class="ui-btn ui-btn-sm ui-btn-outline-secondary" type="button" data-ui-theme-toggle>Theme</button>
+    </div>
+  </header>
+  <div class="docs-layout">
+    <aside class="docs-sidebar">
+      <div class="docs-sidebar-title">Documentation</div>
+      <a class="docs-sidebar-link" href="index.html">Overview</a><a class="docs-sidebar-link" href="getting-started.html">Getting started</a><a class="docs-sidebar-link" href="layout.html">Layout & grid</a><a class="docs-sidebar-link" href="components.html">Components</a><a class="docs-sidebar-link active" href="utilities.html">Utilities</a><a class="docs-sidebar-link" href="javascript.html">JavaScript API</a>
+      <div class="docs-sidebar-title">Examples</div>
+      <a class="docs-sidebar-link" href="examples/dashboard.html">Dashboard</a>
+      <a class="docs-sidebar-link" href="examples/form.html">Form workflow</a>
+      <a class="docs-sidebar-link" href="examples/login.html">Login page</a>
+      <div class="docs-sidebar-title">On this page</div><a class="docs-sidebar-link" href="#spacing">Spacing</a><a class="docs-sidebar-link" href="#flex">Display & flex</a><a class="docs-sidebar-link" href="#text">Text & colors</a><a class="docs-sidebar-link" href="#effects">Effects</a>
+    </aside>
+    <main class="docs-main">
+
+<section class="docs-hero">
+  <div class="docs-kicker">Utility-first helpers</div>
+  <h1 class="ui-display-2">Compose layouts directly in markup.</h1>
+  <p class="ui-lead">Utilities cover display, flexbox, spacing, sizing, typography, colors, borders, shadows, visibility, and interactions.</p>
+</section>
+
+<section class="docs-section" id="spacing">
+  <h2 class="ui-h2">Spacing</h2>
+  <p>Use values <span class="ui-code">0</span> through <span class="ui-code">8</span>.</p>
+  <div class="ui-table-responsive"><table class="ui-table ui-table-striped"><thead><tr><th>Pattern</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+    <tr><td><span class="ui-code">ui-m-*</span></td><td>Margin on all sides</td><td>ui-m-4</td></tr>
+    <tr><td><span class="ui-code">ui-mx-*</span></td><td>Horizontal margin</td><td>ui-mx-auto</td></tr>
+    <tr><td><span class="ui-code">ui-p-*</span></td><td>Padding on all sides</td><td>ui-p-5</td></tr>
+    <tr><td><span class="ui-code">ui-gap-*</span></td><td>Flex/grid gap</td><td>ui-gap-3</td></tr>
+  </tbody></table></div>
+</section>
+
+<section class="docs-section" id="flex">
+  <h2 class="ui-h2">Display and flex</h2>
+  <div class="docs-demo">
+    <div class="ui-d-flex ui-justify-between ui-align-center ui-gap-3 ui-p-3 ui-bg-surface ui-border ui-rounded-3">
+      <span>Start</span><span class="ui-badge ui-badge-primary">Center item</span><button class="ui-btn ui-btn-sm ui-btn-success">End</button>
+    </div>
+  </div>
+  <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>ui-d-flex ui-justify-between ui-align-center ui-gap-3</code></pre></div>
+</section>
+
+<section class="docs-section" id="text">
+  <h2 class="ui-h2">Typography and colors</h2>
+  <div class="ui-css-grid" style="--ui-grid-min:160px">
+    <div class="ui-p-3 ui-border ui-rounded-3 ui-text-primary ui-fw-bold">Primary bold</div>
+    <div class="ui-p-3 ui-border ui-rounded-3 ui-text-success ui-text-uppercase">Success uppercase</div>
+    <div class="ui-p-3 ui-border ui-rounded-3 ui-text-muted ui-fs-5">Muted small text</div>
+  </div>
+</section>
+
+<section class="docs-section" id="effects">
+  <h2 class="ui-h2">Borders, radii, shadows, and hover effects</h2>
+  <div class="ui-css-grid" style="--ui-grid-min:150px">
+    <div class="ui-p-5 ui-bg-surface ui-border ui-rounded-1">Radius 1</div>
+    <div class="ui-p-5 ui-bg-surface ui-shadow-2 ui-rounded-3">Shadow 2</div>
+    <div class="ui-p-5 ui-bg-surface ui-border ui-rounded-4 ui-hover-lift">Hover lift</div>
+  </div>
+</section>
+
+      <footer class="docs-footer">UI Framework 1.0.0 · Dependency-free · Designed for safe use beside Bootstrap and legacy JSP themes.</footer>
+    </main>
+  </div>
+  <script src="../dist/ui-framework.js"></script>
+  <script src="assets/docs.js"></script>
+</body>
+</html>

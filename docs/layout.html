@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en" data-ui-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Layout and grid · UI Framework</title>
+  <link rel="stylesheet" href="../dist/ui-framework.css">
+  <link rel="stylesheet" href="assets/docs.css">
+</head>
+<body class="ui-scope docs-body">
+  <header class="docs-topbar">
+    <div class="ui-d-flex ui-align-center ui-gap-2">
+      <button class="ui-btn ui-btn-icon ui-btn-ghost docs-mobile-menu" type="button" data-docs-menu aria-label="Open documentation menu">☰</button>
+      <a class="docs-brand" href="index.html"><span class="docs-logo">UI</span><span>UI Framework</span></a>
+    </div>
+    <div class="ui-d-flex ui-align-center ui-gap-2">
+      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.0.0</span>
+      <button class="ui-btn ui-btn-sm ui-btn-outline-secondary" type="button" data-ui-theme-toggle>Theme</button>
+    </div>
+  </header>
+  <div class="docs-layout">
+    <aside class="docs-sidebar">
+      <div class="docs-sidebar-title">Documentation</div>
+      <a class="docs-sidebar-link" href="index.html">Overview</a><a class="docs-sidebar-link" href="getting-started.html">Getting started</a><a class="docs-sidebar-link active" href="layout.html">Layout & grid</a><a class="docs-sidebar-link" href="components.html">Components</a><a class="docs-sidebar-link" href="utilities.html">Utilities</a><a class="docs-sidebar-link" href="javascript.html">JavaScript API</a>
+      <div class="docs-sidebar-title">Examples</div>
+      <a class="docs-sidebar-link" href="examples/dashboard.html">Dashboard</a>
+      <a class="docs-sidebar-link" href="examples/form.html">Form workflow</a>
+      <a class="docs-sidebar-link" href="examples/login.html">Login page</a>
+      <div class="docs-sidebar-title">On this page</div><a class="docs-sidebar-link" href="#containers">Containers</a><a class="docs-sidebar-link" href="#flex-grid">Flex grid</a><a class="docs-sidebar-link" href="#css-grid">CSS grid</a><a class="docs-sidebar-link" href="#gutters">Gutters</a>
+    </aside>
+    <main class="docs-main">
+
+<section class="docs-hero">
+  <div class="docs-kicker">Mobile-first layout</div>
+  <h1 class="ui-display-2">Responsive flex and CSS grids.</h1>
+  <p class="ui-lead">Build conventional 12-column layouts or automatic card grids using a small set of predictable classes.</p>
+</section>
+
+<section class="docs-section" id="containers">
+  <h2 class="ui-h2">Containers</h2>
+  <p class="docs-section-intro">Use fluid or width-constrained containers: <span class="ui-code">ui-container-fluid</span>, <span class="ui-code">ui-container-md</span>, <span class="ui-code">ui-container-lg</span>, <span class="ui-code">ui-container-xl</span>.</p>
+</section>
+
+<section class="docs-section" id="flex-grid">
+  <h2 class="ui-h2">12-column flex grid</h2>
+
+<div class="docs-demo">
+<div class="ui-row ui-g-2">
+  <div class="ui-col-12 ui-col-md-4"><div class="ui-alert ui-alert-info">Column 4</div></div>
+  <div class="ui-col-12 ui-col-md-4"><div class="ui-alert ui-alert-success">Column 4</div></div>
+  <div class="ui-col-12 ui-col-md-4"><div class="ui-alert ui-alert-warning">Column 4</div></div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-row ui-g-2&quot;&gt;
+  &lt;div class=&quot;ui-col-12 ui-col-md-4&quot;&gt;...&lt;/div&gt;
+  &lt;div class=&quot;ui-col-12 ui-col-md-4&quot;&gt;...&lt;/div&gt;
+  &lt;div class=&quot;ui-col-12 ui-col-md-4&quot;&gt;...&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+</div>
+
+</section>
+
+<section class="docs-section" id="css-grid">
+  <h2 class="ui-h2">Automatic CSS grid</h2>
+  <p class="docs-section-intro">Set a minimum card width through <span class="ui-code">--ui-grid-min</span>. The layout automatically creates as many columns as fit.</p>
+
+<div class="docs-demo">
+<div class="ui-css-grid" style="--ui-grid-min: 150px">
+  <div class="ui-card"><div class="ui-card-body">One</div></div>
+  <div class="ui-card"><div class="ui-card-body">Two</div></div>
+  <div class="ui-card"><div class="ui-card-body">Three</div></div>
+  <div class="ui-card"><div class="ui-card-body">Four</div></div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-css-grid&quot; style=&quot;--ui-grid-min: 150px&quot;&gt;
+  &lt;div class=&quot;ui-card&quot;&gt;...&lt;/div&gt;
+  &lt;div class=&quot;ui-card&quot;&gt;...&lt;/div&gt;
+  &lt;div class=&quot;ui-card&quot;&gt;...&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+</div>
+
+</section>
+
+<section class="docs-section" id="gutters">
+  <h2 class="ui-h2">Gutters</h2>
+  <p>Use <span class="ui-code">ui-g-0</span> through <span class="ui-code">ui-g-5</span> on rows. CSS grids use <span class="ui-code">--ui-grid-gap</span>.</p>
+</section>
+
+      <footer class="docs-footer">UI Framework 1.0.0 · Dependency-free · Designed for safe use beside Bootstrap and legacy JSP themes.</footer>
+    </main>
+  </div>
+  <script src="../dist/ui-framework.js"></script>
+  <script src="assets/docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+.ui-btn {
+  --ui-btn-bg: var(--ui-primary);
+  --ui-btn-border: var(--ui-btn-bg);
+  --ui-btn-color: #fff;
+  --ui-btn-hover-bg: var(--ui-primary-hover);
+  --ui-btn-hover-border: var(--ui-btn-hover-bg);
+  --ui-btn-height: var(--ui-control-md);
+  --ui-btn-radius: var(--ui-radius-2);
+  --ui-btn-padding-x: 1rem;
+
+  min-height: var(--ui-btn-height);
+  padding: .45rem var(--ui-btn-padding-x);
+  border: 1px solid var(--ui-btn-border);
+  border-radius: var(--ui-btn-radius);
+  background: var(--ui-btn-bg);
+  color: var(--ui-btn-color);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .45rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  transition: color var(--ui-transition-fast),
+              background var(--ui-transition-fast),
+              border-color var(--ui-transition-fast),
+              box-shadow var(--ui-transition-fast),
+              transform var(--ui-transition-fast);
+}
+
+.ui-btn:hover {
+  background: var(--ui-btn-hover-bg);
+  border-color: var(--ui-btn-hover-border);
+  color: var(--ui-btn-color);
+  text-decoration: none;
+}
+
+.ui-btn:focus-visible {
+  outline: 0;
+  box-shadow: var(--ui-focus-ring);
+}
+
+.ui-btn:active { transform: translateY(1px); }
+
+.ui-btn:disabled,
+.ui-btn.ui-disabled {
+  opacity: .55;
+  pointer-events: none;
+}
+
+.ui-btn-sm { --ui-btn-height: var(--ui-control-sm); --ui-btn-padding-x: .75rem; font-size: .8125rem; }
+.ui-btn-lg { --ui-btn-height: var(--ui-control-lg); --ui-btn-padding-x: 1.35rem; font-size: 1.05rem; }
+.ui-btn-block { width: 100%; }
+.ui-btn-icon { width: var(--ui-btn-height); padding-inline: 0; }
+.ui-btn-pill { --ui-btn-radius: var(--ui-radius-pill); }
+.ui-btn-square { --ui-btn-radius: 0; }
+
+.ui-btn-primary { --ui-btn-bg: var(--ui-primary); --ui-btn-hover-bg: var(--ui-primary-hover); }
+.ui-btn-secondary { --ui-btn-bg: var(--ui-secondary); --ui-btn-hover-bg: #475569; }
+.ui-btn-success { --ui-btn-bg: var(--ui-success); --ui-btn-hover-bg: #15803d; }
+.ui-btn-danger { --ui-btn-bg: var(--ui-danger); --ui-btn-hover-bg: #b91c1c; }
+.ui-btn-warning { --ui-btn-bg: var(--ui-warning); --ui-btn-hover-bg: #d97706; --ui-btn-color: #1f2937; }
+.ui-btn-info { --ui-btn-bg: var(--ui-info); --ui-btn-hover-bg: #0e7490; }
+.ui-btn-dark { --ui-btn-bg: var(--ui-dark); --ui-btn-hover-bg: #020617; }
+
+.ui-btn-outline-primary { --ui-btn-bg: transparent; --ui-btn-color: var(--ui-primary); --ui-btn-border: var(--ui-primary); --ui-btn-hover-bg: var(--ui-primary); --ui-btn-hover-border: var(--ui-primary); }
+.ui-btn-outline-secondary { --ui-btn-bg: transparent; --ui-btn-color: var(--ui-secondary); --ui-btn-border: var(--ui-secondary); --ui-btn-hover-bg: var(--ui-secondary); --ui-btn-hover-border: var(--ui-secondary); }
+.ui-btn-outline-success { --ui-btn-bg: transparent; --ui-btn-color: var(--ui-success); --ui-btn-border: var(--ui-success); --ui-btn-hover-bg: var(--ui-success); --ui-btn-hover-border: var(--ui-success); }
+.ui-btn-outline-danger { --ui-btn-bg: transparent; --ui-btn-color: var(--ui-danger); --ui-btn-border: var(--ui-danger); --ui-btn-hover-bg: var(--ui-danger); --ui-btn-hover-border: var(--ui-danger); }
+.ui-btn-outline-primary:hover,
+.ui-btn-outline-secondary:hover,
+.ui-btn-outline-success:hover,
+.ui-btn-outline-danger:hover { color: #fff; }
+
+.ui-btn-ghost {
+  --ui-btn-bg: transparent;
+  --ui-btn-border: transparent;
+  --ui-btn-color: var(--ui-primary);
+  --ui-btn-hover-bg: var(--ui-primary-soft);
+  --ui-btn-hover-border: transparent;
+}
+
+.ui-btn-group {
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.ui-btn-group > .ui-btn:not(:first-child) { margin-left: -1px; }
+.ui-btn-group > .ui-btn:not(:first-child):not(:last-child) { border-radius: 0; }
+.ui-btn-group > .ui-btn:first-child:not(:last-child) { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+.ui-btn-group > .ui-btn:last-child:not(:first-child) { border-top-left-radius: 0; border-bottom-left-radius: 0; }
+
+.ui-btn-loading {
+  position: relative;
+  color: transparent !important;
+  pointer-events: none;
+}
+
+.ui-btn-loading::after {
+  content: "";
+  position: absolute;
+  width: 1em;
+  height: 1em;
+  border: .15em solid rgba(255, 255, 255, .45);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: ui-spin .7s linear infinite;
+}
