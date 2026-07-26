@@ -26,7 +26,7 @@
       <a class="docs-sidebar-link" href="examples/dashboard.html">Dashboard</a>
       <a class="docs-sidebar-link" href="examples/form.html">Form workflow</a>
       <a class="docs-sidebar-link" href="examples/login.html">Login page</a>
-      <div class="docs-sidebar-title">On this page</div><a class="docs-sidebar-link" href="#bundle">Single bundle</a><a class="docs-sidebar-link" href="#modular">Modules</a><a class="docs-sidebar-link" href="#server">Server-side integration</a><a class="docs-sidebar-link" href="#theme">Theming</a>
+      <div class="docs-sidebar-title">On this page</div><a class="docs-sidebar-link" href="#try-it">Try it in 10 seconds</a><a class="docs-sidebar-link" href="#concepts">How it works</a><a class="docs-sidebar-link" href="#bundle">Single bundle</a><a class="docs-sidebar-link" href="#modular">Modules</a><a class="docs-sidebar-link" href="#server">Server-side integration</a><a class="docs-sidebar-link" href="#theme">Theming</a><a class="docs-sidebar-link" href="#troubleshooting">Troubleshooting</a>
     </aside>
     <main class="docs-main">
 
@@ -34,6 +34,22 @@
   <div class="docs-kicker">Installation</div>
   <h1 class="ui-display-2">Start without changing your existing theme.</h1>
   <p class="ui-lead">The framework uses the <span class="ui-code">ui-</span> prefix and scoped base styles, making it suitable for any server-rendered application &mdash; JSP, PHP, Rails, Django, or plain static HTML &mdash; that already uses Bootstrap, CoreUI, or custom master styles.</p>
+</section>
+
+<section class="docs-section" id="try-it">
+  <h2 class="ui-h2">New here? Try it in 10 seconds</h2>
+  <p class="docs-section-intro">No server, no build step, no account. Download or clone the repository, then double-click <span class="ui-code">quick-start.html</span> in the project root to open it directly in your browser (no <span class="ui-code">http://</span> needed &mdash; a plain <span class="ui-code">file://</span> path works). It loads the two bundled files and shows a working button, so you can confirm everything is wired up before touching any of your own pages.</p>
+</section>
+
+<section class="docs-section" id="concepts">
+  <h2 class="ui-h2">How it works, in plain terms</h2>
+  <p class="docs-section-intro">If you've never used a component library before, here's the whole mental model &mdash; there isn't more to it than this:</p>
+  <ul>
+    <li><strong>CSS classes style things.</strong> Every class starts with <span class="ui-code">ui-</span> (e.g. <span class="ui-code">ui-btn</span>, <span class="ui-code">ui-card</span>) specifically so it can't collide with your existing CSS. Write plain HTML and add these classes the same way you'd add any CSS class.</li>
+    <li><strong><span class="ui-code">data-ui-*</span> attributes trigger behavior &mdash; you write zero JavaScript.</strong> For example, a button with <span class="ui-code">data-ui-modal-open="#myModal"</span> opens a modal when clicked. The framework's JavaScript file scans the page for these attributes once it loads and wires up the click handlers for you automatically.</li>
+    <li><strong>Nothing needs to be "initialized" for content that's already in the page when it loads.</strong> You only call <span class="ui-code">UI.init(element)</span> manually if you insert new HTML with JavaScript <em>after</em> the page has loaded (see <a href="javascript.html">JavaScript API</a>).</li>
+  </ul>
+  <p class="docs-section-intro">That's it. Everything else in these docs is just the full list of available <span class="ui-code">ui-*</span> classes and <span class="ui-code">data-ui-*</span> attributes and what each one does.</p>
 </section>
 
 <section class="docs-section" id="bundle">
