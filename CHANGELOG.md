@@ -2,6 +2,10 @@
 
 ## 1.2.0 — 2026-07-27
 
+- Fixed `.ui-btn-loading` making the button label fully transparent, leaving only a bare spinner with no indication of what's loading; the label now stays visible with the spinner shown alongside it (using `currentColor` so it reads correctly on solid, outline, and ghost variants alike)
+- Documented previously-missing button classes (`ui-btn-secondary`, `ui-btn-info`, `ui-btn-dark`, `ui-btn-sm`/`ui-btn-lg`, `ui-btn-block`, `ui-btn-icon`) with a new "Sizes & layout" demo, and added a classes reference table at the end of the Buttons section
+- Added a "classes reference" table to the end of every remaining section in the components doc (Typography, Forms, Selection, Multi-select, Date range, Date picker, Upload, Multi-step form, Save draft, Alerts and badges, Cards, Images, Tables, Smart tables, Navigation, Tabs, Dropdown, Accordion, Modal, Confirm, Offcanvas, Tooltips, Toast, Loaders, Workflow UI) for quick class lookup without reading every demo
+- Fixed the Tabs demo: it was missing the second ("Security") tab panel entirely and never closed its `<section>` tag, so the Dropdown section was silently nested inside it in the DOM
 - Fixed the Buttons demo's copy-paste code sample missing the `ui-btn-loading` line, even though the loading button was shown live
 - Fixed `.ui-skeleton-circle` having no explicit width (only `aspect-ratio: 1`), so used alone as a flex item it would collapse to invisible; it now has a sensible default size and `flex: none`
 - Fixed the last remaining inline `style="--ui-progress-value:...` / `style="width:...` in the Loaders demo that was missed in the earlier CSP-safety pass

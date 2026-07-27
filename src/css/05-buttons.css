@@ -94,18 +94,17 @@
 .ui-btn-group > .ui-btn:last-child:not(:first-child) { border-top-left-radius: 0; border-bottom-left-radius: 0; }
 
 .ui-btn-loading {
-  position: relative;
-  color: transparent !important;
   pointer-events: none;
+  opacity: .85;
 }
 
-.ui-btn-loading::after {
+.ui-btn-loading::before {
   content: "";
-  position: absolute;
   width: 1em;
   height: 1em;
-  border: .15em solid rgba(255, 255, 255, .45);
-  border-top-color: #fff;
+  flex: none;
+  border: .15em solid color-mix(in srgb, currentColor 35%, transparent);
+  border-top-color: currentColor;
   border-radius: 50%;
   animation: ui-spin .7s linear infinite;
 }
