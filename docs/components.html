@@ -43,9 +43,12 @@
 <div class="docs-demo">
 <div class="ui-d-flex ui-flex-wrap ui-gap-2">
   <button class="ui-btn ui-btn-primary">Primary</button>
+  <button class="ui-btn ui-btn-secondary">Secondary</button>
   <button class="ui-btn ui-btn-success">Success</button>
   <button class="ui-btn ui-btn-danger">Danger</button>
   <button class="ui-btn ui-btn-warning">Warning</button>
+  <button class="ui-btn ui-btn-info">Info</button>
+  <button class="ui-btn ui-btn-dark">Dark</button>
   <button class="ui-btn ui-btn-outline-primary">Outline</button>
   <button class="ui-btn ui-btn-ghost">Ghost</button>
   <button class="ui-btn ui-btn-primary ui-btn-pill">Pill</button>
@@ -55,7 +58,9 @@
 <div class="docs-code-wrap">
   <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
   <pre class="ui-code-block"><code>&lt;button class=&quot;ui-btn ui-btn-primary&quot;&gt;Primary&lt;/button&gt;
+&lt;button class=&quot;ui-btn ui-btn-secondary&quot;&gt;Secondary&lt;/button&gt;
 &lt;button class=&quot;ui-btn ui-btn-success&quot;&gt;Success&lt;/button&gt;
+&lt;button class=&quot;ui-btn ui-btn-info&quot;&gt;Info&lt;/button&gt;
 &lt;button class=&quot;ui-btn ui-btn-outline-primary&quot;&gt;Outline&lt;/button&gt;
 &lt;button class=&quot;ui-btn ui-btn-primary ui-btn-pill&quot;&gt;Pill&lt;/button&gt;
 &lt;button class=&quot;ui-btn ui-btn-primary ui-btn-loading&quot;&gt;Loading&lt;/button&gt;</code></pre>
@@ -88,6 +93,52 @@
 &lt;/div&gt;</code></pre>
 </div>
 
+<h3 class="ui-h3 ui-mt-5">Sizes &amp; layout</h3>
+<p class="docs-section-intro"><span class="ui-code">ui-btn-sm</span> and <span class="ui-code">ui-btn-lg</span> resize the control; <span class="ui-code">ui-btn-block</span> stretches it to the full width of its container; <span class="ui-code">ui-btn-icon</span> makes a square, icon-only button (pair it with an <span class="ui-code">aria-label</span> since there's no visible text).</p>
+
+<div class="docs-demo">
+<div class="ui-d-flex ui-flex-wrap ui-align-center ui-gap-3">
+  <button class="ui-btn ui-btn-sm ui-btn-primary">Small</button>
+  <button class="ui-btn ui-btn-primary">Default</button>
+  <button class="ui-btn ui-btn-lg ui-btn-primary">Large</button>
+  <button class="ui-btn ui-btn-icon ui-btn-outline-secondary" type="button" aria-label="Add item">+</button>
+</div>
+<div class="ui-mt-3" style="max-width:280px">
+  <button class="ui-btn ui-btn-primary ui-btn-block">Block button</button>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;button class=&quot;ui-btn ui-btn-sm ui-btn-primary&quot;&gt;Small&lt;/button&gt;
+&lt;button class=&quot;ui-btn ui-btn-primary&quot;&gt;Default&lt;/button&gt;
+&lt;button class=&quot;ui-btn ui-btn-lg ui-btn-primary&quot;&gt;Large&lt;/button&gt;
+&lt;button class=&quot;ui-btn ui-btn-icon ui-btn-outline-secondary&quot; aria-label=&quot;Add item&quot;&gt;+&lt;/button&gt;
+&lt;button class=&quot;ui-btn ui-btn-primary ui-btn-block&quot;&gt;Block button&lt;/button&gt;</code></pre>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">Button classes reference</h3>
+<p class="docs-section-intro">Every class used above, in one place.</p>
+
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>Class</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">ui-btn</code></td><td>Base class; required on every button.</td></tr>
+      <tr><td><code class="ui-code">ui-btn-primary</code> / <code class="ui-code">-secondary</code> / <code class="ui-code">-success</code> / <code class="ui-code">-danger</code> / <code class="ui-code">-warning</code> / <code class="ui-code">-info</code> / <code class="ui-code">-dark</code></td><td>Solid color fills.</td></tr>
+      <tr><td><code class="ui-code">ui-btn-outline-primary</code> / <code class="ui-code">-secondary</code> / <code class="ui-code">-success</code> / <code class="ui-code">-danger</code></td><td>Transparent background with a colored border and text; fills solid on hover.</td></tr>
+      <tr><td><code class="ui-code">ui-btn-ghost</code></td><td>No background or border until hovered.</td></tr>
+      <tr><td><code class="ui-code">ui-btn-sm</code> / <code class="ui-code">ui-btn-lg</code></td><td>Smaller or larger height, padding, and font size.</td></tr>
+      <tr><td><code class="ui-code">ui-btn-block</code></td><td>Stretches the button to 100% width of its container.</td></tr>
+      <tr><td><code class="ui-code">ui-btn-icon</code></td><td>Square, icon-only sizing (no horizontal padding).</td></tr>
+      <tr><td><code class="ui-code">ui-btn-pill</code></td><td>Fully rounded corners.</td></tr>
+      <tr><td><code class="ui-code">ui-btn-square</code></td><td>Removes corner rounding.</td></tr>
+      <tr><td><code class="ui-code">ui-btn-loading</code></td><td>Shows a spinner next to the label and disables clicks; keeps the label visible so context isn't lost.</td></tr>
+      <tr><td><code class="ui-code">ui-btn-group</code></td><td>Wraps adjacent <code class="ui-code">.ui-btn</code> elements into one connected, segmented control.</td></tr>
+      <tr><td><code class="ui-code">ui-disabled</code> / <code class="ui-code">disabled</code></td><td>Dims the button and blocks pointer events.</td></tr>
+    </tbody>
+  </table>
+</div>
+
 </section>
 
 
@@ -118,6 +169,25 @@
 &lt;blockquote class=&quot;ui-blockquote&quot;&gt;Quoted text.&lt;/blockquote&gt;
 &lt;mark class=&quot;ui-mark&quot;&gt;highlighted&lt;/mark&gt;
 &lt;code class=&quot;ui-code&quot;&gt;inline code&lt;/code&gt;</code></pre>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">Typography classes reference</h3>
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>Class</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">ui-display-1</code> / <code class="ui-code">ui-display-2</code></td><td>Largest hero-style headline sizes.</td></tr>
+      <tr><td><code class="ui-code">ui-h1</code>&ndash;<code class="ui-code">ui-h6</code></td><td>Heading sizes independent of the actual tag used.</td></tr>
+      <tr><td><code class="ui-code">ui-lead</code></td><td>Slightly larger, softer paragraph style for intros.</td></tr>
+      <tr><td><code class="ui-code">ui-blockquote</code></td><td>Styled quoted/callout text block.</td></tr>
+      <tr><td><code class="ui-code">ui-mark</code></td><td>Highlighted inline text (on <code class="ui-code">&lt;mark&gt;</code>).</td></tr>
+      <tr><td><code class="ui-code">ui-code</code></td><td>Inline monospace code snippet.</td></tr>
+      <tr><td><code class="ui-code">ui-code-block</code></td><td>Multi-line monospace code block (on <code class="ui-code">&lt;pre&gt;</code>).</td></tr>
+      <tr><td><code class="ui-code">ui-list-unstyled</code></td><td>Removes list bullets/numbers and default padding.</td></tr>
+      <tr><td><code class="ui-code">ui-list-inline</code></td><td>Lays out list items in a row instead of stacked.</td></tr>
+      <tr><td><code class="ui-code">ui-small</code></td><td>Smaller, muted secondary text.</td></tr>
+    </tbody>
+  </table>
 </div>
 
 </section>
@@ -231,6 +301,32 @@
 &lt;/div&gt;</code></pre>
 </div>
 
+<h3 class="ui-h3 ui-mt-5">Form classes reference</h3>
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>Class</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">ui-form-group</code></td><td>Wraps a label + control + help text as one field.</td></tr>
+      <tr><td><code class="ui-code">ui-label</code></td><td>Field label styling.</td></tr>
+      <tr><td><code class="ui-code">ui-label-required</code></td><td>Adds a required-field indicator to a label.</td></tr>
+      <tr><td><code class="ui-code">ui-control</code></td><td>Base text input / textarea styling.</td></tr>
+      <tr><td><code class="ui-code">ui-control-sm</code> / <code class="ui-code">-lg</code></td><td>Smaller or larger control height.</td></tr>
+      <tr><td><code class="ui-code">ui-control-pill</code></td><td>Fully rounded control.</td></tr>
+      <tr><td><code class="ui-code">ui-select</code></td><td>Base <code class="ui-code">&lt;select&gt;</code> styling.</td></tr>
+      <tr><td><code class="ui-code">ui-select-sm</code> / <code class="ui-code">-lg</code> / <code class="ui-code">-pill</code></td><td>Select size and shape variants, matching <code class="ui-code">ui-control</code>.</td></tr>
+      <tr><td><code class="ui-code">ui-help</code></td><td>Muted helper text under a field.</td></tr>
+      <tr><td><code class="ui-code">ui-is-invalid</code> / <code class="ui-code">ui-feedback-invalid</code></td><td>Marks a control as invalid, and the error message shown under it.</td></tr>
+      <tr><td><code class="ui-code">ui-is-valid</code> / <code class="ui-code">ui-feedback-valid</code></td><td>Marks a control as valid, and the confirmation message shown under it.</td></tr>
+      <tr><td><code class="ui-code">ui-input-group</code></td><td>Joins an addon and a control into one connected control.</td></tr>
+      <tr><td><code class="ui-code">ui-input-addon</code></td><td>Static label/prefix/suffix inside an input group.</td></tr>
+      <tr><td><code class="ui-code">ui-floating</code></td><td>Floating-label wrapper (label floats up on focus/value).</td></tr>
+      <tr><td><code class="ui-code">ui-floating-outline</code></td><td>Floats the label onto the border instead of into the padding.</td></tr>
+      <tr><td><code class="ui-code">ui-file-control</code></td><td>Styled <code class="ui-code">&lt;input type="file"&gt;</code>.</td></tr>
+      <tr><td><code class="ui-code">ui-range</code></td><td>Styled <code class="ui-code">&lt;input type="range"&gt;</code> slider.</td></tr>
+    </tbody>
+  </table>
+</div>
+
 </section>
 
 
@@ -277,6 +373,25 @@
 &lt;input class=&quot;ui-switch ui-switch-lg ui-switch-danger&quot; type=&quot;checkbox&quot;&gt;</code></pre>
 </div>
 
+<h3 class="ui-h3 ui-mt-5">Selection classes reference</h3>
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>Class</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">ui-checkbox</code></td><td>Custom checkbox; put on an <code class="ui-code">&lt;input type="checkbox"&gt;</code> immediately followed by its <code class="ui-code">&lt;label&gt;</code>.</td></tr>
+      <tr><td><code class="ui-code">ui-checkbox-sm</code> / <code class="ui-code">-lg</code> / <code class="ui-code">-xl</code></td><td>Checkbox size.</td></tr>
+      <tr><td><code class="ui-code">ui-checkbox-circle</code></td><td>Round instead of rounded-square shape.</td></tr>
+      <tr><td><code class="ui-code">ui-checkbox-success</code> / <code class="ui-code">-danger</code> / <code class="ui-code">-warning</code></td><td>Checked-state color.</td></tr>
+      <tr><td><code class="ui-code">ui-radio</code></td><td>Custom radio button; same label-adjacency rule as checkbox.</td></tr>
+      <tr><td><code class="ui-code">ui-radio-sm</code> / <code class="ui-code">-lg</code></td><td>Radio size.</td></tr>
+      <tr><td><code class="ui-code">ui-radio-success</code> / <code class="ui-code">-danger</code></td><td>Selected-state color.</td></tr>
+      <tr><td><code class="ui-code">ui-switch</code></td><td>Toggle-switch styling on a checkbox input.</td></tr>
+      <tr><td><code class="ui-code">ui-switch-lg</code></td><td>Larger switch.</td></tr>
+      <tr><td><code class="ui-code">ui-switch-primary</code> / <code class="ui-code">-danger</code></td><td>On-state color.</td></tr>
+    </tbody>
+  </table>
+</div>
+
 </section>
 
 
@@ -311,6 +426,31 @@
   &lt;option value=&quot;1&quot;&gt;Asha M.&lt;/option&gt;
   &lt;option value=&quot;2&quot;&gt;Baraka J.&lt;/option&gt;
 &lt;/select&gt;</code></pre>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">Multi-select classes reference</h3>
+<p class="docs-section-intro">These are generated by the JS enhancement (<code class="ui-code">data-ui-multiselect</code>) &mdash; useful if you need to target them with custom CSS.</p>
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>Class</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">ui-multiselect</code></td><td>Root wrapper replacing the native select's visual position.</td></tr>
+      <tr><td><code class="ui-code">ui-multiselect-trigger</code></td><td>The clickable closed-state control showing the current selection.</td></tr>
+      <tr><td><code class="ui-code">ui-multiselect-placeholder</code></td><td>Placeholder text style shown when nothing is selected.</td></tr>
+      <tr><td><code class="ui-code">ui-multiselect-menu</code></td><td>The dropdown panel.</td></tr>
+      <tr><td><code class="ui-code">ui-multiselect-search</code></td><td>The in-menu search input (when <code class="ui-code">data-search="true"</code>).</td></tr>
+      <tr><td><code class="ui-code">ui-multiselect-options</code></td><td>The scrollable list of options.</td></tr>
+      <tr><td><code class="ui-code">ui-multiselect-option</code></td><td>An individual option row.</td></tr>
+      <tr><td><code class="ui-code">ui-multiselect-empty</code></td><td>Shown when search filters out every option.</td></tr>
+      <tr><td><code class="ui-code">ui-multiselect-actions</code> / <code class="ui-code">ui-multiselect-action</code></td><td>Footer action row and its buttons (e.g. Select all).</td></tr>
+      <tr><td><code class="ui-code">ui-multiselect-tags</code></td><td>Tag-display container (when <code class="ui-code">data-display="tags"</code>).</td></tr>
+      <tr><td><code class="ui-code">ui-multiselect-tag</code></td><td>An individual selected-value chip.</td></tr>
+      <tr><td><code class="ui-code">ui-multiselect-tag-text</code> / <code class="ui-code">ui-multiselect-tag-remove</code></td><td>The chip's label and its remove (&times;) button.</td></tr>
+      <tr><td><code class="ui-code">ui-multiselect-tag-overflow</code></td><td>The "+N" chip once selections exceed <code class="ui-code">data-max-tags</code>.</td></tr>
+      <tr><td><code class="ui-code">ui-multiselect-summary</code></td><td>Count-style display when not in tags mode (e.g. "3 selected").</td></tr>
+      <tr><td><code class="ui-code">ui-multiselect-native</code></td><td>Hides the original <code class="ui-code">&lt;select&gt;</code> visually while it keeps holding the form value.</td></tr>
+    </tbody>
+  </table>
 </div>
 
 </section>
@@ -360,6 +500,30 @@ document.querySelector(&quot;[data-ui-date-range]&quot;)
 &lt;!-- posts as reportRange=2026-07-20 - 2026-07-26 --&gt;</code></pre>
 </div>
 
+<h3 class="ui-h3 ui-mt-5">Date range classes reference</h3>
+<p class="docs-section-intro"><code class="ui-code">ui-date-range</code> is the only class you write; the rest are generated by <code class="ui-code">data-ui-date-range</code> (useful for custom CSS).</p>
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>Class</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">ui-date-range</code></td><td>Author-supplied wrapper class that marks the field for enhancement.</td></tr>
+      <tr><td><code class="ui-code">ui-date-range-trigger</code></td><td>The clickable closed-state field showing the chosen range.</td></tr>
+      <tr><td><code class="ui-code">ui-date-range-native</code></td><td>Hides the original <code class="ui-code">&lt;input&gt;</code> visually while it keeps the posted value.</td></tr>
+      <tr><td><code class="ui-code">ui-date-range-panel</code></td><td>The popover calendar panel.</td></tr>
+      <tr><td><code class="ui-code">ui-date-range-months</code> / <code class="ui-code">ui-date-range-month</code></td><td>The two-month grid wrapper, and each individual month.</td></tr>
+      <tr><td><code class="ui-code">ui-date-range-calendar-header</code></td><td>Month/year title with prev/next controls.</td></tr>
+      <tr><td><code class="ui-code">ui-date-range-nav</code> / <code class="ui-code">ui-date-range-nav-hidden</code></td><td>Prev/next month buttons; hidden variant when navigation is out of bounds.</td></tr>
+      <tr><td><code class="ui-code">ui-date-range-weekdays</code> / <code class="ui-code">ui-date-range-grid</code></td><td>Weekday header row and the day-cell grid.</td></tr>
+      <tr><td><code class="ui-code">ui-date-range-day</code></td><td>An individual day cell.</td></tr>
+      <tr><td><code class="ui-code">ui-range-start</code> / <code class="ui-code">ui-range-end</code> / <code class="ui-code">ui-in-range</code></td><td>Applied automatically to the selected range's boundary and in-between days.</td></tr>
+      <tr><td><code class="ui-code">ui-today</code> / <code class="ui-code">ui-outside</code> / <code class="ui-code">ui-disabled</code></td><td>Applied automatically to today's cell, days outside the current month, and dates blocked by <code class="ui-code">data-min-date</code>/<code class="ui-code">data-max-date</code>/<code class="ui-code">data-disabled-dates</code>.</td></tr>
+      <tr><td><code class="ui-code">ui-date-range-presets</code> / <code class="ui-code">ui-date-range-preset</code></td><td>The quick-range button row and each preset button.</td></tr>
+      <tr><td><code class="ui-code">ui-date-range-clear</code></td><td>The clear-selection button.</td></tr>
+      <tr><td><code class="ui-code">ui-open</code></td><td>Applied to the root while the calendar popover is visible.</td></tr>
+    </tbody>
+  </table>
+</div>
+
 </section>
 
 
@@ -385,6 +549,18 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
     console.log(event.detail.value);
   });
 &lt;/script&gt;</code></pre>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">Date picker classes reference</h3>
+<p class="docs-section-intro">The date picker reuses every <code class="ui-code">ui-date-range-*</code> class from the <a href="#date-range">Date range</a> reference above (single month instead of two). Only its own wrapper class differs:</p>
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>Class</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">ui-date-picker</code></td><td>Author-supplied wrapper class that marks the field for enhancement.</td></tr>
+      <tr><td><code class="ui-code">ui-date-picker-shell</code></td><td>Applied automatically; narrows the panel to a single month.</td></tr>
+    </tbody>
+  </table>
 </div>
 
 </section>
@@ -415,6 +591,22 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
     &lt;div class=&quot;ui-upload-preview&quot;&gt;&lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;</code></pre>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">Upload classes reference</h3>
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>Class</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">ui-upload</code></td><td>The drop zone; pair with <code class="ui-code">data-ui-upload</code>.</td></tr>
+      <tr><td><code class="ui-code">ui-dragover</code></td><td>Applied automatically while a file is dragged over the zone.</td></tr>
+      <tr><td><code class="ui-code">ui-upload-title</code> / <code class="ui-code">ui-upload-help</code></td><td>Primary instruction text and secondary helper text (e.g. accepted file types).</td></tr>
+      <tr><td><code class="ui-code">ui-empty-icon</code></td><td>Icon glyph above the upload instructions.</td></tr>
+      <tr><td><code class="ui-code">ui-upload-preview</code></td><td>Container the JS fills with the selected-file list.</td></tr>
+      <tr><td><code class="ui-code">ui-file-item</code></td><td>An individual file row in the preview list.</td></tr>
+      <tr><td><code class="ui-code">ui-file-item-remove</code></td><td>The remove (&times;) button on a file row.</td></tr>
+    </tbody>
+  </table>
 </div>
 
 </section>
@@ -519,6 +711,26 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
      ui:savenext:error on the form. --&gt;</code></pre>
 </div>
 
+<h3 class="ui-h3 ui-mt-5">Multi-step form classes reference</h3>
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>Class</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">ui-stepper</code></td><td>The step-indicator row; pair with <code class="ui-code">data-ui-stepper</code>.</td></tr>
+      <tr><td><code class="ui-code">ui-step</code></td><td>An individual step.</td></tr>
+      <tr><td><code class="ui-code">ui-active</code></td><td>Marks the current step (toggled automatically as the wizard advances).</td></tr>
+      <tr><td><code class="ui-code">ui-complete</code></td><td>Marks a finished step (toggled automatically).</td></tr>
+      <tr><td><code class="ui-code">ui-step-marker</code> / <code class="ui-code">ui-step-label</code></td><td>The step's number/icon bubble and its text label.</td></tr>
+      <tr><td><code class="ui-code">ui-save-next-bar</code></td><td>The record toolbar at the bottom of the form.</td></tr>
+      <tr><td><code class="ui-code">ui-save-next-info</code></td><td>Left side of the bar: progress bar and position text.</td></tr>
+      <tr><td><code class="ui-code">ui-save-next-progress</code></td><td>Progress-bar variant sized for the toolbar.</td></tr>
+      <tr><td><code class="ui-code">ui-save-next-dirty</code></td><td>"Unsaved changes" indicator; shown automatically when the form is dirty.</td></tr>
+      <tr><td><code class="ui-code">ui-save-next-actions</code></td><td>Right side of the bar: Previous/Back/Next/Save buttons.</td></tr>
+      <tr><td><code class="ui-code">ui-dirty</code></td><td>Applied to the form automatically once any field changes.</td></tr>
+    </tbody>
+  </table>
+</div>
+
 </section>
 
 
@@ -550,6 +762,16 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 &lt;/form&gt;
 
 &lt;!-- ui:draft:saved / ui:draft:restored / ui:draft:discarded fire on the form --&gt;</code></pre>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">Save draft classes reference</h3>
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>Class</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">ui-draft-banner</code></td><td>The "restore or discard draft" banner injected above the form when a saved draft is found.</td></tr>
+    </tbody>
+  </table>
 </div>
 
 </section>
@@ -673,6 +895,32 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 &lt;/div&gt;</code></pre>
 </div>
 
+<h3 class="ui-h3 ui-mt-5">Alerts and badges classes reference</h3>
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>Class</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">ui-alert</code></td><td>Base alert box.</td></tr>
+      <tr><td><code class="ui-code">ui-alert-success</code> / <code class="ui-code">-danger</code> / <code class="ui-code">-warning</code> / <code class="ui-code">-info</code></td><td>Color (default: soft tint background).</td></tr>
+      <tr><td><code class="ui-code">ui-alert-outline</code></td><td>Border-only style instead of a tinted background.</td></tr>
+      <tr><td><code class="ui-code">ui-alert-solid</code></td><td>Fully filled background style.</td></tr>
+      <tr><td><code class="ui-code">ui-alert-sm</code> / <code class="ui-code">-lg</code></td><td>Padding size.</td></tr>
+      <tr><td><code class="ui-code">ui-alert-shadow</code></td><td>Adds elevation.</td></tr>
+      <tr><td><code class="ui-code">ui-alert-icon</code></td><td>Icon slot on the left of the alert.</td></tr>
+      <tr><td><code class="ui-code">ui-alert-title</code> / <code class="ui-code">ui-alert-message</code></td><td>Bold heading line and the body text below it.</td></tr>
+      <tr><td><code class="ui-code">ui-alert-list</code></td><td>Bulleted list styled to match the alert.</td></tr>
+      <tr><td><code class="ui-code">ui-alert-actions</code></td><td>Row for action buttons inside the alert.</td></tr>
+      <tr><td><code class="ui-code">ui-alert-close</code></td><td>Dismiss (&times;) button; pair with <code class="ui-code">data-ui-alert-close</code>.</td></tr>
+      <tr><td><code class="ui-code">ui-badge</code></td><td>Base badge/pill label.</td></tr>
+      <tr><td><code class="ui-code">ui-badge-primary</code> / <code class="ui-code">-secondary</code> / <code class="ui-code">-success</code> / <code class="ui-code">-danger</code> / <code class="ui-code">-warning</code> / <code class="ui-code">-info</code></td><td>Solid badge colors.</td></tr>
+      <tr><td><code class="ui-code">ui-badge-soft-primary</code> / <code class="ui-code">-success</code> / <code class="ui-code">-danger</code> / <code class="ui-code">-warning</code></td><td>Tinted, lower-contrast badge colors.</td></tr>
+      <tr><td><code class="ui-code">ui-badge-pill</code></td><td>Fully rounded badge shape.</td></tr>
+      <tr><td><code class="ui-code">ui-dot</code></td><td>Small standalone status indicator (no label), for table rows/lists.</td></tr>
+      <tr><td><code class="ui-code">ui-dot-success</code> / <code class="ui-code">-warning</code> / <code class="ui-code">-danger</code> / <code class="ui-code">-info</code></td><td>Status dot color.</td></tr>
+    </tbody>
+  </table>
+</div>
+
 </section>
 
 
@@ -727,6 +975,29 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 &lt;ul class=&quot;ui-list-group ui-list-group-flush&quot;&gt;
   &lt;li class=&quot;ui-list-group-item ui-list-group-item-action&quot;&gt;View details&lt;/li&gt;
 &lt;/ul&gt;</code></pre>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">Cards and lists classes reference</h3>
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>Class</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">ui-card</code></td><td>Base panel.</td></tr>
+      <tr><td><code class="ui-code">ui-card-hover</code></td><td>Lift/shadow effect on hover.</td></tr>
+      <tr><td><code class="ui-code">ui-card-border-primary</code> / <code class="ui-code">-success</code> / <code class="ui-code">-danger</code></td><td>Colored accent border.</td></tr>
+      <tr><td><code class="ui-code">ui-card-img-top</code></td><td>Full-width image slot at the top of the card.</td></tr>
+      <tr><td><code class="ui-code">ui-card-body</code></td><td>Padded content area.</td></tr>
+      <tr><td><code class="ui-code">ui-card-title</code> / <code class="ui-code">ui-card-subtitle</code></td><td>Heading and secondary text inside the body.</td></tr>
+      <tr><td><code class="ui-code">ui-card-footer</code></td><td>Separated footer strip.</td></tr>
+      <tr><td><code class="ui-code">ui-list-group</code></td><td>Bordered vertical list of items.</td></tr>
+      <tr><td><code class="ui-code">ui-list-group-flush</code></td><td>Removes outer border/rounding, for dropping inside a card body.</td></tr>
+      <tr><td><code class="ui-code">ui-list-group-item</code></td><td>An individual list row.</td></tr>
+      <tr><td><code class="ui-code">ui-list-group-item-action</code></td><td>Makes a row clickable/hoverable.</td></tr>
+      <tr><td><code class="ui-code">ui-active</code></td><td>Marks a row/item as the current selection.</td></tr>
+      <tr><td><code class="ui-code">ui-stat</code></td><td>Dashboard counter card.</td></tr>
+      <tr><td><code class="ui-code">ui-stat-icon</code> / <code class="ui-code">ui-stat-value</code> / <code class="ui-code">ui-stat-label</code></td><td>The icon, the big number, and its caption.</td></tr>
+    </tbody>
+  </table>
 </div>
 
 </section>
@@ -813,6 +1084,30 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 &lt;/div&gt;</code></pre>
 </div>
 
+<h3 class="ui-h3 ui-mt-5">Images and avatars classes reference</h3>
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>Class</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">ui-img</code></td><td>Base responsive image.</td></tr>
+      <tr><td><code class="ui-code">ui-img-fluid</code></td><td>Scales the image to its container width.</td></tr>
+      <tr><td><code class="ui-code">ui-img-cover</code> / <code class="ui-code">-contain</code></td><td>Object-fit behavior for a fixed-size image box.</td></tr>
+      <tr><td><code class="ui-code">ui-img-rounded</code> / <code class="ui-code">-circle</code></td><td>Rounded corners, or a fully circular crop.</td></tr>
+      <tr><td><code class="ui-code">ui-img-thumbnail</code></td><td>Bordered, padded thumbnail frame.</td></tr>
+      <tr><td><code class="ui-code">ui-img-shadow</code></td><td>Drop shadow.</td></tr>
+      <tr><td><code class="ui-code">ui-img-grayscale</code> / <code class="ui-code">-muted</code></td><td>Desaturates the image, fully or partially.</td></tr>
+      <tr><td><code class="ui-code">ui-img-hover-zoom</code> / <code class="ui-code">-hover-bright</code></td><td>Zoom or brighten on hover.</td></tr>
+      <tr><td><code class="ui-code">ui-figure</code> / <code class="ui-code">ui-figure-caption</code></td><td>Image wrapper with a captioned label below it.</td></tr>
+      <tr><td><code class="ui-code">ui-avatar</code></td><td>Circular user image container.</td></tr>
+      <tr><td><code class="ui-code">ui-avatar-sm</code> / <code class="ui-code">-lg</code> / <code class="ui-code">-xl</code></td><td>Avatar size (default is unsuffixed).</td></tr>
+      <tr><td><code class="ui-code">ui-avatar-fallback</code></td><td>Initials shown in place of an <code class="ui-code">&lt;img&gt;</code>.</td></tr>
+      <tr><td><code class="ui-code">ui-avatar-status</code></td><td>Enables the small status-dot corner indicator.</td></tr>
+      <tr><td><code class="ui-code">ui-avatar-online</code> / <code class="ui-code">-away</code> / <code class="ui-code">-busy</code></td><td>Status dot color.</td></tr>
+      <tr><td><code class="ui-code">ui-media</code> / <code class="ui-code">ui-media-body</code></td><td>Lines up an avatar/icon beside text, e.g. comment threads or activity feeds.</td></tr>
+    </tbody>
+  </table>
+</div>
+
 </section>
 
 
@@ -872,6 +1167,27 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 &lt;table class=&quot;ui-table ui-table-card-rows&quot;&gt;...&lt;/table&gt;</code></pre>
 </div>
 
+<h3 class="ui-h3 ui-mt-5">Tables classes reference</h3>
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>Class</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">ui-table-responsive</code></td><td>Scrolls the table horizontally instead of overflowing on narrow screens; wrap the <code class="ui-code">&lt;table&gt;</code> in this.</td></tr>
+      <tr><td><code class="ui-code">ui-table</code></td><td>Base table styling.</td></tr>
+      <tr><td><code class="ui-code">ui-table-striped</code></td><td>Alternating row background.</td></tr>
+      <tr><td><code class="ui-code">ui-table-hover</code></td><td>Highlights a row on hover.</td></tr>
+      <tr><td><code class="ui-code">ui-table-bordered</code></td><td>Borders around every cell.</td></tr>
+      <tr><td><code class="ui-code">ui-table-minimal</code></td><td>No header background fill.</td></tr>
+      <tr><td><code class="ui-code">ui-table-dark-header</code></td><td>Dark-filled header row.</td></tr>
+      <tr><td><code class="ui-code">ui-table-card-rows</code></td><td>Renders each row as its own rounded card.</td></tr>
+      <tr><td><code class="ui-code">ui-table-sm</code></td><td>Compact cell padding.</td></tr>
+      <tr><td><code class="ui-code">ui-table-sticky</code></td><td>Keeps the header row visible while the body scrolls.</td></tr>
+      <tr><td><code class="ui-code">ui-table-caption</code></td><td>Styled <code class="ui-code">&lt;caption&gt;</code> text.</td></tr>
+      <tr><td><code class="ui-code">ui-table-empty</code> / <code class="ui-code">ui-table-empty-row</code></td><td>No-results state shown when a filtered/searched table has no matching rows.</td></tr>
+    </tbody>
+  </table>
+</div>
+
 </section>
 
 
@@ -927,6 +1243,21 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
     &lt;/table&gt;
   &lt;/div&gt;
 &lt;/div&gt;</code></pre>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">Smart tables classes reference</h3>
+<p class="docs-section-intro">Built on top of the <a href="#tables">Tables</a> classes above; these are added by <code class="ui-code">data-ui-table</code> itself.</p>
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>Class</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">ui-table-toolbar</code></td><td>Row above the table holding the search box and page-size selector.</td></tr>
+      <tr><td><code class="ui-code">ui-table-search</code></td><td>The generated search input.</td></tr>
+      <tr><td><code class="ui-code">ui-table-page-size</code></td><td>The generated page-size <code class="ui-code">&lt;select&gt;</code>.</td></tr>
+      <tr><td><code class="ui-code">ui-table-sortable</code></td><td>Applied to headers marked with <code class="ui-code">data-ui-sort</code>, adding the sort-arrow affordance.</td></tr>
+      <tr><td><code class="ui-code">ui-table-pagination</code></td><td>The generated pagination control below the table.</td></tr>
+    </tbody>
+  </table>
 </div>
 
 </section>
@@ -988,6 +1319,28 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 &lt;/nav&gt;</code></pre>
 </div>
 
+<h3 class="ui-h3 ui-mt-5">Navigation classes reference</h3>
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>Class</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">ui-navbar</code></td><td>Top navigation bar.</td></tr>
+      <tr><td><code class="ui-code">ui-navbar-dark</code> / <code class="ui-code">-primary</code></td><td>Colored bar background; nav links/brand auto-adjust to a light color.</td></tr>
+      <tr><td><code class="ui-code">ui-navbar-sticky</code></td><td>Pins the bar to the top of the viewport while scrolling.</td></tr>
+      <tr><td><code class="ui-code">ui-navbar-brand</code></td><td>Logo/title link.</td></tr>
+      <tr><td><code class="ui-code">ui-navbar-nav</code></td><td>The link list inside the bar.</td></tr>
+      <tr><td><code class="ui-code">ui-navbar-search</code></td><td>Inline search box slot.</td></tr>
+      <tr><td><code class="ui-code">ui-nav-link</code></td><td>An individual navbar/sidebar link.</td></tr>
+      <tr><td><code class="ui-code">ui-active</code> / <code class="ui-code">ui-disabled</code></td><td>Marks a link as current or non-interactive.</td></tr>
+      <tr><td><code class="ui-code">ui-breadcrumb</code> / <code class="ui-code">ui-breadcrumb-item</code></td><td>Breadcrumb trail and each of its steps.</td></tr>
+      <tr><td><code class="ui-code">ui-pagination</code> / <code class="ui-code">ui-page-link</code></td><td>Pagination list and each page/prev/next link.</td></tr>
+      <tr><td><code class="ui-code">ui-sidebar</code></td><td>Side navigation panel.</td></tr>
+      <tr><td><code class="ui-code">ui-sidebar-header</code> / <code class="ui-code">ui-sidebar-section</code></td><td>Panel title, and a labeled group of links within it.</td></tr>
+      <tr><td><code class="ui-code">ui-sidebar-nav</code> / <code class="ui-code">ui-sidebar-link</code></td><td>The link list, and each link.</td></tr>
+    </tbody>
+  </table>
+</div>
+
 </section>
 
 
@@ -1001,7 +1354,41 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
     <button class="ui-tab ui-active" role="tab" aria-selected="true" aria-controls="tabProfile" data-ui-tab>Profile</button>
     <button class="ui-tab" role="tab" aria-selected="false" aria-controls="tabSecurity" data-ui-tab>Security</button>
   </div>
-  <section class="ui-tab-panel" id="tabProfile" role="tabpanel">Profile content</section>
+  <div class="ui-tab-panel" id="tabProfile" role="tabpanel">Profile content</div>
+  <div class="ui-tab-panel" id="tabSecurity" role="tabpanel" hidden>Security content</div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-tabs&quot; role=&quot;tablist&quot;&gt;
+  &lt;button class=&quot;ui-tab ui-active&quot; role=&quot;tab&quot;
+          aria-selected=&quot;true&quot; aria-controls=&quot;tabProfile&quot; data-ui-tab&gt;Profile&lt;/button&gt;
+  &lt;button class=&quot;ui-tab&quot; role=&quot;tab&quot;
+          aria-selected=&quot;false&quot; aria-controls=&quot;tabSecurity&quot; data-ui-tab&gt;Security&lt;/button&gt;
+&lt;/div&gt;
+&lt;div class=&quot;ui-tab-panel&quot; id=&quot;tabProfile&quot; role=&quot;tabpanel&quot;&gt;Profile content&lt;/div&gt;
+&lt;div class=&quot;ui-tab-panel&quot; id=&quot;tabSecurity&quot; role=&quot;tabpanel&quot; hidden&gt;Security content&lt;/div&gt;
+
+&lt;!-- ui-tabs-boxed / ui-tabs-pill / ui-tabs-vertical change the tab-strip style --&gt;</code></pre>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">Tabs classes reference</h3>
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>Class</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">ui-tabs</code></td><td>The tab strip; add <code class="ui-code">role="tablist"</code>.</td></tr>
+      <tr><td><code class="ui-code">ui-tabs-boxed</code></td><td>Segmented, boxed tab-strip style.</td></tr>
+      <tr><td><code class="ui-code">ui-tabs-pill</code></td><td>Pill-shaped active tab indicator.</td></tr>
+      <tr><td><code class="ui-code">ui-tabs-vertical</code></td><td>Stacks the tab strip vertically, alongside the panel.</td></tr>
+      <tr><td><code class="ui-code">ui-tab</code></td><td>An individual tab button; pair with <code class="ui-code">data-ui-tab</code> and <code class="ui-code">aria-controls</code>.</td></tr>
+      <tr><td><code class="ui-code">ui-active</code></td><td>Marks the selected tab (toggled automatically by the JS).</td></tr>
+      <tr><td><code class="ui-code">ui-tab-panel</code></td><td>Content pane matched to a tab by <code class="ui-code">id</code>/<code class="ui-code">aria-controls</code>; hidden with the <code class="ui-code">hidden</code> attribute when inactive.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</section>
 
 
 <section class="docs-section" id="dropdown">
@@ -1033,6 +1420,22 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 &lt;/div&gt;</code></pre>
 </div>
 
+<h3 class="ui-h3 ui-mt-5">Dropdown classes reference</h3>
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>Class</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">ui-dropdown</code></td><td>Wraps the trigger and menu; the trigger needs <code class="ui-code">data-ui-dropdown</code>.</td></tr>
+      <tr><td><code class="ui-code">ui-dropdown-menu</code></td><td>The popover menu.</td></tr>
+      <tr><td><code class="ui-code">ui-dropdown-end</code></td><td>Right-aligns the menu to the trigger instead of left.</td></tr>
+      <tr><td><code class="ui-code">ui-dropdown-header</code></td><td>Non-interactive section label inside the menu.</td></tr>
+      <tr><td><code class="ui-code">ui-dropdown-item</code></td><td>A clickable menu row.</td></tr>
+      <tr><td><code class="ui-code">ui-dropdown-divider</code></td><td>Horizontal rule between groups of items.</td></tr>
+      <tr><td><code class="ui-code">ui-show</code></td><td>Applied to the menu automatically while it's open.</td></tr>
+    </tbody>
+  </table>
+</div>
+
 </section>
 
 
@@ -1062,6 +1465,21 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
     &lt;div class=&quot;ui-accordion-panel ui-collapse ui-show&quot; id=&quot;panelOne&quot;&gt;...&lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;</code></pre>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">Accordion classes reference</h3>
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>Class</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">ui-accordion</code></td><td>Wraps a group of accordion items.</td></tr>
+      <tr><td><code class="ui-code">ui-accordion-item</code></td><td>One button + panel pair.</td></tr>
+      <tr><td><code class="ui-code">ui-accordion-button</code></td><td>The clickable header; toggle state via <code class="ui-code">aria-expanded</code>.</td></tr>
+      <tr><td><code class="ui-code">ui-accordion-panel</code></td><td>The collapsible content pane.</td></tr>
+      <tr><td><code class="ui-code">ui-collapse</code></td><td>Generic collapsible-content base (animates height); also usable standalone.</td></tr>
+      <tr><td><code class="ui-code">ui-show</code></td><td>Marks a <code class="ui-code">.ui-collapse</code> panel as expanded.</td></tr>
+    </tbody>
+  </table>
 </div>
 
 </section>
@@ -1125,6 +1543,25 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
      (omit for the default width) --&gt;</code></pre>
 </div>
 
+<h3 class="ui-h3 ui-mt-5">Modal classes reference</h3>
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>Class</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">ui-modal</code></td><td>Modal root; trigger with <code class="ui-code">data-ui-modal-open="#id"</code>.</td></tr>
+      <tr><td><code class="ui-code">ui-modal-sm</code> / <code class="ui-code">-lg</code> / <code class="ui-code">-xl</code> / <code class="ui-code">-fullscreen</code></td><td>Dialog width (omit for the default size).</td></tr>
+      <tr><td><code class="ui-code">ui-backdrop</code></td><td>The dimmed overlay behind the dialog.</td></tr>
+      <tr><td><code class="ui-code">ui-modal-dialog</code></td><td>The visible dialog box.</td></tr>
+      <tr><td><code class="ui-code">ui-modal-header</code> / <code class="ui-code">ui-modal-title</code></td><td>Top bar and its heading text.</td></tr>
+      <tr><td><code class="ui-code">ui-modal-close</code></td><td>The close (&times;) button; pair with <code class="ui-code">data-ui-modal-close</code>.</td></tr>
+      <tr><td><code class="ui-code">ui-modal-body</code></td><td>Scrollable content area.</td></tr>
+      <tr><td><code class="ui-code">ui-modal-footer</code></td><td>Bottom action-button row.</td></tr>
+      <tr><td><code class="ui-code">ui-show</code></td><td>Applied to the modal automatically while it's open.</td></tr>
+      <tr><td><code class="ui-code">ui-overlay-open</code></td><td>Applied to <code class="ui-code">&lt;body&gt;</code> automatically to lock background scroll.</td></tr>
+    </tbody>
+  </table>
+</div>
+
 </section>
 
 
@@ -1152,6 +1589,9 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
   }
 });</code></pre>
 </div>
+
+<h3 class="ui-h3 ui-mt-5">Confirm dialog classes reference</h3>
+<p class="docs-section-intro"><code class="ui-code">UI.confirm()</code> is JavaScript-only &mdash; it builds and renders a <code class="ui-code">.ui-modal.ui-modal-sm</code> for you, reusing every class from the <a href="#modal">Modal</a> reference above. There are no additional classes to write by hand.</p>
 
 </section>
 
@@ -1183,6 +1623,22 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 &lt;/div&gt;</code></pre>
 </div>
 
+<h3 class="ui-h3 ui-mt-5">Offcanvas classes reference</h3>
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>Class</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">ui-offcanvas-root</code></td><td>Root wrapper; trigger with <code class="ui-code">data-ui-offcanvas-open="#id"</code>.</td></tr>
+      <tr><td><code class="ui-code">ui-backdrop</code></td><td>The dimmed overlay behind the panel.</td></tr>
+      <tr><td><code class="ui-code">ui-offcanvas</code></td><td>The sliding panel itself.</td></tr>
+      <tr><td><code class="ui-code">ui-offcanvas-start</code> / <code class="ui-code">-end</code></td><td>Slides in from the left or right edge.</td></tr>
+      <tr><td><code class="ui-code">ui-offcanvas-header</code></td><td>Top bar with a close button.</td></tr>
+      <tr><td><code class="ui-code">ui-offcanvas-body</code></td><td>Scrollable content area.</td></tr>
+      <tr><td><code class="ui-code">ui-show</code></td><td>Applied automatically while the panel is open.</td></tr>
+    </tbody>
+  </table>
+</div>
+
 </section>
 
 
@@ -1203,6 +1659,9 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
   Hover me
 &lt;/button&gt;</code></pre>
 </div>
+
+<h3 class="ui-h3 ui-mt-5">Tooltips classes reference</h3>
+<p class="docs-section-intro">Tooltips are pure CSS driven by the <code class="ui-code">data-ui-tooltip="..."</code> attribute (its value is the tooltip text) &mdash; there's no class to add.</p>
 
 </section>
 
@@ -1227,6 +1686,25 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
   duration: 4000,
   position: &quot;top-end&quot;
 });</code></pre>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">Toast classes reference</h3>
+<p class="docs-section-intro">Toasts are created entirely through <code class="ui-code">UI.toast.show()</code>; these classes are generated for you, useful for custom CSS overrides.</p>
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>Class</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">ui-toast-container</code></td><td>Positioned stack that holds active toasts (one per screen corner in use).</td></tr>
+      <tr><td><code class="ui-code">ui-toast-top-start</code> / <code class="ui-code">-top-center</code> / <code class="ui-code">-top-end</code> / <code class="ui-code">-bottom-start</code> / <code class="ui-code">-bottom-center</code> / <code class="ui-code">-bottom-end</code></td><td>Screen-corner/edge position, set via <code class="ui-code">position</code>.</td></tr>
+      <tr><td><code class="ui-code">ui-toast</code></td><td>An individual toast.</td></tr>
+      <tr><td><code class="ui-code">ui-toast-success</code> / <code class="ui-code">-danger</code> / <code class="ui-code">-warning</code> / <code class="ui-code">-info</code></td><td>Color, set via <code class="ui-code">type</code>.</td></tr>
+      <tr><td><code class="ui-code">ui-toast-icon</code></td><td>Icon slot on the left.</td></tr>
+      <tr><td><code class="ui-code">ui-toast-title</code> / <code class="ui-code">ui-toast-message</code></td><td>Bold heading and body text.</td></tr>
+      <tr><td><code class="ui-code">ui-toast-close</code></td><td>The dismiss (&times;) button.</td></tr>
+      <tr><td><code class="ui-code">ui-toast-progress</code></td><td>Auto-dismiss countdown bar.</td></tr>
+      <tr><td><code class="ui-code">ui-leaving</code></td><td>Applied automatically during the exit animation.</td></tr>
+    </tbody>
+  </table>
 </div>
 
 </section>
@@ -1267,6 +1745,27 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 &lt;div class=&quot;ui-skeleton ui-skeleton-circle&quot;&gt;&lt;/div&gt;</code></pre>
 </div>
 
+<h3 class="ui-h3 ui-mt-5">Loaders classes reference</h3>
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>Class</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">ui-progress</code></td><td>Progress bar track.</td></tr>
+      <tr><td><code class="ui-code">ui-progress-sm</code> / <code class="ui-code">-lg</code></td><td>Track height.</td></tr>
+      <tr><td><code class="ui-code">ui-progress-bar</code></td><td>The filled portion, inside <code class="ui-code">.ui-progress</code>.</td></tr>
+      <tr><td><code class="ui-code">ui-progress-success</code> / <code class="ui-code">-danger</code> / <code class="ui-code">-warning</code></td><td>Fill color (default is primary).</td></tr>
+      <tr><td><code class="ui-code">ui-progress-striped</code> / <code class="ui-code">-animated</code></td><td>Diagonal stripe texture, and animating that texture.</td></tr>
+      <tr><td><code class="ui-code">ui-progress-w-0</code>&ndash;<code class="ui-code">ui-progress-w-100</code></td><td>Fill width in whole percent, on <code class="ui-code">.ui-progress-bar</code> (CSP-safe alternative to an inline <code class="ui-code">width</code> style).</td></tr>
+      <tr><td><code class="ui-code">ui-spinner</code></td><td>Spinning loading ring.</td></tr>
+      <tr><td><code class="ui-code">ui-spinner-sm</code> / <code class="ui-code">-lg</code></td><td>Spinner size.</td></tr>
+      <tr><td><code class="ui-code">ui-spinner-success</code> / <code class="ui-code">-danger</code></td><td>Spinner color.</td></tr>
+      <tr><td><code class="ui-code">ui-pulse</code></td><td>Pulsing dot indicator.</td></tr>
+      <tr><td><code class="ui-code">ui-skeleton</code></td><td>Base shimmering placeholder block.</td></tr>
+      <tr><td><code class="ui-code">ui-skeleton-title</code> / <code class="ui-code">-text</code> / <code class="ui-code">-circle</code></td><td>Preset shapes: heading-width bar, text-line bar, and a circular avatar placeholder.</td></tr>
+    </tbody>
+  </table>
+</div>
+
 </section>
 
 
@@ -1295,6 +1794,25 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 
 &lt;div class=&quot;ui-empty-state&quot;&gt;...&lt;/div&gt;
 &lt;div class=&quot;ui-timeline&quot;&gt;...&lt;/div&gt;</code></pre>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">Empty states, stepper, and timeline classes reference</h3>
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>Class</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">ui-stepper</code></td><td>Step-indicator row (also used by the <a href="#save-next">multi-step form</a>).</td></tr>
+      <tr><td><code class="ui-code">ui-step</code></td><td>An individual step.</td></tr>
+      <tr><td><code class="ui-code">ui-active</code> / <code class="ui-code">ui-complete</code></td><td>Marks the current step, or a finished one.</td></tr>
+      <tr><td><code class="ui-code">ui-step-marker</code> / <code class="ui-code">ui-step-label</code></td><td>The number/icon bubble and its text label.</td></tr>
+      <tr><td><code class="ui-code">ui-empty-state</code></td><td>No-data placeholder panel.</td></tr>
+      <tr><td><code class="ui-code">ui-empty-icon</code></td><td>Icon glyph (also used by <a href="#upload">Upload</a>).</td></tr>
+      <tr><td><code class="ui-code">ui-empty-title</code> / <code class="ui-code">ui-empty-message</code></td><td>Heading and body text.</td></tr>
+      <tr><td><code class="ui-code">ui-timeline</code></td><td>Vertical audit/activity trail.</td></tr>
+      <tr><td><code class="ui-code">ui-timeline-item</code></td><td>An individual event.</td></tr>
+      <tr><td><code class="ui-code">ui-timeline-time</code> / <code class="ui-code">ui-timeline-title</code> / <code class="ui-code">ui-timeline-body</code></td><td>Timestamp, heading, and description of the event.</td></tr>
+    </tbody>
+  </table>
 </div>
 
 </section>
