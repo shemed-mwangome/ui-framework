@@ -3,7 +3,7 @@
 
   var UI = window.UI || {};
 
-  UI.version = "1.3.1";
+  UI.version = "1.5.0";
   UI._initializers = UI._initializers || [];
 
   UI.q = function (selector, root) {
@@ -193,6 +193,7 @@
     "table.next": "Next page",
     "table.status": "{visible} of {total} records",
     "table.selected": "{count} selected",
+    "table.selectionToggle": "Show or hide bulk actions",
     "table.selectAll": "Select all rows",
     "table.selectRow": "Select row",
     "table.columns": "Columns",
@@ -340,10 +341,21 @@
 
     function place() {
       var triggerRect = trigger.getBoundingClientRect();
-      if (options.matchWidth) panel.style.width = triggerRect.width + "px";
-      var panelRect = panel.getBoundingClientRect();
       var viewportW = document.documentElement.clientWidth;
       var viewportH = document.documentElement.clientHeight;
+
+      // Once the trigger itself has scrolled out of the viewport there is
+      // nothing left to anchor the panel to. Clamping the panel position to
+      // the viewport in that state used to pin it to the top or bottom edge,
+      // floating disconnected from its trigger. Dismiss instead, the same
+      // way a click outside would.
+      if (options.onDismiss && (triggerRect.bottom <= 0 || triggerRect.top >= viewportH || triggerRect.right <= 0 || triggerRect.left >= viewportW)) {
+        options.onDismiss();
+        return;
+      }
+
+      if (options.matchWidth) panel.style.width = triggerRect.width + "px";
+      var panelRect = panel.getBoundingClientRect();
 
       var spaceBelow = viewportH - triggerRect.bottom;
       var spaceAbove = triggerRect.top;

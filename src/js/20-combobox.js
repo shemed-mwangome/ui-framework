@@ -192,7 +192,7 @@
       listbox.hidden = false;
       input.setAttribute("aria-expanded", "true");
       wrapper.classList.add("ui-open");
-      floatCleanup = UI.floatPanel(control, listbox, { matchWidth: true });
+      floatCleanup = UI.floatPanel(control, listbox, { matchWidth: true, onDismiss: closeMenu });
     }
 
     function closeMenu() {

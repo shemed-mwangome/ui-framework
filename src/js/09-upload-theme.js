@@ -8,7 +8,8 @@
    *   <div data-ui-upload
    *        data-ui-max-size="5MB"
    *        data-ui-max-files="3"
-   *        data-ui-url="/api/documents">      optional: upload immediately
+   *        data-ui-url="/api/documents"        optional: upload immediately
+   *        data-ui-upload-layout="inline">     optional: chips instead of stacked rows
    *     <input type="file" multiple accept=".pdf,image/*">
    *     <div class="ui-upload-preview"></div>
    *   </div>
@@ -56,6 +57,10 @@
       var input = UI.q('input[type="file"]', zone);
       var preview = UI.q(".ui-upload-preview", zone);
       if (!input) return;
+
+      if (preview && zone.getAttribute("data-ui-upload-layout") === "inline") {
+        preview.classList.add("ui-upload-preview-inline");
+      }
 
       var maxSize = parseSize(zone.getAttribute("data-ui-max-size"));
       var maxFiles = Number(zone.getAttribute("data-ui-max-files")) || 0;

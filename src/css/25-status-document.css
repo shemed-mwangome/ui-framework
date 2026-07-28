@@ -178,6 +178,12 @@
   background: #fff;
   color: #111;
   box-shadow: var(--ui-shadow-3);
+  /* `max-width: 100%` shrinks the sheet itself on a narrow screen, but a
+     wide child (a multi-column table, most often) can still refuse to
+     shrink below its own content width and push past the sheet's edge,
+     widening the whole page rather than the sheet scrolling on its own.
+     Print is unaffected -- there is nothing to scroll on a physical page. */
+  overflow-x: auto;
 }
 
 .ui-document-footer {

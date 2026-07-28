@@ -8,10 +8,25 @@
  * the preview list as a sibling *outside* it, makes that overlap impossible
  * regardless of how the list is styled.
  */
+/*
+ * The dashed "canvas" border lives on the outer .ui-upload wrapper, not on
+ * .ui-upload-dropzone, so the file preview list (a sibling of the dropzone,
+ * kept outside it for the reason above) renders visually inside the same
+ * box as the drop prompt instead of floating below it as a separate block.
+ */
 .ui-upload {
   display: flex;
   flex-direction: column;
-  gap: var(--ui-space-3);
+  border: 2px dashed var(--ui-border-strong);
+  border-radius: var(--ui-radius-4);
+  background: var(--ui-surface-soft);
+  transition: border-color var(--ui-transition-fast), background var(--ui-transition-fast);
+}
+
+.ui-upload:has(.ui-upload-dropzone:hover),
+.ui-upload.ui-dragover {
+  border-color: var(--ui-primary);
+  background: var(--ui-primary-soft);
 }
 
 .ui-upload-dropzone {
@@ -22,24 +37,15 @@
   justify-content: center;
   min-height: 9rem;
   padding: 1.75rem 1.5rem;
-  border: 2px dashed var(--ui-border-strong);
-  border-radius: var(--ui-radius-4);
-  background: var(--ui-surface-soft);
   color: var(--ui-text);
   text-align: center;
   cursor: pointer;
-  transition: border-color var(--ui-transition-fast), background var(--ui-transition-fast);
-}
-
-.ui-upload-dropzone:hover,
-.ui-upload.ui-dragover .ui-upload-dropzone {
-  border-color: var(--ui-primary);
-  background: var(--ui-primary-soft);
 }
 
 .ui-upload-dropzone:focus-within {
   outline: none;
   box-shadow: var(--ui-focus-ring);
+  border-radius: var(--ui-radius-4);
 }
 
 .ui-upload-dropzone input[type="file"] {
@@ -71,6 +77,35 @@
   display: flex;
   flex-direction: column;
   gap: var(--ui-space-2);
+}
+
+.ui-upload-preview:not(:empty) {
+  padding: var(--ui-space-3);
+  border-top: 1px solid var(--ui-border);
+}
+
+/* data-ui-upload-layout="inline": compact wrapping chips instead of one
+   full-width row per file -- better for a dropzone that regularly holds
+   many small files (photos, scans) where a stacked list runs long fast. */
+.ui-upload-preview-inline {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.ui-upload-preview-inline .ui-file-item {
+  width: auto;
+  max-width: 14rem;
+  padding: .4rem .6rem;
+}
+
+.ui-upload-preview-inline .ui-file-item-icon {
+  width: 1.6rem;
+  height: 1.6rem;
+  font-size: .8rem;
+}
+
+.ui-upload-preview-inline .ui-file-item-name {
+  max-width: 8rem;
 }
 
 .ui-file-item {

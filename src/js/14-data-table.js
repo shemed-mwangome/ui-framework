@@ -148,7 +148,16 @@
     function emitSelection() {
       var ids = selectedIds();
       if (selectionBar) {
+        var wasHidden = selectionBar.hidden;
         selectionBar.hidden = ids.length === 0;
+        // A fresh selection (bar going from fully hidden to shown) always
+        // starts expanded -- collapsing is a per-viewing choice, not one
+        // that should carry over and hide bulk actions on the next unrelated
+        // selection.
+        if (wasHidden && !selectionBar.hidden) {
+          selectionBar.classList.remove("ui-collapsed");
+          if (selectionToggle) selectionToggle.setAttribute("aria-expanded", "true");
+        }
         var label = UI.q(".ui-table-selection-count", selectionBar);
         if (label) label.textContent = UI.t("table.selected", { count: ids.length });
       }
@@ -156,6 +165,7 @@
     }
 
     var selectionBar = null;
+    var selectionToggle = null;
     if (selectable) {
       addSelectionColumn();
       selectionBar = UI.q("[data-ui-table-selection]", wrapper);
@@ -166,6 +176,27 @@
           count.className = "ui-table-selection-count";
           selectionBar.insertBefore(count, selectionBar.firstChild);
         }
+
+        // The count doubles as the collapse/expand control -- click (or
+        // Enter/Space) hides the bulk-action buttons down to just the count
+        // chip, so the bar can be tucked out of the way without clearing the
+        // selection, and brought back the same way.
+        selectionToggle = UI.q(".ui-table-selection-count", selectionBar);
+        selectionToggle.setAttribute("role", "button");
+        selectionToggle.setAttribute("tabindex", "0");
+        selectionToggle.setAttribute("aria-expanded", "true");
+        selectionToggle.title = UI.t("table.selectionToggle");
+
+        var toggleCollapsed = function () {
+          var collapsed = selectionBar.classList.toggle("ui-collapsed");
+          selectionToggle.setAttribute("aria-expanded", collapsed ? "false" : "true");
+        };
+        selectionToggle.addEventListener("click", toggleCollapsed);
+        selectionToggle.addEventListener("keydown", function (event) {
+          if (event.key !== "Enter" && event.key !== " ") return;
+          event.preventDefault();
+          toggleCollapsed();
+        });
       }
     }
 

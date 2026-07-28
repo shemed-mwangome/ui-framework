@@ -56,6 +56,31 @@
   font-size: .875rem;
   font-weight: 600;
   color: var(--ui-primary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.ui-table-selection-count::after {
+  content: "\25BE";
+  margin-left: .35rem;
+  font-size: .7em;
+  vertical-align: middle;
+}
+
+/* Collapsed: the count chip stays, everything else (bulk-action buttons)
+   tucks away without touching the selection itself -- click the chip again
+   to bring them back. */
+.ui-table-selection.ui-collapsed {
+  gap: 0;
+}
+.ui-table-selection.ui-collapsed > *:not(.ui-table-selection-count) {
+  display: none;
+}
+.ui-table-selection.ui-collapsed .ui-table-selection-count {
+  margin-right: 0;
+}
+.ui-table-selection.ui-collapsed .ui-table-selection-count::after {
+  content: "\25B8";
 }
 
 /* --------------------------------------------------------- Column toggles */
@@ -146,6 +171,15 @@
 
 .ui-upload-errors:empty {
   display: none;
+}
+
+.ui-upload-errors:not(:empty) {
+  padding: 0 var(--ui-space-3) var(--ui-space-3);
+}
+
+.ui-upload-preview:empty + .ui-upload-errors:not(:empty) {
+  padding-top: var(--ui-space-3);
+  border-top: 1px solid var(--ui-border);
 }
 
 .ui-upload-error {

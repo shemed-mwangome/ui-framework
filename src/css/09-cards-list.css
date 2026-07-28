@@ -1,10 +1,18 @@
 .ui-card {
   --ui-card-radius: var(--ui-radius-4);
+  --ui-card-shadow: var(--ui-shadow-1);
+  --ui-card-accent: transparent;
   border: 1px solid var(--ui-border);
   border-radius: var(--ui-card-radius);
   background: var(--ui-surface);
   color: var(--ui-text);
-  box-shadow: var(--ui-shadow-1);
+  /* An inset shadow for the accent stripe, not a border: a border-top wider
+     than the card's other three (1px) sides distorts the rounded corners --
+     browsers miter differing border widths at a radiused corner, so a thick
+     top edge on a rounded box renders as a lopsided curve. An inset shadow
+     ignores border-radius geometry and is clipped cleanly by `overflow:
+     hidden` instead. */
+  box-shadow: inset 0 .25rem 0 0 var(--ui-card-accent), var(--ui-card-shadow);
   overflow: hidden;
 }
 
@@ -20,11 +28,12 @@
 .ui-card-title { margin: 0 0 .35rem; font-size: 1.05rem; font-weight: 700; }
 .ui-card-subtitle { margin: 0; color: var(--ui-muted); font-size: .85rem; }
 .ui-card-img-top { width: 100%; display: block; }
-.ui-card-border-primary { border-top: .25rem solid var(--ui-primary); }
-.ui-card-border-success { border-top: .25rem solid var(--ui-success); }
-.ui-card-border-danger { border-top: .25rem solid var(--ui-danger); }
+.ui-card-border-primary { --ui-card-accent: var(--ui-primary); }
+.ui-card-border-success { --ui-card-accent: var(--ui-success); }
+.ui-card-border-danger { --ui-card-accent: var(--ui-danger); }
+.ui-card-border-warning { --ui-card-accent: var(--ui-warning); }
 .ui-card-hover { transition: transform var(--ui-transition), box-shadow var(--ui-transition); }
-.ui-card-hover:hover { transform: translateY(-3px); box-shadow: var(--ui-shadow-3); }
+.ui-card-hover:hover { transform: translateY(-3px); --ui-card-shadow: var(--ui-shadow-3); }
 
 .ui-list-group {
   margin: 0;

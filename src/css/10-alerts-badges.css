@@ -22,16 +22,31 @@
 
 .ui-alert-solid {
   background: var(--ui-alert-accent);
-  border-color: var(--ui-alert-accent);
+  border-color: transparent;
+  border-left-width: 1px;
   color: #fff;
+  box-shadow: var(--ui-shadow-2);
 }
 
 .ui-alert-outline { background: transparent; }
 .ui-alert-shadow { box-shadow: var(--ui-shadow-2); }
 .ui-alert-sm { padding: .55rem .7rem; font-size: .8125rem; }
+.ui-alert-sm .ui-alert-icon { width: 1.15rem; height: 1.15rem; font-size: .7rem; }
 .ui-alert-lg { padding: 1.1rem 1.2rem; }
-.ui-alert-icon { color: var(--ui-alert-accent); font-weight: 800; }
-.ui-alert-solid .ui-alert-icon { color: #fff; }
+.ui-alert-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--ui-alert-accent) 16%, transparent);
+  color: var(--ui-alert-accent);
+  font-weight: 800;
+  font-size: .85rem;
+  flex-shrink: 0;
+}
+.ui-alert-solid .ui-alert-icon { background: rgba(255, 255, 255, .22); color: #fff; }
 .ui-alert-title { margin: 0 0 .15rem; font-weight: 700; }
 .ui-alert-message { margin: 0; color: inherit; }
 .ui-alert-close {

@@ -28,7 +28,8 @@
       var menu = UI.q(".ui-dropdown-menu", dropdown);
       if (trigger && menu) {
         dropdown._uiFloatCleanup = UI.floatPanel(trigger, menu, {
-          align: dropdown.classList.contains("ui-dropdown-end") ? "end" : "start"
+          align: dropdown.classList.contains("ui-dropdown-end") ? "end" : "start",
+          onDismiss: function () { closeAll(); }
         });
       }
     } else if (dropdown._uiFloatCleanup) {

@@ -106,7 +106,7 @@
     var trigger = UI.q(".ui-date-range-trigger", container);
     if (trigger) trigger.setAttribute("aria-expanded", "true");
     var panel = UI.q(".ui-date-range-panel", container);
-    if (trigger && panel) container._uiFloatCleanup = UI.floatPanel(trigger, panel);
+    if (trigger && panel) container._uiFloatCleanup = UI.floatPanel(trigger, panel, { onDismiss: closeAll });
 
     var focusTarget = state.value || DU.today();
     if (DU.startOfMonth(focusTarget).getTime() !== state.viewDate.getTime()) {

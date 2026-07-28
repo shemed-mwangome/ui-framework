@@ -50,6 +50,7 @@
       this.rangeEnd = DU.parseISODate(this.endInput.value);
     }
 
+    this.hoverDate = null;
     this.viewDate = DU.startOfMonth(this.rangeStart || this.rangeEnd || DU.today());
     this.minDate = DU.parseISODate(container.getAttribute("data-min-date"));
     this.maxDate = DU.parseISODate(container.getAttribute("data-max-date"));
@@ -105,7 +106,11 @@
     });
   }
 
+  // Clears any stale mouse-hover preview -- render() rebuilds every day cell
+  // from scratch, so a hover recorded against the previous set of cells no
+  // longer refers to anything on screen. The next real mousemove sets it again.
   function render(state) {
+    state.hoverDate = null;
     var container = state.container;
     var trigger = UI.q(".ui-date-range-trigger .ui-date-range-value", container);
     if (trigger) {
@@ -120,6 +125,32 @@
 
     var clearButton = UI.q("[data-ui-range-clear]", container);
     if (clearButton) clearButton.hidden = !(state.rangeStart || state.rangeEnd);
+  }
+
+  // Highlights the span between the picked start date and the day currently
+  // under the pointer, the way flatpickr and similar pickers preview what
+  // would be committed if the visitor clicked here -- without touching
+  // state.rangeEnd, so a plain mouseout leaves the actual selection alone.
+  function updateHoverPreview(state) {
+    var cells = UI.qa(".ui-date-range-day", state.container);
+    cells.forEach(function (cell) {
+      cell.classList.remove("ui-in-range-hover", "ui-range-hover-end");
+    });
+
+    if (!state.rangeStart || state.rangeEnd || !state.hoverDate) return;
+
+    var lo = state.rangeStart < state.hoverDate ? state.rangeStart : state.hoverDate;
+    var hi = state.rangeStart < state.hoverDate ? state.hoverDate : state.rangeStart;
+
+    cells.forEach(function (cell) {
+      var date = DU.parseISODate(cell.getAttribute("data-ui-date"));
+      if (date > lo && date < hi) cell.classList.add("ui-in-range-hover");
+    });
+
+    if (!DU.sameDay(state.hoverDate, state.rangeStart)) {
+      var hoverCell = UI.q('[data-ui-date="' + DU.formatISODate(state.hoverDate) + '"]', state.container);
+      if (hoverCell) hoverCell.classList.add("ui-range-hover-end");
+    }
   }
 
   function applyRange(state) {
@@ -160,7 +191,7 @@
     var trigger = UI.q(".ui-date-range-trigger", container);
     if (trigger) trigger.setAttribute("aria-expanded", "true");
     var panel = UI.q(".ui-date-range-panel", container);
-    if (trigger && panel) container._uiFloatCleanup = UI.floatPanel(trigger, panel);
+    if (trigger && panel) container._uiFloatCleanup = UI.floatPanel(trigger, panel, { onDismiss: closeAll });
 
     var focusTarget = state.rangeStart || DU.today();
     if (isOutsideVisibleSpan(state, focusTarget)) {
@@ -279,6 +310,21 @@
     trigger.addEventListener("click", function () {
       if (container.classList.contains("ui-open")) closeAll();
       else open(container, state);
+    });
+
+    panel.addEventListener("mouseover", function (event) {
+      var cell = UI.closest(event.target, "[data-ui-date]:not(.ui-disabled)");
+      if (!cell) return;
+      var date = DU.parseISODate(cell.getAttribute("data-ui-date"));
+      if (state.hoverDate && DU.sameDay(state.hoverDate, date)) return;
+      state.hoverDate = date;
+      updateHoverPreview(state);
+    });
+
+    panel.addEventListener("mouseleave", function () {
+      if (!state.hoverDate) return;
+      state.hoverDate = null;
+      updateHoverPreview(state);
     });
 
     panel.addEventListener("click", function (event) {
