@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.5.1 — 2026-07-28
+
+- **Docs sidebar:** 1.5.0's `overflow-x: hidden` fix for mobile's off-canvas sidebar was applied to `html` *and* `body`. Setting `overflow-x` on an element computes its `overflow-y` to `auto` instead of `visible` if not set explicitly, so `body` became a second, nested scroll container alongside `html`. With two scrollable ancestors instead of one, `.docs-sidebar`'s `position: sticky` stuck relative to the wrong one and stopped tracking the page scroll the user actually sees — the sidebar scrolled away instead of snapping to the top, breaking navigation on every docs page. Moved the rule to `html` only
+
 ## 1.5.0 — 2026-07-28
 
 A responsive-layout pass: every docs and example page had a way to end up wider than its viewport on a narrow screen, several from the same root cause. Also rounds out charts (horizontal multi-series bars, a dedicated area/stacked-area type) and gives uploads a second, compact layout.

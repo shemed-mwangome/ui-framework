@@ -9,7 +9,14 @@ html { scroll-behavior: smooth; }
    so on narrow viewports it silently widens the page's scrollable area by
    its own width -- the whole page could be scrolled sideways to reveal a
    blank strip, even though the sidebar itself was never visible. */
-html, body.docs-body {
+/* Only html, not body -- overflow-x on an element forces its overflow-y to
+   compute as auto instead of visible if not set explicitly (a CSS quirk),
+   and doing that to body turns it into a second, nested scroll container.
+   With two scrollable ancestors instead of one, .docs-sidebar's `position:
+   sticky` below sticks relative to the wrong one and stops tracking the
+   page scroll the user actually sees -- it scrolls away instead of
+   snapping to the top. */
+html {
   overflow-x: hidden;
 }
 
