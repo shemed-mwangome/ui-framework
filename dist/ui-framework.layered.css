@@ -1,5 +1,5 @@
 /*!
- * UI Framework v1.3.0
+ * UI Framework v1.3.1
  * Original dependency-free CSS/JavaScript framework.
  * Prefix: ui-
  * License: MIT
@@ -630,6 +630,17 @@ textarea.ui-control { min-height: 7rem; resize: vertical; }
   font-size: .78rem;
 }
 
+/*
+ * Visibility is keyed off the message actually having text (:not(:empty)),
+ * not off being a later sibling of the control that carries .ui-is-invalid.
+ * The sibling-combinator version broke for any wrapped component (date
+ * picker, date range, multi-select) where the real <input> is hidden and a
+ * separate trigger button carries the visible invalid state instead -- the
+ * message ended up positioned by DOM order relative to the *hidden* input,
+ * not the visible control, and could render above or beside it instead of
+ * directly underneath. Keying off :not(:empty) means the message just needs
+ * to exist somewhere sensible in the field, with no positional coupling.
+ */
 .ui-feedback-valid,
 .ui-feedback-invalid {
   display: none;
@@ -637,8 +648,11 @@ textarea.ui-control { min-height: 7rem; resize: vertical; }
   font-size: .78rem;
 }
 
+.ui-feedback-valid:not(:empty) { display: block; }
+.ui-feedback-invalid:not(:empty) { display: block; }
+
 .ui-feedback-valid { color: var(--ui-success); }
-.ui-feedback-invalid { color: var(--ui-danger); }
+.ui-feedback-invalid { color: var(--ui-danger); font-weight: 600; }
 
 .ui-is-valid {
   --ui-control-border: var(--ui-success);
@@ -659,9 +673,6 @@ textarea.ui-control { min-height: 7rem; resize: vertical; }
   background-position: calc(100% - .75rem) 50%;
   background-repeat: no-repeat;
 }
-
-.ui-is-valid ~ .ui-feedback-valid,
-.ui-is-invalid ~ .ui-feedback-invalid { display: block; }
 
 .ui-input-group {
   display: flex;
@@ -1450,24 +1461,31 @@ input[type="checkbox"].ui-switch-danger + label { --ui-switch-color: var(--ui-da
 
 .ui-tabs {
   display: flex;
-  gap: .25rem;
+  align-items: flex-end;
+  gap: .1rem;
   border-bottom: 1px solid var(--ui-border);
   overflow-x: auto;
 }
 
 .ui-tab {
   position: relative;
-  padding: .7rem .9rem;
+  padding: .7rem 1.1rem;
   border: 0;
   border-radius: var(--ui-radius-2) var(--ui-radius-2) 0 0;
   background: transparent;
   color: var(--ui-muted);
   font-weight: 600;
+  font-size: .9rem;
   white-space: nowrap;
   cursor: pointer;
+  transition: color var(--ui-transition-fast), background var(--ui-transition-fast);
 }
 
 .ui-tab:hover { color: var(--ui-primary); background: var(--ui-primary-soft); }
+.ui-tab:focus-visible {
+  outline: none;
+  box-shadow: var(--ui-focus-ring);
+}
 .ui-tab[aria-selected="true"],
 .ui-tab.ui-active {
   color: var(--ui-primary);
@@ -1477,52 +1495,80 @@ input[type="checkbox"].ui-switch-danger + label { --ui-switch-color: var(--ui-da
 .ui-tab.ui-active::after {
   content: "";
   position: absolute;
-  left: .65rem;
-  right: .65rem;
+  left: .5rem;
+  right: .5rem;
   bottom: -1px;
-  height: 2px;
+  height: 2.5px;
+  border-radius: var(--ui-radius-pill);
   background: var(--ui-primary);
 }
 
-.ui-tab-panel { padding-block: 1rem; }
+.ui-tab-panel {
+  padding-block: 1.1rem;
+  color: var(--ui-text-soft);
+  font-size: .9rem;
+}
 .ui-tab-panel[hidden] { display: none !important; }
 
 /* Pill tabs: no underline, active tab gets a filled pill background. */
-.ui-tabs-pill { border-bottom: 0; gap: .35rem; }
+.ui-tabs-pill { align-items: center; border-bottom: 0; gap: .35rem; }
 .ui-tabs-pill .ui-tab { border-radius: var(--ui-radius-pill); }
+.ui-tabs-pill .ui-tab:hover:not([aria-selected="true"]):not(.ui-active) {
+  background: var(--ui-surface-muted);
+  color: var(--ui-text);
+}
 .ui-tabs-pill .ui-tab[aria-selected="true"],
-.ui-tabs-pill .ui-tab.ui-active { background: var(--ui-primary); color: #fff; }
+.ui-tabs-pill .ui-tab.ui-active {
+  background: var(--ui-primary);
+  color: #fff;
+  box-shadow: var(--ui-shadow-1);
+}
 .ui-tabs-pill .ui-tab[aria-selected="true"]::after,
 .ui-tabs-pill .ui-tab.ui-active::after { display: none; }
 
 /* Boxed tabs: bordered, connecting visually to the panel below. */
-.ui-tabs-boxed { gap: 0; border-bottom: 1px solid var(--ui-border); }
+.ui-tabs-boxed {
+  align-items: stretch;
+  gap: 0;
+  padding: .25rem;
+  background: var(--ui-surface-muted);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-3);
+}
 .ui-tabs-boxed .ui-tab {
-  border: 1px solid transparent;
-  border-radius: var(--ui-radius-2) var(--ui-radius-2) 0 0;
-  margin-bottom: -1px;
+  border-radius: var(--ui-radius-2);
+  color: var(--ui-text-soft);
 }
 .ui-tabs-boxed .ui-tab[aria-selected="true"],
 .ui-tabs-boxed .ui-tab.ui-active {
-  border-color: var(--ui-border);
-  border-bottom-color: var(--ui-surface);
   background: var(--ui-surface);
+  color: var(--ui-primary);
+  box-shadow: var(--ui-shadow-1);
 }
 .ui-tabs-boxed .ui-tab[aria-selected="true"]::after,
 .ui-tabs-boxed .ui-tab.ui-active::after { display: none; }
+.ui-tabs-boxed + .ui-tab-panel { padding-top: 1.25rem; }
 
 /* Vertical tabs: sidebar-style list, panel sits beside it. */
 .ui-tabs-vertical {
   flex-direction: column;
+  align-items: stretch;
   gap: .15rem;
   border-bottom: 0;
   border-right: 1px solid var(--ui-border);
   padding-right: .75rem;
   overflow-x: visible;
 }
-.ui-tabs-vertical .ui-tab { border-radius: var(--ui-radius-2); text-align: left; }
+.ui-tabs-vertical .ui-tab {
+  padding: .55rem .85rem;
+  border-radius: var(--ui-radius-2);
+  text-align: left;
+}
 .ui-tabs-vertical .ui-tab[aria-selected="true"],
-.ui-tabs-vertical .ui-tab.ui-active { background: var(--ui-primary-soft); }
+.ui-tabs-vertical .ui-tab.ui-active {
+  background: var(--ui-primary-soft);
+  font-weight: 700;
+}
 .ui-tabs-vertical .ui-tab[aria-selected="true"]::after,
 .ui-tabs-vertical .ui-tab.ui-active::after {
   left: auto;
@@ -2133,28 +2179,51 @@ body.ui-overlay-open { overflow: hidden; }
 @keyframes ui-skeleton { to { transform: translateX(100%); } }
 @keyframes ui-progress-stripes { to { background-position: 1rem 0; } }
 
+/*
+ * The dropzone (dashed box, click/drop target) and the file preview list are
+ * separate elements on purpose. Earlier this was one box with the file
+ * <input> absolutely positioned over the *entire* thing -- including the
+ * preview list rendered inside it -- so clicking a file's remove (x) button
+ * actually hit the invisible input underneath and reopened the file picker
+ * instead of removing the file. Scoping the input to just the dropzone, with
+ * the preview list as a sibling *outside* it, makes that overlap impossible
+ * regardless of how the list is styled.
+ */
 .ui-upload {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-3);
+}
+
+.ui-upload-dropzone {
   position: relative;
-  min-height: 10rem;
-  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 9rem;
+  padding: 1.75rem 1.5rem;
   border: 2px dashed var(--ui-border-strong);
   border-radius: var(--ui-radius-4);
   background: var(--ui-surface-soft);
   color: var(--ui-text);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   text-align: center;
+  cursor: pointer;
   transition: border-color var(--ui-transition-fast), background var(--ui-transition-fast);
 }
 
-.ui-upload:hover,
-.ui-upload.ui-dragover {
+.ui-upload-dropzone:hover,
+.ui-upload.ui-dragover .ui-upload-dropzone {
   border-color: var(--ui-primary);
   background: var(--ui-primary-soft);
 }
 
-.ui-upload > input[type="file"] {
+.ui-upload-dropzone:focus-within {
+  outline: none;
+  box-shadow: var(--ui-focus-ring);
+}
+
+.ui-upload-dropzone input[type="file"] {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -2163,25 +2232,95 @@ body.ui-overlay-open { overflow: hidden; }
   cursor: pointer;
 }
 
+.ui-upload-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-bottom: var(--ui-space-2);
+  border-radius: 50%;
+  background: var(--ui-primary-soft);
+  color: var(--ui-primary);
+  font-size: 1.25rem;
+}
+
 .ui-upload-title { margin: 0 0 .25rem; font-weight: 700; }
 .ui-upload-help { color: var(--ui-muted); font-size: .8rem; }
-.ui-upload-preview { margin-top: .75rem; display: flex; flex-wrap: wrap; gap: .5rem; }
-.ui-file-item { padding: .55rem .7rem; border: 1px solid var(--ui-border); border-radius: var(--ui-radius-2); background: var(--ui-surface); display: flex; align-items: center; gap: .5rem; font-size: .8rem; }
+
+.ui-upload-preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-2);
+}
+
+.ui-file-item {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-3);
+  width: 100%;
+  padding: .6rem .85rem;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-2);
+  background: var(--ui-surface);
+  font-size: .8125rem;
+  transition: border-color var(--ui-transition-fast), background var(--ui-transition-fast);
+}
+
+.ui-file-item-icon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--ui-radius-2);
+  background: var(--ui-surface-muted);
+  color: var(--ui-muted);
+  font-size: 1rem;
+}
+
+.ui-file-item-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  gap: .1rem;
+}
+
+.ui-file-item-name {
+  overflow: hidden;
+  font-weight: 600;
+  color: var(--ui-text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ui-file-item-size {
+  color: var(--ui-muted);
+  font-size: .75rem;
+}
 
 .ui-file-item-remove {
-  width: 1.1rem;
-  height: 1.1rem;
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
   border: 0;
   border-radius: 50%;
   padding: 0;
   background: transparent;
   color: var(--ui-muted);
+  font-size: 1rem;
   line-height: 1;
   cursor: pointer;
-  flex: 0 0 auto;
+  transition: background var(--ui-transition-fast), color var(--ui-transition-fast);
 }
 
 .ui-file-item-remove:hover { background: var(--ui-danger-soft); color: var(--ui-danger); }
+.ui-file-item-remove:focus-visible { outline: none; box-shadow: var(--ui-focus-ring); }
 
 .ui-empty-state {
   padding: 2.5rem 1.5rem;
@@ -2500,12 +2639,30 @@ form[data-ui-save-next].ui-dirty .ui-save-next-dirty { display: inline-flex; }
 
 /* --------------------------------------------------- Validation summary */
 
+/*
+ * Deliberately its own flex layout rather than reusing `.ui-alert`'s
+ * icon|body|close-button grid: that grid sizes its first column to the
+ * title's natural width and hands whatever is left to the second, which
+ * crushes a multi-item list into a sliver once the title text is long.
+ *
+ * This is also meant to read as a secondary, "several things need fixing"
+ * aid -- the primary feedback is always the red border + message under each
+ * field. Keep this quiet: a thin red rule, no filled block.
+ */
 .ui-validate-summary[hidden] {
   display: none;
 }
 
 .ui-validate-summary {
+  display: flex;
+  gap: var(--ui-space-3);
+  align-items: flex-start;
+  padding: var(--ui-space-3) var(--ui-space-4);
   margin-bottom: var(--ui-space-5);
+  border: 1px solid var(--ui-border);
+  border-left: 3px solid var(--ui-danger);
+  border-radius: var(--ui-radius-2);
+  background: var(--ui-surface);
 }
 
 .ui-validate-summary:focus {
@@ -2513,16 +2670,62 @@ form[data-ui-save-next].ui-dirty .ui-save-next-dirty { display: inline-flex; }
   box-shadow: var(--ui-focus-ring);
 }
 
+.ui-validate-summary-icon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 1.375rem;
+  height: 1.375rem;
+  margin-top: .0625rem;
+  border-radius: 50%;
+  background: var(--ui-danger);
+  color: #fff;
+  font-size: .75rem;
+  font-weight: 800;
+  font-style: normal;
+}
+
+.ui-validate-summary-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.ui-validate-summary-title {
+  margin: 0;
+  font-size: .875rem;
+  font-weight: 700;
+  color: var(--ui-text);
+}
+
 .ui-validate-summary-list {
   margin: var(--ui-space-2) 0 0;
-  padding-left: var(--ui-space-5);
+  padding: 0;
+  list-style: none;
   display: grid;
   gap: var(--ui-space-1);
-  font-size: .875rem;
+  font-size: .8125rem;
+  color: var(--ui-text-soft);
+}
+
+.ui-validate-summary-list li {
+  padding-left: var(--ui-space-4);
+  position: relative;
+}
+
+.ui-validate-summary-list li::before {
+  content: "";
+  position: absolute;
+  left: .2rem;
+  top: .55em;
+  width: .3rem;
+  height: .3rem;
+  border-radius: 50%;
+  background: var(--ui-danger);
 }
 
 .ui-validate-summary-list a {
-  color: inherit;
+  color: var(--ui-text);
   font-weight: 600;
   text-underline-offset: 2px;
 }
@@ -2560,12 +2763,17 @@ form[data-ui-save-next].ui-dirty .ui-save-next-dirty { display: inline-flex; }
 
 .ui-combobox-input {
   width: 100%;
-  padding-right: 2.25rem;
+  padding-right: 3.5rem;
+  cursor: text;
 }
+
+/* A read-only-looking combobox (no results yet fetched) should still read as
+   a control you can act on, so the caret stays visible rather than a plain
+   I-beam once focused -- handled by keeping the native text caret. */
 
 .ui-combobox-clear {
   position: absolute;
-  right: var(--ui-space-2);
+  right: 2rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -2596,6 +2804,24 @@ form[data-ui-save-next].ui-dirty .ui-save-next-dirty { display: inline-flex; }
   display: none;
 }
 
+.ui-combobox-chevron {
+  position: absolute;
+  right: .85rem;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ui-subtle);
+  pointer-events: none;
+  transform: translateY(-50%);
+  transition: transform var(--ui-transition-fast), color var(--ui-transition-fast);
+}
+
+.ui-combobox.ui-open .ui-combobox-chevron {
+  color: var(--ui-primary);
+  transform: translateY(-50%) rotate(180deg);
+}
+
 .ui-combobox-menu {
   position: absolute;
   z-index: var(--ui-z-dropdown);
@@ -2615,11 +2841,16 @@ form[data-ui-save-next].ui-dirty .ui-save-next-dirty { display: inline-flex; }
 
 .ui-combobox-option {
   display: flex;
-  flex-direction: column;
-  gap: .125rem;
-  padding: var(--ui-space-2) var(--ui-space-3);
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ui-space-2);
+  padding: .55rem var(--ui-space-3);
   cursor: pointer;
   transition: background var(--ui-transition-fast);
+}
+
+.ui-combobox-option:not(:last-child) {
+  border-bottom: 1px solid var(--ui-border);
 }
 
 .ui-combobox-option:hover,
@@ -2629,17 +2860,44 @@ form[data-ui-save-next].ui-dirty .ui-save-next-dirty { display: inline-flex; }
 
 .ui-combobox-option[aria-selected="true"] {
   background: var(--ui-primary-soft);
-  font-weight: 600;
+}
+
+.ui-combobox-option[aria-selected="true"] .ui-combobox-option-label {
+  font-weight: 700;
+  color: var(--ui-primary);
+}
+
+.ui-combobox-option-text {
+  display: flex;
+  flex-direction: column;
+  gap: .125rem;
+  min-width: 0;
 }
 
 .ui-combobox-option-label {
-  font-size: .9375rem;
+  overflow: hidden;
+  font-size: .875rem;
   color: var(--ui-text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .ui-combobox-option-hint {
-  font-size: .8125rem;
+  overflow: hidden;
+  font-size: .75rem;
   color: var(--ui-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ui-combobox-option-check {
+  display: none;
+  flex: none;
+  color: var(--ui-primary);
+}
+
+.ui-combobox-option[aria-selected="true"] .ui-combobox-option-check {
+  display: flex;
 }
 
 .ui-combobox-message {
@@ -3120,27 +3378,34 @@ form[data-ui-save-next].ui-dirty .ui-save-next-dirty { display: inline-flex; }
   border-color: color-mix(in srgb, var(--ui-danger) 30%, transparent);
 }
 
+/*
+ * Expired and suspended used to share rejected's exact red, distinguished
+ * only by a ring-vs-dot marker a couple of pixels wide -- effectively
+ * invisible at a glance. Each status now gets its own colour: expired reads
+ * as neutral/inert (a lapse, not a judgement, so it sits with draft's grey
+ * rather than rejected's red), suspended gets its own burnt-orange so it
+ * doesn't collide with under-review's amber either.
+ */
 .ui-status-expired {
-  color: var(--ui-danger);
-  background: var(--ui-danger-soft);
-  border-color: color-mix(in srgb, var(--ui-danger) 30%, transparent);
+  color: var(--ui-text-soft);
+  background: var(--ui-surface-muted);
+  border-color: var(--ui-border-strong);
 }
 
-/* Expired is a lapse; suspended is a sanction. Distinguished by the ring. */
 .ui-status-expired::before {
   background: transparent;
   border: 1.5px solid currentColor;
 }
 
 .ui-status-suspended {
-  color: #b45309;
-  background: var(--ui-warning-soft);
-  border-color: color-mix(in srgb, var(--ui-warning) 45%, transparent);
+  color: #9a3412;
+  background: color-mix(in srgb, #f97316 14%, transparent);
+  border-color: color-mix(in srgb, #f97316 40%, transparent);
   border-style: dashed;
 }
 
-[data-ui-theme="dark"] .ui-status-under-review,
-[data-ui-theme="dark"] .ui-status-suspended { color: #fbbf24; }
+[data-ui-theme="dark"] .ui-status-under-review { color: #fbbf24; }
+[data-ui-theme="dark"] .ui-status-suspended { color: #fb923c; }
 [data-ui-theme="dark"] .ui-status-approved,
 [data-ui-theme="dark"] .ui-status-active { color: #4ade80; }
 
@@ -3294,11 +3559,44 @@ form[data-ui-save-next].ui-dirty .ui-save-next-dirty { display: inline-flex; }
   text-align: center;
 }
 
+/*
+ * A blank bordered square reads as a rendering glitch, not "put your QR code
+ * here" -- the dashed border, corner brackets and label make the empty slot
+ * self-explanatory without needing to read the docs.
+ */
 .ui-document-qr {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 26mm;
   height: 26mm;
   flex: none;
-  border: 1px solid #ccc;
+  border: 1.5px dashed #b3b3b3;
+  border-radius: 2px;
+  background: #fafafa;
+  color: #999;
+  font-size: .6rem;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.ui-document-qr::before {
+  content: "QR";
+}
+
+.ui-document-qr img,
+.ui-document-qr svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Once real QR content is placed inside, the placeholder label must not
+   still render behind/over it. */
+.ui-document-qr:not(:empty)::before {
+  display: none;
 }
 
 .ui-document-watermark {

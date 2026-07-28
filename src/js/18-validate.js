@@ -131,11 +131,18 @@
 
     var element = document.createElement("p");
     element.className = "ui-feedback ui-feedback-invalid";
-    // Sits after the control so `.ui-is-invalid ~ .ui-feedback-invalid` matches.
-    if (field.nextSibling) {
-      field.parentNode.insertBefore(element, field.nextSibling);
+
+    // For a wrapped component (date picker, date range, multi-select) the
+    // real <input> is hidden and sits *before* the visible trigger in the
+    // DOM, so inserting right after it would place the message above the
+    // control instead of below it. Anchor to the whole wrapper instead.
+    var overlay = UI.closest(field, ".ui-date-range, .ui-date-picker, .ui-multiselect");
+    var anchor = overlay || field;
+
+    if (anchor.nextSibling) {
+      anchor.parentNode.insertBefore(element, anchor.nextSibling);
     } else {
-      field.parentNode.appendChild(element);
+      anchor.parentNode.appendChild(element);
     }
     return element;
   }
@@ -224,7 +231,7 @@
     // display:none element is invisible; mirror the state onto the trigger.
     var wrapper = UI.closest(field, ".ui-date-range, .ui-date-picker, .ui-multiselect");
     if (wrapper) {
-      var trigger = UI.q(".ui-date-trigger, .ui-multiselect-trigger", wrapper);
+      var trigger = UI.q(".ui-date-range-trigger, .ui-multiselect-trigger", wrapper);
       if (trigger) trigger.classList.add("ui-is-invalid");
     }
   }
@@ -257,7 +264,7 @@
     }
 
     summary.hidden = false;
-    summary.className = "ui-alert ui-alert-danger ui-validate-summary";
+    summary.className = "ui-validate-summary";
     summary.setAttribute("role", "alert");
     summary.setAttribute("tabindex", "-1");
 
@@ -271,10 +278,17 @@
         : "<li>" + label + " — " + message + "</li>";
     });
 
+    // A standalone flex layout rather than the generic `.ui-alert` grid,
+    // which is shaped for icon|body|close-button and squeezes a wide list
+    // into whatever the title's natural width leaves over.
     summary.innerHTML =
-      '<div class="ui-alert-title">' +
+      '<span class="ui-validate-summary-icon" aria-hidden="true">!</span>' +
+      '<div class="ui-validate-summary-body">' +
+      '<p class="ui-validate-summary-title">' +
       UI.escape(UI.t("validate.summaryTitle", { count: errors.length })) +
-      "</div><ul class=\"ui-validate-summary-list\">" + items.join("") + "</ul>";
+      "</p>" +
+      '<ul class="ui-validate-summary-list">' + items.join("") + "</ul>" +
+      "</div>";
   }
 
   function validateForm(form, options) {
@@ -314,7 +328,7 @@
     // overlay component.
     if (target === errors[0].element) {
       var overlay = UI.closest(target, ".ui-date-range, .ui-date-picker, .ui-multiselect");
-      if (overlay) target = UI.q(".ui-date-trigger, .ui-multiselect-trigger", overlay) || target;
+      if (overlay) target = UI.q(".ui-date-range-trigger, .ui-multiselect-trigger", overlay) || target;
     }
 
     if (target.focus) target.focus();

@@ -1,25 +1,48 @@
+/*
+ * The dropzone (dashed box, click/drop target) and the file preview list are
+ * separate elements on purpose. Earlier this was one box with the file
+ * <input> absolutely positioned over the *entire* thing -- including the
+ * preview list rendered inside it -- so clicking a file's remove (x) button
+ * actually hit the invisible input underneath and reopened the file picker
+ * instead of removing the file. Scoping the input to just the dropzone, with
+ * the preview list as a sibling *outside* it, makes that overlap impossible
+ * regardless of how the list is styled.
+ */
 .ui-upload {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-3);
+}
+
+.ui-upload-dropzone {
   position: relative;
-  min-height: 10rem;
-  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 9rem;
+  padding: 1.75rem 1.5rem;
   border: 2px dashed var(--ui-border-strong);
   border-radius: var(--ui-radius-4);
   background: var(--ui-surface-soft);
   color: var(--ui-text);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   text-align: center;
+  cursor: pointer;
   transition: border-color var(--ui-transition-fast), background var(--ui-transition-fast);
 }
 
-.ui-upload:hover,
-.ui-upload.ui-dragover {
+.ui-upload-dropzone:hover,
+.ui-upload.ui-dragover .ui-upload-dropzone {
   border-color: var(--ui-primary);
   background: var(--ui-primary-soft);
 }
 
-.ui-upload > input[type="file"] {
+.ui-upload-dropzone:focus-within {
+  outline: none;
+  box-shadow: var(--ui-focus-ring);
+}
+
+.ui-upload-dropzone input[type="file"] {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -28,25 +51,95 @@
   cursor: pointer;
 }
 
+.ui-upload-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-bottom: var(--ui-space-2);
+  border-radius: 50%;
+  background: var(--ui-primary-soft);
+  color: var(--ui-primary);
+  font-size: 1.25rem;
+}
+
 .ui-upload-title { margin: 0 0 .25rem; font-weight: 700; }
 .ui-upload-help { color: var(--ui-muted); font-size: .8rem; }
-.ui-upload-preview { margin-top: .75rem; display: flex; flex-wrap: wrap; gap: .5rem; }
-.ui-file-item { padding: .55rem .7rem; border: 1px solid var(--ui-border); border-radius: var(--ui-radius-2); background: var(--ui-surface); display: flex; align-items: center; gap: .5rem; font-size: .8rem; }
+
+.ui-upload-preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-2);
+}
+
+.ui-file-item {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-3);
+  width: 100%;
+  padding: .6rem .85rem;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-2);
+  background: var(--ui-surface);
+  font-size: .8125rem;
+  transition: border-color var(--ui-transition-fast), background var(--ui-transition-fast);
+}
+
+.ui-file-item-icon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--ui-radius-2);
+  background: var(--ui-surface-muted);
+  color: var(--ui-muted);
+  font-size: 1rem;
+}
+
+.ui-file-item-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  gap: .1rem;
+}
+
+.ui-file-item-name {
+  overflow: hidden;
+  font-weight: 600;
+  color: var(--ui-text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ui-file-item-size {
+  color: var(--ui-muted);
+  font-size: .75rem;
+}
 
 .ui-file-item-remove {
-  width: 1.1rem;
-  height: 1.1rem;
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
   border: 0;
   border-radius: 50%;
   padding: 0;
   background: transparent;
   color: var(--ui-muted);
+  font-size: 1rem;
   line-height: 1;
   cursor: pointer;
-  flex: 0 0 auto;
+  transition: background var(--ui-transition-fast), color var(--ui-transition-fast);
 }
 
 .ui-file-item-remove:hover { background: var(--ui-danger-soft); color: var(--ui-danger); }
+.ui-file-item-remove:focus-visible { outline: none; box-shadow: var(--ui-focus-ring); }
 
 .ui-empty-state {
   padding: 2.5rem 1.5rem;

@@ -1,4 +1,4 @@
-# UI Framework 1.3.0
+# UI Framework 1.3.1
 
 A complete, dependency-free CSS and JavaScript UI framework designed for
 server-rendered applications, static HTML, and legacy projects that already
@@ -95,7 +95,7 @@ outranks a layered one, so keep your overrides in a declared layer too.
 npm test
 ```
 
-160+ tests against a real Chrome, with **no npm dependencies** — the harness
+169+ tests against a real Chrome, with **no npm dependencies** — the harness
 drives the browser over the DevTools Protocol using Node's built-in
 `WebSocket`. You need Node 18+ and a Chrome/Chromium binary; set `CHROME_PATH`
 if it lives somewhere unusual. See [`tests/README.md`](tests/README.md).

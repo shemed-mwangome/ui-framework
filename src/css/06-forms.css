@@ -80,6 +80,17 @@ textarea.ui-control { min-height: 7rem; resize: vertical; }
   font-size: .78rem;
 }
 
+/*
+ * Visibility is keyed off the message actually having text (:not(:empty)),
+ * not off being a later sibling of the control that carries .ui-is-invalid.
+ * The sibling-combinator version broke for any wrapped component (date
+ * picker, date range, multi-select) where the real <input> is hidden and a
+ * separate trigger button carries the visible invalid state instead -- the
+ * message ended up positioned by DOM order relative to the *hidden* input,
+ * not the visible control, and could render above or beside it instead of
+ * directly underneath. Keying off :not(:empty) means the message just needs
+ * to exist somewhere sensible in the field, with no positional coupling.
+ */
 .ui-feedback-valid,
 .ui-feedback-invalid {
   display: none;
@@ -87,8 +98,11 @@ textarea.ui-control { min-height: 7rem; resize: vertical; }
   font-size: .78rem;
 }
 
+.ui-feedback-valid:not(:empty) { display: block; }
+.ui-feedback-invalid:not(:empty) { display: block; }
+
 .ui-feedback-valid { color: var(--ui-success); }
-.ui-feedback-invalid { color: var(--ui-danger); }
+.ui-feedback-invalid { color: var(--ui-danger); font-weight: 600; }
 
 .ui-is-valid {
   --ui-control-border: var(--ui-success);
@@ -109,9 +123,6 @@ textarea.ui-control { min-height: 7rem; resize: vertical; }
   background-position: calc(100% - .75rem) 50%;
   background-repeat: no-repeat;
 }
-
-.ui-is-valid ~ .ui-feedback-valid,
-.ui-is-invalid ~ .ui-feedback-invalid { display: block; }
 
 .ui-input-group {
   display: flex;

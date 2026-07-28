@@ -155,13 +155,19 @@
           item.className = "ui-file-item";
           item.setAttribute("data-ui-file-index", String(index));
           item.innerHTML =
-            '<span class="ui-file-item-name">' + UI.escape(file.name) + " · " +
-              formatSize(file.size) + "</span>" +
+            '<span class="ui-file-item-icon" aria-hidden="true">&#128196;</span>' +
+            '<span class="ui-file-item-info">' +
+              '<span class="ui-file-item-name">' + UI.escape(file.name) + '</span>' +
+              '<span class="ui-file-item-size">' + formatSize(file.size) + '</span>' +
+            '</span>' +
             '<div class="ui-file-item-progress" hidden><div class="ui-progress ui-progress-sm">' +
               '<div class="ui-progress-bar ui-progress-w-0"></div></div></div>' +
             '<button type="button" class="ui-file-item-remove" aria-label="' +
               UI.escape(UI.t("upload.remove", { name: file.name })) + '">&times;</button>';
 
+          // The remove button lives in .ui-upload-preview, a sibling of the
+          // dropzone that owns the file <input> -- never covered by it -- so
+          // this stopPropagation is defensive, not load-bearing.
           item.querySelector(".ui-file-item-remove").addEventListener("click", function (event) {
             event.stopPropagation();
             removeFile(index);

@@ -208,3 +208,57 @@ test("dark theme overrides every surface token the light theme defines", () => {
     "dark theme does not override: " + missing.join(", ")
   );
 });
+
+test("every docs/example page loads dist/ with a cache-busting version query", () => {
+  // A browser that already cached an earlier version's dist/ui-framework.js
+  // will happily keep running it against new markup, and the framework then
+  // looks broken rather than out of date. Every page must ask for the
+  // *current* version explicitly so a stale cache can never be mistaken for
+  // a stale build.
+  const pages = [
+    "docs/index.html", "docs/getting-started.html", "docs/layout.html",
+    "docs/components.html", "docs/utilities.html", "docs/javascript.html",
+    "docs/examples/dashboard.html", "docs/examples/form.html",
+    "docs/examples/login.html", "docs/examples/application-form.html",
+    "docs/examples/record-register.html", "quick-start.html",
+  ];
+
+  // Scoped to href="..."/src="..." attributes specifically, not just the
+  // literal string anywhere in the page -- several pages mention
+  // "dist/ui-framework.css" in prose (e.g. inside a <span class="ui-code">)
+  // as a plain example, which is not a reference that needs versioning.
+  const pattern = /(?:href|src)="([^"]*dist\/ui-framework(?:\.layered)?(?:\.min)?\.(?:css|js))(\?v=[^"]*)?"/g;
+
+  for (const page of pages) {
+    const html = read(page);
+    const references = [...html.matchAll(pattern)];
+    assert.ok(references.length > 0, page + " does not reference dist/ at all");
+
+    for (const [, full, query] of references) {
+      assert.equal(
+        query,
+        "?v=" + pkg.version,
+        page + " references " + full + " without a matching ?v=" + pkg.version + " cache-buster"
+      );
+    }
+  }
+});
+
+test("every docs page's version badge and footer match the current version", () => {
+  const pages = [
+    "docs/index.html", "docs/getting-started.html", "docs/layout.html",
+    "docs/components.html", "docs/utilities.html", "docs/javascript.html",
+  ];
+
+  for (const page of pages) {
+    const html = read(page);
+    assert.ok(
+      html.includes(">v" + pkg.version + "<"),
+      page + " version badge does not read v" + pkg.version
+    );
+    assert.ok(
+      html.includes("UI Framework " + pkg.version),
+      page + " footer does not read UI Framework " + pkg.version
+    );
+  }
+});

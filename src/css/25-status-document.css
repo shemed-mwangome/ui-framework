@@ -65,27 +65,34 @@
   border-color: color-mix(in srgb, var(--ui-danger) 30%, transparent);
 }
 
+/*
+ * Expired and suspended used to share rejected's exact red, distinguished
+ * only by a ring-vs-dot marker a couple of pixels wide -- effectively
+ * invisible at a glance. Each status now gets its own colour: expired reads
+ * as neutral/inert (a lapse, not a judgement, so it sits with draft's grey
+ * rather than rejected's red), suspended gets its own burnt-orange so it
+ * doesn't collide with under-review's amber either.
+ */
 .ui-status-expired {
-  color: var(--ui-danger);
-  background: var(--ui-danger-soft);
-  border-color: color-mix(in srgb, var(--ui-danger) 30%, transparent);
+  color: var(--ui-text-soft);
+  background: var(--ui-surface-muted);
+  border-color: var(--ui-border-strong);
 }
 
-/* Expired is a lapse; suspended is a sanction. Distinguished by the ring. */
 .ui-status-expired::before {
   background: transparent;
   border: 1.5px solid currentColor;
 }
 
 .ui-status-suspended {
-  color: #b45309;
-  background: var(--ui-warning-soft);
-  border-color: color-mix(in srgb, var(--ui-warning) 45%, transparent);
+  color: #9a3412;
+  background: color-mix(in srgb, #f97316 14%, transparent);
+  border-color: color-mix(in srgb, #f97316 40%, transparent);
   border-style: dashed;
 }
 
-[data-ui-theme="dark"] .ui-status-under-review,
-[data-ui-theme="dark"] .ui-status-suspended { color: #fbbf24; }
+[data-ui-theme="dark"] .ui-status-under-review { color: #fbbf24; }
+[data-ui-theme="dark"] .ui-status-suspended { color: #fb923c; }
 [data-ui-theme="dark"] .ui-status-approved,
 [data-ui-theme="dark"] .ui-status-active { color: #4ade80; }
 
@@ -239,11 +246,44 @@
   text-align: center;
 }
 
+/*
+ * A blank bordered square reads as a rendering glitch, not "put your QR code
+ * here" -- the dashed border, corner brackets and label make the empty slot
+ * self-explanatory without needing to read the docs.
+ */
 .ui-document-qr {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 26mm;
   height: 26mm;
   flex: none;
-  border: 1px solid #ccc;
+  border: 1.5px dashed #b3b3b3;
+  border-radius: 2px;
+  background: #fafafa;
+  color: #999;
+  font-size: .6rem;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.ui-document-qr::before {
+  content: "QR";
+}
+
+.ui-document-qr img,
+.ui-document-qr svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Once real QR content is placed inside, the placeholder label must not
+   still render behind/over it. */
+.ui-document-qr:not(:empty)::before {
+  display: none;
 }
 
 .ui-document-watermark {
