@@ -1,0 +1,201 @@
+/*!
+ * UI Framework 1.3.0
+ * Charts, popovers and copy feedback
+ */
+
+:root {
+  --ui-chart-1: #2563eb;
+  --ui-chart-2: #16a34a;
+  --ui-chart-3: #f59e0b;
+  --ui-chart-4: #dc2626;
+  --ui-chart-5: #0891b2;
+  --ui-chart-6: #7c3aed;
+}
+
+/* ----------------------------------------------------------------- Charts */
+
+.ui-chart {
+  display: block;
+  width: 100%;
+}
+
+.ui-chart-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/*
+ * Bar and line charts stretch to their container via preserveAspectRatio="none",
+ * so an explicit height is what actually controls their size.
+ */
+.ui-chart-bar .ui-chart-svg,
+.ui-chart-line .ui-chart-svg {
+  height: 10rem;
+}
+
+.ui-chart-sparkline {
+  display: inline-block;
+  width: 6rem;
+  vertical-align: middle;
+}
+
+.ui-chart-sparkline .ui-chart-svg {
+  height: 1.75rem;
+}
+
+.ui-chart-donut .ui-chart-svg {
+  max-width: 12rem;
+  height: auto;
+  margin: 0 auto;
+}
+
+.ui-chart-donut-svg {
+  /* Dash offsets are measured from 3 o'clock; rotate so segments start at 12. */
+  transform: rotate(-90deg);
+}
+
+.ui-chart-segment {
+  transition: stroke-width var(--ui-transition-fast);
+}
+
+.ui-chart-centre {
+  font-size: .3rem;
+  font-weight: 700;
+  fill: var(--ui-text);
+  transform: rotate(90deg);
+  transform-origin: 21px 21px;
+}
+
+/* Legend */
+
+.ui-chart-legend {
+  display: grid;
+  gap: var(--ui-space-1);
+  margin: var(--ui-space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ui-chart-legend-item {
+  display: flex;
+  gap: var(--ui-space-2);
+  align-items: center;
+  font-size: .8125rem;
+}
+
+.ui-chart-legend-label {
+  /* Shrink the label rather than pushing the value onto its own line, which
+     is what happens in a narrow card with a long category name. */
+  flex: 1;
+  min-width: 0;
+  color: var(--ui-text-soft);
+}
+
+.ui-chart-legend-value {
+  margin-left: auto;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--ui-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.ui-chart-swatch {
+  width: .625rem;
+  height: .625rem;
+  border-radius: var(--ui-radius-1);
+  flex: none;
+}
+
+.ui-chart-swatch[data-ui-swatch="0"] { background: var(--ui-chart-1); }
+.ui-chart-swatch[data-ui-swatch="1"] { background: var(--ui-chart-2); }
+.ui-chart-swatch[data-ui-swatch="2"] { background: var(--ui-chart-3); }
+.ui-chart-swatch[data-ui-swatch="3"] { background: var(--ui-chart-4); }
+.ui-chart-swatch[data-ui-swatch="4"] { background: var(--ui-chart-5); }
+.ui-chart-swatch[data-ui-swatch="5"] { background: var(--ui-chart-6); }
+
+/* --------------------------------------------------------------- Popover */
+
+.ui-popover {
+  position: fixed;
+  z-index: var(--ui-z-popover);
+  max-width: 20rem;
+  padding: var(--ui-space-3);
+  padding-right: var(--ui-space-5);
+  background: var(--ui-surface);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-3);
+  box-shadow: var(--ui-shadow-3);
+  color: var(--ui-text);
+  font-size: .875rem;
+  line-height: 1.5;
+}
+
+.ui-popover-title {
+  margin-bottom: var(--ui-space-1);
+  font-weight: 700;
+}
+
+.ui-popover-body > :first-child { margin-top: 0; }
+.ui-popover-body > :last-child { margin-bottom: 0; }
+
+.ui-popover-close {
+  position: absolute;
+  top: var(--ui-space-1);
+  right: var(--ui-space-1);
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  font-size: 1.125rem;
+  line-height: 1;
+  color: var(--ui-muted);
+  background: none;
+  border: 0;
+  border-radius: var(--ui-radius-pill);
+  cursor: pointer;
+}
+
+.ui-popover-close:hover {
+  color: var(--ui-text);
+  background: var(--ui-surface-muted);
+}
+
+.ui-popover-close:focus-visible {
+  outline: none;
+  box-shadow: var(--ui-focus-ring);
+}
+
+.ui-popover-arrow {
+  position: absolute;
+  top: -.375rem;
+  left: 1rem;
+  width: .75rem;
+  height: .75rem;
+  background: var(--ui-surface);
+  border-top: 1px solid var(--ui-border);
+  border-left: 1px solid var(--ui-border);
+  transform: rotate(45deg);
+}
+
+/* floatPanel flips the panel above the trigger when space runs out. */
+.ui-popover.ui-panel-above .ui-popover-arrow {
+  top: auto;
+  bottom: -.375rem;
+  border-top: 0;
+  border-left: 0;
+  border-bottom: 1px solid var(--ui-border);
+  border-right: 1px solid var(--ui-border);
+}
+
+/* ---------------------------------------------------------- Copy feedback */
+
+.ui-copied {
+  color: var(--ui-success) !important;
+  border-color: var(--ui-success) !important;
+}
+
+.ui-copy-failed {
+  color: var(--ui-danger) !important;
+  border-color: var(--ui-danger) !important;
+}

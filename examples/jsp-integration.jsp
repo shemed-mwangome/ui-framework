@@ -25,12 +25,12 @@
 
         <div class="ui-card">
             <div class="ui-card-header">
-                <h1 class="ui-card-title">Assign compliance officers</h1>
+                <h1 class="ui-card-title">Assign reviewers</h1>
             </div>
 
             <form class="ui-card-body"
                   method="post"
-                  action="${pageContext.request.contextPath}/assign/officers">
+                  action="${pageContext.request.contextPath}/assign/reviewers">
 
                 <sec:csrfInput/>
 
@@ -52,21 +52,21 @@
                     </div>
 
                     <div class="ui-col-12 ui-col-md-6">
-                        <label class="ui-label" for="officers">
-                            Officers
+                        <label class="ui-label" for="reviewers">
+                            Reviewers
                         </label>
 
-                        <select id="officers"
-                                name="officersIds"
+                        <select id="reviewers"
+                                name="reviewerIds"
                                 multiple
                                 data-ui-multiselect
                                 data-display="tags"
-                                data-placeholder="Select officers"
+                                data-placeholder="Select reviewers"
                                 data-search="true"
                                 data-select-all="true">
-                            <c:forEach items="${officers}" var="officer">
-                                <option value="${officer.id}">
-                                    ${officer.name}
+                            <c:forEach items="${reviewers}" var="reviewer">
+                                <option value="${reviewer.id}">
+                                    ${reviewer.name}
                                 </option>
                             </c:forEach>
                         </select>
@@ -78,7 +78,7 @@
                                class="ui-checkbox ui-checkbox-lg ui-checkbox-success">
 
                         <label for="assignAll">
-                            Select all available premises
+                            Select all available sites
                         </label>
                     </div>
                 </div>
@@ -91,7 +91,7 @@
 
                     <button type="submit"
                             class="ui-btn ui-btn-primary">
-                        Assign officers
+                        Assign reviewers
                     </button>
                 </div>
             </form>

@@ -26,7 +26,7 @@
       var search = document.createElement("div");
       search.className = "ui-multiselect-search";
       search.innerHTML = '<input type="search" class="ui-control ui-control-sm" placeholder="' +
-        UI.escape(select.getAttribute("data-search-placeholder") || "Search options") + '">';
+        UI.escape(select.getAttribute("data-search-placeholder") || UI.t("select.search")) + '">';
       menu.appendChild(search);
     }
 
@@ -34,8 +34,8 @@
       var actions = document.createElement("div");
       actions.className = "ui-multiselect-actions";
       actions.innerHTML =
-        '<button type="button" class="ui-multiselect-action" data-ui-ms-action="all">Select all</button>' +
-        '<button type="button" class="ui-multiselect-action" data-ui-ms-action="clear">Clear</button>';
+        '<button type="button" class="ui-multiselect-action" data-ui-ms-action="all">' + UI.escape(UI.t("select.all")) + '</button>' +
+        '<button type="button" class="ui-multiselect-action" data-ui-ms-action="clear">' + UI.escape(UI.t("select.clear")) + '</button>';
       menu.appendChild(actions);
     }
 
@@ -57,7 +57,7 @@
 
     var empty = document.createElement("div");
     empty.className = "ui-multiselect-empty";
-    empty.textContent = select.getAttribute("data-empty-text") || "No matching options";
+    empty.textContent = select.getAttribute("data-empty-text") || UI.t("select.empty");
 
     menu.appendChild(options);
     menu.appendChild(empty);
@@ -68,7 +68,7 @@
       var selected = Array.prototype.filter.call(select.options, function (option) { return option.selected; });
       var summary = UI.q(".ui-multiselect-summary", wrapper);
       var display = select.getAttribute("data-display") || "count";
-      var placeholder = select.getAttribute("data-placeholder") || "Select options";
+      var placeholder = select.getAttribute("data-placeholder") || UI.t("select.placeholder");
       summary.innerHTML = "";
 
       UI.qa(".ui-multiselect-option", wrapper).forEach(function (row, index) {
@@ -164,7 +164,7 @@
   }
 
   function init(root) {
-    UI.qa("select[multiple][data-ui-multiselect]", root).forEach(build);
+    UI.matchAll("select[multiple][data-ui-multiselect]", root).forEach(build);
   }
 
   function closeWrapper(wrapper) {

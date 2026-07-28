@@ -1,5 +1,60 @@
 # Changelog
 
+## 1.3.0 — 2026-07-28
+
+### Test suite
+
+- Added a headless browser test suite (`npm test`) — 99 tests over a real Chrome, with **no npm dependencies**: the harness drives the browser over the DevTools Protocol using Node's built-in `WebSocket`, `node:test` and `node:http`, so `git clone && npm test` works with nothing to install. Fixtures are served over HTTP and load `dist/` exactly as a browser app does, so `DOMContentLoaded` auto-init is genuinely exercised, and any uncaught page exception fails the test. Input goes through real CDP mouse/keyboard events rather than `element.click()`, which is what makes click-outside-to-close, focus restoration and focus trapping testable at all. See [`tests/README.md`](tests/README.md)
+- The suite targets invariants that isolated per-component demos cannot see: Escape closing only the *topmost* overlay layer (the 1.1.0 regression), `save-next`/`stepper-form`/`draft` composed on a single `<form>` (the 1.1.0 `dataset.uiReady` guard collision, now also enforced by a static check), and `dist/` being regenerated into a scratch directory and diffed against what is committed — editing `src/` without rebuilding previously shipped nothing, silently
+- Fixed the smart table setting `aria-sort="none"` on **every** header once any column was sorted, including columns that opted out with no `data-ui-sort` — announcing non-sortable columns to screen readers as sortable. Found by the new suite on its first run
+- Added a GitHub Actions workflow running the suite plus a `dist/` staleness check on every push and pull request
+
+### Platform
+
+- Added `UI.destroy(root)` and `UI.cleanup(element, fn)`. Modules guarded against double-initialisation but nothing released the listeners they attached, so a region swapped over AJAX leaked a listener per swap. `UI.floatPanel()` was the worst case: its scroll listener is capture-phase and global, so a panel torn out of the DOM while open left a handler firing on every scroll for the life of the page. `floatPanel` now registers its own teardown, so `UI.destroy()` releases it even if the owning component never gets to clean up
+- Added `UI.observe(root)`, an opt-in `MutationObserver` that initialises inserted markup and tears down removed markup automatically, batched on an animation frame — AJAX fragments no longer each need a manual `UI.init()` call
+- Added `UI.matchAll(selector, root)` and switched every module's `init(root)` to it, so **`UI.init(el)` now matches `el` itself** and not just its descendants. `querySelectorAll` returns descendants only, so `UI.destroy(table); UI.init(table)` previously did nothing at all and callers had to pass `table.parentNode` — a sharp edge on precisely the teardown-then-rebuild flow `UI.destroy()` invites. `UI.qa` keeps its descendant-only semantics on purpose: it also backs ordinary lookups like `UI.qa("tr", tbody)` and `UI.focusable()`, where including the root would send a modal's initial focus to the dialog instead of its first field
+- Added `dist/ui-framework.layered.css` (and `.layered.min.css`), a `@layer`-wrapped build with `ui-base`, `ui-components` and `ui-utilities` sub-layers. Apps coexisting with Bootstrap, CoreUI or an existing `master.css` declare the order they want once — `@layer app-reset, ui-base, ui-components, ui-utilities, app-overrides;` — and their own rules then win regardless of selector specificity, with no `!important`
+
+### Internationalisation and accessibility
+
+- Added `UI.i18n` and `UI.t(key, vars)`. Every user-visible string the JavaScript generates now routes through the string table instead of being hardcoded English — previously `"Search"`, `"No matching records"`, `"Cancel"`, `"Select all"`, `"per page"` and the draft banner were unreachable for translation. Existing per-element `data-*` attributes still take precedence, so current markup is unaffected
+- Draft timestamps now use `Intl.RelativeTimeFormat`, which applies each locale's plural rules — a string table cannot express that "2 minutes ago" pluralises differently in other languages
+- Added `UI.announce(message, priority)`, a screen-reader live region for outcomes a sighted user sees but a screen-reader user would not
+
+### Forms
+
+- Added a validation module (`data-ui-validate`) covering native constraints plus `match`, `after`, `before`, `integer` and custom rules via `UI.validate.addRule()`. Messages render inline and translatably rather than in native browser bubbles, which cannot be styled, are not read on submit, and vanish on scroll
+- Added `UI.validate.showErrors(form, errors)` — binds a failed POST's `{"field": "message"}` response onto the right controls, the summary and focus. Accepts `{field: message}`, `{field: [messages]}` and `[{field, message}]`. This is the piece that otherwise gets hand-rolled on every screen
+- Added an error summary (`data-ui-validate-summary`) that lists every problem, links each entry to its field, takes focus on failure and announces assertively — the pattern accessibility audits expect
+- Validation binds on the capture phase so it runs *before* `save-next`'s AJAX submit, and mirrors invalid state onto the visible trigger for components whose real control is hidden (date pickers, multi-select)
+- Added input masking (`data-ui-mask`): pattern masks (`999-999-999`, `+99 999 999 999`, `AAA-9999`) plus `number` and `currency` modes with locale-aware grouping. Caret position is preserved across reformatting, including mid-string edits. `data-ui-mask-raw="true"` posts the unformatted value through a hidden field so the server receives digits while the user still sees the mask. `UI.mask.format()` renders the same formatting outside an input
+- Added a combobox (`data-ui-combobox`) with type-ahead over either a local `<select>` or a remote endpoint via `data-ui-url`. Out-of-order responses are discarded so a slow earlier request cannot overwrite a newer one; uncommitted text reverts on blur so the visible text can never disagree with what will be posted; the backing `<select>` is kept in sync throughout, so the field posts normally and existing validation still sees it
+- Fixed the multi-step wizard leaving the user **silently stuck**: `Next` gated on `reportValidity()`, but `data-ui-validate` sets `novalidate`, so a form using both refused to advance while showing nothing at all. The wizard now delegates to the validation module, scoped to the visible step, and falls back to native validation when used on its own
+
+### Tables
+
+- Added server mode (`data-ui-url`) to smart tables. The endpoint receives `?page=&size=&q=&sort=&dir=` and returns `{rows, total}` — rows as objects mapped through `<th data-ui-field>`, as arrays, or as a pre-rendered `{html}` fragment for stacks that would rather build them server-side. Search is debounced into one request per pause, out-of-order pages are discarded, and the table reports `aria-busy` while loading. Client mode is unchanged and still right up to a few thousand rows
+- Added row selection (`data-ui-select`): a checkbox column, a select-all that goes indeterminate on partial selection, a bulk-action bar that appears only when something is selected, and a selection that survives paging. `UI.table.selected()` / `clearSelection()` and a `ui:table:select` event
+- Added column visibility (`data-ui-columns`) and sticky columns/headers (`.ui-table-sticky-first`, `.ui-table-sticky-head`)
+- Added CSV export (`data-ui-export`). Exports every row matching the current search and sort rather than just the page on screen, omits hidden columns, honours `data-ui-export-value` for raw values behind formatted cells, doubles embedded quotes per RFC 4180, and writes a UTF-8 BOM so Excel does not mangle non-ASCII names
+- Added `UI.table.refresh()` for re-running the current query after a save
+
+### Uploads
+
+- Hardened the upload area: `data-ui-max-size` (accepts `5MB`-style values), `data-ui-max-files`, and `accept` matching by extension, MIME type or wildcard. Rejected files are **removed from the input's `FileList`**, so what the form posts always matches what the preview shows — client-side checks remain a courtesy the server must still enforce
+- Added direct upload via `data-ui-url` with real per-file progress, using `XMLHttpRequest` because `fetch` still has no upload progress event and a bar that jumps 0→100 is worse than none on large document scans. Progress is driven by stepped classes, so no `style-src 'unsafe-inline'` exception is needed
+- Added drag-and-drop that appends to the existing selection instead of replacing it
+
+### Display
+
+- Added dependency-free SVG charts (`data-ui-chart`): `bar` (with horizontal variant), `line`, `sparkline` and `donut`, with an optional legend and percentages. Every chart renders `role="img"` with a generated summary label **and** a visually-hidden data table, because a bare `<svg>` is invisible to a screen reader and to print. Scope is deliberately narrow — anything needing zoom, brushing or streaming still wants a charting library
+- Added popovers (`data-ui-popover`, `data-ui-popover-target`) — richer than a tooltip, lighter than a modal, and able to hold interactive content. Content can come from a `<template>`. Focus moves in only when there is something to interact with. The Escape handler is ordered before `modal.js`, so dismissing a popover inside a modal does not also close the modal
+- Added copy-to-clipboard (`data-ui-copy`, `data-ui-copy-target`) with a transient label swap plus a screen-reader announcement, and an `execCommand` fallback for the plain-HTTP internal deployments where `navigator.clipboard` is unavailable
+- Added a status lexicon: `.ui-status-draft|submitted|under-review|approved|active|rejected|expired|suspended`. The value is the shared vocabulary, not the styling — without one, every screen invents its own and "Under review" ends up amber on one page and blue on the next. Expired and suspended are distinguished by marker and border rather than colour alone
+- Added `.ui-record-header` (title, reference, status, actions) for the record-detail pattern repeated across every record-detail screen
+- Added `.ui-document`, an A4 print sheet for certificates, statements and reports: portrait and landscape, running header/footer repeated per page, `thead` repeated across page breaks on long tables, page-break helpers, watermark, signature and QR slots, and `print-color-adjust: exact` so status colour survives printing
+
 ## 1.2.0 — 2026-07-27
 
 - Fixed `.ui-btn-loading` making the button label fully transparent, leaving only a bare spinner with no indication of what's loading; the label now stays visible with the spinner shown alongside it (using `currentColor` so it reads correctly on solid, outline, and ghost variants alike)

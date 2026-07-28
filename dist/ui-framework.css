@@ -1,11 +1,11 @@
 /*!
- * UI Framework v1.2.0
+ * UI Framework v1.3.0
  * Original dependency-free CSS/JavaScript framework.
  * Prefix: ui-
  * License: MIT
  */
 /*!
- * UI Framework 1.2.0
+ * UI Framework 1.3.0
  * Design tokens and themes
  */
 :root {
@@ -2768,4 +2768,906 @@ form[data-ui-save-next].ui-dirty .ui-save-next-dirty { display: inline-flex; }
   text-decoration: line-through;
   cursor: not-allowed;
   pointer-events: none;
+}
+
+
+/*!
+ * UI Framework 1.3.0
+ * Validation summary and combobox
+ */
+
+/* ---------------------------------------------------------------- Fields */
+
+.ui-field {
+  margin-bottom: var(--ui-space-4);
+}
+
+.ui-field:last-child {
+  margin-bottom: 0;
+}
+
+/* --------------------------------------------------- Validation summary */
+
+.ui-validate-summary[hidden] {
+  display: none;
+}
+
+.ui-validate-summary {
+  margin-bottom: var(--ui-space-5);
+}
+
+.ui-validate-summary:focus {
+  outline: none;
+  box-shadow: var(--ui-focus-ring);
+}
+
+.ui-validate-summary-list {
+  margin: var(--ui-space-2) 0 0;
+  padding-left: var(--ui-space-5);
+  display: grid;
+  gap: var(--ui-space-1);
+  font-size: .875rem;
+}
+
+.ui-validate-summary-list a {
+  color: inherit;
+  font-weight: 600;
+  text-underline-offset: 2px;
+}
+
+.ui-validate-summary-list a:hover,
+.ui-validate-summary-list a:focus-visible {
+  text-decoration: underline;
+}
+
+/* ------------------------------------------------------------- Combobox */
+
+.ui-combobox {
+  position: relative;
+  display: block;
+}
+
+.ui-combobox-native {
+  /* The real <select> still posts the value; it is never shown. */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.ui-combobox-control {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.ui-combobox-input {
+  width: 100%;
+  padding-right: 2.25rem;
+}
+
+.ui-combobox-clear {
+  position: absolute;
+  right: var(--ui-space-2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  font-size: 1.125rem;
+  line-height: 1;
+  color: var(--ui-muted);
+  background: none;
+  border: 0;
+  border-radius: var(--ui-radius-pill);
+  cursor: pointer;
+  transition: background var(--ui-transition-fast), color var(--ui-transition-fast);
+}
+
+.ui-combobox-clear:hover {
+  color: var(--ui-text);
+  background: var(--ui-surface-muted);
+}
+
+.ui-combobox-clear:focus-visible {
+  outline: none;
+  box-shadow: var(--ui-focus-ring);
+}
+
+.ui-combobox-clear[hidden] {
+  display: none;
+}
+
+.ui-combobox-menu {
+  position: absolute;
+  z-index: var(--ui-z-dropdown);
+  width: 100%;
+  max-height: 16rem;
+  margin-top: var(--ui-space-1);
+  overflow-y: auto;
+  background: var(--ui-surface);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-3);
+  box-shadow: var(--ui-shadow-3);
+}
+
+.ui-combobox-menu[hidden] {
+  display: none;
+}
+
+.ui-combobox-option {
+  display: flex;
+  flex-direction: column;
+  gap: .125rem;
+  padding: var(--ui-space-2) var(--ui-space-3);
+  cursor: pointer;
+  transition: background var(--ui-transition-fast);
+}
+
+.ui-combobox-option:hover,
+.ui-combobox-option.ui-active {
+  background: var(--ui-surface-muted);
+}
+
+.ui-combobox-option[aria-selected="true"] {
+  background: var(--ui-primary-soft);
+  font-weight: 600;
+}
+
+.ui-combobox-option-label {
+  font-size: .9375rem;
+  color: var(--ui-text);
+}
+
+.ui-combobox-option-hint {
+  font-size: .8125rem;
+  color: var(--ui-muted);
+}
+
+.ui-combobox-message {
+  padding: var(--ui-space-3);
+  font-size: .875rem;
+  color: var(--ui-muted);
+  text-align: center;
+}
+
+.ui-combobox-error {
+  color: var(--ui-danger);
+}
+
+.ui-combobox-loading::after {
+  content: "";
+  display: inline-block;
+  width: .75rem;
+  height: .75rem;
+  margin-left: var(--ui-space-2);
+  vertical-align: -1px;
+  border: 2px solid var(--ui-border);
+  border-top-color: var(--ui-primary);
+  border-radius: 50%;
+  animation: ui-combobox-spin .6s linear infinite;
+}
+
+@keyframes ui-combobox-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-combobox-loading::after {
+    animation-duration: 2s;
+  }
+}
+
+
+/*!
+ * UI Framework 1.3.0
+ * Table selection, column menu, sticky columns, upload states
+ */
+
+/* ------------------------------------------------------- Toolbar grouping */
+
+.ui-table-toolbar-end {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ui-space-2);
+  align-items: center;
+  justify-content: flex-end;
+  margin-left: auto;
+}
+
+/*
+ * .ui-control is width:100%, which makes the search box claim the whole
+ * toolbar row and push the buttons onto a line of their own.
+ */
+.ui-table-toolbar .ui-table-search {
+  width: auto;
+  min-width: 11rem;
+}
+
+/* ------------------------------------------------------------- Selection */
+
+.ui-table-select-cell {
+  width: 1%;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.ui-table tbody tr.ui-selected {
+  background: var(--ui-primary-soft);
+}
+
+.ui-table-selection {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ui-space-2);
+  align-items: center;
+  padding: var(--ui-space-2) var(--ui-space-3);
+  margin-bottom: var(--ui-space-2);
+  background: var(--ui-primary-soft);
+  border: 1px solid var(--ui-primary);
+  border-radius: var(--ui-radius-2);
+}
+
+.ui-table-selection[hidden] {
+  display: none;
+}
+
+.ui-table-selection-count {
+  margin-right: auto;
+  font-size: .875rem;
+  font-weight: 600;
+  color: var(--ui-primary);
+}
+
+/* --------------------------------------------------------- Column toggles */
+
+.ui-table-column-option {
+  display: flex;
+  gap: var(--ui-space-2);
+  align-items: center;
+  cursor: pointer;
+}
+
+.ui-table th[hidden],
+.ui-table td[hidden] {
+  display: none;
+}
+
+/* --------------------------------------------------------- Sticky columns */
+
+/*
+ * Sticky cells need an opaque background of their own: the row underneath
+ * scrolls beneath them, and a transparent cell would show it through.
+ */
+.ui-table-sticky-first th:first-child,
+.ui-table-sticky-first td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--ui-surface);
+}
+
+.ui-table-sticky-first thead th:first-child {
+  z-index: 2;
+}
+
+.ui-table-sticky-first tbody tr:hover td:first-child {
+  background: var(--ui-surface-muted);
+}
+
+.ui-table-sticky-first tbody tr.ui-selected td:first-child {
+  background: var(--ui-primary-soft);
+}
+
+.ui-table-sticky-head thead th {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: var(--ui-surface-soft);
+}
+
+/* --------------------------------------------------------- Loading state */
+
+.ui-table-loading {
+  position: relative;
+}
+
+.ui-table-loading .ui-table tbody {
+  opacity: .45;
+  transition: opacity var(--ui-transition);
+}
+
+.ui-table-loading::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1.75rem;
+  height: 1.75rem;
+  margin: -.875rem 0 0 -.875rem;
+  border: 2px solid var(--ui-border);
+  border-top-color: var(--ui-primary);
+  border-radius: 50%;
+  animation: ui-table-spin .6s linear infinite;
+}
+
+@keyframes ui-table-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-table-loading::after { animation-duration: 2s; }
+}
+
+.ui-table-error-row td {
+  color: var(--ui-danger);
+}
+
+/* -------------------------------------------------------- Upload feedback */
+
+.ui-upload-errors:empty {
+  display: none;
+}
+
+.ui-upload-error {
+  margin: var(--ui-space-1) 0 0;
+  font-size: .8125rem;
+  color: var(--ui-danger);
+}
+
+.ui-file-item-progress {
+  flex: 1;
+  min-width: 4rem;
+  margin: 0 var(--ui-space-3);
+}
+
+.ui-file-item-progress[hidden] {
+  display: none;
+}
+
+.ui-progress-sm {
+  height: .25rem;
+}
+
+.ui-file-item.ui-uploaded {
+  border-color: var(--ui-success);
+}
+
+.ui-file-item.ui-uploaded .ui-progress-bar {
+  background: var(--ui-success);
+}
+
+.ui-file-item.ui-upload-failed {
+  border-color: var(--ui-danger);
+}
+
+.ui-file-item.ui-upload-failed .ui-file-item-name {
+  color: var(--ui-danger);
+}
+
+.ui-file-item.ui-upload-failed .ui-progress-bar {
+  background: var(--ui-danger);
+}
+
+
+/*!
+ * UI Framework 1.3.0
+ * Charts, popovers and copy feedback
+ */
+
+:root {
+  --ui-chart-1: #2563eb;
+  --ui-chart-2: #16a34a;
+  --ui-chart-3: #f59e0b;
+  --ui-chart-4: #dc2626;
+  --ui-chart-5: #0891b2;
+  --ui-chart-6: #7c3aed;
+}
+
+/* ----------------------------------------------------------------- Charts */
+
+.ui-chart {
+  display: block;
+  width: 100%;
+}
+
+.ui-chart-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/*
+ * Bar and line charts stretch to their container via preserveAspectRatio="none",
+ * so an explicit height is what actually controls their size.
+ */
+.ui-chart-bar .ui-chart-svg,
+.ui-chart-line .ui-chart-svg {
+  height: 10rem;
+}
+
+.ui-chart-sparkline {
+  display: inline-block;
+  width: 6rem;
+  vertical-align: middle;
+}
+
+.ui-chart-sparkline .ui-chart-svg {
+  height: 1.75rem;
+}
+
+.ui-chart-donut .ui-chart-svg {
+  max-width: 12rem;
+  height: auto;
+  margin: 0 auto;
+}
+
+.ui-chart-donut-svg {
+  /* Dash offsets are measured from 3 o'clock; rotate so segments start at 12. */
+  transform: rotate(-90deg);
+}
+
+.ui-chart-segment {
+  transition: stroke-width var(--ui-transition-fast);
+}
+
+.ui-chart-centre {
+  font-size: .3rem;
+  font-weight: 700;
+  fill: var(--ui-text);
+  transform: rotate(90deg);
+  transform-origin: 21px 21px;
+}
+
+/* Legend */
+
+.ui-chart-legend {
+  display: grid;
+  gap: var(--ui-space-1);
+  margin: var(--ui-space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ui-chart-legend-item {
+  display: flex;
+  gap: var(--ui-space-2);
+  align-items: center;
+  font-size: .8125rem;
+}
+
+.ui-chart-legend-label {
+  /* Shrink the label rather than pushing the value onto its own line, which
+     is what happens in a narrow card with a long category name. */
+  flex: 1;
+  min-width: 0;
+  color: var(--ui-text-soft);
+}
+
+.ui-chart-legend-value {
+  margin-left: auto;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--ui-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.ui-chart-swatch {
+  width: .625rem;
+  height: .625rem;
+  border-radius: var(--ui-radius-1);
+  flex: none;
+}
+
+.ui-chart-swatch[data-ui-swatch="0"] { background: var(--ui-chart-1); }
+.ui-chart-swatch[data-ui-swatch="1"] { background: var(--ui-chart-2); }
+.ui-chart-swatch[data-ui-swatch="2"] { background: var(--ui-chart-3); }
+.ui-chart-swatch[data-ui-swatch="3"] { background: var(--ui-chart-4); }
+.ui-chart-swatch[data-ui-swatch="4"] { background: var(--ui-chart-5); }
+.ui-chart-swatch[data-ui-swatch="5"] { background: var(--ui-chart-6); }
+
+/* --------------------------------------------------------------- Popover */
+
+.ui-popover {
+  position: fixed;
+  z-index: var(--ui-z-popover);
+  max-width: 20rem;
+  padding: var(--ui-space-3);
+  padding-right: var(--ui-space-5);
+  background: var(--ui-surface);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-3);
+  box-shadow: var(--ui-shadow-3);
+  color: var(--ui-text);
+  font-size: .875rem;
+  line-height: 1.5;
+}
+
+.ui-popover-title {
+  margin-bottom: var(--ui-space-1);
+  font-weight: 700;
+}
+
+.ui-popover-body > :first-child { margin-top: 0; }
+.ui-popover-body > :last-child { margin-bottom: 0; }
+
+.ui-popover-close {
+  position: absolute;
+  top: var(--ui-space-1);
+  right: var(--ui-space-1);
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  font-size: 1.125rem;
+  line-height: 1;
+  color: var(--ui-muted);
+  background: none;
+  border: 0;
+  border-radius: var(--ui-radius-pill);
+  cursor: pointer;
+}
+
+.ui-popover-close:hover {
+  color: var(--ui-text);
+  background: var(--ui-surface-muted);
+}
+
+.ui-popover-close:focus-visible {
+  outline: none;
+  box-shadow: var(--ui-focus-ring);
+}
+
+.ui-popover-arrow {
+  position: absolute;
+  top: -.375rem;
+  left: 1rem;
+  width: .75rem;
+  height: .75rem;
+  background: var(--ui-surface);
+  border-top: 1px solid var(--ui-border);
+  border-left: 1px solid var(--ui-border);
+  transform: rotate(45deg);
+}
+
+/* floatPanel flips the panel above the trigger when space runs out. */
+.ui-popover.ui-panel-above .ui-popover-arrow {
+  top: auto;
+  bottom: -.375rem;
+  border-top: 0;
+  border-left: 0;
+  border-bottom: 1px solid var(--ui-border);
+  border-right: 1px solid var(--ui-border);
+}
+
+/* ---------------------------------------------------------- Copy feedback */
+
+.ui-copied {
+  color: var(--ui-success) !important;
+  border-color: var(--ui-success) !important;
+}
+
+.ui-copy-failed {
+  color: var(--ui-danger) !important;
+  border-color: var(--ui-danger) !important;
+}
+
+
+/*!
+ * UI Framework 1.3.0
+ * Status lexicon, record header, and the A4 document sheet
+ */
+
+/* ------------------------------------------------------ Status lexicon */
+
+/*
+ * A fixed vocabulary for record state. The point is not the styling -- it is
+ * that every screen uses the same seven words with the same seven colours.
+ * Without a shared set, each screen invents its own and "Under review" ends up
+ * amber on one page and blue on the next.
+ */
+
+.ui-status {
+  display: inline-flex;
+  gap: .375rem;
+  align-items: center;
+  padding: .2rem .55rem;
+  font-size: .75rem;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  border-radius: var(--ui-radius-pill);
+}
+
+.ui-status::before {
+  content: "";
+  width: .4rem;
+  height: .4rem;
+  border-radius: 50%;
+  background: currentColor;
+  flex: none;
+}
+
+.ui-status-draft {
+  color: var(--ui-muted);
+  background: var(--ui-surface-muted);
+  border-color: var(--ui-border);
+}
+
+.ui-status-submitted {
+  color: var(--ui-info);
+  background: var(--ui-info-soft);
+  border-color: color-mix(in srgb, var(--ui-info) 30%, transparent);
+}
+
+.ui-status-under-review {
+  color: #b45309;
+  background: var(--ui-warning-soft);
+  border-color: color-mix(in srgb, var(--ui-warning) 35%, transparent);
+}
+
+.ui-status-approved,
+.ui-status-active {
+  color: #15803d;
+  background: var(--ui-success-soft);
+  border-color: color-mix(in srgb, var(--ui-success) 30%, transparent);
+}
+
+.ui-status-rejected {
+  color: var(--ui-danger);
+  background: var(--ui-danger-soft);
+  border-color: color-mix(in srgb, var(--ui-danger) 30%, transparent);
+}
+
+.ui-status-expired {
+  color: var(--ui-danger);
+  background: var(--ui-danger-soft);
+  border-color: color-mix(in srgb, var(--ui-danger) 30%, transparent);
+}
+
+/* Expired is a lapse; suspended is a sanction. Distinguished by the ring. */
+.ui-status-expired::before {
+  background: transparent;
+  border: 1.5px solid currentColor;
+}
+
+.ui-status-suspended {
+  color: #b45309;
+  background: var(--ui-warning-soft);
+  border-color: color-mix(in srgb, var(--ui-warning) 45%, transparent);
+  border-style: dashed;
+}
+
+[data-ui-theme="dark"] .ui-status-under-review,
+[data-ui-theme="dark"] .ui-status-suspended { color: #fbbf24; }
+[data-ui-theme="dark"] .ui-status-approved,
+[data-ui-theme="dark"] .ui-status-active { color: #4ade80; }
+
+/* ------------------------------------------------------- Record header */
+
+.ui-record-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ui-space-3);
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-bottom: var(--ui-space-4);
+  margin-bottom: var(--ui-space-5);
+  border-bottom: 1px solid var(--ui-border);
+}
+
+.ui-record-title {
+  margin: 0;
+  font-size: 1.375rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.ui-record-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ui-space-2) var(--ui-space-4);
+  align-items: center;
+  margin-top: var(--ui-space-2);
+  font-size: .8125rem;
+  color: var(--ui-muted);
+}
+
+.ui-record-meta dt {
+  display: inline;
+  margin: 0;
+  font-weight: 400;
+}
+
+.ui-record-meta dt::after { content: ":"; }
+
+.ui-record-meta dd {
+  display: inline;
+  margin: 0 0 0 .25rem;
+  color: var(--ui-text);
+  font-weight: 600;
+}
+
+.ui-record-ref {
+  font-family: var(--ui-font-mono);
+  font-size: .8125rem;
+  letter-spacing: .02em;
+}
+
+.ui-record-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ui-space-2);
+  align-items: center;
+}
+
+/* --------------------------------------------------------- A4 document */
+
+/*
+ * A printable sheet for certificates, statements and reports. On
+ * screen it is a page-like card; on paper it fills the sheet exactly, with the
+ * running header/footer repeated via position: fixed (which, in paged media,
+ * repeats on every page rather than pinning to the viewport).
+ */
+
+.ui-document {
+  --ui-document-margin: 18mm;
+  position: relative;
+  /* Column flow so the footer can sit at the foot of the sheet rather than
+     wherever the body text happens to end. */
+  display: flex;
+  flex-direction: column;
+  width: 210mm;
+  min-height: 297mm;
+  max-width: 100%;
+  padding: var(--ui-document-margin);
+  margin: 0 auto var(--ui-space-6);
+  background: #fff;
+  color: #111;
+  box-shadow: var(--ui-shadow-3);
+}
+
+.ui-document-footer {
+  margin-top: auto;
+}
+
+.ui-document-landscape {
+  width: 297mm;
+  min-height: 210mm;
+}
+
+.ui-document-header,
+.ui-document-footer {
+  display: flex;
+  gap: var(--ui-space-3);
+  align-items: center;
+  justify-content: space-between;
+  color: #444;
+  font-size: .75rem;
+}
+
+.ui-document-header {
+  padding-bottom: var(--ui-space-3);
+  margin-bottom: var(--ui-space-5);
+  border-bottom: 2px solid #111;
+}
+
+.ui-document-footer {
+  padding-top: var(--ui-space-3);
+  border-top: 1px solid #999;
+}
+
+.ui-document-title {
+  margin: 0 0 var(--ui-space-1);
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.ui-document-subtitle {
+  margin: 0 0 var(--ui-space-5);
+  font-size: .875rem;
+  text-align: center;
+  color: #444;
+}
+
+.ui-document-body {
+  font-size: .875rem;
+  line-height: 1.6;
+}
+
+.ui-document-seal {
+  display: flex;
+  gap: var(--ui-space-5);
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-top: var(--ui-space-7);
+}
+
+.ui-document-signature {
+  flex: 1;
+  max-width: 16rem;
+  padding-top: var(--ui-space-2);
+  border-top: 1px solid #111;
+  font-size: .75rem;
+  text-align: center;
+}
+
+.ui-document-qr {
+  width: 26mm;
+  height: 26mm;
+  flex: none;
+  border: 1px solid #ccc;
+}
+
+.ui-document-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 5rem;
+  font-weight: 800;
+  letter-spacing: .1em;
+  color: rgba(0, 0, 0, .06);
+  pointer-events: none;
+  white-space: nowrap;
+  transform: translate(-50%, -50%) rotate(-30deg);
+}
+
+/* Force a page break before/after a block when printing. */
+.ui-page-break-before { break-before: page; }
+.ui-page-break-after { break-after: page; }
+.ui-page-break-avoid { break-inside: avoid; }
+
+@page {
+  size: A4;
+  margin: 0;
+}
+
+@media print {
+  .ui-document {
+    width: auto;
+    min-height: 0;
+    margin: 0;
+    box-shadow: none;
+  }
+
+  /* Repeat the running header and footer on every printed page. */
+  .ui-document-running-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .ui-document-running-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .ui-document-table {
+    break-inside: auto;
+  }
+
+  .ui-document-table thead {
+    display: table-header-group;
+  }
+
+  .ui-document-table tr {
+    break-inside: avoid;
+  }
+
+  .ui-status {
+    /* Status colour carries meaning, so keep it when the printer allows. */
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
 }

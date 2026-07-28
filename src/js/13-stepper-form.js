@@ -2,7 +2,20 @@
   "use strict";
   var UI = window.UI;
 
-  function validateStep(panel) {
+  // Gating "Next" on the current step only.
+  //
+  // When the form also opts into `data-ui-validate`, delegate: that module
+  // sets `novalidate` and renders its own inline messages, so calling
+  // reportValidity() here would leave the user stuck on a step with no visible
+  // reason -- blocked, but silently. Otherwise fall back to native validation
+  // so the wizard still works on its own.
+  function validateStep(panel, form) {
+    if (UI.validate && form.hasAttribute("data-ui-validate")) {
+      var result = UI.validate.form(form, { scope: panel });
+      if (!result.valid) UI.validate.focusFirst(form, result.errors);
+      return result.valid;
+    }
+
     var fields = UI.qa("input, select, textarea", panel);
     for (var i = 0; i < fields.length; i++) {
       if (!fields[i].reportValidity()) return false;
@@ -46,7 +59,7 @@
 
     if (nextButton) {
       nextButton.addEventListener("click", function () {
-        if (!validateStep(panels[current])) return;
+        if (!validateStep(panels[current], form)) return;
         if (current < panels.length - 1) current++;
         render();
       });
@@ -56,7 +69,7 @@
   }
 
   function init(root) {
-    UI.qa("[data-ui-stepper-form]", root).forEach(build);
+    UI.matchAll("[data-ui-stepper-form]", root).forEach(build);
   }
 
   UI.register(init);

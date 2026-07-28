@@ -264,7 +264,7 @@
   }
 
   function init(root) {
-    UI.qa("[data-ui-date-picker]", root).forEach(build);
+    UI.matchAll("[data-ui-date-picker]", root).forEach(build);
   }
 
   document.addEventListener("click", function (event) {

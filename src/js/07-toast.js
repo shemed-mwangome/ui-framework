@@ -33,7 +33,7 @@
       '<div class="ui-toast-icon">' + UI.escape(options.icon || "●") + '</div>' +
       '<div><div class="ui-toast-title">' + UI.escape(options.title || "Notification") + '</div>' +
       '<p class="ui-toast-message">' + UI.escape(options.message || "") + '</p></div>' +
-      '<button type="button" class="ui-toast-close" aria-label="Close">&times;</button>' +
+      '<button type="button" class="ui-toast-close" aria-label="' + UI.escape(UI.t("toast.close")) + '">&times;</button>' +
       (duration > 0 ? '<div class="ui-toast-progress"></div>' : "");
 
     toast.querySelector(".ui-toast-close").addEventListener("click", function () { remove(toast); });

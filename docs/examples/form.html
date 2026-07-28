@@ -12,12 +12,12 @@
 <header class="ui-navbar ui-justify-between"><a class="ui-navbar-brand" href="../index.html">← UI Framework</a><button class="ui-btn ui-btn-sm ui-btn-outline-secondary" data-ui-theme-toggle>Theme</button></header>
 <main class="ui-container-lg ui-py-6">
   <div class="ui-card">
-    <div class="ui-card-header"><h1 class="ui-card-title">Schedule compliance inspection</h1><p class="ui-card-subtitle">Complete all required fields before continuing. Your progress is saved automatically as a draft.</p></div>
-    <form class="ui-card-body" id="workflowForm" data-ui-stepper-form data-ui-save-next data-ui-draft data-ui-draft-key="inspection-schedule" data-ui-draft-auto-discard="false">
+    <div class="ui-card-header"><h1 class="ui-card-title">Schedule compliance review</h1><p class="ui-card-subtitle">Complete all required fields before continuing. Your progress is saved automatically as a draft.</p></div>
+    <form class="ui-card-body" id="workflowForm" data-ui-stepper-form data-ui-save-next data-ui-draft data-ui-draft-key="review-schedule" data-ui-draft-auto-discard="false">
 
       <div class="ui-stepper ui-mb-6" data-ui-stepper>
         <div class="ui-step"><div class="ui-step-marker">1</div><div class="ui-step-label">Company</div></div>
-        <div class="ui-step"><div class="ui-step-marker">2</div><div class="ui-step-label">Inspection</div></div>
+        <div class="ui-step"><div class="ui-step-marker">2</div><div class="ui-step-label">Review</div></div>
         <div class="ui-step"><div class="ui-step-marker">3</div><div class="ui-step-label">Documents</div></div>
         <div class="ui-step"><div class="ui-step-marker">4</div><div class="ui-step-label">Review</div></div>
       </div>
@@ -25,24 +25,24 @@
       <fieldset data-ui-step>
         <div class="ui-alert ui-alert-info ui-mb-5"><div class="ui-alert-icon">i</div><div><div class="ui-alert-title">Required information</div><p class="ui-alert-message">Fields marked with an asterisk are mandatory.</p></div></div>
         <div class="ui-row ui-g-3">
-          <div class="ui-col-12 ui-col-md-6"><label class="ui-label ui-label-required" for="premiseName">Premise</label><input class="ui-control" id="premiseName" name="premiseName" required placeholder="Enter premise name"></div>
-          <div class="ui-col-12 ui-col-md-6"><label class="ui-label ui-label-required" for="region">Region</label><select class="ui-select" id="region" name="region" required><option value="">Select region</option><option>Dar es Salaam</option><option>Tanga</option><option>Mwanza</option></select></div>
+          <div class="ui-col-12 ui-col-md-6"><label class="ui-label ui-label-required" for="siteName">Site</label><input class="ui-control" id="siteName" name="siteName" required placeholder="Enter site name"></div>
+          <div class="ui-col-12 ui-col-md-6"><label class="ui-label ui-label-required" for="region">Region</label><select class="ui-select" id="region" name="region" required><option value="">Select region</option><option>Central</option><option>South</option><option>West</option></select></div>
         </div>
       </fieldset>
 
       <fieldset data-ui-step hidden>
         <div class="ui-row ui-g-3">
           <div class="ui-col-12">
-            <label class="ui-label ui-label-required">Inspection dates</label>
-            <div class="ui-date-range" data-ui-date-range data-ui-placeholder="Select inspection date range">
+            <label class="ui-label ui-label-required">Review dates</label>
+            <div class="ui-date-range" data-ui-date-range data-ui-placeholder="Select review date range">
               <input type="date" name="startDate" aria-label="Start date" required>
               <input type="date" name="endDate" aria-label="End date" required>
             </div>
           </div>
           <div class="ui-col-12">
-            <label class="ui-label" for="officers">Inspection officers</label>
-            <select id="officers" name="officers" multiple data-ui-multiselect data-display="tags" data-max-tags="2" data-placeholder="Select officers">
-              <option>Asha M.</option><option>Baraka J.</option><option>Neema K.</option><option>Selemani M.</option>
+            <label class="ui-label" for="reviewers">Assigned reviewers</label>
+            <select id="reviewers" name="reviewers" multiple data-ui-multiselect data-display="tags" data-max-tags="2" data-placeholder="Select reviewers">
+              <option>Alex M.</option><option>Sam J.</option><option>Neema K.</option><option>Selemani M.</option>
             </select>
           </div>
           <div class="ui-col-12"><label class="ui-label" for="notes">Notes</label><textarea class="ui-control" id="notes" name="notes" placeholder="Add any special instructions"></textarea></div>
@@ -88,12 +88,12 @@ document.addEventListener("DOMContentLoaded", function () {
   form.addEventListener("submit", function (event) {
     event.preventDefault();
     UI.confirm({
-      title: "Submit inspection schedule",
+      title: "Submit review schedule",
       message: "Submit this schedule for review? You won't be able to edit it once submitted."
     }).then(function (confirmed) {
       if (!confirmed) return;
       UI.draft.discard(form);
-      UI.toast.show({ type: "success", title: "Submitted", message: "The inspection schedule is ready for review." });
+      UI.toast.show({ type: "success", title: "Submitted", message: "The review schedule is ready for review." });
     });
   });
 });

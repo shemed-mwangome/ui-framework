@@ -16,6 +16,8 @@ CSS_ORDER = [
     "16-multiselect.css", "17-progress-loaders.css",
     "18-upload-empty-stepper.css", "19-print.css",
     "20-form-flow.css", "21-date-range.css",
+    "22-validate-combobox.css", "23-table-tools.css",
+    "24-chart-popover.css", "25-status-document.css",
 ]
 
 
@@ -30,15 +32,17 @@ CSS_ORDER = [
 JS_ORDER = [
     "00-core.js", "01-alert.js", "02-collapse-accordion.js",
     "03-dropdown.js", "04-tabs.js", "08-multiselect.js",
+    "22-popover.js",
     "15-date-utils.js", "12-date-range.js", "16-date-picker.js",
     "05-modal.js", "06-offcanvas.js",
     "07-toast.js", "09-upload-theme.js", "10-confirm.js",
     "11-save-next.js", "13-stepper-form.js", "14-data-table.js",
-    "17-draft.js",
+    "17-draft.js", "18-validate.js", "19-mask.js", "20-combobox.js",
+    "21-chart.js", "23-clipboard.js",
 ]
 
 CSS_BANNER = """/*!
- * UI Framework v1.2.0
+ * UI Framework v1.3.0
  * Original dependency-free CSS/JavaScript framework.
  * Prefix: ui-
  * License: MIT
@@ -46,7 +50,7 @@ CSS_BANNER = """/*!
 """
 
 JS_BANNER = """/*!
- * UI Framework v1.2.0
+ * UI Framework v1.3.0
  * Dependency-free JavaScript bundle.
  * License: MIT
  */
@@ -89,23 +93,75 @@ def bundle(directory: Path, order: list[str], banner: str) -> str:
     )
 
 
+# Which cascade layer each CSS module belongs to in the layered build.
+# Anything not listed falls into "ui-components".
+LAYER_BASE = {"00-tokens.css", "01-base.css", "02-typography.css", "03-layout-grid.css"}
+LAYER_UTILITIES = {"04-utilities.css", "19-print.css"}
+
+
+def layered_css(directory: Path, order: list[str], banner: str) -> str:
+    """Build a @layer-wrapped variant of the CSS bundle.
+
+    Cascade layers make precedence explicit instead of a specificity race.
+    Consumers coexisting with Bootstrap, CoreUI or an existing master.css
+    declare the order they want once, at the top of their own stylesheet:
+
+        @layer app-reset, ui-base, ui-components, ui-utilities, app-overrides;
+
+    ...and every app rule in `app-overrides` then beats the framework
+    regardless of selector specificity -- no !important needed. Within the
+    framework the three sub-layers keep base < components < utilities stable
+    no matter what order the files happen to be concatenated in.
+
+    Note: an unlayered stylesheet always outranks a layered one. Apps that
+    load this variant should keep their own overrides in a declared layer.
+    """
+    groups: dict[str, list[str]] = {"ui-base": [], "ui-components": [], "ui-utilities": []}
+
+    for name in order:
+        text = (directory / name).read_text(encoding="utf-8")
+        # Strip the per-file banner comments; the bundle carries its own.
+        text = re.sub(r"/\*!.*?\*/", "", text, count=1, flags=re.DOTALL).strip()
+        if name in LAYER_BASE:
+            groups["ui-base"].append(text)
+        elif name in LAYER_UTILITIES:
+            groups["ui-utilities"].append(text)
+        else:
+            groups["ui-components"].append(text)
+
+    out = [banner, "@layer ui-base, ui-components, ui-utilities;\n"]
+    for layer, chunks in groups.items():
+        out.append("@layer %s {\n%s\n}\n" % (layer, "\n\n".join(chunks)))
+    return "\n".join(out)
+
+
 def main() -> None:
     dist = ROOT / "dist"
     dist.mkdir(exist_ok=True)
 
     css = bundle(ROOT / "src/css", CSS_ORDER, CSS_BANNER)
     js = bundle(ROOT / "src/js", JS_ORDER, JS_BANNER)
+    layered = layered_css(ROOT / "src/css", CSS_ORDER, CSS_BANNER)
 
     (dist / "ui-framework.css").write_text(css, encoding="utf-8")
     (dist / "ui-framework.min.css").write_text(compact_css(css) + "\n", encoding="utf-8")
+    (dist / "ui-framework.layered.css").write_text(layered, encoding="utf-8")
+    (dist / "ui-framework.layered.min.css").write_text(
+        compact_css(layered) + "\n", encoding="utf-8"
+    )
     (dist / "ui-framework.js").write_text(js, encoding="utf-8")
     (dist / "ui-framework.min.js").write_text(compact_js(js) + "\n", encoding="utf-8")
 
     print("Built:")
-    print(" - dist/ui-framework.css")
-    print(" - dist/ui-framework.min.css")
-    print(" - dist/ui-framework.js")
-    print(" - dist/ui-framework.min.js")
+    for name in (
+        "ui-framework.css",
+        "ui-framework.min.css",
+        "ui-framework.layered.css",
+        "ui-framework.layered.min.css",
+        "ui-framework.js",
+        "ui-framework.min.js",
+    ):
+        print(" - dist/%s (%d bytes)" % (name, (dist / name).stat().st_size))
 
 
 if __name__ == "__main__":

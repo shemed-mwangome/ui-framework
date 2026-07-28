@@ -47,13 +47,24 @@
     });
   }
 
+  // Intl.RelativeTimeFormat handles plural rules per locale, which a string
+  // table cannot -- "2 minutes ago" vs "dakika 2 zilizopita" have different
+  // pluralisation shapes. Falls back to the i18n table where unsupported.
   function relativeTime(timestamp) {
     var seconds = Math.round((Date.now() - timestamp) / 1000);
-    if (seconds < 60) return "just now";
     var minutes = Math.round(seconds / 60);
-    if (minutes < 60) return minutes + (minutes === 1 ? " minute ago" : " minutes ago");
     var hours = Math.round(minutes / 60);
-    return hours + (hours === 1 ? " hour ago" : " hours ago");
+
+    if (window.Intl && Intl.RelativeTimeFormat) {
+      var formatter = new Intl.RelativeTimeFormat(UI.i18n.locale, { numeric: "auto" });
+      if (seconds < 60) return formatter.format(-seconds, "second");
+      if (minutes < 60) return formatter.format(-minutes, "minute");
+      return formatter.format(-hours, "hour");
+    }
+
+    if (seconds < 60) return UI.t("draft.justNow");
+    if (minutes < 60) return UI.t("draft.minutes", { count: minutes });
+    return UI.t("draft.hours", { count: hours });
   }
 
   // Best-effort remote sync. The server contract:
@@ -147,11 +158,14 @@
       banner.setAttribute("role", "alert");
       banner.innerHTML =
         '<div class="ui-alert-icon">i</div>' +
-        '<div><div class="ui-alert-title">Unsaved draft found</div>' +
-        '<p class="ui-alert-message">You have a draft saved ' + UI.escape(relativeTime(draft.savedAt)) + '.</p>' +
+        '<div><div class="ui-alert-title">' + UI.escape(UI.t("unsaved.title")) + "</div>" +
+        '<p class="ui-alert-message">' +
+        UI.escape(UI.t("draft.found", { when: relativeTime(draft.savedAt) })) + "</p>" +
         '<div class="ui-d-flex ui-gap-2 ui-mt-2">' +
-        '<button type="button" class="ui-btn ui-btn-sm ui-btn-primary" data-ui-draft-restore>Restore draft</button>' +
-        '<button type="button" class="ui-btn ui-btn-sm ui-btn-outline-secondary" data-ui-draft-discard>Discard</button>' +
+        '<button type="button" class="ui-btn ui-btn-sm ui-btn-primary" data-ui-draft-restore>' +
+        UI.escape(UI.t("draft.restore")) + "</button>" +
+        '<button type="button" class="ui-btn ui-btn-sm ui-btn-outline-secondary" data-ui-draft-discard>' +
+        UI.escape(UI.t("draft.discard")) + "</button>" +
         "</div></div>";
       form.parentNode.insertBefore(banner, form);
 
@@ -186,7 +200,7 @@
   }
 
   function init(root) {
-    UI.qa("form[data-ui-draft]", root).forEach(build);
+    UI.matchAll("form[data-ui-draft]", root).forEach(build);
   }
 
   UI.draft = {

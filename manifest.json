@@ -1,5 +1,5 @@
 {
-  "version": "1.2.0",
+  "version": "1.3.0",
   "prefix": "ui-",
   "cssModules": [
     "00-tokens.css",
@@ -23,7 +23,11 @@
     "18-upload-empty-stepper.css",
     "19-print.css",
     "20-form-flow.css",
-    "21-date-range.css"
+    "21-date-range.css",
+    "22-validate-combobox.css",
+    "23-table-tools.css",
+    "24-chart-popover.css",
+    "25-status-document.css"
   ],
   "jsModules": [
     "00-core.js",
@@ -32,6 +36,7 @@
     "03-dropdown.js",
     "04-tabs.js",
     "08-multiselect.js",
+    "22-popover.js",
     "15-date-utils.js",
     "12-date-range.js",
     "16-date-picker.js",
@@ -43,11 +48,18 @@
     "11-save-next.js",
     "13-stepper-form.js",
     "14-data-table.js",
-    "17-draft.js"
+    "17-draft.js",
+    "18-validate.js",
+    "19-mask.js",
+    "20-combobox.js",
+    "21-chart.js",
+    "23-clipboard.js"
   ],
   "bundles": [
     "dist/ui-framework.css",
     "dist/ui-framework.min.css",
+    "dist/ui-framework.layered.css",
+    "dist/ui-framework.layered.min.css",
     "dist/ui-framework.js",
     "dist/ui-framework.min.js"
   ],
@@ -64,6 +76,8 @@
     "docs/examples/dashboard.html",
     "docs/examples/form.html",
     "docs/examples/login.html",
+    "docs/examples/application-form.html",
+    "docs/examples/record-register.html",
     "examples/jsp-integration.jsp"
   ]
 }

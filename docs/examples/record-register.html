@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Record register — UI Framework</title>
+<link rel="stylesheet" href="../../dist/ui-framework.css">
+<link rel="stylesheet" href="../assets/docs.css">
+</head>
+<body class="ui-scope">
+
+<!--
+  Second combined demo: charts, popovers, clipboard, the status lexicon, the
+  record header, and a table doing selection + bulk actions + column toggling
+  + CSV export all at once. As with the application form, the point is to
+  exercise these together rather than one at a time -- the table's selection
+  column and its column-visibility menu both rewrite the same cells, and only
+  a combined demo shows whether they agree.
+
+  The domain (supplier register + certificate) is illustrative; the components
+  are not tied to it.
+-->
+
+<div class="ui-container ui-py-6">
+
+  <nav class="ui-breadcrumb ui-mb-4">
+    <a href="../index.html">Docs</a>
+    <span aria-hidden="true">/</span>
+    <span>Record register</span>
+  </nav>
+
+  <header class="ui-record-header">
+    <div>
+      <h1 class="ui-record-title">Supplier register</h1>
+      <dl class="ui-record-meta">
+        <dt>Reference</dt>
+        <dd class="ui-record-ref">REG-2026</dd>
+        <dt>Period</dt>
+        <dd>FY 2026</dd>
+        <dt>Status</dt>
+        <dd><span class="ui-status ui-status-active">Active</span></dd>
+      </dl>
+    </div>
+    <div class="ui-record-actions">
+      <button type="button" class="ui-btn ui-btn-outline-secondary" data-ui-copy-target=".ui-record-ref">
+        Copy reference
+      </button>
+      <button type="button" class="ui-btn ui-btn-outline-secondary"
+              data-ui-popover-target="#about" data-ui-popover-title="About this register">
+        About
+      </button>
+      <button type="button" class="ui-btn ui-btn-outline-secondary" data-ui-theme-toggle>Theme</button>
+    </div>
+  </header>
+
+  <template id="about">
+    <p>The register lists every supplier registered in the current financial year.</p>
+    <p class="ui-mb-0"><a href="#register">Jump to the table</a></p>
+  </template>
+
+  <!-- Summary -------------------------------------------------------- -->
+  <div class="ui-row ui-mb-6">
+    <div class="ui-col-12 ui-col-md-4">
+      <div class="ui-card">
+        <div class="ui-card-body">
+          <h2 class="ui-h6 ui-text-muted">Registrations by status</h2>
+          <div data-ui-chart="donut"
+               data-ui-values="4,1,1,1"
+               data-ui-labels="Active,Expired,Suspended,Under review"
+               data-ui-title="Registrations by status"
+               data-ui-centre="7"
+               data-ui-legend data-ui-legend-percent></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ui-col-12 ui-col-md-8">
+      <div class="ui-card">
+        <div class="ui-card-body">
+          <h2 class="ui-h6 ui-text-muted">
+            Contract value by month
+            <button type="button" class="ui-btn ui-btn-sm ui-btn-ghost"
+                    data-ui-popover="Figures are provisional until reconciled with finance.">
+              Note
+            </button>
+          </h2>
+          <div data-ui-chart="bar"
+               data-ui-values="1200000,1850000,900000,2400000,1750000,3100000"
+               data-ui-labels="Jan,Feb,Mar,Apr,May,Jun"
+               data-ui-title="Contract value by month"
+               data-ui-format-currency="USD"></div>
+          <p class="ui-help ui-mt-3">
+            Trend
+            <span data-ui-chart="sparkline" data-ui-values="12,18,9,24,17,31"></span>
+            rising
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Register ------------------------------------------------------- -->
+  <h2 class="ui-h4 ui-mb-3" id="register">Registered suppliers</h2>
+
+  <div data-ui-table
+       data-ui-select
+       data-ui-columns
+       data-ui-export="supplier-register"
+       data-ui-page-size="5"
+       data-ui-page-sizes="5,10,25"
+       id="register-table">
+
+    <div class="ui-table-selection" data-ui-table-selection>
+      <button type="button" class="ui-btn ui-btn-sm ui-btn-danger" id="revoke">Suspend selected</button>
+      <button type="button" class="ui-btn ui-btn-sm ui-btn-outline-secondary" id="clear">Clear</button>
+    </div>
+
+    <table class="ui-table ui-table-hover ui-table-sticky-first">
+      <thead>
+        <tr>
+          <th data-ui-field="company" data-ui-sort="text">Company</th>
+          <th data-ui-field="reference" data-ui-sort="text">Reference</th>
+          <th data-ui-field="expires" data-ui-sort="date">Expires</th>
+          <th data-ui-field="value" data-ui-sort="number">Annual value</th>
+          <th data-ui-field="status">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-ui-row-id="7">
+          <td>Acme Industries Ltd</td><td>REG-0007</td><td>2026-03-14</td>
+          <td data-ui-export-value="1500000">USD 1,500,000</td>
+          <td><span class="ui-status ui-status-active">Active</span></td>
+        </tr>
+        <tr data-ui-row-id="2">
+          <td>Blue Harbour Trading</td><td>REG-0002</td><td>2025-11-02</td>
+          <td data-ui-export-value="9000000">USD 9,000,000</td>
+          <td><span class="ui-status ui-status-expired">Expired</span></td>
+        </tr>
+        <tr data-ui-row-id="21">
+          <td>Cedar Works Ltd</td><td>REG-0021</td><td>2026-07-01</td>
+          <td data-ui-export-value="250000">USD 250,000</td>
+          <td><span class="ui-status ui-status-active">Active</span></td>
+        </tr>
+        <tr data-ui-row-id="13">
+          <td>Delta Logistics</td><td>REG-0013</td><td>2024-01-30</td>
+          <td data-ui-export-value="4200000">USD 4,200,000</td>
+          <td><span class="ui-status ui-status-suspended">Suspended</span></td>
+        </tr>
+        <tr data-ui-row-id="4">
+          <td>Evergreen Supplies</td><td>REG-0004</td><td>2026-01-15</td>
+          <td data-ui-export-value="780000">USD 780,000</td>
+          <td><span class="ui-status ui-status-active">Active</span></td>
+        </tr>
+        <tr data-ui-row-id="18">
+          <td>Foxglove Media</td><td>REG-0018</td><td>2025-06-20</td>
+          <td data-ui-export-value="310000">USD 310,000</td>
+          <td><span class="ui-status ui-status-under-review">Under review</span></td>
+        </tr>
+        <tr data-ui-row-id="11">
+          <td>Granite Partners</td><td>REG-0011</td><td>2026-05-05</td>
+          <td data-ui-export-value="2650000">USD 2,650,000</td>
+          <td><span class="ui-status ui-status-active">Active</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Printable certificate ------------------------------------------ -->
+  <h2 class="ui-h4 ui-mt-7 ui-mb-3">Certificate preview</h2>
+  <div class="ui-document" id="certificate">
+    <div class="ui-document-watermark">CERTIFIED</div>
+
+    <div class="ui-document-header">
+      <span><strong>Example Organisation</strong></span>
+      <span class="ui-record-ref">REG-2026-0184</span>
+    </div>
+
+    <h1 class="ui-document-title">Certificate of Registration</h1>
+    <p class="ui-document-subtitle">Issued under the supplier registration scheme</p>
+
+    <div class="ui-document-body">
+      <p>This is to certify that <strong>Acme Industries Ltd</strong>, tax ID
+      <span class="ui-record-ref">123-456-789</span>, is registered as an approved
+      supplier for the period stated below.</p>
+
+      <table class="ui-table ui-table-bordered ui-document-table ui-mt-4">
+        <thead>
+          <tr><th>Reference</th><th>Category</th><th>Issued</th><th>Expires</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>REG-0007</td><td>Category A — Goods</td><td>2026-03-15</td><td>2027-03-14</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ui-document-seal">
+      <div class="ui-document-signature">Authorised signatory</div>
+      <div class="ui-document-qr" aria-label="Verification QR code"></div>
+    </div>
+
+    <div class="ui-document-footer">
+      <span>Verify at example.org/verify</span>
+      <span>Page 1 of 1</span>
+    </div>
+  </div>
+
+  <div class="ui-d-flex ui-gap-2 ui-mb-6">
+    <button type="button" class="ui-btn ui-btn-primary" id="print">Print certificate</button>
+  </div>
+</div>
+
+<script src="../../dist/ui-framework.js"></script>
+<script>
+  var table = document.getElementById("register-table");
+
+  document.getElementById("revoke").addEventListener("click", function () {
+    var ids = UI.table.selected(table);
+    UI.confirm({
+      title: "Suspend registrations",
+      message: "Suspend " + ids.length + " registration(s)? This can be reversed later.",
+      variant: "danger",
+      confirmText: "Suspend"
+    }).then(function (ok) {
+      if (!ok) return;
+      UI.toast.show({ type: "success", title: "Suspended", message: ids.length + " registration(s) suspended" });
+      UI.table.clearSelection(table);
+    });
+  });
+
+  document.getElementById("clear").addEventListener("click", function () {
+    UI.table.clearSelection(table);
+  });
+
+  document.getElementById("print").addEventListener("click", function () {
+    window.print();
+  });
+</script>
+</body>
+</html>
