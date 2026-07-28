@@ -121,7 +121,10 @@
       var open = wrapper.classList.toggle("ui-open");
       trigger.setAttribute("aria-expanded", open ? "true" : "false");
       if (open) {
-        wrapper._uiFloatCleanup = UI.floatPanel(trigger, menu, { matchWidth: true });
+        wrapper._uiFloatCleanup = UI.floatPanel(trigger, menu, {
+          matchWidth: true,
+          onDismiss: function () { closeWrapper(wrapper); }
+        });
       } else if (wrapper._uiFloatCleanup) {
         wrapper._uiFloatCleanup();
         wrapper._uiFloatCleanup = null;

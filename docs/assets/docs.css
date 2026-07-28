@@ -4,6 +4,15 @@
 
 html { scroll-behavior: smooth; }
 
+/* Below 56rem, .docs-sidebar becomes `position: fixed` and sits off-screen
+   at `transform: translateX(-100%)` until opened. Nothing clips that box,
+   so on narrow viewports it silently widens the page's scrollable area by
+   its own width -- the whole page could be scrolled sideways to reveal a
+   blank strip, even though the sidebar itself was never visible. */
+html, body.docs-body {
+  overflow-x: hidden;
+}
+
 body.docs-body {
   margin: 0;
   background: var(--ui-surface-soft);
@@ -129,10 +138,13 @@ body.docs-body {
   padding: 1.25rem;
   border: 1px solid var(--ui-border);
   border-radius: var(--ui-radius-4) var(--ui-radius-4) 0 0;
+  /* A shade off the default surface color, not the surface color itself --
+     white-background components (cards, tables, tab panels) need a visibly
+     different canvas behind them or they read as borderless and washed out. */
   background:
     linear-gradient(var(--ui-border) 1px, transparent 1px),
     linear-gradient(90deg, var(--ui-border) 1px, transparent 1px),
-    var(--ui-surface);
+    var(--ui-surface-soft);
   background-size: 24px 24px;
 }
 

@@ -5,6 +5,7 @@
   display: inline-flex;
   align-items: center;
   gap: .5rem;
+  max-width: 100%;
   min-height: var(--ui-control-md);
   padding: .45rem .75rem;
   border: 1px solid var(--ui-border);
@@ -16,6 +17,19 @@
 }
 
 .ui-date-range-trigger:hover { border-color: var(--ui-border-strong); }
+
+/* Squeezed by a narrow flex row (e.g. beside other header actions on
+   mobile), the trigger used to wrap its label character-by-character into a
+   multi-line stack instead of staying one line -- truncate with an ellipsis
+   instead, the way a native <select> would. `min-width: 0` overrides the
+   flex-item default of `auto`, which otherwise refuses to shrink below the
+   label's natural width in the first place. */
+.ui-date-range-value {
+  overflow: hidden;
+  min-width: 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 
 /* The real <input> backing this trigger is display:none (interaction goes
    through the popover), so a native validation bubble has nowhere visible
@@ -156,6 +170,16 @@
 .ui-date-range-day.ui-range-end {
   background: var(--ui-primary);
   color: #fff;
+  font-weight: 700;
+}
+
+/* Live preview of the range that would be committed if the hovered day were
+   picked as the other end -- mouse-only, shown while a start date is picked
+   and an end date is not yet. */
+.ui-date-range-day.ui-in-range-hover { background: var(--ui-primary-soft); border-radius: 0; }
+.ui-date-range-day.ui-range-hover-end {
+  background: var(--ui-primary-soft);
+  box-shadow: inset 0 0 0 2px var(--ui-primary);
   font-weight: 700;
 }
 

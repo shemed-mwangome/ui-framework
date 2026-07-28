@@ -6,6 +6,15 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+  /* A brand plus several nav links can outgrow a narrow screen; scrolling
+     the bar itself beats either silently clipping a link's text or letting
+     the whole page grow wider than the viewport to fit it. */
+  overflow-x: auto;
+}
+
+.ui-navbar-brand,
+.ui-nav-link {
+  flex-shrink: 0;
 }
 
 .ui-navbar-sticky { position: sticky; top: 0; z-index: var(--ui-z-sticky); box-shadow: var(--ui-shadow-2); }
@@ -51,6 +60,9 @@
   color: inherit;
   outline: 0;
 }
+
+.ui-navbar-dark .ui-navbar-search input,
+.ui-navbar-primary .ui-navbar-search input { color: #fff; }
 
 .ui-navbar-dark .ui-navbar-search input::placeholder,
 .ui-navbar-primary .ui-navbar-search input::placeholder { color: rgba(255, 255, 255, .65); }
@@ -236,30 +248,38 @@
 .ui-tabs-vertical {
   flex-direction: column;
   align-items: stretch;
-  gap: .15rem;
+  gap: .2rem;
+  min-width: 10rem;
   border-bottom: 0;
   border-right: 1px solid var(--ui-border);
-  padding-right: .75rem;
+  padding-right: 1rem;
   overflow-x: visible;
 }
 .ui-tabs-vertical .ui-tab {
-  padding: .55rem .85rem;
+  padding: .6rem .9rem;
   border-radius: var(--ui-radius-2);
   text-align: left;
+  color: var(--ui-text-soft);
+}
+.ui-tabs-vertical .ui-tab:hover:not([aria-selected="true"]):not(.ui-active) {
+  background: var(--ui-surface-muted);
+  color: var(--ui-text);
 }
 .ui-tabs-vertical .ui-tab[aria-selected="true"],
 .ui-tabs-vertical .ui-tab.ui-active {
   background: var(--ui-primary-soft);
+  color: var(--ui-primary);
   font-weight: 700;
 }
 .ui-tabs-vertical .ui-tab[aria-selected="true"]::after,
 .ui-tabs-vertical .ui-tab.ui-active::after {
   left: auto;
-  top: .5rem;
-  bottom: .5rem;
-  right: -1px;
+  top: .3rem;
+  bottom: .3rem;
+  right: -1rem;
   width: 2px;
   height: auto;
+  border-radius: 0;
 }
 
 .ui-sidebar {

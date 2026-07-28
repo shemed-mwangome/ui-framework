@@ -674,6 +674,22 @@ test("the file input only covers the dropzone, never the preview list", async ()
   });
 });
 
+test("data-ui-upload-layout=\"inline\" marks the preview list for chip layout", async () => {
+  await ui.page(UPLOAD.replace("data-ui-upload ", 'data-ui-upload data-ui-upload-layout="inline" '), async (page) => {
+    assert.equal(await page.evaluate(() =>
+      document.querySelector(".ui-upload-preview").classList.contains("ui-upload-preview-inline")
+    ), true);
+  });
+});
+
+test("without the attribute, the preview list keeps the default stacked layout", async () => {
+  await ui.page(UPLOAD, async (page) => {
+    assert.equal(await page.evaluate(() =>
+      document.querySelector(".ui-upload-preview").classList.contains("ui-upload-preview-inline")
+    ), false);
+  });
+});
+
 test("data-ui-url uploads immediately and reports progress", async () => {
   await ui.page(UPLOAD.replace("id=\"zone\"", 'id="zone" data-ui-url="/api/documents"'), async (page) => {
     // Stub XMLHttpRequest so no server is needed but the progress path still runs.

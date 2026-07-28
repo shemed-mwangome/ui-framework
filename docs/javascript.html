@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>JavaScript API · UI Framework</title>
-  <link rel="stylesheet" href="../dist/ui-framework.css?v=1.3.1">
-  <link rel="stylesheet" href="assets/docs.css">
+  <link rel="stylesheet" href="../dist/ui-framework.css?v=1.5.0">
+  <link rel="stylesheet" href="assets/docs.css?v=1.5.0">
 </head>
 <body class="ui-scope docs-body">
   <header class="docs-topbar">
@@ -14,7 +14,7 @@
       <a class="docs-brand" href="index.html"><span class="docs-logo">UI</span><span>UI Framework</span></a>
     </div>
     <div class="ui-d-flex ui-align-center ui-gap-2">
-      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.3.1</span>
+      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.5.0</span>
       <button class="ui-btn ui-btn-sm ui-btn-outline-secondary" type="button" data-ui-theme-toggle>Theme</button>
     </div>
   </header>
@@ -49,7 +49,11 @@
   <p class="docs-section-intro">Everything hangs off the global <span class="ui-code">UI</span> object. Most components also work purely through <span class="ui-code">data-ui-*</span> attributes with no JavaScript calls at all &mdash; these methods are for programmatic control.</p>
   <div class="ui-table-responsive"><table class="ui-table ui-table-striped"><thead><tr><th>API</th><th>Purpose</th></tr></thead><tbody>
     <tr><td><span class="ui-code">UI.init(root)</span></td><td>Initialize components within newly inserted HTML</td></tr>
+    <tr><td><span class="ui-code">UI.q(selector, root)</span> / <span class="ui-code">UI.qa(selector, root)</span></td><td>Scoped <span class="ui-code">querySelector</span> / <span class="ui-code">querySelectorAll</span> (returns an array), defaulting <span class="ui-code">root</span> to <span class="ui-code">document</span></td></tr>
     <tr><td><span class="ui-code">UI.matchAll(selector, root)</span></td><td>Like <span class="ui-code">UI.qa</span>, but also matches <span class="ui-code">root</span> itself</td></tr>
+    <tr><td><span class="ui-code">UI.closest(element, selector)</span></td><td>Like <span class="ui-code">Element.closest</span>, but safe to call with a non-<span class="ui-code">Element</span> event target</td></tr>
+    <tr><td><span class="ui-code">UI.uid(prefix)</span></td><td>A short random id, for wiring up generated markup (<span class="ui-code">aria-controls</span> and the like)</td></tr>
+    <tr><td><span class="ui-code">UI.version</span></td><td>The loaded bundle's version string</td></tr>
     <tr><td><span class="ui-code">UI.destroy(root)</span></td><td>Run teardown for a subtree and clear its ready guards, before replacing it</td></tr>
     <tr><td><span class="ui-code">UI.cleanup(element, fn)</span></td><td>Register a teardown callback for <span class="ui-code">UI.destroy</span></td></tr>
     <tr><td><span class="ui-code">UI.observe(root)</span></td><td>Auto-initialize inserted markup and tear down removed markup; returns a stop function</td></tr>
@@ -69,7 +73,8 @@
     <tr><td><span class="ui-code">UI.table.refresh(target)</span></td><td>Re-run the current page/search/sort — call after saving a row</td></tr>
     <tr><td><span class="ui-code">UI.table.selected(target)</span></td><td>Array of selected <span class="ui-code">data-ui-row-id</span> values</td></tr>
     <tr><td><span class="ui-code">UI.table.clearSelection(target)</span></td><td>Clear the table's selection</td></tr>
-    <tr><td><span class="ui-code">UI.chart.update(target, values, labels)</span></td><td>Replace a chart's data and re-render in place</td></tr>
+    <tr><td><span class="ui-code">UI.chart.update(target, values, labels)</span></td><td>Replace a single-series chart's data and re-render in place</td></tr>
+    <tr><td><span class="ui-code">UI.chart.update(target, {labels, series})</span></td><td>Same, for a grouped/stacked bar or multi-line chart (<span class="ui-code">series</span> is <span class="ui-code">[{name, values}, ...]</span>)</td></tr>
     <tr><td><span class="ui-code">UI.popover.open(trigger)</span></td><td>Open a popover programmatically</td></tr>
     <tr><td><span class="ui-code">UI.popover.close()</span></td><td>Close the open popover</td></tr>
     <tr><td><span class="ui-code">UI.clipboard.copy(text)</span></td><td>Copy text; resolves to <span class="ui-code">true</span> on success</td></tr>
@@ -90,6 +95,7 @@
     <tr><td><span class="ui-code">UI.dateUtils</span></td><td>Shared date helpers (<span class="ui-code">parseISODate</span>, <span class="ui-code">formatISODate</span>, <span class="ui-code">addDays</span>, <span class="ui-code">addMonths</span>, etc.) used by both date components</td></tr>
     <tr><td><span class="ui-code">UI.floatPanel(trigger, panel, options)</span></td><td>Position a popover relative to a trigger; flips above and escapes clipping. Returns a cleanup function</td></tr>
     <tr><td><span class="ui-code">UI.saveNext.setDirty(form, dirty)</span></td><td>Manually mark a save-and-next form as having unsaved changes</td></tr>
+    <tr><td><span class="ui-code">UI.draft.save(form)</span> / <span class="ui-code">.discard(form)</span></td><td>Trigger a <span class="ui-code">data-ui-draft</span> form's save/discard as if its own buttons were clicked</td></tr>
     <tr><td><span class="ui-code">UI.trapFocus(container, event)</span></td><td>Wrap Tab/Shift+Tab focus within a container (used internally by modal/offcanvas)</td></tr>
     <tr><td><span class="ui-code">UI.focusable(root)</span></td><td>List focusable, visible elements within a container</td></tr>
     <tr><td><span class="ui-code">UI.escape(value)</span></td><td>HTML-escape a string before inserting it via <span class="ui-code">innerHTML</span></td></tr>
@@ -215,10 +221,10 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
-      <footer class="docs-footer">UI Framework 1.3.1 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
+      <footer class="docs-footer">UI Framework 1.5.0 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
     </main>
   </div>
-  <script src="../dist/ui-framework.js?v=1.3.1"></script>
-  <script src="assets/docs.js"></script>
+  <script src="../dist/ui-framework.js?v=1.5.0"></script>
+  <script src="assets/docs.js?v=1.5.0"></script>
 </body>
 </html>

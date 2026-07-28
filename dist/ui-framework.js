@@ -1,5 +1,5 @@
 /*!
- * UI Framework v1.3.1
+ * UI Framework v1.5.0
  * Dependency-free JavaScript bundle.
  * License: MIT
  */
@@ -8,7 +8,7 @@
 
   var UI = window.UI || {};
 
-  UI.version = "1.3.1";
+  UI.version = "1.5.0";
   UI._initializers = UI._initializers || [];
 
   UI.q = function (selector, root) {
@@ -198,6 +198,7 @@
     "table.next": "Next page",
     "table.status": "{visible} of {total} records",
     "table.selected": "{count} selected",
+    "table.selectionToggle": "Show or hide bulk actions",
     "table.selectAll": "Select all rows",
     "table.selectRow": "Select row",
     "table.columns": "Columns",
@@ -345,10 +346,21 @@
 
     function place() {
       var triggerRect = trigger.getBoundingClientRect();
-      if (options.matchWidth) panel.style.width = triggerRect.width + "px";
-      var panelRect = panel.getBoundingClientRect();
       var viewportW = document.documentElement.clientWidth;
       var viewportH = document.documentElement.clientHeight;
+
+      // Once the trigger itself has scrolled out of the viewport there is
+      // nothing left to anchor the panel to. Clamping the panel position to
+      // the viewport in that state used to pin it to the top or bottom edge,
+      // floating disconnected from its trigger. Dismiss instead, the same
+      // way a click outside would.
+      if (options.onDismiss && (triggerRect.bottom <= 0 || triggerRect.top >= viewportH || triggerRect.right <= 0 || triggerRect.left >= viewportW)) {
+        options.onDismiss();
+        return;
+      }
+
+      if (options.matchWidth) panel.style.width = triggerRect.width + "px";
+      var panelRect = panel.getBoundingClientRect();
 
       var spaceBelow = viewportH - triggerRect.bottom;
       var spaceAbove = triggerRect.top;
@@ -559,7 +571,8 @@
       var menu = UI.q(".ui-dropdown-menu", dropdown);
       if (trigger && menu) {
         dropdown._uiFloatCleanup = UI.floatPanel(trigger, menu, {
-          align: dropdown.classList.contains("ui-dropdown-end") ? "end" : "start"
+          align: dropdown.classList.contains("ui-dropdown-end") ? "end" : "start",
+          onDismiss: function () { closeAll(); }
         });
       }
     } else if (dropdown._uiFloatCleanup) {
@@ -764,7 +777,10 @@
       var open = wrapper.classList.toggle("ui-open");
       trigger.setAttribute("aria-expanded", open ? "true" : "false");
       if (open) {
-        wrapper._uiFloatCleanup = UI.floatPanel(trigger, menu, { matchWidth: true });
+        wrapper._uiFloatCleanup = UI.floatPanel(trigger, menu, {
+          matchWidth: true,
+          onDismiss: function () { closeWrapper(wrapper); }
+        });
       } else if (wrapper._uiFloatCleanup) {
         wrapper._uiFloatCleanup();
         wrapper._uiFloatCleanup = null;
@@ -923,7 +939,8 @@
     trigger.setAttribute("aria-controls", popover.id);
 
     floatCleanup = UI.floatPanel(trigger, popover, {
-      align: trigger.getAttribute("data-ui-popover-align") || "start"
+      align: trigger.getAttribute("data-ui-popover-align") || "start",
+      onDismiss: close
     });
 
     popover.querySelector(".ui-popover-close").addEventListener("click", function () {
@@ -1096,6 +1113,7 @@
       this.rangeEnd = DU.parseISODate(this.endInput.value);
     }
 
+    this.hoverDate = null;
     this.viewDate = DU.startOfMonth(this.rangeStart || this.rangeEnd || DU.today());
     this.minDate = DU.parseISODate(container.getAttribute("data-min-date"));
     this.maxDate = DU.parseISODate(container.getAttribute("data-max-date"));
@@ -1151,7 +1169,11 @@
     });
   }
 
+  // Clears any stale mouse-hover preview -- render() rebuilds every day cell
+  // from scratch, so a hover recorded against the previous set of cells no
+  // longer refers to anything on screen. The next real mousemove sets it again.
   function render(state) {
+    state.hoverDate = null;
     var container = state.container;
     var trigger = UI.q(".ui-date-range-trigger .ui-date-range-value", container);
     if (trigger) {
@@ -1166,6 +1188,32 @@
 
     var clearButton = UI.q("[data-ui-range-clear]", container);
     if (clearButton) clearButton.hidden = !(state.rangeStart || state.rangeEnd);
+  }
+
+  // Highlights the span between the picked start date and the day currently
+  // under the pointer, the way flatpickr and similar pickers preview what
+  // would be committed if the visitor clicked here -- without touching
+  // state.rangeEnd, so a plain mouseout leaves the actual selection alone.
+  function updateHoverPreview(state) {
+    var cells = UI.qa(".ui-date-range-day", state.container);
+    cells.forEach(function (cell) {
+      cell.classList.remove("ui-in-range-hover", "ui-range-hover-end");
+    });
+
+    if (!state.rangeStart || state.rangeEnd || !state.hoverDate) return;
+
+    var lo = state.rangeStart < state.hoverDate ? state.rangeStart : state.hoverDate;
+    var hi = state.rangeStart < state.hoverDate ? state.hoverDate : state.rangeStart;
+
+    cells.forEach(function (cell) {
+      var date = DU.parseISODate(cell.getAttribute("data-ui-date"));
+      if (date > lo && date < hi) cell.classList.add("ui-in-range-hover");
+    });
+
+    if (!DU.sameDay(state.hoverDate, state.rangeStart)) {
+      var hoverCell = UI.q('[data-ui-date="' + DU.formatISODate(state.hoverDate) + '"]', state.container);
+      if (hoverCell) hoverCell.classList.add("ui-range-hover-end");
+    }
   }
 
   function applyRange(state) {
@@ -1206,7 +1254,7 @@
     var trigger = UI.q(".ui-date-range-trigger", container);
     if (trigger) trigger.setAttribute("aria-expanded", "true");
     var panel = UI.q(".ui-date-range-panel", container);
-    if (trigger && panel) container._uiFloatCleanup = UI.floatPanel(trigger, panel);
+    if (trigger && panel) container._uiFloatCleanup = UI.floatPanel(trigger, panel, { onDismiss: closeAll });
 
     var focusTarget = state.rangeStart || DU.today();
     if (isOutsideVisibleSpan(state, focusTarget)) {
@@ -1325,6 +1373,21 @@
     trigger.addEventListener("click", function () {
       if (container.classList.contains("ui-open")) closeAll();
       else open(container, state);
+    });
+
+    panel.addEventListener("mouseover", function (event) {
+      var cell = UI.closest(event.target, "[data-ui-date]:not(.ui-disabled)");
+      if (!cell) return;
+      var date = DU.parseISODate(cell.getAttribute("data-ui-date"));
+      if (state.hoverDate && DU.sameDay(state.hoverDate, date)) return;
+      state.hoverDate = date;
+      updateHoverPreview(state);
+    });
+
+    panel.addEventListener("mouseleave", function () {
+      if (!state.hoverDate) return;
+      state.hoverDate = null;
+      updateHoverPreview(state);
     });
 
     panel.addEventListener("click", function (event) {
@@ -1536,7 +1599,7 @@
     var trigger = UI.q(".ui-date-range-trigger", container);
     if (trigger) trigger.setAttribute("aria-expanded", "true");
     var panel = UI.q(".ui-date-range-panel", container);
-    if (trigger && panel) container._uiFloatCleanup = UI.floatPanel(trigger, panel);
+    if (trigger && panel) container._uiFloatCleanup = UI.floatPanel(trigger, panel, { onDismiss: closeAll });
 
     var focusTarget = state.value || DU.today();
     if (DU.startOfMonth(focusTarget).getTime() !== state.viewDate.getTime()) {
@@ -1895,7 +1958,8 @@
    *   <div data-ui-upload
    *        data-ui-max-size="5MB"
    *        data-ui-max-files="3"
-   *        data-ui-url="/api/documents">      optional: upload immediately
+   *        data-ui-url="/api/documents"        optional: upload immediately
+   *        data-ui-upload-layout="inline">     optional: chips instead of stacked rows
    *     <input type="file" multiple accept=".pdf,image/*">
    *     <div class="ui-upload-preview"></div>
    *   </div>
@@ -1943,6 +2007,10 @@
       var input = UI.q('input[type="file"]', zone);
       var preview = UI.q(".ui-upload-preview", zone);
       if (!input) return;
+
+      if (preview && zone.getAttribute("data-ui-upload-layout") === "inline") {
+        preview.classList.add("ui-upload-preview-inline");
+      }
 
       var maxSize = parseSize(zone.getAttribute("data-ui-max-size"));
       var maxFiles = Number(zone.getAttribute("data-ui-max-files")) || 0;
@@ -2562,7 +2630,16 @@
     function emitSelection() {
       var ids = selectedIds();
       if (selectionBar) {
+        var wasHidden = selectionBar.hidden;
         selectionBar.hidden = ids.length === 0;
+        // A fresh selection (bar going from fully hidden to shown) always
+        // starts expanded -- collapsing is a per-viewing choice, not one
+        // that should carry over and hide bulk actions on the next unrelated
+        // selection.
+        if (wasHidden && !selectionBar.hidden) {
+          selectionBar.classList.remove("ui-collapsed");
+          if (selectionToggle) selectionToggle.setAttribute("aria-expanded", "true");
+        }
         var label = UI.q(".ui-table-selection-count", selectionBar);
         if (label) label.textContent = UI.t("table.selected", { count: ids.length });
       }
@@ -2570,6 +2647,7 @@
     }
 
     var selectionBar = null;
+    var selectionToggle = null;
     if (selectable) {
       addSelectionColumn();
       selectionBar = UI.q("[data-ui-table-selection]", wrapper);
@@ -2580,6 +2658,27 @@
           count.className = "ui-table-selection-count";
           selectionBar.insertBefore(count, selectionBar.firstChild);
         }
+
+        // The count doubles as the collapse/expand control -- click (or
+        // Enter/Space) hides the bulk-action buttons down to just the count
+        // chip, so the bar can be tucked out of the way without clearing the
+        // selection, and brought back the same way.
+        selectionToggle = UI.q(".ui-table-selection-count", selectionBar);
+        selectionToggle.setAttribute("role", "button");
+        selectionToggle.setAttribute("tabindex", "0");
+        selectionToggle.setAttribute("aria-expanded", "true");
+        selectionToggle.title = UI.t("table.selectionToggle");
+
+        var toggleCollapsed = function () {
+          var collapsed = selectionBar.classList.toggle("ui-collapsed");
+          selectionToggle.setAttribute("aria-expanded", collapsed ? "false" : "true");
+        };
+        selectionToggle.addEventListener("click", toggleCollapsed);
+        selectionToggle.addEventListener("keydown", function (event) {
+          if (event.key !== "Enter" && event.key !== " ") return;
+          event.preventDefault();
+          toggleCollapsed();
+        });
       }
     }
 
@@ -4222,7 +4321,7 @@
       listbox.hidden = false;
       input.setAttribute("aria-expanded", "true");
       wrapper.classList.add("ui-open");
-      floatCleanup = UI.floatPanel(control, listbox, { matchWidth: true });
+      floatCleanup = UI.floatPanel(control, listbox, { matchWidth: true, onDismiss: closeMenu });
     }
 
     function closeMenu() {
@@ -4435,8 +4534,34 @@
    *
    *   <div data-ui-chart="bar"  data-ui-values="12,19,3" data-ui-labels="Jan,Feb,Mar"></div>
    *   <div data-ui-chart="line" data-ui-values="…"></div>
+   *   <div data-ui-chart="area" data-ui-values="…"></div>
    *   <div data-ui-chart="donut" data-ui-values="…" data-ui-labels="…"></div>
    *   <span data-ui-chart="sparkline" data-ui-values="…"></span>
+   *
+   * `bar` also takes `data-ui-orientation="horizontal"`, single- or
+   * multi-series. `area` is `line` with a deliberate gradient fill rather
+   * than the line chart's incidental one -- use it when the filled shape
+   * itself is the point.
+   *
+   * A flat `data-ui-values` list only ever holds one series. For grouped or
+   * stacked bars, multi-line comparisons, or stacked areas, give the element
+   * a JSON data island instead -- everything else about it (type, title,
+   * height, currency formatting) stays the same:
+   *
+   *   <div data-ui-chart="bar" data-ui-stacked data-ui-legend>
+   *     <script type="application/json">
+   *       {"labels": ["Jan","Feb","Mar"],
+   *        "series": [{"name": "North", "values": [12,19,3]},
+   *                    {"name": "South", "values": [8,11,9]}]}
+   *     </script>
+   *   </div>
+   *
+   * Drop `data-ui-stacked` for side-by-side grouped bars instead of stacked
+   * segments (bars only -- `data-ui-chart="area"` with a JSON data island is
+   * always stacked, and `data-ui-chart="line"` is always separate lines).
+   * `UI.chart.update(target, data)` accepts the same shape for live updates,
+   * so a chart fed from an API does not need to hand-build a comma-separated
+   * string.
    *
    * Scope is deliberately narrow: these cover the "how many records by
    * status / by month" panels a typical dashboard needs. Anything
@@ -4621,7 +4746,244 @@
       'stroke-width="' + thickness + '"/>' + segments + centre + "</svg>";
   }
 
+  // ------------------------------------------------------- multi-series
+
+  // A second, additive data source for grouped/stacked bars and multi-line
+  // comparisons: a `data-ui-values` attribute can only ever hold one flat
+  // list of numbers, which has no room for more than one named series. A
+  // `<script type="application/json">` child holds `{labels, series}`
+  // instead, where `series` is `[{name, values}, ...]`. Returns null (and
+  // build() falls back to the single-series, attribute-based path below,
+  // completely unchanged) when no such script is present or it does not
+  // parse -- this is additive, not a replacement.
+  function parseSeries(element) {
+    var script = element.querySelector('script[type="application/json"]');
+    if (!script) return null;
+
+    var json;
+    try {
+      json = JSON.parse(script.textContent || "{}");
+    } catch (error) {
+      return null;
+    }
+    if (!json || !Array.isArray(json.series) || !json.series.length) return null;
+
+    var series = json.series.map(function (item, index) {
+      return {
+        name: (item && item.name) || ("Series " + (index + 1)),
+        values: ((item && item.values) || [])
+          .map(function (value) { return parseFloat(value); })
+          .filter(function (value) { return isFinite(value); })
+      };
+    });
+    var categories = (json.labels || []).map(String);
+    return { series: series, categories: categories };
+  }
+
+  function barRect(x, y, w, h, color, title) {
+    return '<rect x="' + x.toFixed(2) + '" y="' + y.toFixed(2) +
+      '" width="' + w.toFixed(2) + '" height="' + h.toFixed(2) +
+      '" fill="' + color + '" rx="0.4"><title>' + UI.escape(title) + "</title></rect>";
+  }
+
+  function renderGroupedBar(element, series, categories, stacked) {
+    var width = 100;
+    var height = Number(element.getAttribute("data-ui-height")) || 40;
+    var horizontal = element.getAttribute("data-ui-orientation") === "horizontal";
+    var groups = categories.length;
+    var seriesCount = series.length;
+    if (!groups || !seriesCount) return svgOpen("0 0 " + width + " " + height) + "</svg>";
+
+    var groupGap = groups > 1 ? 1.5 : 0;
+    var mainAxis = horizontal ? height : width;
+    var groupSize = (mainAxis - groupGap * (groups - 1)) / groups;
+    var crossAxis = horizontal ? width : height;
+
+    var max = 0;
+    for (var g = 0; g < groups; g++) {
+      if (stacked) {
+        var sum = 0;
+        for (var s = 0; s < seriesCount; s++) sum += (series[s].values[g] || 0);
+        max = Math.max(max, sum);
+      } else {
+        for (var s2 = 0; s2 < seriesCount; s2++) max = Math.max(max, series[s2].values[g] || 0);
+      }
+    }
+
+    var rects = [];
+    for (var gi = 0; gi < groups; gi++) {
+      var groupStart = gi * (groupSize + groupGap);
+
+      if (stacked) {
+        var cumulative = 0;
+        for (var si = 0; si < seriesCount; si++) {
+          var value = series[si].values[gi] || 0;
+          var ratio = max > 0 ? value / max : 0;
+          var segSize = ratio * crossAxis;
+          var title = series[si].name + " – " + categories[gi] + ": " + formatValue(element, value);
+          rects.push(horizontal
+            ? barRect(cumulative, groupStart, segSize, groupSize, PALETTE[si % PALETTE.length], title)
+            : barRect(groupStart, height - cumulative - segSize, groupSize, segSize, PALETTE[si % PALETTE.length], title));
+          cumulative += segSize;
+        }
+      } else {
+        var barGap = seriesCount > 1 ? 0.4 : 0;
+        var barSize = (groupSize - barGap * (seriesCount - 1)) / seriesCount;
+        for (var sj = 0; sj < seriesCount; sj++) {
+          var value2 = series[sj].values[gi] || 0;
+          var ratio2 = max > 0 ? value2 / max : 0;
+          var segSize2 = ratio2 * crossAxis;
+          var barStart = groupStart + sj * (barSize + barGap);
+          var title2 = series[sj].name + " – " + categories[gi] + ": " + formatValue(element, value2);
+          rects.push(horizontal
+            ? barRect(0, barStart, segSize2, barSize, PALETTE[sj % PALETTE.length], title2)
+            : barRect(barStart, height - segSize2, barSize, segSize2, PALETTE[sj % PALETTE.length], title2));
+        }
+      }
+    }
+
+    return svgOpen("0 0 " + width + " " + height) + rects.join("") + "</svg>";
+  }
+
+  function renderMultiLine(element, series, categories) {
+    var width = 100;
+    var height = Number(element.getAttribute("data-ui-height")) || 40;
+    var allValues = [].concat.apply([], series.map(function (s) { return s.values; }));
+    var max = Math.max.apply(null, allValues.concat([0]));
+    var min = element.hasAttribute("data-ui-zero-based") ? 0 : Math.min.apply(null, allValues.concat([0]));
+
+    var polylines = series.map(function (s, index) {
+      var points = linePoints(s.values, width, height, max, min);
+      var color = PALETTE[index % PALETTE.length];
+      var dots = points.map(function (point, i) {
+        var parts = point.split(",");
+        return '<circle cx="' + parts[0] + '" cy="' + parts[1] + '" r="1.1" fill="' + color + '"><title>' +
+          UI.escape(s.name + " – " + (categories[i] || "") + ": " + formatValue(element, s.values[i])) +
+          "</title></circle>";
+      }).join("");
+      return '<polyline points="' + points.join(" ") + '" fill="none" stroke="' + color +
+        '" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" ' +
+        'vector-effect="non-scaling-stroke"/>' + dots;
+    }).join("");
+
+    return svgOpen("0 0 " + width + " " + height) + polylines + "</svg>";
+  }
+
+  function renderSeriesLegend(element, series) {
+    if (!element.hasAttribute("data-ui-legend")) return "";
+    var items = series.map(function (s, index) {
+      return '<li class="ui-chart-legend-item">' +
+        '<span class="ui-chart-swatch" data-ui-swatch="' + (index % PALETTE.length) + '"></span>' +
+        '<span class="ui-chart-legend-label">' + UI.escape(s.name) + "</span></li>";
+    }).join("");
+    return '<ul class="ui-chart-legend">' + items + "</ul>";
+  }
+
+  function multiDataTable(element, series, categories) {
+    var head = "<tr><th></th>" + series.map(function (s) {
+      return "<th>" + UI.escape(s.name) + "</th>";
+    }).join("") + "</tr>";
+    var rows = categories.map(function (category, i) {
+      return "<tr><th scope=\"row\">" + UI.escape(category) + "</th>" +
+        series.map(function (s) {
+          return "<td>" + UI.escape(formatValue(element, s.values[i] || 0)) + "</td>";
+        }).join("") + "</tr>";
+    }).join("");
+
+    return '<table class="ui-sr-only ui-chart-data"><caption>' +
+      UI.escape(element.getAttribute("data-ui-title") || "Chart data") +
+      "</caption><thead>" + head + "</thead><tbody>" + rows + "</tbody></table>";
+  }
+
+  function multiSummary(element, series, categories) {
+    var title = element.getAttribute("data-ui-title") || "Chart";
+    var parts = series.map(function (s) {
+      return s.name + ": " + s.values.map(function (value, i) {
+        return (categories[i] || "") + " " + formatValue(element, value);
+      }).join(", ");
+    });
+    return title + ". " + parts.join(". ");
+  }
+
   // ---------------------------------------------------------------- legend
+
+  // ------------------------------------------------------------------ area
+
+  // A more deliberate fill than the line chart's whisper-thin default tint
+  // (opacity .12) -- a gradient fading from the series colour to transparent,
+  // for when the filled area itself is the point rather than an incidental
+  // backdrop to the line.
+  function renderArea(element, values, names) {
+    var width = 100;
+    var height = Number(element.getAttribute("data-ui-height")) || 40;
+    var max = Math.max.apply(null, values);
+    var min = element.hasAttribute("data-ui-zero-based") ? 0 : Math.min.apply(null, values);
+    var points = linePoints(values, width, height, max, min);
+    var gradientId = UI.uid("ui-chart-area");
+
+    var dots = values.map(function (value, index) {
+      var parts = points[index].split(",");
+      return '<circle cx="' + parts[0] + '" cy="' + parts[1] +
+        '" r="1.2" fill="var(--ui-chart-1)"><title>' +
+        UI.escape(names[index] + ": " + formatValue(element, value)) + "</title></circle>";
+    }).join("");
+
+    return svgOpen("0 0 " + width + " " + height) +
+      '<defs><linearGradient id="' + gradientId + '" x1="0" y1="0" x2="0" y2="1">' +
+      '<stop offset="0%" stop-color="var(--ui-chart-1)" stop-opacity="0.45"/>' +
+      '<stop offset="100%" stop-color="var(--ui-chart-1)" stop-opacity="0.03"/>' +
+      "</linearGradient></defs>" +
+      '<polygon points="0,' + height + " " + points.join(" ") + " " + width + "," + height +
+      '" fill="url(#' + gradientId + ')"/>' +
+      '<polyline points="' + points.join(" ") +
+      '" fill="none" stroke="var(--ui-chart-1)" stroke-width="1.5" ' +
+      'stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>' +
+      dots + "</svg>";
+  }
+
+  // Stacked multi-series area: each series is a band between its own
+  // cumulative baseline and the baseline of everything stacked below it, so
+  // the top edge of the last series traces the combined total.
+  function renderMultiArea(element, series, categories) {
+    var width = 100;
+    var height = Number(element.getAttribute("data-ui-height")) || 40;
+    var groups = categories.length;
+    var seriesCount = series.length;
+    if (!groups || !seriesCount) return svgOpen("0 0 " + width + " " + height) + "</svg>";
+
+    var max = 0;
+    for (var g = 0; g < groups; g++) {
+      var sum = 0;
+      for (var s = 0; s < seriesCount; s++) sum += (series[s].values[g] || 0);
+      max = Math.max(max, sum);
+    }
+
+    var step = groups > 1 ? width / (groups - 1) : 0;
+    var baseline = new Array(groups).fill(0);
+    var layers = [];
+
+    series.forEach(function (s, index) {
+      var topPoints = [];
+      var bottomPoints = [];
+      for (var i = 0; i < groups; i++) {
+        var value = s.values[i] || 0;
+        var top = baseline[i] + value;
+        var x = (i * step).toFixed(2);
+        topPoints.push(x + "," + (max > 0 ? (height - (top / max) * height).toFixed(2) : height.toFixed(2)));
+        bottomPoints.push(x + "," + (max > 0 ? (height - (baseline[i] / max) * height).toFixed(2) : height.toFixed(2)));
+        baseline[i] = top;
+      }
+
+      var color = PALETTE[index % PALETTE.length];
+      var polygonPoints = topPoints.concat(bottomPoints.slice().reverse()).join(" ");
+      layers.push('<polygon points="' + polygonPoints + '" fill="' + color + '" opacity="0.55"><title>' +
+        UI.escape(s.name) + "</title></polygon>");
+      layers.push('<polyline points="' + topPoints.join(" ") + '" fill="none" stroke="' + color +
+        '" stroke-width="1.25" vector-effect="non-scaling-stroke"/>');
+    });
+
+    return svgOpen("0 0 " + width + " " + height) + layers.join("") + "</svg>";
+  }
 
   function renderLegend(element, values, names) {
     if (!element.hasAttribute("data-ui-legend")) return "";
@@ -4645,6 +5007,28 @@
     element.dataset.uiChartReady = "true";
 
     var type = element.getAttribute("data-ui-chart") || "bar";
+    var multi = parseSeries(element);
+
+    if (multi) {
+      var hasValues = multi.series.some(function (s) { return s.values.length; });
+      if (!hasValues) return;
+
+      var mbody;
+      if (type === "line") mbody = renderMultiLine(element, multi.series, multi.categories);
+      else if (type === "area") mbody = renderMultiArea(element, multi.series, multi.categories);
+      else mbody = renderGroupedBar(element, multi.series, multi.categories, element.hasAttribute("data-ui-stacked"));
+
+      element.classList.add("ui-chart", "ui-chart-" + type, "ui-chart-multi");
+      element.setAttribute("role", "img");
+      element.setAttribute("aria-label", multiSummary(element, multi.series, multi.categories));
+      element.innerHTML = mbody +
+        renderSeriesLegend(element, multi.series) +
+        multiDataTable(element, multi.series, multi.categories);
+
+      UI.emit(element, "ui:chart:rendered", { type: type, series: multi.series });
+      return;
+    }
+
     var values = numbers(element);
     if (!values.length) return;
     var names = labels(element, values.length);
@@ -4653,6 +5037,7 @@
     if (type === "donut" || type === "pie") body = renderDonut(element, values, names);
     else if (type === "line") body = renderLine(element, values, names, false);
     else if (type === "sparkline") body = renderLine(element, values, names, true);
+    else if (type === "area") body = renderArea(element, values, names);
     else body = renderBar(element, values, names);
 
     element.classList.add("ui-chart", "ui-chart-" + type);
@@ -4670,12 +5055,34 @@
   UI.register(init);
 
   UI.chart = {
-    /** Replaces a chart's data and re-renders it in place. */
-    update: function (target, values, names) {
+    /**
+     * Replaces a chart's data and re-renders it in place.
+     *
+     *   UI.chart.update("#c", [5, 10, 15], ["X", "Y", "Z"]);            single series
+     *   UI.chart.update("#c", { labels: [...], series: [{name, values}, ...] });   multi
+     */
+    update: function (target, valuesOrData, names) {
       var element = typeof target === "string" ? UI.q(target) : target;
       if (!element) return;
-      element.setAttribute("data-ui-values", values.join(","));
-      if (names) element.setAttribute("data-ui-labels", names.join(","));
+
+      if (valuesOrData && !Array.isArray(valuesOrData) && typeof valuesOrData === "object") {
+        var script = element.querySelector('script[type="application/json"]');
+        if (!script) {
+          script = document.createElement("script");
+          script.type = "application/json";
+          element.appendChild(script);
+        }
+        script.textContent = JSON.stringify({
+          labels: valuesOrData.labels || [],
+          series: valuesOrData.series || []
+        });
+        element.removeAttribute("data-ui-values");
+        element.removeAttribute("data-ui-labels");
+      } else {
+        element.setAttribute("data-ui-values", valuesOrData.join(","));
+        if (names) element.setAttribute("data-ui-labels", names.join(","));
+      }
+
       delete element.dataset.uiChartReady;
       build(element);
     }

@@ -82,7 +82,8 @@
     trigger.setAttribute("aria-controls", popover.id);
 
     floatCleanup = UI.floatPanel(trigger, popover, {
-      align: trigger.getAttribute("data-ui-popover-align") || "start"
+      align: trigger.getAttribute("data-ui-popover-align") || "start",
+      onDismiss: close
     });
 
     popover.querySelector(".ui-popover-close").addEventListener("click", function () {

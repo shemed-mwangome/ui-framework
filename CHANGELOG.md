@@ -1,6 +1,51 @@
 # Changelog
 
-## 1.3.1 — 2026-07-28
+## 1.5.0 — 2026-07-28
+
+A responsive-layout pass: every docs and example page had a way to end up wider than its viewport on a narrow screen, several from the same root cause. Also rounds out charts (horizontal multi-series bars, a dedicated area/stacked-area type) and gives uploads a second, compact layout.
+
+### Fixed
+
+- **Every docs page:** below 56rem, `.docs-sidebar` becomes `position: fixed`, sitting off-screen at `transform: translateX(-100%)` until opened. Nothing clipped that box, so on a narrow viewport the page's scrollable area silently included its full width — the whole page could be dragged sideways to reveal a blank strip, even though the sidebar itself was never visible. `html`/`body` now clip horizontal overflow
+- **`docs/assets/docs.css` and `docs.js`:** loaded with no cache-busting query string on any page, unlike `dist/*`, which has carried one since 1.3.1 for exactly this reason — a browser that had cached either file kept running it after this session's edits changed both, several times over. Both now load with the same `?v=` the bundle uses
+- **Date range and date picker triggers:** squeezed by a narrow flex row (their most common home: a card header next to other actions), the trigger's label wrapped character-by-character into a multi-line stack instead of staying on one line. It now truncates with an ellipsis instead, the way a native `<select>` would
+- **Navbar:** a brand plus several nav links has no fallback once it stops fitting a narrow screen — `.ui-navbar` now scrolls horizontally instead of silently clipping a link's text or forcing the whole page wider
+- **Document sheet:** `.ui-document`'s `max-width: 100%` shrinks the sheet itself on a narrow screen, but a wide child (a multi-column table, most often) does not shrink with it and pushed past the sheet's edge, widening the whole page rather than scrolling within the sheet. Print is unaffected
+- The dashboard and application-form examples had a card header / page header row that did not wrap, for the same reason as the date-range trigger above — narrow-screen actions had nowhere to go but overlap or squeeze. Both now wrap onto their own row
+
+### Added
+
+- **Charts:** `data-ui-orientation="horizontal"` now works on grouped and stacked multi-series bars, not just the single-series form. `data-ui-chart="area"` is a new type — a line chart with a deliberate gradient fill rather than the existing line chart's incidental one — and stacks one band per series when given a multi-series data island, the way most dashboards' area charts do
+- **Upload:** `data-ui-upload-layout="inline"` lists selected files as wrapping compact chips instead of one full-width row each, for a dropzone that regularly holds many small files (photos, scans) where a stacked list runs long fast
+
+## 1.4.0 — 2026-07-28
+
+Another hands-on pass, this time across the whole component catalogue rather than just what shipped in 1.3.0. Fixes a positioning bug shared by every popover-style component, redesigns the components that read as visually broken rather than just plain, and adds grouped/stacked multi-series charts.
+
+### Fixed
+
+- **Popovers, dropdowns, date pickers, combobox, multiselect:** `UI.floatPanel` clamped its position to stay inside the viewport on every scroll, so once its trigger scrolled off-screen the panel kept floating, pinned to the top or bottom edge, completely detached from the trigger it was supposedly anchored to. It now dismisses instead of clamping once the trigger is no longer visible, the same way a click outside would — every caller (`03-dropdown.js`, `08-multiselect.js`, `12-date-range.js`, `16-date-picker.js`, `20-combobox.js`, `22-popover.js`) now passes an `onDismiss` callback into `floatPanel`
+- **Navbar:** `.ui-navbar-search input` used `color: inherit`, but neither `.ui-navbar-dark`/`-primary` nor `.ui-navbar-search` itself set a `color` — the input inherited the page's default dark text color and typed text was invisible against the dark background
+- **Cards:** `.ui-card-border-*` used a `.25rem` `border-top`, four times thicker than the card's other three (`1px`) sides. Differing border widths at a rounded corner make browsers miter the curve unevenly, so the accent border's corners looked distorted rather than following the card's rounded shape. Replaced with an inset `box-shadow`, which clips cleanly to the existing `border-radius` regardless of width. Also added the `-warning` variant, already mentioned in the docs text but missing from the CSS
+- **Multi-step form validation:** the "Next" button's native-fallback path (`reportValidity()`) ran even on forms that also had `data-ui-validate`, surfacing the browser's own unstyled tooltip bubble — unstyled, not read out on submit, and gone on scroll, the exact problems `data-ui-validate` exists to avoid — instead of the inline red-border-and-message pattern used everywhere else. The docs example now opts into `data-ui-validate` so its own stepper demonstrates the pattern it documents
+- **Upload:** the selected-file list rendered as a separate block below the dashed dropzone rather than inside it, because the dashed border lived on `.ui-upload-dropzone` and the preview list is a sibling kept outside it (on purpose, since 1.3.1 — see below). Moved the border onto the outer `.ui-upload` wrapper instead, so the drop prompt and the file list now share one visual canvas without changing which element the file `<input>` covers
+- **Smart tables in a card:** a table dropped straight into a `.ui-card` with no `.ui-card-body` of its own sat flush against the card's edges, while `.ui-card-header` above it kept its usual padding — the auto-inserted toolbar and pagination now match that inset; the table rows themselves stay edge-to-edge
+
+### Added
+
+- **Charts:** grouped and stacked multi-series bars, and multi-line comparisons. A flat `data-ui-values` list only ever held one series; give the chart element a `<script type="application/json">` child instead (`{labels, series: [{name, values}, ...]}`) and it renders as grouped bars by default, or stacked with `data-ui-stacked`. `UI.chart.update(target, data)` accepts the same shape for live updates, alongside its original `(target, values, labels)` form
+- **Date range:** hovering a day while a start date is picked (but before an end date is chosen) previews the range that would be committed, the way flatpickr and similar pickers do — cells between the two are tinted and the hovered day gets a ring, purely visual until a day is actually clicked
+- **Smart tables:** the "N selected" bulk-action bar's count doubles as a collapse control — click it to tuck the bulk-action buttons away without clearing the selection, click again to bring them back
+- Alerts got an `.ui-alert-icon` chip (a tinted circle instead of a bare glyph, white-on-fill for `.ui-alert-solid`), and `.ui-tabs-vertical` got real hover/spacing treatment instead of reusing the horizontal tab's bare minimum
+
+### Changed
+
+- The docs demo canvas (`.docs-demo`) is a shade off the page's surface color instead of matching it exactly — white-background components (tables, cards, tab panels, form controls) were reading as borderless against an identically-colored canvas
+- Reordered `docs/components.html` so its section order matches the sidebar navigation — `data-ui-validate`, input masks, combobox, table tools, charts, popovers and the status lexicon were appended at the end of the file as they were added across 1.1.0–1.3.0, long after the nav was written to group them near their thematic neighbours, so the nav and the page had drifted into two different orders
+- `docs/javascript.html` now documents `UI.q`, `UI.closest`, `UI.uid`, `UI.version` and `UI.draft.save`/`.discard`, all of which existed but were missing from the API reference
+- The record register example's print button now sits in a heading row next to "Certificate preview" instead of floating alone below the certificate; the multi-step form and form-controls docs demos got matching label/spacing treatment for their validation-state examples
+
+
 
 A follow-up pass fixing real bugs surfaced by hands-on testing of every 1.3.0 component, plus a round of visual redesign on the ones that were merely under-polished rather than broken.
 

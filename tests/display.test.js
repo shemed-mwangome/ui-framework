@@ -205,6 +205,148 @@ test("currency formatting flows into labels and the data table", async () => {
   );
 });
 
+test("grouped bar chart renders one rect per series per category", async () => {
+  await ui.page(
+    `<div id="c" data-ui-chart="bar">
+       <script type="application/json">
+         {"labels": ["Jan","Feb"], "series": [{"name":"North","values":[10,20]},{"name":"South","values":[5,15]}]}
+       </script>
+     </div>`,
+    async (page) => {
+      assert.equal(await page.count("#c rect"), 4, "2 categories x 2 series = 4 bars");
+      assert.equal(await page.attr("#c", "role"), "img");
+    }
+  );
+});
+
+test("data-ui-stacked stacks series into one bar per category", async () => {
+  await ui.page(
+    `<div id="c" data-ui-chart="bar" data-ui-stacked>
+       <script type="application/json">
+         {"labels": ["Jan"], "series": [{"name":"North","values":[10]},{"name":"South","values":[20]}]}
+       </script>
+     </div>`,
+    async (page) => {
+      const heights = await page.evaluate(() =>
+        [...document.querySelectorAll("#c rect")].map((r) => parseFloat(r.getAttribute("height")))
+      );
+      assert.equal(heights.length, 2, "one segment per series, not one bar per series");
+      assert.ok(
+        Math.abs(heights[0] + heights[1] - 40) < 0.01,
+        "stacked segments should sum to the full chart height, the stack being the tallest"
+      );
+    }
+  );
+});
+
+test("multi-series line chart draws one polyline per series", async () => {
+  await ui.page(
+    `<div id="c" data-ui-chart="line">
+       <script type="application/json">
+         {"labels": ["Jan","Feb","Mar"], "series": [{"name":"North","values":[1,2,3]},{"name":"South","values":[3,2,1]}]}
+       </script>
+     </div>`,
+    async (page) => {
+      assert.equal(await page.count("#c polyline"), 2);
+    }
+  );
+});
+
+test("multi-series legend lists series names, not category labels", async () => {
+  await ui.page(
+    `<div id="c" data-ui-chart="bar" data-ui-legend>
+       <script type="application/json">
+         {"labels": ["Jan"], "series": [{"name":"North","values":[1]},{"name":"South","values":[2]}]}
+       </script>
+     </div>`,
+    async (page) => {
+      const labels = await page.evaluate(() =>
+        [...document.querySelectorAll("#c .ui-chart-legend-label")].map((el) => el.textContent)
+      );
+      assert.deepEqual(labels, ["North", "South"]);
+    }
+  );
+});
+
+test("UI.chart.update accepts a multi-series data object", async () => {
+  await ui.page('<div id="c" data-ui-chart="bar" data-ui-values="1,2"></div>', async (page) => {
+    await page.evaluate(() =>
+      UI.chart.update("#c", {
+        labels: ["Jan", "Feb"],
+        series: [
+          { name: "North", values: [4, 8] },
+          { name: "South", values: [2, 6] }
+        ]
+      })
+    );
+
+    assert.equal(await page.count("#c rect"), 4);
+    assert.equal(
+      await page.count("#c .ui-chart-svg"),
+      1,
+      "updating to multi-series must replace the chart, not append a second one"
+    );
+  });
+});
+
+test("a chart with unparsable JSON data falls back to attribute-based values", async () => {
+  await ui.page(
+    `<div id="c" data-ui-chart="bar" data-ui-values="1,2" data-ui-labels="A,B">
+       <script type="application/json">not json</script>
+     </div>`,
+    async (page) => {
+      assert.equal(await page.count("#c rect"), 2);
+    }
+  );
+});
+
+test("data-ui-orientation=\"horizontal\" lays out a grouped multi-series bar sideways", async () => {
+  await ui.page(
+    `<div id="c" data-ui-chart="bar" data-ui-orientation="horizontal">
+       <script type="application/json">
+         {"labels": ["Jan","Feb"], "series": [{"name":"North","values":[10,20]},{"name":"South","values":[5,15]}]}
+       </script>
+     </div>`,
+    async (page) => {
+      const rects = await page.evaluate(() =>
+        [...document.querySelectorAll("#c rect")].map((r) => ({
+          x: parseFloat(r.getAttribute("x")),
+          width: parseFloat(r.getAttribute("width")),
+        }))
+      );
+      assert.equal(rects.length, 4);
+      // Horizontal bars grow from x=0 rightwards, not upwards from the foot.
+      rects.forEach((r) => assert.equal(r.x, 0, "each horizontal bar should start at x=0"));
+      assert.ok(rects.some((r) => r.width > 0), "bars should have non-zero width");
+    }
+  );
+});
+
+test("area chart fills under the line with a gradient and keeps the polyline", async () => {
+  await ui.page(
+    '<div id="c" data-ui-chart="area" data-ui-values="5,10,5" data-ui-height="40"></div>',
+    async (page) => {
+      assert.equal(await page.count("#c polyline"), 1);
+      assert.equal(await page.count("#c polygon"), 1);
+      assert.equal(await page.count("#c linearGradient"), 1);
+    }
+  );
+});
+
+test("multi-series area chart stacks one polygon band per series", async () => {
+  await ui.page(
+    `<div id="c" data-ui-chart="area">
+       <script type="application/json">
+         {"labels": ["Jan","Feb","Mar"], "series": [{"name":"North","values":[10,20,15]},{"name":"South","values":[5,10,8]}]}
+       </script>
+     </div>`,
+    async (page) => {
+      assert.equal(await page.count("#c polygon"), 2);
+      assert.equal(await page.count("#c polyline"), 2);
+    }
+  );
+});
+
 // --------------------------------------------------------------------------
 // Popover
 // --------------------------------------------------------------------------
