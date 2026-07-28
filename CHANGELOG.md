@@ -1,5 +1,27 @@
 # Changelog
 
+## 1.3.1 — 2026-07-28
+
+A follow-up pass fixing real bugs surfaced by hands-on testing of every 1.3.0 component, plus a round of visual redesign on the ones that were merely under-polished rather than broken.
+
+### Fixed
+
+- **Upload:** the file `<input>` was absolutely positioned over the *entire* upload zone, including the rendered preview list, so clicking a file's remove (×) button actually hit the invisible input underneath and reopened the file picker instead of removing the file. The dropzone (click/drop target) and the preview list are now separate elements — the input only ever covers the dropzone — so the remove button is always clickable. Added `.ui-upload-dropzone`, `.ui-upload-icon`, `.ui-file-item-icon/-info/-size` for the restructured, clearer file rows
+- **Validation:** the error summary used the generic `.ui-alert` icon│body│close grid, but only supplied two of its three children, so the "auto" icon column sized itself to the title's full text width and squeezed the list of problems into whatever was left — a couple of characters wide on a long title. The summary now has its own layout, independent of `.ui-alert`
+- **Validation:** `data-ui-rule-after`/`-before` and focus/highlight handling mirrored invalid state onto a class, `.ui-date-trigger`, that does not exist anywhere in the codebase (the real class is `.ui-date-range-trigger`, shared by the date-range and single date-picker components) — an invalid date-picker field showed **no highlight at all**, since its real `<input>` is hidden. Also fixed the feedback message rendering above/beside a wrapped control instead of underneath it, for the same reason
+- **Smart tables:** the toolbar and pagination were inserted as siblings of the raw `<table>`, so when the table sat inside the documented `.ui-table-responsive` scroll wrapper (the pattern for wide tables on narrow screens), the toolbar and pagination ended up trapped *inside* that scroll box too — the search field, column menu and export button could scroll out of view along with the table instead of staying in place. This was a latent, pre-existing gap (present since the original "Smart tables" example), only exposed by a wider table
+- **Combobox:** clicking a field that already had focus — the common case right after picking a value — did not reopen the menu, since only the `focus` event was wired up. A click now reopens it, re-showing whatever was already fetched rather than firing a fresh remote query
+
+### Changed
+
+- **Validation:** the error summary is a supporting aid for forms with several problems, not the primary feedback mechanism — the red border and message under each field is. Restyled the summary to be quiet (a thin left accent, no filled colour block) rather than a loud alert banner
+- **Combobox:** added a chevron indicator (flips when open, the way a native `<select>`'s platform arrow does) and a checkmark on the selected option, so the control reads as "this opens a list" at a glance instead of looking like a plain text input
+- **Status lexicon:** `expired` and `suspended` previously shared their colour with `rejected` and `under-review` respectively, distinguished only by a couple of pixels of marker shape — effectively invisible at a glance. `expired` now reads as a neutral grey lapse and `suspended` gets its own burnt orange, so all eight states (minus `approved`/`active`, intentionally identical) are pairwise distinguishable by colour alone
+- **Tabs:** thicker, rounded underline indicator; boxed variant now reads as a segmented control with a raised active pill; the docs demo shows all four variants (underline, boxed, pill, vertical) live side by side instead of only the default
+- **Document sheet:** the docs demo was missing its own watermark, and the QR placeholder was an unlabelled blank square indistinguishable from a rendering glitch — it now has a dashed border and a "QR" label that disappears automatically once real content is placed inside it
+- Docs and examples now use the framework's own date-picker instead of a native `<input type="date">` wherever a single labelled date field appears standalone (the "Review date" field in the dashboard example, and the start/end dates in the application-form example)
+- All docs pages and examples now load `dist/ui-framework.*` with a `?v=1.3.1` query string, so a browser that cached an earlier version's bundle fetches the new one instead of silently running stale JS/CSS against new markup — the likely explanation for several of the above reading as "doesn't work at all" rather than "looks unfinished"
+
 ## 1.3.0 — 2026-07-28
 
 ### Test suite

@@ -15,12 +15,30 @@
 
 /* --------------------------------------------------- Validation summary */
 
+/*
+ * Deliberately its own flex layout rather than reusing `.ui-alert`'s
+ * icon|body|close-button grid: that grid sizes its first column to the
+ * title's natural width and hands whatever is left to the second, which
+ * crushes a multi-item list into a sliver once the title text is long.
+ *
+ * This is also meant to read as a secondary, "several things need fixing"
+ * aid -- the primary feedback is always the red border + message under each
+ * field. Keep this quiet: a thin red rule, no filled block.
+ */
 .ui-validate-summary[hidden] {
   display: none;
 }
 
 .ui-validate-summary {
+  display: flex;
+  gap: var(--ui-space-3);
+  align-items: flex-start;
+  padding: var(--ui-space-3) var(--ui-space-4);
   margin-bottom: var(--ui-space-5);
+  border: 1px solid var(--ui-border);
+  border-left: 3px solid var(--ui-danger);
+  border-radius: var(--ui-radius-2);
+  background: var(--ui-surface);
 }
 
 .ui-validate-summary:focus {
@@ -28,16 +46,62 @@
   box-shadow: var(--ui-focus-ring);
 }
 
+.ui-validate-summary-icon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 1.375rem;
+  height: 1.375rem;
+  margin-top: .0625rem;
+  border-radius: 50%;
+  background: var(--ui-danger);
+  color: #fff;
+  font-size: .75rem;
+  font-weight: 800;
+  font-style: normal;
+}
+
+.ui-validate-summary-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.ui-validate-summary-title {
+  margin: 0;
+  font-size: .875rem;
+  font-weight: 700;
+  color: var(--ui-text);
+}
+
 .ui-validate-summary-list {
   margin: var(--ui-space-2) 0 0;
-  padding-left: var(--ui-space-5);
+  padding: 0;
+  list-style: none;
   display: grid;
   gap: var(--ui-space-1);
-  font-size: .875rem;
+  font-size: .8125rem;
+  color: var(--ui-text-soft);
+}
+
+.ui-validate-summary-list li {
+  padding-left: var(--ui-space-4);
+  position: relative;
+}
+
+.ui-validate-summary-list li::before {
+  content: "";
+  position: absolute;
+  left: .2rem;
+  top: .55em;
+  width: .3rem;
+  height: .3rem;
+  border-radius: 50%;
+  background: var(--ui-danger);
 }
 
 .ui-validate-summary-list a {
-  color: inherit;
+  color: var(--ui-text);
   font-weight: 600;
   text-underline-offset: 2px;
 }
@@ -75,12 +139,17 @@
 
 .ui-combobox-input {
   width: 100%;
-  padding-right: 2.25rem;
+  padding-right: 3.5rem;
+  cursor: text;
 }
+
+/* A read-only-looking combobox (no results yet fetched) should still read as
+   a control you can act on, so the caret stays visible rather than a plain
+   I-beam once focused -- handled by keeping the native text caret. */
 
 .ui-combobox-clear {
   position: absolute;
-  right: var(--ui-space-2);
+  right: 2rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -111,6 +180,24 @@
   display: none;
 }
 
+.ui-combobox-chevron {
+  position: absolute;
+  right: .85rem;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ui-subtle);
+  pointer-events: none;
+  transform: translateY(-50%);
+  transition: transform var(--ui-transition-fast), color var(--ui-transition-fast);
+}
+
+.ui-combobox.ui-open .ui-combobox-chevron {
+  color: var(--ui-primary);
+  transform: translateY(-50%) rotate(180deg);
+}
+
 .ui-combobox-menu {
   position: absolute;
   z-index: var(--ui-z-dropdown);
@@ -130,11 +217,16 @@
 
 .ui-combobox-option {
   display: flex;
-  flex-direction: column;
-  gap: .125rem;
-  padding: var(--ui-space-2) var(--ui-space-3);
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ui-space-2);
+  padding: .55rem var(--ui-space-3);
   cursor: pointer;
   transition: background var(--ui-transition-fast);
+}
+
+.ui-combobox-option:not(:last-child) {
+  border-bottom: 1px solid var(--ui-border);
 }
 
 .ui-combobox-option:hover,
@@ -144,17 +236,44 @@
 
 .ui-combobox-option[aria-selected="true"] {
   background: var(--ui-primary-soft);
-  font-weight: 600;
+}
+
+.ui-combobox-option[aria-selected="true"] .ui-combobox-option-label {
+  font-weight: 700;
+  color: var(--ui-primary);
+}
+
+.ui-combobox-option-text {
+  display: flex;
+  flex-direction: column;
+  gap: .125rem;
+  min-width: 0;
 }
 
 .ui-combobox-option-label {
-  font-size: .9375rem;
+  overflow: hidden;
+  font-size: .875rem;
   color: var(--ui-text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .ui-combobox-option-hint {
-  font-size: .8125rem;
+  overflow: hidden;
+  font-size: .75rem;
   color: var(--ui-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ui-combobox-option-check {
+  display: none;
+  flex: none;
+  color: var(--ui-primary);
+}
+
+.ui-combobox-option[aria-selected="true"] .ui-combobox-option-check {
+  display: flex;
 }
 
 .ui-combobox-message {

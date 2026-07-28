@@ -77,7 +77,7 @@ test("the error summary lists every problem and links to the field", async () =>
     await page.click("#submit");
 
     assert.equal(await page.isVisible("[data-ui-validate-summary]"), true);
-    assert.match(await page.text(".ui-validate-summary .ui-alert-title"), /2 problem/);
+    assert.match(await page.text(".ui-validate-summary .ui-validate-summary-title"), /2 problem/);
 
     const links = await page.evaluate(() =>
       [...document.querySelectorAll(".ui-validate-summary-list a")].map((a) => ({
@@ -165,6 +165,75 @@ test("cross-field date rule compares against the other field", async () => {
       "correcting the value should clear the error as you type"
     );
   });
+});
+
+test("an invalid date-picker field highlights the trigger, not the hidden input", async () => {
+  // Regression: the module mirrored .ui-is-invalid onto a class
+  // (".ui-date-trigger") that does not exist anywhere in the codebase -- the
+  // real class is ".ui-date-range-trigger", shared by the date-range and
+  // single date-picker components. An invalid wrapped date field previously
+  // showed no highlight at all, since its real <input> is display:none.
+  await ui.page(
+    `<form id="f" data-ui-validate>
+       <div class="ui-field">
+         <label class="ui-label" for="issued">Issued</label>
+         <div class="ui-date-picker" data-ui-date-picker>
+           <input type="date" id="issued" name="issued">
+         </div>
+       </div>
+       <div class="ui-field">
+         <label class="ui-label" for="expires">Expires</label>
+         <div class="ui-date-picker" data-ui-date-picker>
+           <input type="date" id="expires" name="expires" data-ui-rule-after="issued">
+         </div>
+       </div>
+       <button type="submit" id="go">Go</button>
+     </form>`,
+    async (page) => {
+      await page.evaluate(() => {
+        document.getElementById("issued").value = "2026-06-01";
+        document.getElementById("expires").value = "2026-01-01";
+      });
+      await page.click("#go");
+
+      const trigger = await page.evaluate(() => {
+        const wrapper = document
+          .getElementById("expires")
+          .closest(".ui-date-picker");
+        const button = wrapper.querySelector(".ui-date-range-trigger");
+        return {
+          invalidClass: button.classList.contains("ui-is-invalid"),
+          borderColor: getComputedStyle(button).borderColor,
+        };
+      });
+
+      assert.equal(
+        trigger.invalidClass,
+        true,
+        "the visible trigger must carry ui-is-invalid, not just the hidden input"
+      );
+      assert.equal(trigger.borderColor, "rgb(220, 38, 38)", "the trigger border must turn red");
+
+      // The message must render directly under the *visible* control, not
+      // sandwiched between the hidden input and the trigger (which put it
+      // visually above the control instead of below it).
+      const order = await page.evaluate(() => {
+        const field = document.getElementById("expires").closest(".ui-field");
+        return [...field.children].map((el) => el.className || el.tagName);
+      });
+      const pickerIndex = order.findIndex((c) => String(c).includes("ui-date-picker"));
+      const feedbackIndex = order.findIndex((c) => String(c).includes("ui-feedback-invalid"));
+      assert.ok(
+        feedbackIndex > pickerIndex,
+        "the feedback message must come after the whole date-picker wrapper: " + JSON.stringify(order)
+      );
+
+      assert.match(
+        await page.evaluate(() => document.getElementById("expires").closest(".ui-field").querySelector(".ui-feedback-invalid").textContent),
+        /Must be after Issued/
+      );
+    }
+  );
 });
 
 test("errors clear as the user fixes them, and the form then submits", async () => {
@@ -640,6 +709,73 @@ test("the clear button resets the selection", async () => {
     assert.equal(await page.value("#op"), "");
     assert.equal(await page.value(".ui-combobox-input"), "");
   });
+});
+
+test("clicking an already-focused, already-filled combobox reopens the menu", async () => {
+  // Regression: only the "focus" event reopened the menu, so re-clicking a
+  // field that already had focus (the common case right after picking a
+  // value) silently did nothing.
+  await ui.page(LOCAL_COMBOBOX, async (page) => {
+    await page.click(".ui-combobox-input");
+    await page.press("ArrowDown");
+    await page.press("Enter");
+    assert.equal(
+      await page.evaluate(() => document.querySelector(".ui-combobox-menu").hidden),
+      true,
+      "committing a value should close the menu"
+    );
+
+    await page.click(".ui-combobox-input");
+    assert.equal(
+      await page.evaluate(() => document.querySelector(".ui-combobox-menu").hidden),
+      false,
+      "clicking the already-focused field should reopen it"
+    );
+    // Local mode filters by the input's current text, which after a commit is
+    // the selected option's own label -- so reopening narrows to that one
+    // match, shown with its checkmark, rather than the full list. That is
+    // consistent with how filtering behaves on every keystroke elsewhere.
+    assert.equal(await page.count(".ui-combobox-option"), 1);
+    assert.equal(
+      await page.evaluate(() =>
+        document.querySelector(".ui-combobox-option").getAttribute("aria-selected")
+      ),
+      "true"
+    );
+  });
+});
+
+test("clicking a focused remote combobox re-shows results without a fresh query", async () => {
+  await ui.page(
+    `<select id="lic" data-ui-combobox data-ui-url="/api/customers" data-ui-min-chars="2"></select>`,
+    async (page) => {
+      await page.evaluate(() => {
+        window.__calls = 0;
+        window.fetch = function () {
+          window.__calls++;
+          return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve([{ value: "1", label: "Acme Industries Ltd" }]),
+          });
+        };
+      });
+
+      await page.click(".ui-combobox-input");
+      await page.type(".ui-combobox-input", "acme");
+      await page.waitFor(() => document.querySelectorAll(".ui-combobox-option").length > 0);
+      assert.equal(await page.evaluate(() => window.__calls), 1);
+
+      await page.press("Escape");
+      await page.click(".ui-combobox-input");
+
+      assert.equal(
+        await page.evaluate(() => window.__calls),
+        1,
+        "reopening on click should not re-query the server"
+      );
+      assert.equal(await page.count(".ui-combobox-option"), 1);
+    }
+  );
 });
 
 test("remote combobox queries the endpoint and renders results", async () => {

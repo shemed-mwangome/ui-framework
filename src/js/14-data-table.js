@@ -52,6 +52,14 @@
     var headers = UI.qa("thead th", table);
     var headerRow = UI.q("thead tr", table);
 
+    // When the table is wrapped for horizontal scrolling (`.ui-table-responsive`,
+    // the documented pattern for wide tables on narrow screens), the toolbar
+    // and pagination must sit *outside* that scroll box. Anchoring them to the
+    // raw `table` element instead put them inside it, so on a narrow screen
+    // the search box, column menu and export button scrolled out of view
+    // along with the table instead of staying put above/below it.
+    var scrollBox = UI.closest(table, ".ui-table-responsive") || table;
+
     var url = wrapper.getAttribute("data-ui-url");
     var serverMode = !!url;
     var allRows = serverMode ? [] : UI.qa("tr", tbody);
@@ -224,10 +232,11 @@
         });
       }
 
-      // Insert relative to `table` (not `wrapper`), since `data-ui-table` may
-      // be on the <table> itself: a <nav> can't legally live inside a table,
-      // and a node can't be inserted before itself.
-      table.parentNode.insertBefore(toolbar, table);
+      // Insert relative to `scrollBox` (the .ui-table-responsive wrapper when
+      // there is one, else `table` itself) rather than `wrapper`: `data-ui-table`
+      // may be on the <table> itself, where a <nav> can't legally live inside
+      // it and a node can't be inserted before itself.
+      scrollBox.parentNode.insertBefore(toolbar, scrollBox);
     }
 
     // ------------------------------------------------------- column toggling
@@ -342,7 +351,7 @@
 
     var pagination = document.createElement("nav");
     pagination.className = "ui-table-pagination";
-    table.insertAdjacentElement("afterend", pagination);
+    scrollBox.insertAdjacentElement("afterend", pagination);
 
     // Only sortable headers carry aria-sort. Setting aria-sort="none" on an
     // opted-out column would announce it to screen readers as a sortable

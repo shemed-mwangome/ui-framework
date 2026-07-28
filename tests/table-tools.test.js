@@ -512,6 +512,24 @@ const UPLOAD = `
     <div class="ui-upload-preview"></div>
   </div>`;
 
+// The dropzone must be the ONLY thing the file <input> overlaps. Earlier the
+// input covered the entire .ui-upload box -- preview list included -- so a
+// real click on a file's remove button actually hit the invisible input and
+// reopened the file picker instead of removing the file. This markup matches
+// exactly what the docs ship (class="ui-upload" + .ui-upload-dropzone), which
+// is the only configuration that reproduces the CSS overlay; the minimal
+// `UPLOAD` fixture above has no `ui-upload` class, so it never exercised the
+// positioning at all.
+const REALISTIC_UPLOAD = `
+  <div class="ui-upload" data-ui-upload id="zone">
+    <label class="ui-upload-dropzone">
+      <input type="file" id="docs" name="docs" multiple>
+      <span class="ui-upload-icon">&#8679;</span>
+      <span class="ui-upload-title">Drop files here or click to browse</span>
+    </label>
+    <div class="ui-upload-preview"></div>
+  </div>`;
+
 /** Builds a real FileList on the input, which is the only way to set one. */
 const putFiles = (specs) => `
   (() => {
@@ -531,7 +549,8 @@ test("files within the rules are accepted and previewed", async () => {
     await page.evaluate(putFiles([{ name: "certificate.pdf", size: 500, type: "application/pdf" }]));
 
     assert.equal(await page.count(".ui-file-item"), 1);
-    assert.match(await page.text(".ui-file-item-name"), /certificate\.pdf · 500 B/);
+    assert.equal(await page.text(".ui-file-item-name"), "certificate.pdf");
+    assert.equal(await page.text(".ui-file-item-size"), "500 B");
     assert.equal(await page.count(".ui-upload-error"), 0);
   });
 });
@@ -606,6 +625,52 @@ test("removing a file rebuilds the FileList", async () => {
       await page.evaluate(() => document.getElementById("docs").files[0].name),
       "second.pdf"
     );
+  });
+});
+
+test("a real click on remove deletes the file instead of reopening the file picker", async () => {
+  // Regression test for the dropzone/preview overlap bug: uses the exact
+  // markup the docs ship (see REALISTIC_UPLOAD above) and a real
+  // coordinate-based mouse click -- synthetic .click() calls do not
+  // reproduce this bug because they bypass hit-testing entirely.
+  await ui.page(REALISTIC_UPLOAD, async (page) => {
+    await page.evaluate(
+      putFiles([
+        { name: "first.pdf", size: 100, type: "application/pdf" },
+        { name: "second.pdf", size: 100, type: "application/pdf" },
+      ])
+    );
+    assert.equal(await page.count(".ui-file-item"), 2);
+
+    await page.click('.ui-file-item[data-ui-file-index="0"] .ui-file-item-remove');
+
+    assert.equal(
+      await page.evaluate(() => document.getElementById("docs").files.length),
+      1,
+      "a real click on remove must delete the file, not fall through to the dropzone's file input"
+    );
+    assert.equal(await page.count(".ui-file-item"), 1);
+    assert.equal(
+      await page.evaluate(() => document.getElementById("docs").files[0].name),
+      "second.pdf"
+    );
+  });
+});
+
+test("the file input only covers the dropzone, never the preview list", async () => {
+  await ui.page(REALISTIC_UPLOAD, async (page) => {
+    await page.evaluate(putFiles([{ name: "a.pdf", size: 100, type: "application/pdf" }]));
+
+    const overlap = await page.evaluate(() => {
+      const input = document.querySelector("#zone input[type=file]");
+      const preview = document.querySelector(".ui-upload-preview");
+      const a = input.getBoundingClientRect();
+      const b = preview.getBoundingClientRect();
+      // Standard axis-aligned rectangle overlap test.
+      return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+    });
+
+    assert.equal(overlap, false, "the file input's box must never overlap the preview list");
   });
 });
 

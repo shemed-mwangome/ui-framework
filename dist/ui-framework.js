@@ -1,5 +1,5 @@
 /*!
- * UI Framework v1.3.0
+ * UI Framework v1.3.1
  * Dependency-free JavaScript bundle.
  * License: MIT
  */
@@ -8,7 +8,7 @@
 
   var UI = window.UI || {};
 
-  UI.version = "1.3.0";
+  UI.version = "1.3.1";
   UI._initializers = UI._initializers || [];
 
   UI.q = function (selector, root) {
@@ -2042,13 +2042,19 @@
           item.className = "ui-file-item";
           item.setAttribute("data-ui-file-index", String(index));
           item.innerHTML =
-            '<span class="ui-file-item-name">' + UI.escape(file.name) + " · " +
-              formatSize(file.size) + "</span>" +
+            '<span class="ui-file-item-icon" aria-hidden="true">&#128196;</span>' +
+            '<span class="ui-file-item-info">' +
+              '<span class="ui-file-item-name">' + UI.escape(file.name) + '</span>' +
+              '<span class="ui-file-item-size">' + formatSize(file.size) + '</span>' +
+            '</span>' +
             '<div class="ui-file-item-progress" hidden><div class="ui-progress ui-progress-sm">' +
               '<div class="ui-progress-bar ui-progress-w-0"></div></div></div>' +
             '<button type="button" class="ui-file-item-remove" aria-label="' +
               UI.escape(UI.t("upload.remove", { name: file.name })) + '">&times;</button>';
 
+          // The remove button lives in .ui-upload-preview, a sibling of the
+          // dropzone that owns the file <input> -- never covered by it -- so
+          // this stopPropagation is defensive, not load-bearing.
           item.querySelector(".ui-file-item-remove").addEventListener("click", function (event) {
             event.stopPropagation();
             removeFile(index);
@@ -2460,6 +2466,14 @@
     var headers = UI.qa("thead th", table);
     var headerRow = UI.q("thead tr", table);
 
+    // When the table is wrapped for horizontal scrolling (`.ui-table-responsive`,
+    // the documented pattern for wide tables on narrow screens), the toolbar
+    // and pagination must sit *outside* that scroll box. Anchoring them to the
+    // raw `table` element instead put them inside it, so on a narrow screen
+    // the search box, column menu and export button scrolled out of view
+    // along with the table instead of staying put above/below it.
+    var scrollBox = UI.closest(table, ".ui-table-responsive") || table;
+
     var url = wrapper.getAttribute("data-ui-url");
     var serverMode = !!url;
     var allRows = serverMode ? [] : UI.qa("tr", tbody);
@@ -2632,10 +2646,11 @@
         });
       }
 
-      // Insert relative to `table` (not `wrapper`), since `data-ui-table` may
-      // be on the <table> itself: a <nav> can't legally live inside a table,
-      // and a node can't be inserted before itself.
-      table.parentNode.insertBefore(toolbar, table);
+      // Insert relative to `scrollBox` (the .ui-table-responsive wrapper when
+      // there is one, else `table` itself) rather than `wrapper`: `data-ui-table`
+      // may be on the <table> itself, where a <nav> can't legally live inside
+      // it and a node can't be inserted before itself.
+      scrollBox.parentNode.insertBefore(toolbar, scrollBox);
     }
 
     // ------------------------------------------------------- column toggling
@@ -2750,7 +2765,7 @@
 
     var pagination = document.createElement("nav");
     pagination.className = "ui-table-pagination";
-    table.insertAdjacentElement("afterend", pagination);
+    scrollBox.insertAdjacentElement("afterend", pagination);
 
     // Only sortable headers carry aria-sort. Setting aria-sort="none" on an
     // opted-out column would announce it to screen readers as a sortable
@@ -3368,11 +3383,18 @@
 
     var element = document.createElement("p");
     element.className = "ui-feedback ui-feedback-invalid";
-    // Sits after the control so `.ui-is-invalid ~ .ui-feedback-invalid` matches.
-    if (field.nextSibling) {
-      field.parentNode.insertBefore(element, field.nextSibling);
+
+    // For a wrapped component (date picker, date range, multi-select) the
+    // real <input> is hidden and sits *before* the visible trigger in the
+    // DOM, so inserting right after it would place the message above the
+    // control instead of below it. Anchor to the whole wrapper instead.
+    var overlay = UI.closest(field, ".ui-date-range, .ui-date-picker, .ui-multiselect");
+    var anchor = overlay || field;
+
+    if (anchor.nextSibling) {
+      anchor.parentNode.insertBefore(element, anchor.nextSibling);
     } else {
-      field.parentNode.appendChild(element);
+      anchor.parentNode.appendChild(element);
     }
     return element;
   }
@@ -3461,7 +3483,7 @@
     // display:none element is invisible; mirror the state onto the trigger.
     var wrapper = UI.closest(field, ".ui-date-range, .ui-date-picker, .ui-multiselect");
     if (wrapper) {
-      var trigger = UI.q(".ui-date-trigger, .ui-multiselect-trigger", wrapper);
+      var trigger = UI.q(".ui-date-range-trigger, .ui-multiselect-trigger", wrapper);
       if (trigger) trigger.classList.add("ui-is-invalid");
     }
   }
@@ -3494,7 +3516,7 @@
     }
 
     summary.hidden = false;
-    summary.className = "ui-alert ui-alert-danger ui-validate-summary";
+    summary.className = "ui-validate-summary";
     summary.setAttribute("role", "alert");
     summary.setAttribute("tabindex", "-1");
 
@@ -3508,10 +3530,17 @@
         : "<li>" + label + " — " + message + "</li>";
     });
 
+    // A standalone flex layout rather than the generic `.ui-alert` grid,
+    // which is shaped for icon|body|close-button and squeezes a wide list
+    // into whatever the title's natural width leaves over.
     summary.innerHTML =
-      '<div class="ui-alert-title">' +
+      '<span class="ui-validate-summary-icon" aria-hidden="true">!</span>' +
+      '<div class="ui-validate-summary-body">' +
+      '<p class="ui-validate-summary-title">' +
       UI.escape(UI.t("validate.summaryTitle", { count: errors.length })) +
-      "</div><ul class=\"ui-validate-summary-list\">" + items.join("") + "</ul>";
+      "</p>" +
+      '<ul class="ui-validate-summary-list">' + items.join("") + "</ul>" +
+      "</div>";
   }
 
   function validateForm(form, options) {
@@ -3551,7 +3580,7 @@
     // overlay component.
     if (target === errors[0].element) {
       var overlay = UI.closest(target, ".ui-date-range, .ui-date-picker, .ui-multiselect");
-      if (overlay) target = UI.q(".ui-date-trigger, .ui-multiselect-trigger", overlay) || target;
+      if (overlay) target = UI.q(".ui-date-range-trigger, .ui-multiselect-trigger", overlay) || target;
     }
 
     if (target.focus) target.focus();
@@ -4073,6 +4102,15 @@
     clearButton.innerHTML = "&times;";
     clearButton.hidden = true;
 
+    // Purely decorative: signals "this opens a list" the way a native
+    // <select>'s platform arrow does, and flips when the menu is open.
+    var chevron = document.createElement("span");
+    chevron.className = "ui-combobox-chevron";
+    chevron.setAttribute("aria-hidden", "true");
+    chevron.innerHTML =
+      '<svg viewBox="0 0 12 8" width="10" height="7" fill="none"><path d="M1 1.5L6 6.5L11 1.5" ' +
+      'stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
     var listbox = document.createElement("div");
     listbox.className = "ui-combobox-menu";
     listbox.setAttribute("role", "listbox");
@@ -4082,6 +4120,7 @@
 
     control.appendChild(input);
     if (allowClear) control.appendChild(clearButton);
+    control.appendChild(chevron);
     wrapper.appendChild(control);
     wrapper.appendChild(listbox);
 
@@ -4146,10 +4185,16 @@
             '<div class="ui-combobox-option" role="option" id="' +
             listbox.id + "-" + index + '" data-index="' + index + '"' +
             ' aria-selected="' + (option.value === select.value ? "true" : "false") + '">' +
+            '<span class="ui-combobox-option-text">' +
             '<span class="ui-combobox-option-label">' + UI.escape(option.label) + "</span>" +
             (option.hint
               ? '<span class="ui-combobox-option-hint">' + UI.escape(option.hint) + "</span>"
               : "") +
+            "</span>" +
+            '<span class="ui-combobox-option-check" aria-hidden="true">' +
+            '<svg viewBox="0 0 16 12" width="13" height="10" fill="none">' +
+            '<path d="M1 6L5.5 10.5L15 1" stroke="currentColor" stroke-width="2" ' +
+            'stroke-linecap="round" stroke-linejoin="round"/></svg></span>' +
             "</div>"
           );
         })
@@ -4320,6 +4365,21 @@
     input.addEventListener("blur", onBlur);
     input.addEventListener("focus", function () {
       if (!url && !open) search(input.value);
+    });
+    // A click on an already-focused input (the common case right after
+    // picking a value) does not re-fire "focus", so without this the menu
+    // only ever reopens after the field loses and regains focus first.
+    // Re-show whatever was last fetched rather than issuing a fresh remote
+    // query merely because the field was clicked.
+    input.addEventListener("click", function () {
+      if (open) return;
+      if (!url) {
+        search(input.value);
+        return;
+      }
+      openMenu();
+      if (options.length) renderOptions();
+      else renderMessage(input.value.trim().length < minChars ? UI.t("combobox.hint") : UI.t("combobox.empty"));
     });
     listbox.addEventListener("mousedown", function (event) {
       // Prevent the input losing focus before the click resolves.

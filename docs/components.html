@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Components · UI Framework</title>
-  <link rel="stylesheet" href="../dist/ui-framework.css">
+  <link rel="stylesheet" href="../dist/ui-framework.css?v=1.3.1">
   <link rel="stylesheet" href="assets/docs.css">
 </head>
 <body class="ui-scope docs-body">
@@ -14,7 +14,7 @@
       <a class="docs-brand" href="index.html"><span class="docs-logo">UI</span><span>UI Framework</span></a>
     </div>
     <div class="ui-d-flex ui-align-center ui-gap-2">
-      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.3.0</span>
+      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.3.1</span>
       <button class="ui-btn ui-btn-sm ui-btn-outline-secondary" type="button" data-ui-theme-toggle>Theme</button>
     </div>
   </header>
@@ -573,39 +573,50 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
   <p class="docs-section-intro">A drag-and-drop friendly upload zone that lists selected files without dependencies.</p>
 
 <div class="docs-demo">
-<div class="ui-upload" data-ui-upload>
-  <input type="file" multiple aria-label="Upload documents">
-  <div>
-    <div class="ui-empty-icon">⇧</div>
-    <div class="ui-upload-title">Drop files here or click to browse</div>
-    <div class="ui-upload-help">PDF, PNG, JPG, DOCX</div>
-    <div class="ui-upload-preview"></div>
-  </div>
+<div class="ui-upload" data-ui-upload data-ui-max-size="5MB" data-ui-max-files="4" accept=".pdf,.png,.jpg,.docx">
+  <label class="ui-upload-dropzone">
+    <input type="file" multiple accept=".pdf,.png,.jpg,.docx" aria-label="Upload documents">
+    <span class="ui-upload-icon" aria-hidden="true">&#8679;</span>
+    <span class="ui-upload-title">Drop files here or click to browse</span>
+    <span class="ui-upload-help">PDF, PNG, JPG, DOCX up to 5&nbsp;MB &mdash; up to 4 files</span>
+  </label>
+  <div class="ui-upload-preview"></div>
 </div>
 </div>
 <div class="docs-code-wrap">
   <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
-  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-upload&quot; data-ui-upload&gt;
-  &lt;input type=&quot;file&quot; multiple&gt;
-  &lt;div&gt;
-    &lt;div class=&quot;ui-upload-title&quot;&gt;Drop files here&lt;/div&gt;
-    &lt;div class=&quot;ui-upload-help&quot;&gt;PDF, PNG, JPG, DOCX&lt;/div&gt;
-    &lt;div class=&quot;ui-upload-preview&quot;&gt;&lt;/div&gt;
-  &lt;/div&gt;
-&lt;/div&gt;</code></pre>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-upload&quot; data-ui-upload data-ui-max-size=&quot;5MB&quot; data-ui-max-files=&quot;4&quot;
+     accept=&quot;.pdf,.png,.jpg,.docx&quot;&gt;
+  &lt;label class=&quot;ui-upload-dropzone&quot;&gt;
+    &lt;input type=&quot;file&quot; multiple accept=&quot;.pdf,.png,.jpg,.docx&quot;&gt;
+    &lt;span class=&quot;ui-upload-icon&quot;&gt;&amp;#8679;&lt;/span&gt;
+    &lt;span class=&quot;ui-upload-title&quot;&gt;Drop files here or click to browse&lt;/span&gt;
+    &lt;span class=&quot;ui-upload-help&quot;&gt;PDF, PNG, JPG, DOCX up to 5 MB&lt;/span&gt;
+  &lt;/label&gt;
+  &lt;div class=&quot;ui-upload-preview&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- The input only covers the dropzone label, never the preview list below
+     it, so a file&#39;s remove button is always clickable and never reopens
+     the file picker. --&gt;</code></pre>
 </div>
 
 <h3 class="ui-h3 ui-mt-5">Upload classes reference</h3>
 <div class="ui-table-responsive ui-shadow-1">
   <table class="ui-table ui-table-striped">
-    <thead><tr><th>Class</th><th>Effect</th></tr></thead>
+    <thead><tr><th>Class / attribute</th><th>Effect</th></tr></thead>
     <tbody>
-      <tr><td><code class="ui-code">ui-upload</code></td><td>The drop zone; pair with <code class="ui-code">data-ui-upload</code>.</td></tr>
-      <tr><td><code class="ui-code">ui-dragover</code></td><td>Applied automatically while a file is dragged over the zone.</td></tr>
+      <tr><td><code class="ui-code">ui-upload</code></td><td>Outer wrapper; pair with <code class="ui-code">data-ui-upload</code>.</td></tr>
+      <tr><td><code class="ui-code">ui-upload-dropzone</code></td><td>The click/drop target. Must contain the <code class="ui-code">&lt;input type="file"&gt;</code> and nothing else that needs its own clicks (the input covers this box only).</td></tr>
+      <tr><td><code class="ui-code">ui-dragover</code></td><td>Applied to the outer <code class="ui-code">ui-upload</code> automatically while a file is dragged over it.</td></tr>
+      <tr><td><code class="ui-code">data-ui-max-size</code></td><td>Rejects files over this size, e.g. <code class="ui-code">5MB</code>.</td></tr>
+      <tr><td><code class="ui-code">data-ui-max-files</code></td><td>Caps how many files may be selected at once.</td></tr>
+      <tr><td><code class="ui-code">accept</code></td><td>Restricts by extension, MIME type, or wildcard (e.g. <code class="ui-code">image/*</code>).</td></tr>
+      <tr><td><code class="ui-code">data-ui-url</code></td><td>Uploads each file immediately via <code class="ui-code">XMLHttpRequest</code>, with a real progress bar per file.</td></tr>
       <tr><td><code class="ui-code">ui-upload-title</code> / <code class="ui-code">ui-upload-help</code></td><td>Primary instruction text and secondary helper text (e.g. accepted file types).</td></tr>
-      <tr><td><code class="ui-code">ui-empty-icon</code></td><td>Icon glyph above the upload instructions.</td></tr>
-      <tr><td><code class="ui-code">ui-upload-preview</code></td><td>Container the JS fills with the selected-file list.</td></tr>
-      <tr><td><code class="ui-code">ui-file-item</code></td><td>An individual file row in the preview list.</td></tr>
+      <tr><td><code class="ui-code">ui-upload-icon</code></td><td>Icon badge above the upload instructions.</td></tr>
+      <tr><td><code class="ui-code">ui-upload-preview</code></td><td>Container the JS fills with the selected-file list, positioned <em>outside</em> the dropzone.</td></tr>
+      <tr><td><code class="ui-code">ui-file-item</code></td><td>An individual file row: icon, name, size, progress and a remove button.</td></tr>
       <tr><td><code class="ui-code">ui-file-item-remove</code></td><td>The remove (&times;) button on a file row.</td></tr>
     </tbody>
   </table>
@@ -1351,13 +1362,58 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
   <p class="docs-section-intro">Accessible tabs support mouse and arrow-key navigation.</p>
 
 <div class="docs-demo">
-<div>
-  <div class="ui-tabs" role="tablist">
-    <button class="ui-tab ui-active" role="tab" aria-selected="true" aria-controls="tabProfile" data-ui-tab>Profile</button>
-    <button class="ui-tab" role="tab" aria-selected="false" aria-controls="tabSecurity" data-ui-tab>Security</button>
+<div class="ui-row">
+  <div class="ui-col-12">
+    <p class="ui-small ui-text-muted ui-mb-2"><strong>Underline</strong> (default)</p>
+    <div class="ui-tabs" role="tablist">
+      <button class="ui-tab ui-active" role="tab" aria-selected="true" aria-controls="tabProfile" data-ui-tab>Profile</button>
+      <button class="ui-tab" role="tab" aria-selected="false" aria-controls="tabSecurity" data-ui-tab>Security</button>
+      <button class="ui-tab" role="tab" aria-selected="false" aria-controls="tabBilling" data-ui-tab>Billing</button>
+    </div>
+    <div class="ui-tab-panel" id="tabProfile" role="tabpanel">Profile content</div>
+    <div class="ui-tab-panel" id="tabSecurity" role="tabpanel" hidden>Security content</div>
+    <div class="ui-tab-panel" id="tabBilling" role="tabpanel" hidden>Billing content</div>
   </div>
-  <div class="ui-tab-panel" id="tabProfile" role="tabpanel">Profile content</div>
-  <div class="ui-tab-panel" id="tabSecurity" role="tabpanel" hidden>Security content</div>
+
+  <div class="ui-col-12 ui-mt-5">
+    <p class="ui-small ui-text-muted ui-mb-2"><strong>Boxed</strong></p>
+    <div class="ui-tabs ui-tabs-boxed" role="tablist">
+      <button class="ui-tab ui-active" role="tab" aria-selected="true" aria-controls="tabProfile2" data-ui-tab>Profile</button>
+      <button class="ui-tab" role="tab" aria-selected="false" aria-controls="tabSecurity2" data-ui-tab>Security</button>
+      <button class="ui-tab" role="tab" aria-selected="false" aria-controls="tabBilling2" data-ui-tab>Billing</button>
+    </div>
+    <div class="ui-tab-panel" id="tabProfile2" role="tabpanel">Profile content</div>
+    <div class="ui-tab-panel" id="tabSecurity2" role="tabpanel" hidden>Security content</div>
+    <div class="ui-tab-panel" id="tabBilling2" role="tabpanel" hidden>Billing content</div>
+  </div>
+
+  <div class="ui-col-12 ui-mt-5">
+    <p class="ui-small ui-text-muted ui-mb-2"><strong>Pill</strong></p>
+    <div class="ui-tabs ui-tabs-pill" role="tablist">
+      <button class="ui-tab ui-active" role="tab" aria-selected="true" aria-controls="tabProfile3" data-ui-tab>Profile</button>
+      <button class="ui-tab" role="tab" aria-selected="false" aria-controls="tabSecurity3" data-ui-tab>Security</button>
+      <button class="ui-tab" role="tab" aria-selected="false" aria-controls="tabBilling3" data-ui-tab>Billing</button>
+    </div>
+    <div class="ui-tab-panel" id="tabProfile3" role="tabpanel">Profile content</div>
+    <div class="ui-tab-panel" id="tabSecurity3" role="tabpanel" hidden>Security content</div>
+    <div class="ui-tab-panel" id="tabBilling3" role="tabpanel" hidden>Billing content</div>
+  </div>
+
+  <div class="ui-col-12 ui-mt-5">
+    <p class="ui-small ui-text-muted ui-mb-2"><strong>Vertical</strong></p>
+    <div class="ui-d-flex">
+      <div class="ui-tabs ui-tabs-vertical" role="tablist">
+        <button class="ui-tab ui-active" role="tab" aria-selected="true" aria-controls="tabProfile4" data-ui-tab>Profile</button>
+        <button class="ui-tab" role="tab" aria-selected="false" aria-controls="tabSecurity4" data-ui-tab>Security</button>
+        <button class="ui-tab" role="tab" aria-selected="false" aria-controls="tabBilling4" data-ui-tab>Billing</button>
+      </div>
+      <div class="ui-ps-4" style="flex:1">
+        <div class="ui-tab-panel" id="tabProfile4" role="tabpanel">Profile content</div>
+        <div class="ui-tab-panel" id="tabSecurity4" role="tabpanel" hidden>Security content</div>
+        <div class="ui-tab-panel" id="tabBilling4" role="tabpanel" hidden>Billing content</div>
+      </div>
+    </div>
+  </div>
 </div>
 </div>
 <div class="docs-code-wrap">
@@ -1371,7 +1427,9 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 &lt;div class=&quot;ui-tab-panel&quot; id=&quot;tabProfile&quot; role=&quot;tabpanel&quot;&gt;Profile content&lt;/div&gt;
 &lt;div class=&quot;ui-tab-panel&quot; id=&quot;tabSecurity&quot; role=&quot;tabpanel&quot; hidden&gt;Security content&lt;/div&gt;
 
-&lt;!-- ui-tabs-boxed / ui-tabs-pill / ui-tabs-vertical change the tab-strip style --&gt;</code></pre>
+&lt;!-- Add ui-tabs-boxed / ui-tabs-pill / ui-tabs-vertical to the .ui-tabs
+     element to change the tab-strip style -- the markup and JS are
+     otherwise identical. --&gt;</code></pre>
 </div>
 
 <h3 class="ui-h3 ui-mt-5">Tabs classes reference</h3>
@@ -1828,6 +1886,7 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 <section class="docs-section" id="validate">
   <h2 class="ui-h2">Form validation</h2>
   <p class="docs-section-intro">Add <code class="ui-code">data-ui-validate</code> to a form. Native constraints (<code class="ui-code">required</code>, <code class="ui-code">type</code>, <code class="ui-code">pattern</code>, <code class="ui-code">min</code>/<code class="ui-code">max</code>) are checked alongside cross-field rules, and messages render inline instead of in a native browser bubble — which cannot be styled, is not read out on submit, and disappears on scroll.</p>
+  <p class="docs-section-intro"><strong>The primary pattern is per-field:</strong> a red border on the control and a short message directly beneath it. The error summary below is optional — add <code class="ui-code">data-ui-validate-summary</code> only on longer forms where a single at-a-glance list and jump-links genuinely help; leave it out and the field-level highlighting still works on its own.</p>
 
 <div class="docs-demo">
 <form data-ui-validate action="#" method="post" onsubmit="return false">
@@ -1848,13 +1907,17 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
     <div class="ui-col-12 ui-col-md-6">
       <div class="ui-field">
         <label class="ui-label" for="v-start">Start date</label>
-        <input class="ui-control" id="v-start" name="start" type="date" value="2026-06-01">
+        <div class="ui-date-picker" data-ui-date-picker>
+          <input type="date" id="v-start" name="start" value="2026-06-01">
+        </div>
       </div>
     </div>
     <div class="ui-col-12 ui-col-md-6">
       <div class="ui-field">
         <label class="ui-label" for="v-end">End date</label>
-        <input class="ui-control" id="v-end" name="end" type="date" data-ui-rule-after="start">
+        <div class="ui-date-picker" data-ui-date-picker>
+          <input type="date" id="v-end" name="end" data-ui-rule-after="start">
+        </div>
       </div>
     </div>
   </div>
@@ -2042,6 +2105,7 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
     <button type="button" class="ui-btn ui-btn-sm ui-btn-outline-secondary"
             onclick="UI.table.clearSelection('#tt-demo')">Clear selection</button>
   </div>
+  <div class="ui-table-responsive">
   <table class="ui-table ui-table-hover">
     <thead>
       <tr>
@@ -2059,6 +2123,7 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
       <tr data-ui-row-id="5"><td>Evergreen Supplies</td><td>REG-0004</td><td data-ui-export-value="780000">USD 780,000</td><td><span class="ui-status ui-status-under-review">Under review</span></td></tr>
     </tbody>
   </table>
+  </div>
 </div>
 </div>
 
@@ -2068,14 +2133,19 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
   &lt;div class=&quot;ui-table-selection&quot; data-ui-table-selection&gt;
     &lt;button type=&quot;button&quot; class=&quot;ui-btn ui-btn-sm ui-btn-danger&quot; id=&quot;bulk&quot;&gt;Suspend selected&lt;/button&gt;
   &lt;/div&gt;
-  &lt;table class=&quot;ui-table ui-table-sticky-first&quot;&gt;
-    &lt;thead&gt;
-      &lt;tr&gt;&lt;th data-ui-sort=&quot;text&quot;&gt;Company&lt;/th&gt;&lt;th&gt;Status&lt;/th&gt;&lt;/tr&gt;
-    &lt;/thead&gt;
-    &lt;tbody&gt;
-      &lt;tr data-ui-row-id=&quot;7&quot;&gt;&lt;td&gt;Acme Industries&lt;/td&gt;&lt;td&gt;Active&lt;/td&gt;&lt;/tr&gt;
-    &lt;/tbody&gt;
-  &lt;/table&gt;
+
+  &lt;!-- keeps a wide table scrolling on its own, so the toolbar and
+       pagination stay put instead of scrolling away with it --&gt;
+  &lt;div class=&quot;ui-table-responsive&quot;&gt;
+    &lt;table class=&quot;ui-table ui-table-sticky-first&quot;&gt;
+      &lt;thead&gt;
+        &lt;tr&gt;&lt;th data-ui-sort=&quot;text&quot;&gt;Company&lt;/th&gt;&lt;th&gt;Status&lt;/th&gt;&lt;/tr&gt;
+      &lt;/thead&gt;
+      &lt;tbody&gt;
+        &lt;tr data-ui-row-id=&quot;7&quot;&gt;&lt;td&gt;Acme Industries&lt;/td&gt;&lt;td&gt;Active&lt;/td&gt;&lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  &lt;/div&gt;
 &lt;/div&gt;
 
 &lt;script&gt;
@@ -2248,7 +2318,7 @@ document.getElementById(&quot;bulk&quot;).addEventListener(&quot;click&quot;, fu
 
 <section class="docs-section" id="status">
   <h2 class="ui-h2">Status lexicon and record header</h2>
-  <p class="docs-section-intro">A fixed vocabulary for record state. The value is not the styling — it is that every screen uses the same words with the same colours, instead of each one inventing its own. Expired and suspended are distinguished by marker and border, not colour alone.</p>
+  <p class="docs-section-intro">A fixed vocabulary for record state. The value is not the styling — it is that every screen uses the same words with the same colours, instead of each one inventing its own. Every status gets its own colour, and the ones that could otherwise be confused for one another (expired vs. rejected, suspended vs. under review) also differ in marker shape or border style, so the difference survives colour-blindness and greyscale printing too.</p>
 
 <div class="docs-demo">
 <div class="ui-d-flex ui-flex-wrap ui-gap-2 ui-mb-5">
@@ -2321,6 +2391,7 @@ document.getElementById(&quot;bulk&quot;).addEventListener(&quot;click&quot;, fu
 
 <div class="docs-demo">
 <div class="ui-document" style="width:100%;min-height:0;box-shadow:none;border:1px solid var(--ui-border)">
+  <div class="ui-document-watermark">CERTIFIED</div>
   <div class="ui-document-header">
     <span><strong>Example Organisation</strong></span>
     <span class="ui-record-ref">REG-2026-0184</span>
@@ -2383,10 +2454,10 @@ document.getElementById(&quot;bulk&quot;).addEventListener(&quot;click&quot;, fu
 </section>
 
 
-      <footer class="docs-footer">UI Framework 1.3.0 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
+      <footer class="docs-footer">UI Framework 1.3.1 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
     </main>
   </div>
-  <script src="../dist/ui-framework.js"></script>
+  <script src="../dist/ui-framework.js?v=1.3.1"></script>
   <script src="assets/docs.js"></script>
 </body>
 </html>

@@ -420,7 +420,7 @@ test("copy announces to screen readers", async () => {
 // Status lexicon and document sheet
 // --------------------------------------------------------------------------
 
-test("the status lexicon covers every regulatory state", () => {
+test("the status lexicon covers every documented state", () => {
   const css = readFileSync(join(ROOT, "src/css/25-status-document.css"), "utf8");
   const required = [
     "draft", "submitted", "under-review", "approved",
@@ -432,28 +432,39 @@ test("the status lexicon covers every regulatory state", () => {
 });
 
 test("status pills are visually distinguishable, not just differently worded", async () => {
+  const statuses = [
+    "draft", "submitted", "under-review", "approved",
+    "active", "rejected", "expired", "suspended",
+  ];
+
   await ui.page(
-    ["draft", "submitted", "under-review", "approved", "rejected", "expired", "suspended"]
-      .map((s) => `<span class="ui-status ui-status-${s}" id="s-${s}">${s}</span>`)
-      .join(""),
+    statuses.map((s) => `<span class="ui-status ui-status-${s}" id="s-${s}">${s}</span>`).join(""),
     async (page) => {
-      const colors = await page.evaluate(() =>
-        ["draft", "submitted", "under-review", "approved", "rejected", "expired", "suspended"].map(
-          (s) => {
-            const el = document.getElementById("s-" + s);
-            const cs = getComputedStyle(el);
-            return { s, color: cs.color, bg: cs.backgroundColor, border: cs.borderStyle };
-          }
-        )
+      const colors = await page.evaluate((names) =>
+        names.map((s) => {
+          const el = document.getElementById("s-" + s);
+          const cs = getComputedStyle(el);
+          return { s, color: cs.color, bg: cs.backgroundColor, border: cs.borderStyle };
+        }), statuses
       );
 
-      // Expired and rejected share a colour by design, but expired uses a ring
-      // marker and suspended a dashed border, so all seven remain distinct.
+      // Every status gets its own colour now (expired reads as a neutral
+      // grey lapse rather than sharing rejected's red; suspended gets its
+      // own burnt orange rather than sharing under-review's amber), so all
+      // eight -- minus approved/active, which are intentionally the same
+      // "good and in force" green -- should be pairwise distinguishable.
       const signatures = new Set(colors.map((c) => c.color + "|" + c.bg + "|" + c.border));
-      assert.ok(
-        signatures.size >= 6,
-        "statuses should be distinguishable at a glance: " + JSON.stringify(colors)
+      assert.equal(
+        signatures.size,
+        statuses.length - 1,
+        "expected exactly one shared signature (approved === active): " + JSON.stringify(colors)
       );
+
+      const byStatus = Object.fromEntries(colors.map((c) => [c.s, c.color + "|" + c.bg + "|" + c.border]));
+      assert.equal(byStatus.approved, byStatus.active, "approved and active are the same intentional state");
+      assert.notEqual(byStatus.rejected, byStatus.expired, "expired must not look like rejected");
+      assert.notEqual(byStatus["under-review"], byStatus.suspended, "suspended must not look like under-review");
+      assert.notEqual(byStatus.draft, byStatus.expired, "expired must not look identical to draft either");
     }
   );
 });

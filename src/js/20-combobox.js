@@ -72,6 +72,15 @@
     clearButton.innerHTML = "&times;";
     clearButton.hidden = true;
 
+    // Purely decorative: signals "this opens a list" the way a native
+    // <select>'s platform arrow does, and flips when the menu is open.
+    var chevron = document.createElement("span");
+    chevron.className = "ui-combobox-chevron";
+    chevron.setAttribute("aria-hidden", "true");
+    chevron.innerHTML =
+      '<svg viewBox="0 0 12 8" width="10" height="7" fill="none"><path d="M1 1.5L6 6.5L11 1.5" ' +
+      'stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
     var listbox = document.createElement("div");
     listbox.className = "ui-combobox-menu";
     listbox.setAttribute("role", "listbox");
@@ -81,6 +90,7 @@
 
     control.appendChild(input);
     if (allowClear) control.appendChild(clearButton);
+    control.appendChild(chevron);
     wrapper.appendChild(control);
     wrapper.appendChild(listbox);
 
@@ -145,10 +155,16 @@
             '<div class="ui-combobox-option" role="option" id="' +
             listbox.id + "-" + index + '" data-index="' + index + '"' +
             ' aria-selected="' + (option.value === select.value ? "true" : "false") + '">' +
+            '<span class="ui-combobox-option-text">' +
             '<span class="ui-combobox-option-label">' + UI.escape(option.label) + "</span>" +
             (option.hint
               ? '<span class="ui-combobox-option-hint">' + UI.escape(option.hint) + "</span>"
               : "") +
+            "</span>" +
+            '<span class="ui-combobox-option-check" aria-hidden="true">' +
+            '<svg viewBox="0 0 16 12" width="13" height="10" fill="none">' +
+            '<path d="M1 6L5.5 10.5L15 1" stroke="currentColor" stroke-width="2" ' +
+            'stroke-linecap="round" stroke-linejoin="round"/></svg></span>' +
             "</div>"
           );
         })
@@ -319,6 +335,21 @@
     input.addEventListener("blur", onBlur);
     input.addEventListener("focus", function () {
       if (!url && !open) search(input.value);
+    });
+    // A click on an already-focused input (the common case right after
+    // picking a value) does not re-fire "focus", so without this the menu
+    // only ever reopens after the field loses and regains focus first.
+    // Re-show whatever was last fetched rather than issuing a fresh remote
+    // query merely because the field was clicked.
+    input.addEventListener("click", function () {
+      if (open) return;
+      if (!url) {
+        search(input.value);
+        return;
+      }
+      openMenu();
+      if (options.length) renderOptions();
+      else renderMessage(input.value.trim().length < minChars ? UI.t("combobox.hint") : UI.t("combobox.empty"));
     });
     listbox.addEventListener("mousedown", function (event) {
       // Prevent the input losing focus before the click resolves.

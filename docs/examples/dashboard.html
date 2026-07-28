@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Dashboard · UI Framework Example</title>
-  <link rel="stylesheet" href="../../dist/ui-framework.css">
+  <link rel="stylesheet" href="../../dist/ui-framework.css?v=1.3.1">
   <style>
 @media (max-width: 52rem) {
   .ui-sidebar { display: none; }
@@ -131,7 +131,7 @@
     <div class="ui-modal-body">
       <div class="ui-row ui-g-2">
         <div class="ui-col-12 ui-col-md-6"><label class="ui-label">Region</label><select class="ui-select"><option>Central</option><option>South</option></select></div>
-        <div class="ui-col-12 ui-col-md-6"><label class="ui-label">Review date</label><input class="ui-control" type="date"></div>
+        <div class="ui-col-12 ui-col-md-6"><label class="ui-label">Review date</label><div class="ui-date-picker" data-ui-date-picker><input type="date"></div></div>
         <div class="ui-col-12"><label class="ui-label">Reviewers</label><select multiple data-ui-multiselect data-display="tags"><option>Alex</option><option>Sam</option><option>Neema</option></select></div>
       </div>
     </div>
@@ -160,6 +160,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
-<script src="../../dist/ui-framework.js"></script>
+<script src="../../dist/ui-framework.js?v=1.3.1"></script>
 </body>
 </html>

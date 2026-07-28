@@ -245,6 +245,45 @@ test("pagination is omitted entirely when everything fits on one page", async ()
   });
 });
 
+test("toolbar and pagination stay outside a .ui-table-responsive scroll wrapper", async () => {
+  // Regression: both were inserted as siblings of the raw <table>, so when
+  // the table sat inside the documented .ui-table-responsive scroll wrapper
+  // (the pattern for wide tables on narrow screens), the toolbar and
+  // pagination ended up *inside* that wrapper too -- meaning the search box,
+  // column menu and export button could scroll out of view along with the
+  // table instead of staying visible above/below it.
+  await ui.page(
+    `<div data-ui-table data-ui-page-size="2">
+       <div class="ui-table-responsive">
+         <table class="ui-table">
+           <thead><tr><th data-ui-sort="text">Name</th></tr></thead>
+           <tbody><tr><td>Alpha</td></tr><tr><td>Beta</td></tr><tr><td>Gamma</td></tr></tbody>
+         </table>
+       </div>
+     </div>`,
+    async (page) => {
+      const placement = await page.evaluate(() => {
+        const scrollBox = document.querySelector(".ui-table-responsive");
+        const toolbar = document.querySelector(".ui-table-toolbar");
+        const pagination = document.querySelector(".ui-table-pagination");
+        return {
+          toolbarInside: scrollBox.contains(toolbar),
+          paginationInside: scrollBox.contains(pagination),
+          toolbarBeforeScrollBox: toolbar.nextElementSibling === scrollBox,
+        };
+      });
+
+      assert.equal(placement.toolbarInside, false, "toolbar must not be inside the scroll wrapper");
+      assert.equal(placement.paginationInside, false, "pagination must not be inside the scroll wrapper");
+      assert.equal(
+        placement.toolbarBeforeScrollBox,
+        true,
+        "toolbar should sit immediately before the scroll wrapper"
+      );
+    }
+  );
+});
+
 test("works when data-ui-table sits directly on the <table>", async () => {
   await ui.page(
     `<table class="ui-table" data-ui-table data-ui-page-size="2">
