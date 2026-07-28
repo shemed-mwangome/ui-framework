@@ -1,4 +1,4 @@
-# UI Framework 1.2.0
+# UI Framework 1.3.0
 
 A complete, dependency-free CSS and JavaScript UI framework designed for
 server-rendered applications, static HTML, and legacy projects that already
@@ -20,6 +20,9 @@ common first-time issues.
 1. **Single-file distribution**
    - `dist/ui-framework.css`
    - `dist/ui-framework.min.css`
+   - `dist/ui-framework.layered.css` (and `.layered.min.css`) — the same CSS
+     wrapped in `@layer`, for apps that also load Bootstrap, CoreUI or an
+     existing `master.css`. See [Cascade layers](#cascade-layers).
    - `dist/ui-framework.js`
    - `dist/ui-framework.min.js`
 
@@ -57,7 +60,45 @@ common first-time issues.
 - Save draft: debounced `localStorage` autosave with a restore-on-reload banner
 - Date range picker with quick presets, two-month view, and keyboard navigation, plus a single-date picker counterpart
 - Promise-based confirmation dialog (`UI.confirm()`)
-- Smart tables: client-side search, column sorting, and pagination over a plain `.ui-table`
+- Smart tables: client-side search, column sorting and pagination over a plain
+  `.ui-table`, plus optional server mode (`data-ui-url`), row selection with
+  bulk actions, column visibility, sticky columns and CSV export
+- Form validation with cross-field rules, an error summary, and server-error
+  binding (`UI.validate.showErrors()`)
+- Input masks and number/currency formatting (`data-ui-mask`, `UI.mask.format()`)
+- Combobox with type-ahead over a local `<select>` or a remote endpoint
+- Upload areas with size/type/count gating and per-file upload progress
+- SVG charts without a charting library: bar, line, sparkline and donut
+- Popovers, copy-to-clipboard, a record status lexicon, a record header, and
+  an A4 print sheet for certificates and reports
+- Internationalisation (`UI.i18n` / `UI.t()`) and a screen-reader announcer
+  (`UI.announce()`)
+- Teardown and auto-init for AJAX-swapped regions (`UI.destroy()`, `UI.observe()`)
+
+## Cascade layers
+
+`dist/ui-framework.layered.css` wraps the framework in `@layer ui-base,
+ui-components, ui-utilities`. Declare the order you want once, at the top of
+your own stylesheet:
+
+```css
+@layer app-reset, ui-base, ui-components, ui-utilities, app-overrides;
+```
+
+Rules you put in `app-overrides` then beat the framework regardless of selector
+specificity, with no `!important`. Note that an *unlayered* stylesheet always
+outranks a layered one, so keep your overrides in a declared layer too.
+
+## Tests
+
+```bash
+npm test
+```
+
+160+ tests against a real Chrome, with **no npm dependencies** — the harness
+drives the browser over the DevTools Protocol using Node's built-in
+`WebSocket`. You need Node 18+ and a Chrome/Chromium binary; set `CHROME_PATH`
+if it lives somewhere unusual. See [`tests/README.md`](tests/README.md).
 
 ## Quick start: bundled files
 
@@ -121,7 +162,8 @@ The documentation includes:
 - Live examples for every major component
 - Utility reference
 - JavaScript API
-- Complete dashboard, form workflow and login examples
+- Worked examples: dashboard, form workflow, login, a combined
+  application form, and a record register with charts and a print sheet
 
 ## Custom theme
 
@@ -196,12 +238,12 @@ values. In `data-display="tags"` mode, once more than `data-max-tags` options
 to see the remaining labels) so the trigger doesn't grow unbounded.
 
 ```html
-<select name="officersIds"
+<select name="reviewerIds"
         multiple
         data-ui-multiselect
         data-display="tags"
         data-max-tags="3"
-        data-placeholder="Select officers"
+        data-placeholder="Select reviewers"
         data-search="true"
         data-select-all="true">
     <option value="1">Asha M.</option>
@@ -217,9 +259,9 @@ instead of a full page reload.
 ```html
 <form data-ui-save-next
       data-ui-position="3" data-ui-total="12"
-      data-ui-prev-url="/premises/2/edit"
-      data-ui-next-url="/premises/4/edit"
-      action="/premises/3" method="post">
+      data-ui-prev-url="/records/2/edit"
+      data-ui-next-url="/records/4/edit"
+      action="/records/3" method="post">
     ...fields...
     <div class="ui-save-next-bar">
         <div class="ui-save-next-info">
@@ -281,9 +323,9 @@ banner is inserted before the form offering to restore or discard it. The
 draft is cleared on submit.
 
 ```html
-<form data-ui-draft data-ui-draft-key="inspection-form">
+<form data-ui-draft data-ui-draft-key="application-form">
     <div class="ui-form-group">
-        <label class="ui-label" for="notes">Inspection notes</label>
+        <label class="ui-label" for="notes">Review notes</label>
         <textarea class="ui-control" id="notes" name="notes"></textarea>
     </div>
     <button type="submit">Submit</button>
@@ -305,8 +347,8 @@ follow the user to another device), add `data-ui-draft-url` pointing at an
 endpoint that implements this contract:
 
 ```html
-<form data-ui-draft data-ui-draft-key="inspection-form"
-      data-ui-draft-url="/api/drafts/inspection-form">
+<form data-ui-draft data-ui-draft-key="application-form"
+      data-ui-draft-url="/api/drafts/application-form">
 ```
 
 | Method | Behavior |
@@ -368,7 +410,7 @@ single month and simple Yesterday/Today/Tomorrow presets.
 
 ```html
 <div class="ui-date-picker" data-ui-date-picker data-ui-placeholder="Select date">
-    <input type="date" name="inspectionDate" aria-label="Inspection date">
+    <input type="date" name="reviewDate" aria-label="Review date">
 </div>
 ```
 
@@ -452,10 +494,10 @@ UI.alert.create({
 UI.modal.open(document.getElementById("assignModal"));
 
 UI.confirm({
-    title: "Revoke licence",
-    message: "This will immediately revoke the operator licence.",
+    title: "Revoke access",
+    message: "This will immediately revoke the account's access.",
     variant: "danger",
-    confirmText: "Revoke licence"
+    confirmText: "Revoke access"
 }).then(function (confirmed) {
     if (confirmed) {
         // proceed with the revoke request

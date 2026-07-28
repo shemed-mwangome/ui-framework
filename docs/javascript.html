@@ -14,7 +14,7 @@
       <a class="docs-brand" href="index.html"><span class="docs-logo">UI</span><span>UI Framework</span></a>
     </div>
     <div class="ui-d-flex ui-align-center ui-gap-2">
-      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.2.0</span>
+      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.3.0</span>
       <button class="ui-btn ui-btn-sm ui-btn-outline-secondary" type="button" data-ui-theme-toggle>Theme</button>
     </div>
   </header>
@@ -25,6 +25,8 @@
       <div class="docs-sidebar-title">Examples</div>
       <a class="docs-sidebar-link" href="examples/dashboard.html">Dashboard</a>
       <a class="docs-sidebar-link" href="examples/form.html">Form workflow</a>
+      <a class="docs-sidebar-link" href="examples/application-form.html">Application form</a>
+      <a class="docs-sidebar-link" href="examples/record-register.html">Record register</a>
       <a class="docs-sidebar-link" href="examples/login.html">Login page</a>
       <div class="docs-sidebar-title">On this page</div><a class="docs-sidebar-link" href="#initialization">Initialization</a><a class="docs-sidebar-link" href="#api">Public API</a><a class="docs-sidebar-link" href="#howto">How to&hellip;</a><a class="docs-sidebar-link" href="#events">Events</a><a class="docs-sidebar-link" href="#dynamic">Dynamic content</a>
     </aside>
@@ -47,6 +49,32 @@
   <p class="docs-section-intro">Everything hangs off the global <span class="ui-code">UI</span> object. Most components also work purely through <span class="ui-code">data-ui-*</span> attributes with no JavaScript calls at all &mdash; these methods are for programmatic control.</p>
   <div class="ui-table-responsive"><table class="ui-table ui-table-striped"><thead><tr><th>API</th><th>Purpose</th></tr></thead><tbody>
     <tr><td><span class="ui-code">UI.init(root)</span></td><td>Initialize components within newly inserted HTML</td></tr>
+    <tr><td><span class="ui-code">UI.matchAll(selector, root)</span></td><td>Like <span class="ui-code">UI.qa</span>, but also matches <span class="ui-code">root</span> itself</td></tr>
+    <tr><td><span class="ui-code">UI.destroy(root)</span></td><td>Run teardown for a subtree and clear its ready guards, before replacing it</td></tr>
+    <tr><td><span class="ui-code">UI.cleanup(element, fn)</span></td><td>Register a teardown callback for <span class="ui-code">UI.destroy</span></td></tr>
+    <tr><td><span class="ui-code">UI.observe(root)</span></td><td>Auto-initialize inserted markup and tear down removed markup; returns a stop function</td></tr>
+    <tr><td><span class="ui-code">UI.t(key, vars)</span></td><td>Translate a framework string, interpolating <span class="ui-code">{placeholders}</span></td></tr>
+    <tr><td><span class="ui-code">UI.i18n.add(locale, strings)</span></td><td>Add or extend a locale's strings</td></tr>
+    <tr><td><span class="ui-code">UI.i18n.setLocale(locale)</span></td><td>Switch locale; emits <span class="ui-code">ui:locale:changed</span></td></tr>
+    <tr><td><span class="ui-code">UI.announce(message, priority)</span></td><td>Announce to screen readers via a live region (<span class="ui-code">polite</span> / <span class="ui-code">assertive</span>)</td></tr>
+    <tr><td><span class="ui-code">UI.validate.form(form, options)</span></td><td>Validate a form; <span class="ui-code">{silent: true}</span> checks without rendering, <span class="ui-code">{scope: el}</span> limits it to a region</td></tr>
+    <tr><td><span class="ui-code">UI.validate.showErrors(form, errors)</span></td><td>Apply server-side errors to fields, the summary and focus</td></tr>
+    <tr><td><span class="ui-code">UI.validate.clear(form)</span></td><td>Clear all validation state</td></tr>
+    <tr><td><span class="ui-code">UI.validate.addRule(name, fn)</span></td><td>Register a custom <span class="ui-code">data-ui-rule-&lt;name&gt;</span></td></tr>
+    <tr><td><span class="ui-code">UI.mask.raw(field)</span></td><td>Read a masked field's unformatted value</td></tr>
+    <tr><td><span class="ui-code">UI.mask.set(field, value)</span></td><td>Set a masked field, formatting on the way in</td></tr>
+    <tr><td><span class="ui-code">UI.mask.format(value, options)</span></td><td>Format a number or currency outside an input</td></tr>
+    <tr><td><span class="ui-code">UI.combobox.set(target, option)</span></td><td>Select a combobox option programmatically</td></tr>
+    <tr><td><span class="ui-code">UI.combobox.clear(target)</span></td><td>Clear a combobox selection</td></tr>
+    <tr><td><span class="ui-code">UI.table.refresh(target)</span></td><td>Re-run the current page/search/sort — call after saving a row</td></tr>
+    <tr><td><span class="ui-code">UI.table.selected(target)</span></td><td>Array of selected <span class="ui-code">data-ui-row-id</span> values</td></tr>
+    <tr><td><span class="ui-code">UI.table.clearSelection(target)</span></td><td>Clear the table's selection</td></tr>
+    <tr><td><span class="ui-code">UI.chart.update(target, values, labels)</span></td><td>Replace a chart's data and re-render in place</td></tr>
+    <tr><td><span class="ui-code">UI.popover.open(trigger)</span></td><td>Open a popover programmatically</td></tr>
+    <tr><td><span class="ui-code">UI.popover.close()</span></td><td>Close the open popover</td></tr>
+    <tr><td><span class="ui-code">UI.clipboard.copy(text)</span></td><td>Copy text; resolves to <span class="ui-code">true</span> on success</td></tr>
+    <tr><td><span class="ui-code">UI.upload.clear(zone)</span></td><td>Clear an upload area's selected files</td></tr>
+    <tr><td><span class="ui-code">UI.upload.formatSize(bytes)</span></td><td>Human-readable file size</td></tr>
     <tr><td><span class="ui-code">UI.modal.open(element)</span></td><td>Open a modal</td></tr>
     <tr><td><span class="ui-code">UI.modal.close(element)</span></td><td>Close a modal</td></tr>
     <tr><td><span class="ui-code">UI.offcanvas.open(element)</span> / <span class="ui-code">.close(element)</span></td><td>Open/close an offcanvas panel</td></tr>
@@ -95,10 +123,10 @@
 
   <h3 class="ui-h3 ui-mt-4">Ask for confirmation before a destructive action</h3>
   <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>UI.confirm({
-  title: &quot;Revoke licence&quot;,
-  message: &quot;This will immediately revoke the operator licence.&quot;,
+  title: &quot;Revoke access&quot;,
+  message: &quot;This will immediately revoke the account access.&quot;,
   variant: &quot;danger&quot;,       // primary | danger; danger focuses Cancel by default
-  confirmText: &quot;Revoke licence&quot;,
+  confirmText: &quot;Revoke access&quot;,
   cancelText: &quot;Cancel&quot;
 }).then(function (confirmed) {
   if (confirmed) {
@@ -128,6 +156,28 @@ document.querySelector(&quot;[data-ui-table]&quot;)
   <h2 class="ui-h2">Custom events</h2>
   <p>Components emit bubbling, cancelable events you can listen for on the element or via delegation on <span class="ui-code">document</span>.</p>
   <div class="ui-table-responsive"><table class="ui-table ui-table-striped"><thead><tr><th>Event</th><th>Fires on</th><th>detail</th></tr></thead><tbody>
+    <tr><td><span class="ui-code">ui:validate</span></td><td>Form validated — <span class="ui-code">{valid, errors}</span></td></tr>
+    <tr><td><span class="ui-code">ui:validate:server</span></td><td>Server errors were applied to the form</td></tr>
+    <tr><td><span class="ui-code">ui:combobox:change</span></td><td>A combobox selection changed</td></tr>
+    <tr><td><span class="ui-code">ui:combobox:results</span></td><td>Remote combobox results arrived</td></tr>
+    <tr><td><span class="ui-code">ui:combobox:error</span></td><td>A remote combobox query failed</td></tr>
+    <tr><td><span class="ui-code">ui:table:select</span></td><td>Table selection changed — <span class="ui-code">{selected, count}</span></td></tr>
+    <tr><td><span class="ui-code">ui:table:columns</span></td><td>Column visibility changed</td></tr>
+    <tr><td><span class="ui-code">ui:table:export</span></td><td>A CSV export was produced</td></tr>
+    <tr><td><span class="ui-code">ui:table:error</span></td><td>A server-mode table request failed</td></tr>
+    <tr><td><span class="ui-code">ui:upload:change</span></td><td>Accepted files changed</td></tr>
+    <tr><td><span class="ui-code">ui:upload:rejected</span></td><td>Files were rejected by size, type or count</td></tr>
+    <tr><td><span class="ui-code">ui:upload:progress</span></td><td>Upload progress — <span class="ui-code">{name, percent}</span></td></tr>
+    <tr><td><span class="ui-code">ui:upload:done</span></td><td>A file finished uploading</td></tr>
+    <tr><td><span class="ui-code">ui:upload:failed</span></td><td>A file failed to upload</td></tr>
+    <tr><td><span class="ui-code">ui:chart:rendered</span></td><td>A chart finished rendering</td></tr>
+    <tr><td><span class="ui-code">ui:popover:shown</span></td><td>A popover opened</td></tr>
+    <tr><td><span class="ui-code">ui:popover:hidden</span></td><td>A popover closed</td></tr>
+    <tr><td><span class="ui-code">ui:copy</span></td><td>Text was copied to the clipboard</td></tr>
+    <tr><td><span class="ui-code">ui:copy:failed</span></td><td>The clipboard copy failed</td></tr>
+    <tr><td><span class="ui-code">ui:locale:changed</span></td><td><span class="ui-code">UI.i18n.setLocale()</span> was called</td></tr>
+    <tr><td><span class="ui-code">ui:destroyed</span></td><td><span class="ui-code">UI.destroy()</span> ran on a subtree</td></tr>
+
     <tr><td><span class="ui-code">ui:modal:shown</span> / <span class="ui-code">ui:modal:hidden</span></td><td>the modal</td><td>&mdash;</td></tr>
     <tr><td><span class="ui-code">ui:offcanvas:shown</span> / <span class="ui-code">ui:offcanvas:hidden</span></td><td>the offcanvas root</td><td>&mdash;</td></tr>
     <tr><td><span class="ui-code">ui:tab:shown</span></td><td>the activated tab</td><td>&mdash;</td></tr>
@@ -165,7 +215,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
-      <footer class="docs-footer">UI Framework 1.2.0 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
+      <footer class="docs-footer">UI Framework 1.3.0 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
     </main>
   </div>
   <script src="../dist/ui-framework.js"></script>

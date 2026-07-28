@@ -1,0 +1,35 @@
+name: Test
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # The test harness drives the browser over CDP directly and has no npm
+      # dependencies, so there is nothing to install -- it only needs a Chrome
+      # binary on PATH. ubuntu-latest ships one at /usr/bin/google-chrome.
+      - name: Verify Chrome is available
+        run: google-chrome --version
+
+      - name: Check dist/ is committed up to date
+        run: |
+          python3 build.py
+          git diff --exit-code dist/ \
+            || (echo "::error::dist/ is stale. Run 'python3 build.py' and commit." && exit 1)
+
+      - name: Run tests
+        run: npm test

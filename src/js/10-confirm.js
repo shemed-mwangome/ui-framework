@@ -14,11 +14,11 @@
       modal.innerHTML =
         '<div class="ui-backdrop"></div>' +
         '<div class="ui-modal-dialog" role="alertdialog" aria-modal="true">' +
-          '<div class="ui-modal-header"><h3 class="ui-modal-title">' + UI.escape(options.title || "Please confirm") + "</h3></div>" +
-          '<div class="ui-modal-body"><p>' + UI.escape(options.message || "Are you sure?") + "</p></div>" +
+          '<div class="ui-modal-header"><h3 class="ui-modal-title">' + UI.escape(options.title || UI.t("confirm.title")) + "</h3></div>" +
+          '<div class="ui-modal-body"><p>' + UI.escape(options.message || UI.t("confirm.message")) + "</p></div>" +
           '<div class="ui-modal-footer">' +
-            '<button type="button" class="ui-btn ui-btn-secondary"' + (variant === "danger" ? " autofocus" : "") + " data-ui-confirm-cancel>" + UI.escape(options.cancelText || "Cancel") + "</button>" +
-            '<button type="button" class="ui-btn ui-btn-' + variant + '"' + (variant === "danger" ? "" : " autofocus") + " data-ui-confirm-ok>" + UI.escape(options.confirmText || "Confirm") + "</button>" +
+            '<button type="button" class="ui-btn ui-btn-secondary"' + (variant === "danger" ? " autofocus" : "") + " data-ui-confirm-cancel>" + UI.escape(options.cancelText || UI.t("confirm.cancel")) + "</button>" +
+            '<button type="button" class="ui-btn ui-btn-' + variant + '"' + (variant === "danger" ? "" : " autofocus") + " data-ui-confirm-ok>" + UI.escape(options.confirmText || UI.t("confirm.ok")) + "</button>" +
           "</div>" +
         "</div>";
       document.body.appendChild(modal);

@@ -354,7 +354,7 @@
   }
 
   function init(root) {
-    UI.qa("[data-ui-date-range]", root).forEach(build);
+    UI.matchAll("[data-ui-date-range]", root).forEach(build);
   }
 
   document.addEventListener("click", function (event) {

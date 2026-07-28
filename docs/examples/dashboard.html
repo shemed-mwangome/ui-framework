@@ -17,12 +17,12 @@
 
 <div class="ui-d-flex ui-min-vh-100">
   <aside class="ui-sidebar ui-no-print" style="flex:0 0 16rem">
-    <div class="ui-sidebar-header"><strong>GBT Admin</strong><div class="ui-small ui-text-muted">Operations portal</div></div>
+    <div class="ui-sidebar-header"><strong>Admin Portal</strong><div class="ui-small ui-text-muted">Operations portal</div></div>
     <ul class="ui-sidebar-nav">
       <li class="ui-sidebar-section">Workspace</li>
       <li><a class="ui-sidebar-link ui-active" href="#">▦ Dashboard</a></li>
       <li><a class="ui-sidebar-link" href="#">✓ Compliance</a></li>
-      <li><a class="ui-sidebar-link" href="#">▤ Licences</a></li>
+      <li><a class="ui-sidebar-link" href="#">▤ Accounts</a></li>
       <li><a class="ui-sidebar-link" href="#">◎ Payments</a></li>
       <li class="ui-sidebar-section">Management</li>
       <li><a class="ui-sidebar-link" href="#">♙ Users</a></li>
@@ -57,8 +57,8 @@
       <ol class="ui-breadcrumb ui-mb-4"><li class="ui-breadcrumb-item">Home</li><li class="ui-breadcrumb-item">Dashboard</li></ol>
 
       <div class="ui-css-grid ui-mb-5 ui-css-grid-sm">
-        <div class="ui-stat"><div class="ui-stat-icon">✓</div><div><div class="ui-stat-value">128</div><div class="ui-stat-label">Approved licences</div></div></div>
-        <div class="ui-stat"><div class="ui-stat-icon ui-bg-success">↗</div><div><div class="ui-stat-value">42</div><div class="ui-stat-label">Active inspections</div></div></div>
+        <div class="ui-stat"><div class="ui-stat-icon">✓</div><div><div class="ui-stat-value">128</div><div class="ui-stat-label">Approved accounts</div></div></div>
+        <div class="ui-stat"><div class="ui-stat-icon ui-bg-success">↗</div><div><div class="ui-stat-value">42</div><div class="ui-stat-label">Active reviews</div></div></div>
         <div class="ui-stat"><div class="ui-stat-icon ui-bg-warning">!</div><div><div class="ui-stat-value">17</div><div class="ui-stat-label">Pending approvals</div></div></div>
         <div class="ui-stat"><div class="ui-stat-icon ui-bg-danger">×</div><div><div class="ui-stat-value">6</div><div class="ui-stat-label">Rejected reports</div></div></div>
       </div>
@@ -67,7 +67,7 @@
         <section class="ui-col-12 ui-col-lg-8">
           <div class="ui-card">
             <div class="ui-card-header ui-d-flex ui-justify-between ui-align-center">
-              <div><div class="ui-card-title">Recent inspections</div><div class="ui-card-subtitle">Latest scheduled compliance activity</div></div>
+              <div><div class="ui-card-title">Recent reviews</div><div class="ui-card-subtitle">Latest scheduled compliance activity</div></div>
               <div class="ui-d-flex ui-gap-2">
                 <div class="ui-date-range" data-ui-date-range data-ui-placeholder="Filter by date">
                   <input type="date" name="filterStart" aria-label="Start date">
@@ -79,15 +79,15 @@
             <div data-ui-table data-ui-page-size="5">
             <div class="ui-table-responsive">
               <table class="ui-table ui-table-hover">
-                <thead><tr><th data-ui-sort="text">Premise</th><th data-ui-sort="text">Region</th><th data-ui-sort="text">Team</th><th data-ui-sort="text">Status</th><th data-ui-sort="false"></th></tr></thead>
+                <thead><tr><th data-ui-sort="text">Site</th><th data-ui-sort="text">Region</th><th data-ui-sort="text">Team</th><th data-ui-sort="text">Status</th><th data-ui-sort="false"></th></tr></thead>
                 <tbody>
-                  <tr><td>Sunrise Casino</td><td>Dar es Salaam</td><td>Asha, Baraka</td><td><span class="ui-badge ui-badge-soft-success ui-badge-pill">Approved</span></td><td><button class="ui-btn ui-btn-sm ui-btn-ghost">Open</button></td></tr>
-                  <tr><td>Coastal Sports</td><td>Tanga</td><td>Neema</td><td><span class="ui-badge ui-badge-soft-warning ui-badge-pill">Pending</span></td><td><button class="ui-btn ui-btn-sm ui-btn-ghost">Review</button></td></tr>
-                  <tr><td>Lake View Gaming</td><td>Mwanza</td><td>Unassigned</td><td><span class="ui-badge ui-badge-soft-danger ui-badge-pill">Attention</span></td><td><button class="ui-btn ui-btn-sm ui-btn-ghost" data-ui-assign>Assign</button></td></tr>
-                  <tr><td>Northern Lights Bingo</td><td>Arusha</td><td>Baraka</td><td><span class="ui-badge ui-badge-soft-success ui-badge-pill">Approved</span></td><td><button class="ui-btn ui-btn-sm ui-btn-ghost">Open</button></td></tr>
-                  <tr><td>Serengeti Sportsbook</td><td>Arusha</td><td>Unassigned</td><td><span class="ui-badge ui-badge-soft-danger ui-badge-pill">Attention</span></td><td><button class="ui-btn ui-btn-sm ui-btn-ghost" data-ui-assign>Assign</button></td></tr>
-                  <tr><td>Harbour View Casino</td><td>Dar es Salaam</td><td>Neema, Selemani</td><td><span class="ui-badge ui-badge-soft-success ui-badge-pill">Approved</span></td><td><button class="ui-btn ui-btn-sm ui-btn-ghost">Open</button></td></tr>
-                  <tr><td>Golden Sands Gaming</td><td>Zanzibar</td><td>Asha</td><td><span class="ui-badge ui-badge-soft-warning ui-badge-pill">Pending</span></td><td><button class="ui-btn ui-btn-sm ui-btn-ghost">Review</button></td></tr>
+                  <tr><td>Evergreen Supplies</td><td>Central</td><td>Alex, Sam</td><td><span class="ui-badge ui-badge-soft-success ui-badge-pill">Approved</span></td><td><button class="ui-btn ui-btn-sm ui-btn-ghost">Open</button></td></tr>
+                  <tr><td>Coastal Sports</td><td>South</td><td>Neema</td><td><span class="ui-badge ui-badge-soft-warning ui-badge-pill">Pending</span></td><td><button class="ui-btn ui-btn-sm ui-btn-ghost">Review</button></td></tr>
+                  <tr><td>Cedar Works</td><td>West</td><td>Unassigned</td><td><span class="ui-badge ui-badge-soft-danger ui-badge-pill">Attention</span></td><td><button class="ui-btn ui-btn-sm ui-btn-ghost" data-ui-assign>Assign</button></td></tr>
+                  <tr><td>Delta Logistics</td><td>North</td><td>Sam</td><td><span class="ui-badge ui-badge-soft-success ui-badge-pill">Approved</span></td><td><button class="ui-btn ui-btn-sm ui-btn-ghost">Open</button></td></tr>
+                  <tr><td>Acme Industries</td><td>North</td><td>Unassigned</td><td><span class="ui-badge ui-badge-soft-danger ui-badge-pill">Attention</span></td><td><button class="ui-btn ui-btn-sm ui-btn-ghost" data-ui-assign>Assign</button></td></tr>
+                  <tr><td>Harbour View Casino</td><td>Central</td><td>Neema, Selemani</td><td><span class="ui-badge ui-badge-soft-success ui-badge-pill">Approved</span></td><td><button class="ui-btn ui-btn-sm ui-btn-ghost">Open</button></td></tr>
+                  <tr><td>Blue Harbour Trading</td><td>East</td><td>Alex</td><td><span class="ui-badge ui-badge-soft-warning ui-badge-pill">Pending</span></td><td><button class="ui-btn ui-btn-sm ui-btn-ghost">Review</button></td></tr>
                 </tbody>
               </table>
             </div>
@@ -105,7 +105,7 @@
                 <div class="ui-step"><div class="ui-step-marker">3</div><div class="ui-step-label">Approved</div></div>
               </div>
               <div class="ui-progress ui-progress-success"><div class="ui-progress-bar ui-progress-w-68"></div></div>
-              <div class="ui-small ui-text-muted ui-mt-2">68% of this month's inspections completed</div>
+              <div class="ui-small ui-text-muted ui-mt-2">68% of this month's reviews completed</div>
             </div>
           </div>
 
@@ -113,8 +113,8 @@
             <div class="ui-card-header"><div class="ui-card-title">Activity</div></div>
             <div class="ui-card-body">
               <div class="ui-timeline">
-                <div class="ui-timeline-item"><div class="ui-timeline-time">10 minutes ago</div><div class="ui-timeline-title">Report approved</div><div class="ui-timeline-body">Sunrise Casino inspection report.</div></div>
-                <div class="ui-timeline-item"><div class="ui-timeline-time">1 hour ago</div><div class="ui-timeline-title">Team assigned</div><div class="ui-timeline-body">Two officers assigned in Tanga.</div></div>
+                <div class="ui-timeline-item"><div class="ui-timeline-time">10 minutes ago</div><div class="ui-timeline-title">Report approved</div><div class="ui-timeline-body">Evergreen Supplies review report.</div></div>
+                <div class="ui-timeline-item"><div class="ui-timeline-time">1 hour ago</div><div class="ui-timeline-title">Team assigned</div><div class="ui-timeline-body">Two reviewers assigned in South.</div></div>
               </div>
             </div>
           </div>
@@ -127,12 +127,12 @@
 <div class="ui-modal ui-modal-lg" id="scheduleModal" aria-hidden="true">
   <div class="ui-backdrop"></div>
   <div class="ui-modal-dialog" role="dialog" aria-modal="true" tabindex="-1">
-    <div class="ui-modal-header"><h2 class="ui-modal-title">Create inspection schedule</h2><button class="ui-modal-close" data-ui-modal-close>&times;</button></div>
+    <div class="ui-modal-header"><h2 class="ui-modal-title">Create review schedule</h2><button class="ui-modal-close" data-ui-modal-close>&times;</button></div>
     <div class="ui-modal-body">
       <div class="ui-row ui-g-2">
-        <div class="ui-col-12 ui-col-md-6"><label class="ui-label">Region</label><select class="ui-select"><option>Dar es Salaam</option><option>Tanga</option></select></div>
-        <div class="ui-col-12 ui-col-md-6"><label class="ui-label">Inspection date</label><input class="ui-control" type="date"></div>
-        <div class="ui-col-12"><label class="ui-label">Officers</label><select multiple data-ui-multiselect data-display="tags"><option>Asha</option><option>Baraka</option><option>Neema</option></select></div>
+        <div class="ui-col-12 ui-col-md-6"><label class="ui-label">Region</label><select class="ui-select"><option>Central</option><option>South</option></select></div>
+        <div class="ui-col-12 ui-col-md-6"><label class="ui-label">Review date</label><input class="ui-control" type="date"></div>
+        <div class="ui-col-12"><label class="ui-label">Reviewers</label><select multiple data-ui-multiselect data-display="tags"><option>Alex</option><option>Sam</option><option>Neema</option></select></div>
       </div>
     </div>
     <div class="ui-modal-footer"><button class="ui-btn ui-btn-outline-secondary" data-ui-modal-close>Cancel</button><button class="ui-btn ui-btn-primary" id="createSchedule">Create schedule</button></div>
@@ -142,19 +142,19 @@
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("createSchedule").addEventListener("click", function () {
-    UI.toast.show({type:"success",title:"Created",message:"The inspection schedule was created."});
+    UI.toast.show({type:"success",title:"Created",message:"The review schedule was created."});
     UI.modal.close(document.getElementById("scheduleModal"));
   });
 
   document.addEventListener("click", function (event) {
     var button = event.target.closest("[data-ui-assign]");
     if (!button) return;
-    var premise = button.closest("tr").children[0].textContent;
+    var site = button.closest("tr").children[0].textContent;
     UI.confirm({
-      title: "Assign inspection team",
-      message: "Assign the next available officers to " + premise + "?"
+      title: "Assign review team",
+      message: "Assign the next available reviewers to " + site + "?"
     }).then(function (confirmed) {
-      if (confirmed) UI.toast.show({ type: "success", title: "Assigned", message: premise + " has been assigned to the compliance team." });
+      if (confirmed) UI.toast.show({ type: "success", title: "Assigned", message: site + " has been assigned to the review team." });
     });
   });
 });

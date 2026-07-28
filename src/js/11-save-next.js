@@ -26,10 +26,10 @@
   }
 
   function confirmLeave(form) {
-    var message = form.getAttribute("data-ui-unsaved-message") || "You have unsaved changes. Leave without saving?";
+    var message = form.getAttribute("data-ui-unsaved-message") || UI.t("unsaved.message");
     if (form.dataset.uiDirty !== "true") return Promise.resolve(true);
     if (typeof UI.confirm === "function") {
-      return UI.confirm({ title: "Unsaved changes", message: message, variant: "danger", confirmText: "Leave" });
+      return UI.confirm({ title: UI.t("unsaved.title"), message: message, variant: "danger", confirmText: UI.t("unsaved.leave") });
     }
     return Promise.resolve(window.confirm(message));
   }
@@ -62,7 +62,7 @@
   }
 
   function init(root) {
-    UI.qa("form[data-ui-save-next]", root).forEach(function (form) {
+    UI.matchAll("form[data-ui-save-next]", root).forEach(function (form) {
       if (form.dataset.uiSaveNextReady) return;
       form.dataset.uiSaveNextReady = "true";
 

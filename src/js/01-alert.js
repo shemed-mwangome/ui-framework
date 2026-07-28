@@ -13,7 +13,7 @@
   }
 
   function init(root) {
-    UI.qa(".ui-alert[data-ui-auto-dismiss]", root).forEach(function (alert) {
+    UI.matchAll(".ui-alert[data-ui-auto-dismiss]", root).forEach(function (alert) {
       if (alert.dataset.uiAlertReady) return;
       alert.dataset.uiAlertReady = "true";
       var duration = Number(alert.getAttribute("data-ui-auto-dismiss") || 4000);

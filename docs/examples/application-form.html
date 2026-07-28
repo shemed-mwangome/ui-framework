@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Application form — UI Framework</title>
+<link rel="stylesheet" href="../../dist/ui-framework.css">
+<link rel="stylesheet" href="../assets/docs.css">
+</head>
+<body class="ui-scope">
+
+<!--
+  A deliberately combined demo: validation, masking, combobox, the multi-step
+  wizard, save & next, autosave and a smart table all on one page, sharing one
+  form. Isolated per-feature demos pass while the combination breaks, because
+  these modules share state -- an early guard-key collision was only ever
+  visible with three of them on the same <form>.
+
+  The domain here (supplier registration) is illustrative. Swap the labels for
+  whatever your application collects, reviews and approves.
+-->
+
+<div class="ui-container ui-py-6">
+
+  <nav class="ui-breadcrumb ui-mb-4">
+    <a href="../index.html">Docs</a>
+    <span aria-hidden="true">/</span>
+    <span>Application form</span>
+  </nav>
+
+  <div class="ui-d-flex ui-gap-3 ui-mb-5" style="align-items:center;justify-content:space-between">
+    <div>
+      <h1 class="ui-h2">Supplier registration</h1>
+      <p class="ui-text-muted">Reference REG-2026-0184 · Draft</p>
+    </div>
+    <div class="ui-d-flex ui-gap-2">
+      <button type="button" class="ui-btn ui-btn-outline-secondary" data-ui-theme-toggle>Toggle theme</button>
+      <button type="button" class="ui-btn ui-btn-outline-secondary" id="lang">Français</button>
+    </div>
+  </div>
+
+  <form id="application"
+        method="post"
+        action="#"
+        data-ui-validate
+        data-ui-stepper-form
+        data-ui-save-next
+        data-ui-draft
+        data-ui-draft-key="demo-application-form"
+        data-ui-position="3"
+        data-ui-total="8">
+
+    <div data-ui-validate-summary></div>
+
+    <div class="ui-stepper ui-mb-5" data-ui-stepper>
+      <div class="ui-step"><div class="ui-step-marker">1</div><span class="ui-step-label">Company</span></div>
+      <div class="ui-step"><div class="ui-step-marker">2</div><span class="ui-step-label">Agreement</span></div>
+      <div class="ui-step"><div class="ui-step-marker">3</div><span class="ui-step-label">Declaration</span></div>
+    </div>
+
+    <!-- Step 1 ------------------------------------------------------- -->
+    <section data-ui-step class="ui-card ui-mb-4">
+      <div class="ui-card-body">
+        <h2 class="ui-h5 ui-mb-4">Company details</h2>
+
+        <div class="ui-row">
+          <div class="ui-col-12 ui-col-md-6">
+            <div class="ui-field">
+              <label class="ui-label" for="company">Registered name</label>
+              <input class="ui-control" id="company" name="company" required
+                     placeholder="e.g. Acme Industries Ltd">
+            </div>
+          </div>
+
+          <div class="ui-col-12 ui-col-md-6">
+            <div class="ui-field">
+              <label class="ui-label" for="taxId">Tax ID</label>
+              <input class="ui-control" id="taxId" name="taxId" required
+                     data-ui-mask="999-999-999"
+                     data-ui-mask-raw="true"
+                     pattern="\d{3}-\d{3}-\d{3}"
+                     data-ui-message-pattern="A tax ID has nine digits, like 123-456-789"
+                     placeholder="123-456-789">
+            </div>
+          </div>
+
+          <div class="ui-col-12 ui-col-md-6">
+            <div class="ui-field">
+              <label class="ui-label" for="phone">Contact phone</label>
+              <input class="ui-control" id="phone" name="phone" required
+                     data-ui-mask="+99 999 999 999" placeholder="+44 207 000 000">
+            </div>
+          </div>
+
+          <div class="ui-col-12 ui-col-md-6">
+            <div class="ui-field">
+              <label class="ui-label" for="email">Contact email</label>
+              <input class="ui-control" id="email" name="email" type="email" required>
+            </div>
+          </div>
+
+          <div class="ui-col-12">
+            <div class="ui-field">
+              <label class="ui-label" for="parent">Parent company</label>
+              <select id="parent" name="parent" data-ui-combobox
+                      data-ui-placeholder="Search registered companies">
+                <option value=""></option>
+                <option value="1">Acme Holdings Ltd</option>
+                <option value="2">Blue Harbour Group</option>
+                <option value="3">Cedar Works PLC</option>
+                <option value="4">Delta Investments</option>
+                <option value="5">Evergreen Capital Partners</option>
+              </select>
+              <p class="ui-help">Type to filter. Leave blank if the company is independent.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 2 ------------------------------------------------------- -->
+    <section data-ui-step class="ui-card ui-mb-4">
+      <div class="ui-card-body">
+        <h2 class="ui-h5 ui-mb-4">Agreement details</h2>
+
+        <div class="ui-row">
+          <div class="ui-col-12 ui-col-md-6">
+            <div class="ui-field">
+              <label class="ui-label" for="issued">Start date</label>
+              <input class="ui-control" id="issued" name="issued" type="date" required value="2026-08-01">
+            </div>
+          </div>
+
+          <div class="ui-col-12 ui-col-md-6">
+            <div class="ui-field">
+              <label class="ui-label" for="expires">End date</label>
+              <input class="ui-control" id="expires" name="expires" type="date" required
+                     data-ui-rule-after="issued">
+            </div>
+          </div>
+
+          <div class="ui-col-12 ui-col-md-6">
+            <div class="ui-field">
+              <label class="ui-label" for="value">Annual value</label>
+              <input class="ui-control" id="value" name="value" required
+                     data-ui-mask="currency" data-ui-currency="USD"
+                     data-ui-decimals="2" data-ui-mask-raw="true">
+            </div>
+          </div>
+
+          <div class="ui-col-12 ui-col-md-6">
+            <div class="ui-field">
+              <label class="ui-label" for="sites">Sites covered</label>
+              <input class="ui-control" id="sites" name="sites" type="number"
+                     min="1" max="500" required>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 3 ------------------------------------------------------- -->
+    <section data-ui-step class="ui-card ui-mb-4">
+      <div class="ui-card-body">
+        <h2 class="ui-h5 ui-mb-4">Declaration</h2>
+
+        <div class="ui-field">
+          <label class="ui-label" for="declarant">Declarant full name</label>
+          <input class="ui-control" id="declarant" name="declarant" required>
+        </div>
+
+        <div class="ui-field">
+          <label class="ui-checkbox">
+            <input type="checkbox" id="confirm" name="confirm" required>
+            <span>I confirm the information given is true and complete</span>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <div class="ui-save-next-progress ui-mb-3">
+      <div class="ui-progress"><div class="ui-progress-bar"></div></div>
+      <p class="ui-help">
+        Record <span data-ui-save-next-position>3</span> of <span data-ui-save-next-total>8</span>
+      </p>
+    </div>
+
+    <div class="ui-d-flex ui-gap-2">
+      <button type="button" class="ui-btn ui-btn-outline-secondary" data-ui-step-back>Back</button>
+      <button type="button" class="ui-btn ui-btn-primary" data-ui-step-next>Next</button>
+      <button type="submit" class="ui-btn ui-btn-primary" data-ui-save-next-submit>Submit application</button>
+    </div>
+  </form>
+
+  <!-- Register ------------------------------------------------------- -->
+  <h2 class="ui-h4 ui-mt-7 ui-mb-3">Existing registrations</h2>
+  <div data-ui-table data-ui-page-size="5" data-ui-page-sizes="5,10,25">
+    <table class="ui-table ui-table-hover">
+      <thead>
+        <tr>
+          <th data-ui-sort="text">Company</th>
+          <th data-ui-sort="text">Reference</th>
+          <th data-ui-sort="date">Expires</th>
+          <th data-ui-sort="number">Value</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Acme Industries Ltd</td><td>REG-0007</td><td>2026-03-14</td><td data-ui-sort-value="1500000">USD 1,500,000</td><td><span class="ui-status ui-status-active">Active</span></td></tr>
+        <tr><td>Blue Harbour Trading</td><td>REG-0002</td><td>2025-11-02</td><td data-ui-sort-value="9000000">USD 9,000,000</td><td><span class="ui-status ui-status-expired">Expired</span></td></tr>
+        <tr><td>Cedar Works Ltd</td><td>REG-0021</td><td>2026-07-01</td><td data-ui-sort-value="250000">USD 250,000</td><td><span class="ui-status ui-status-active">Active</span></td></tr>
+        <tr><td>Delta Logistics</td><td>REG-0013</td><td>2024-01-30</td><td data-ui-sort-value="4200000">USD 4,200,000</td><td><span class="ui-status ui-status-suspended">Suspended</span></td></tr>
+        <tr><td>Evergreen Supplies</td><td>REG-0004</td><td>2026-01-15</td><td data-ui-sort-value="780000">USD 780,000</td><td><span class="ui-status ui-status-active">Active</span></td></tr>
+        <tr><td>Foxglove Media</td><td>REG-0018</td><td>2025-06-20</td><td data-ui-sort-value="310000">USD 310,000</td><td><span class="ui-status ui-status-under-review">Under review</span></td></tr>
+        <tr><td>Granite Partners</td><td>REG-0011</td><td>2026-05-05</td><td data-ui-sort-value="2650000">USD 2,650,000</td><td><span class="ui-status ui-status-active">Active</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script src="../../dist/ui-framework.js"></script>
+<script>
+  document.getElementById("application").addEventListener("ui:validate", function (event) {
+    if (!event.detail.valid) return;
+    event.preventDefault();
+  });
+
+  document.getElementById("lang").addEventListener("click", function () {
+    var french = UI.i18n.locale !== "fr";
+    UI.i18n.add("fr", {
+      "table.search": "Rechercher",
+      "table.empty": "Aucun enregistrement",
+      "table.showPrefix": "Afficher",
+      "table.showSuffix": "par page",
+      "select.clear": "Effacer",
+      "confirm.cancel": "Annuler",
+      "confirm.ok": "Confirmer",
+      "validate.required": "Ce champ est obligatoire",
+      "validate.email": "Saisissez une adresse e-mail valide",
+      "validate.summaryTitle": "Corrigez {count} problème(s) avant de continuer"
+    });
+    UI.i18n.setLocale(french ? "fr" : "en");
+    this.textContent = french ? "English" : "Français";
+
+    // UI.t() is read at build time, so components already on the page keep the
+    // strings they were built with. Tear the table down and re-initialise it to
+    // pick up the new locale. Most apps set the locale once before UI.init()
+    // and never need this.
+    var table = document.querySelector("[data-ui-table]");
+    UI.destroy(table);
+    var toolbar = document.querySelector(".ui-table-toolbar");
+    var pager = document.querySelector(".ui-table-pagination");
+    if (toolbar) toolbar.remove();
+    if (pager) pager.remove();
+    UI.init(table);
+
+    UI.announce(french ? "Langue changée en français" : "Language changed to English");
+  });
+</script>
+</body>
+</html>

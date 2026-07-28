@@ -14,7 +14,7 @@
       <a class="docs-brand" href="index.html"><span class="docs-logo">UI</span><span>UI Framework</span></a>
     </div>
     <div class="ui-d-flex ui-align-center ui-gap-2">
-      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.2.0</span>
+      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.3.0</span>
       <button class="ui-btn ui-btn-sm ui-btn-outline-secondary" type="button" data-ui-theme-toggle>Theme</button>
     </div>
   </header>
@@ -25,8 +25,10 @@
       <div class="docs-sidebar-title">Examples</div>
       <a class="docs-sidebar-link" href="examples/dashboard.html">Dashboard</a>
       <a class="docs-sidebar-link" href="examples/form.html">Form workflow</a>
+      <a class="docs-sidebar-link" href="examples/application-form.html">Application form</a>
+      <a class="docs-sidebar-link" href="examples/record-register.html">Record register</a>
       <a class="docs-sidebar-link" href="examples/login.html">Login page</a>
-      <div class="docs-sidebar-title">On this page</div><a class="docs-sidebar-link" href="#buttons">Buttons</a><a class="docs-sidebar-link" href="#typography">Typography</a><a class="docs-sidebar-link" href="#forms">Forms</a><a class="docs-sidebar-link" href="#selection">Selection</a><a class="docs-sidebar-link" href="#multiselect">Multi-select</a><a class="docs-sidebar-link" href="#date-range">Date range</a><a class="docs-sidebar-link" href="#date-picker">Date picker</a><a class="docs-sidebar-link" href="#upload">Upload</a><a class="docs-sidebar-link" href="#save-next">Multi-step form</a><a class="docs-sidebar-link" href="#draft">Save draft</a><a class="docs-sidebar-link" href="#alerts">Alerts</a><a class="docs-sidebar-link" href="#cards">Cards</a><a class="docs-sidebar-link" href="#images">Images</a><a class="docs-sidebar-link" href="#tables">Tables</a><a class="docs-sidebar-link" href="#data-table">Smart tables</a><a class="docs-sidebar-link" href="#navigation">Navigation</a><a class="docs-sidebar-link" href="#tabs">Tabs</a><a class="docs-sidebar-link" href="#dropdown">Dropdown</a><a class="docs-sidebar-link" href="#accordion">Accordion</a><a class="docs-sidebar-link" href="#modal">Modal</a><a class="docs-sidebar-link" href="#confirm">Confirm dialog</a><a class="docs-sidebar-link" href="#offcanvas">Offcanvas</a><a class="docs-sidebar-link" href="#tooltips">Tooltips</a><a class="docs-sidebar-link" href="#toast">Toast</a><a class="docs-sidebar-link" href="#loaders">Loaders</a><a class="docs-sidebar-link" href="#empty-stepper">Workflow UI</a>
+      <div class="docs-sidebar-title">On this page</div><a class="docs-sidebar-link" href="#buttons">Buttons</a><a class="docs-sidebar-link" href="#typography">Typography</a><a class="docs-sidebar-link" href="#forms">Forms</a><a class="docs-sidebar-link" href="#validate">Validation</a><a class="docs-sidebar-link" href="#mask">Input masks</a><a class="docs-sidebar-link" href="#selection">Selection</a><a class="docs-sidebar-link" href="#multiselect">Multi-select</a><a class="docs-sidebar-link" href="#combobox">Combobox</a><a class="docs-sidebar-link" href="#date-range">Date range</a><a class="docs-sidebar-link" href="#date-picker">Date picker</a><a class="docs-sidebar-link" href="#upload">Upload</a><a class="docs-sidebar-link" href="#save-next">Multi-step form</a><a class="docs-sidebar-link" href="#draft">Save draft</a><a class="docs-sidebar-link" href="#alerts">Alerts</a><a class="docs-sidebar-link" href="#status">Status &amp; record header</a><a class="docs-sidebar-link" href="#cards">Cards</a><a class="docs-sidebar-link" href="#charts">Charts</a><a class="docs-sidebar-link" href="#images">Images</a><a class="docs-sidebar-link" href="#tables">Tables</a><a class="docs-sidebar-link" href="#data-table">Smart tables</a><a class="docs-sidebar-link" href="#table-tools">Table tools</a><a class="docs-sidebar-link" href="#navigation">Navigation</a><a class="docs-sidebar-link" href="#tabs">Tabs</a><a class="docs-sidebar-link" href="#dropdown">Dropdown</a><a class="docs-sidebar-link" href="#accordion">Accordion</a><a class="docs-sidebar-link" href="#modal">Modal</a><a class="docs-sidebar-link" href="#confirm">Confirm dialog</a><a class="docs-sidebar-link" href="#popover">Popover &amp; copy</a><a class="docs-sidebar-link" href="#offcanvas">Offcanvas</a><a class="docs-sidebar-link" href="#tooltips">Tooltips</a><a class="docs-sidebar-link" href="#toast">Toast</a><a class="docs-sidebar-link" href="#loaders">Loaders</a><a class="docs-sidebar-link" href="#empty-stepper">Workflow UI</a><a class="docs-sidebar-link" href="#document">Document sheet</a>
     </aside>
     <main class="docs-main">
 
@@ -249,14 +251,14 @@
 <div class="ui-row ui-g-2">
   <div class="ui-col-12 ui-col-md-6">
     <div class="ui-input-group">
-      <span class="ui-input-addon">TZS</span>
+      <span class="ui-input-addon">USD</span>
       <input class="ui-control" placeholder="Amount">
     </div>
   </div>
   <div class="ui-col-12 ui-col-md-6">
     <div class="ui-input-group">
       <input class="ui-control" placeholder="username">
-      <span class="ui-input-addon">@gbt.go.tz</span>
+      <span class="ui-input-addon">@example.com</span>
     </div>
   </div>
 </div>
@@ -264,7 +266,7 @@
 <div class="docs-code-wrap">
   <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
   <pre class="ui-code-block"><code>&lt;div class=&quot;ui-input-group&quot;&gt;
-  &lt;span class=&quot;ui-input-addon&quot;&gt;TZS&lt;/span&gt;
+  &lt;span class=&quot;ui-input-addon&quot;&gt;USD&lt;/span&gt;
   &lt;input class=&quot;ui-control&quot; placeholder=&quot;Amount&quot;&gt;
 &lt;/div&gt;</code></pre>
 </div>
@@ -401,10 +403,10 @@
 
 <div class="docs-demo">
 <div style="max-width:520px">
-  <label class="ui-label" for="officers">Inspection officers</label>
-  <select id="officers" name="officersIds" multiple data-ui-multiselect data-display="tags" data-max-tags="3" data-placeholder="Select officers" data-search="true" data-select-all="true">
-    <option value="1">Asha M.</option>
-    <option value="2">Baraka J.</option>
+  <label class="ui-label" for="reviewers">Assigned reviewers</label>
+  <select id="reviewers" name="reviewerIds" multiple data-ui-multiselect data-display="tags" data-max-tags="3" data-placeholder="Select reviewers" data-search="true" data-select-all="true">
+    <option value="1">Alex M.</option>
+    <option value="2">Sam J.</option>
     <option value="3">Neema K.</option>
     <option value="4">Selemani M.</option>
     <option value="5">Cleo N.</option>
@@ -415,16 +417,16 @@
 </div>
 <div class="docs-code-wrap">
   <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
-  <pre class="ui-code-block"><code>&lt;select name=&quot;officersIds&quot;
+  <pre class="ui-code-block"><code>&lt;select name=&quot;reviewerIds&quot;
         multiple
         data-ui-multiselect
         data-display=&quot;tags&quot;
         data-max-tags=&quot;3&quot;
-        data-placeholder=&quot;Select officers&quot;
+        data-placeholder=&quot;Select reviewers&quot;
         data-search=&quot;true&quot;
         data-select-all=&quot;true&quot;&gt;
-  &lt;option value=&quot;1&quot;&gt;Asha M.&lt;/option&gt;
-  &lt;option value=&quot;2&quot;&gt;Baraka J.&lt;/option&gt;
+  &lt;option value=&quot;1&quot;&gt;Alex M.&lt;/option&gt;
+  &lt;option value=&quot;2&quot;&gt;Sam J.&lt;/option&gt;
 &lt;/select&gt;</code></pre>
 </div>
 
@@ -533,14 +535,14 @@ document.querySelector(&quot;[data-ui-date-range]&quot;)
 
 <div class="docs-demo">
 <div class="ui-date-picker" data-ui-date-picker data-ui-placeholder="Select date">
-  <input type="date" name="inspectionDate" aria-label="Inspection date">
+  <input type="date" name="reviewDate" aria-label="Review date">
 </div>
 </div>
 <div class="docs-code-wrap">
   <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
   <pre class="ui-code-block"><code>&lt;div class=&quot;ui-date-picker&quot; data-ui-date-picker
      data-ui-placeholder=&quot;Select date&quot;&gt;
-  &lt;input type=&quot;date&quot; name=&quot;inspectionDate&quot; aria-label=&quot;Inspection date&quot;&gt;
+  &lt;input type=&quot;date&quot; name=&quot;reviewDate&quot; aria-label=&quot;Review date&quot;&gt;
 &lt;/div&gt;
 
 &lt;script&gt;
@@ -625,7 +627,7 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 
   <div class="ui-stepper" data-ui-stepper>
     <div class="ui-step"><div class="ui-step-marker">1</div><div class="ui-step-label">Applicant</div></div>
-    <div class="ui-step"><div class="ui-step-marker">2</div><div class="ui-step-label">Premises</div></div>
+    <div class="ui-step"><div class="ui-step-marker">2</div><div class="ui-step-label">Sites</div></div>
     <div class="ui-step"><div class="ui-step-marker">3</div><div class="ui-step-label">Documents</div></div>
     <div class="ui-step"><div class="ui-step-marker">4</div><div class="ui-step-label">Review</div></div>
   </div>
@@ -639,8 +641,8 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 
   <fieldset data-ui-step hidden>
     <div class="ui-form-group">
-      <label class="ui-label ui-label-required" for="premiseAddress">Premises address</label>
-      <input class="ui-control" id="premiseAddress" name="premiseAddress" required>
+      <label class="ui-label ui-label-required" for="siteAddress">Site address</label>
+      <input class="ui-control" id="siteAddress" name="siteAddress" required>
     </div>
   </fieldset>
 
@@ -680,7 +682,7 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 
   &lt;div class=&quot;ui-stepper&quot; data-ui-stepper&gt;
     &lt;div class=&quot;ui-step&quot;&gt;&lt;div class=&quot;ui-step-marker&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;ui-step-label&quot;&gt;Applicant&lt;/div&gt;&lt;/div&gt;
-    &lt;div class=&quot;ui-step&quot;&gt;&lt;div class=&quot;ui-step-marker&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;ui-step-label&quot;&gt;Premises&lt;/div&gt;&lt;/div&gt;
+    &lt;div class=&quot;ui-step&quot;&gt;&lt;div class=&quot;ui-step-marker&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;ui-step-label&quot;&gt;Sites&lt;/div&gt;&lt;/div&gt;
     &lt;div class=&quot;ui-step&quot;&gt;&lt;div class=&quot;ui-step-marker&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;ui-step-label&quot;&gt;Documents&lt;/div&gt;&lt;/div&gt;
     &lt;div class=&quot;ui-step&quot;&gt;&lt;div class=&quot;ui-step-marker&quot;&gt;4&lt;/div&gt;&lt;div class=&quot;ui-step-label&quot;&gt;Review&lt;/div&gt;&lt;/div&gt;
   &lt;/div&gt;
@@ -741,7 +743,7 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 <div class="docs-demo">
 <form data-ui-draft data-ui-draft-key="docs-demo-draft" id="draftDemoForm" onsubmit="event.preventDefault(); UI.toast.show({type:'info', title:'Demo only', message:'This documentation form does not submit anywhere (but the draft was cleared).'});">
   <div class="ui-form-group">
-    <label class="ui-label" for="draftNotes">Inspection notes</label>
+    <label class="ui-label" for="draftNotes">Review notes</label>
     <textarea class="ui-control" id="draftNotes" name="notes" rows="3" placeholder="Start typing, then reload the page..."></textarea>
   </div>
   <div class="ui-d-flex ui-align-center ui-gap-3">
@@ -752,9 +754,9 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 </div>
 <div class="docs-code-wrap">
   <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
-  <pre class="ui-code-block"><code>&lt;form data-ui-draft data-ui-draft-key=&quot;inspection-form&quot;&gt;
+  <pre class="ui-code-block"><code>&lt;form data-ui-draft data-ui-draft-key=&quot;review-form&quot;&gt;
   &lt;div class=&quot;ui-form-group&quot;&gt;
-    &lt;label class=&quot;ui-label&quot; for=&quot;notes&quot;&gt;Inspection notes&lt;/label&gt;
+    &lt;label class=&quot;ui-label&quot; for=&quot;notes&quot;&gt;Review notes&lt;/label&gt;
     &lt;textarea class=&quot;ui-control&quot; id=&quot;notes&quot; name=&quot;notes&quot;&gt;&lt;/textarea&gt;
   &lt;/div&gt;
   &lt;button type=&quot;submit&quot;&gt;Submit&lt;/button&gt;
@@ -930,8 +932,8 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 
 <div class="docs-demo">
 <div class="ui-css-grid ui-css-grid-sm">
-  <article class="ui-card ui-card-hover ui-card-border-primary"><div class="ui-card-body"><h3 class="ui-card-title">Operator profile</h3><p class="ui-card-subtitle">Reusable content card</p></div></article>
-  <div class="ui-stat"><div class="ui-stat-icon">✓</div><div><div class="ui-stat-value">128</div><div class="ui-stat-label">Approved licences</div></div></div>
+  <article class="ui-card ui-card-hover ui-card-border-primary"><div class="ui-card-body"><h3 class="ui-card-title">Customer profile</h3><p class="ui-card-subtitle">Reusable content card</p></div></article>
+  <div class="ui-stat"><div class="ui-stat-icon">✓</div><div><div class="ui-stat-value">128</div><div class="ui-stat-label">Approved accounts</div></div></div>
   <ul class="ui-list-group"><li class="ui-list-group-item">First item</li><li class="ui-list-group-item ui-active">Active item</li></ul>
 </div>
 </div>
@@ -939,7 +941,7 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
   <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
   <pre class="ui-code-block"><code>&lt;article class=&quot;ui-card ui-card-hover ui-card-border-primary&quot;&gt;
   &lt;div class=&quot;ui-card-body&quot;&gt;
-    &lt;h3 class=&quot;ui-card-title&quot;&gt;Operator profile&lt;/h3&gt;
+    &lt;h3 class=&quot;ui-card-title&quot;&gt;Customer profile&lt;/h3&gt;
     &lt;p class=&quot;ui-card-subtitle&quot;&gt;Reusable content card&lt;/p&gt;
   &lt;/div&gt;
 &lt;/article&gt;</code></pre>
@@ -952,14 +954,14 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 <div class="ui-css-grid ui-css-grid-sm">
   <article class="ui-card ui-card-border-danger">
     <img class="ui-card-img-top" src="assets/placeholder-landscape.svg" alt="">
-    <div class="ui-card-body"><h3 class="ui-card-title">Non-compliant premise</h3></div>
-    <div class="ui-card-footer">Last inspected 3 days ago</div>
+    <div class="ui-card-body"><h3 class="ui-card-title">Non-compliant site</h3></div>
+    <div class="ui-card-footer">Last reviewed 3 days ago</div>
   </article>
   <div class="ui-card">
     <ul class="ui-list-group ui-list-group-flush">
       <li class="ui-list-group-item ui-list-group-item-action">View details</li>
-      <li class="ui-list-group-item ui-list-group-item-action">Assign officer</li>
-      <li class="ui-list-group-item ui-list-group-item-action ui-active">Revoke licence</li>
+      <li class="ui-list-group-item ui-list-group-item-action">Assign reviewer</li>
+      <li class="ui-list-group-item ui-list-group-item-action ui-active">Revoke access</li>
     </ul>
   </div>
 </div>
@@ -969,7 +971,7 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
   <pre class="ui-code-block"><code>&lt;article class=&quot;ui-card ui-card-border-danger&quot;&gt;
   &lt;img class=&quot;ui-card-img-top&quot; src=&quot;photo.jpg&quot; alt=&quot;&quot;&gt;
   &lt;div class=&quot;ui-card-body&quot;&gt;&lt;h3 class=&quot;ui-card-title&quot;&gt;...&lt;/h3&gt;&lt;/div&gt;
-  &lt;div class=&quot;ui-card-footer&quot;&gt;Last inspected 3 days ago&lt;/div&gt;
+  &lt;div class=&quot;ui-card-footer&quot;&gt;Last reviewed 3 days ago&lt;/div&gt;
 &lt;/article&gt;
 
 &lt;ul class=&quot;ui-list-group ui-list-group-flush&quot;&gt;
@@ -1058,16 +1060,16 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 <div class="docs-demo">
 <div class="ui-d-flex ui-flex-column ui-gap-3">
   <div class="ui-media">
-    <span class="ui-avatar"><img src="assets/avatar.svg" alt="Asha M."></span>
+    <span class="ui-avatar"><img src="assets/avatar.svg" alt="Alex M."></span>
     <div class="ui-media-body">
-      <strong>Asha M.</strong> approved the licence application for Premise One.
+      <strong>Alex M.</strong> approved the account request for Site One.
       <div class="ui-text-muted" style="font-size:.8rem">2 hours ago</div>
     </div>
   </div>
   <div class="ui-media">
     <span class="ui-avatar ui-avatar-status ui-avatar-online"><span class="ui-avatar-fallback">BJ</span></span>
     <div class="ui-media-body">
-      <strong>Baraka J.</strong> flagged Premise Three for a follow-up inspection.
+      <strong>Sam J.</strong> flagged Site Three for a follow-up review.
       <div class="ui-text-muted" style="font-size:.8rem">Yesterday</div>
     </div>
   </div>
@@ -1076,9 +1078,9 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 <div class="docs-code-wrap">
   <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
   <pre class="ui-code-block"><code>&lt;div class=&quot;ui-media&quot;&gt;
-  &lt;span class=&quot;ui-avatar&quot;&gt;&lt;img src=&quot;user.jpg&quot; alt=&quot;Asha M.&quot;&gt;&lt;/span&gt;
+  &lt;span class=&quot;ui-avatar&quot;&gt;&lt;img src=&quot;user.jpg&quot; alt=&quot;Alex M.&quot;&gt;&lt;/span&gt;
   &lt;div class=&quot;ui-media-body&quot;&gt;
-    &lt;strong&gt;Asha M.&lt;/strong&gt; approved the licence application.
+    &lt;strong&gt;Alex M.&lt;/strong&gt; approved the account request.
     &lt;div class=&quot;ui-text-muted&quot;&gt;2 hours ago&lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;</code></pre>
@@ -1118,9 +1120,9 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 <div class="docs-demo">
 <div class="ui-table-responsive ui-shadow-1">
   <table class="ui-table ui-table-striped ui-table-hover">
-    <thead><tr><th>Premise</th><th>Status</th><th>Action</th></tr></thead>
+    <thead><tr><th>Site</th><th>Status</th><th>Action</th></tr></thead>
     <tbody>
-      <tr><td>Premise One</td><td><span class="ui-badge ui-badge-success">Approved</span></td><td><button class="ui-btn ui-btn-sm ui-btn-outline-primary">Open</button></td></tr>
+      <tr><td>Site One</td><td><span class="ui-badge ui-badge-success">Approved</span></td><td><button class="ui-btn ui-btn-sm ui-btn-outline-primary">Open</button></td></tr>
       <tr><td>Premise Two</td><td><span class="ui-badge ui-badge-warning">Pending</span></td><td><button class="ui-btn ui-btn-sm ui-btn-outline-primary">Review</button></td></tr>
     </tbody>
   </table>
@@ -1143,19 +1145,19 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 <div class="ui-d-flex ui-flex-column ui-gap-3">
 <table class="ui-table ui-table-bordered">
   <thead><tr><th>Bordered</th><th>Status</th></tr></thead>
-  <tbody><tr><td>Premise One</td><td><span class="ui-badge ui-badge-success">Approved</span></td></tr><tr><td>Premise Two</td><td><span class="ui-badge ui-badge-warning">Pending</span></td></tr></tbody>
+  <tbody><tr><td>Site One</td><td><span class="ui-badge ui-badge-success">Approved</span></td></tr><tr><td>Premise Two</td><td><span class="ui-badge ui-badge-warning">Pending</span></td></tr></tbody>
 </table>
 <table class="ui-table ui-table-minimal">
   <thead><tr><th>Minimal</th><th>Status</th></tr></thead>
-  <tbody><tr><td>Premise One</td><td><span class="ui-badge ui-badge-success">Approved</span></td></tr><tr><td>Premise Two</td><td><span class="ui-badge ui-badge-warning">Pending</span></td></tr></tbody>
+  <tbody><tr><td>Site One</td><td><span class="ui-badge ui-badge-success">Approved</span></td></tr><tr><td>Premise Two</td><td><span class="ui-badge ui-badge-warning">Pending</span></td></tr></tbody>
 </table>
 <table class="ui-table ui-table-dark-header">
   <thead><tr><th>Dark header</th><th>Status</th></tr></thead>
-  <tbody><tr><td>Premise One</td><td><span class="ui-badge ui-badge-success">Approved</span></td></tr><tr><td>Premise Two</td><td><span class="ui-badge ui-badge-warning">Pending</span></td></tr></tbody>
+  <tbody><tr><td>Site One</td><td><span class="ui-badge ui-badge-success">Approved</span></td></tr><tr><td>Premise Two</td><td><span class="ui-badge ui-badge-warning">Pending</span></td></tr></tbody>
 </table>
 <table class="ui-table ui-table-card-rows">
   <thead><tr><th>Card rows</th><th>Status</th></tr></thead>
-  <tbody><tr><td>Premise One</td><td><span class="ui-badge ui-badge-success">Approved</span></td></tr><tr><td>Premise Two</td><td><span class="ui-badge ui-badge-warning">Pending</span></td></tr></tbody>
+  <tbody><tr><td>Site One</td><td><span class="ui-badge ui-badge-success">Approved</span></td></tr><tr><td>Premise Two</td><td><span class="ui-badge ui-badge-warning">Pending</span></td></tr></tbody>
 </table>
 </div>
 </div>
@@ -1199,11 +1201,11 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 <div data-ui-table data-ui-page-size="5">
 <div class="ui-table-responsive ui-shadow-1">
   <table class="ui-table ui-table-striped ui-table-hover">
-    <thead><tr><th data-ui-sort="text">Premise</th><th data-ui-sort="text">Status</th><th data-ui-sort="date">Applied</th><th data-ui-sort="false">Action</th></tr></thead>
+    <thead><tr><th data-ui-sort="text">Site</th><th data-ui-sort="text">Status</th><th data-ui-sort="date">Applied</th><th data-ui-sort="false">Action</th></tr></thead>
     <tbody>
-      <tr><td>Premise One</td><td><span class="ui-badge ui-badge-success">Approved</span></td><td data-ui-sort-value="2026-01-04">4 Jan 2026</td><td><button class="ui-btn ui-btn-sm ui-btn-outline-primary">Open</button></td></tr>
+      <tr><td>Site One</td><td><span class="ui-badge ui-badge-success">Approved</span></td><td data-ui-sort-value="2026-01-04">4 Jan 2026</td><td><button class="ui-btn ui-btn-sm ui-btn-outline-primary">Open</button></td></tr>
       <tr><td>Premise Two</td><td><span class="ui-badge ui-badge-warning">Pending</span></td><td data-ui-sort-value="2026-02-11">11 Feb 2026</td><td><button class="ui-btn ui-btn-sm ui-btn-outline-primary">Review</button></td></tr>
-      <tr><td>Premise Three</td><td><span class="ui-badge ui-badge-danger">Rejected</span></td><td data-ui-sort-value="2026-01-22">22 Jan 2026</td><td><button class="ui-btn ui-btn-sm ui-btn-outline-primary">Open</button></td></tr>
+      <tr><td>Site Three</td><td><span class="ui-badge ui-badge-danger">Rejected</span></td><td data-ui-sort-value="2026-01-22">22 Jan 2026</td><td><button class="ui-btn ui-btn-sm ui-btn-outline-primary">Open</button></td></tr>
       <tr><td>Premise Four</td><td><span class="ui-badge ui-badge-success">Approved</span></td><td data-ui-sort-value="2026-03-02">2 Mar 2026</td><td><button class="ui-btn ui-btn-sm ui-btn-outline-primary">Open</button></td></tr>
       <tr><td>Premise Five</td><td><span class="ui-badge ui-badge-warning">Pending</span></td><td data-ui-sort-value="2026-02-27">27 Feb 2026</td><td><button class="ui-btn ui-btn-sm ui-btn-outline-primary">Review</button></td></tr>
       <tr><td>Premise Six</td><td><span class="ui-badge ui-badge-success">Approved</span></td><td data-ui-sort-value="2026-01-30">30 Jan 2026</td><td><button class="ui-btn ui-btn-sm ui-btn-outline-primary">Open</button></td></tr>
@@ -1225,7 +1227,7 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
     &lt;table class=&quot;ui-table ui-table-striped ui-table-hover&quot;&gt;
       &lt;thead&gt;
         &lt;tr&gt;
-          &lt;th data-ui-sort=&quot;text&quot;&gt;Premise&lt;/th&gt;
+          &lt;th data-ui-sort=&quot;text&quot;&gt;Site&lt;/th&gt;
           &lt;th data-ui-sort=&quot;text&quot;&gt;Status&lt;/th&gt;
           &lt;th data-ui-sort=&quot;date&quot;&gt;Applied&lt;/th&gt;
           &lt;th data-ui-sort=&quot;false&quot;&gt;Action&lt;/th&gt;
@@ -1233,7 +1235,7 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
       &lt;/thead&gt;
       &lt;tbody&gt;
         &lt;tr&gt;
-          &lt;td&gt;Premise One&lt;/td&gt;
+          &lt;td&gt;Site One&lt;/td&gt;
           &lt;td&gt;Approved&lt;/td&gt;
           &lt;td data-ui-sort-value=&quot;2026-01-04&quot;&gt;4 Jan 2026&lt;/td&gt;
           &lt;td&gt;&lt;button&gt;Open&lt;/button&gt;&lt;/td&gt;
@@ -1270,7 +1272,7 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 <div class="docs-demo">
 <div class="ui-card">
   <nav class="ui-navbar">
-    <a class="ui-navbar-brand" href="#">GBT Portal</a>
+    <a class="ui-navbar-brand" href="#">Admin Portal</a>
     <ul class="ui-navbar-nav"><li><a class="ui-nav-link ui-active" href="#">Dashboard</a></li><li><a class="ui-nav-link" href="#">Reports</a></li></ul>
   </nav>
   <div class="ui-card-body">
@@ -1282,7 +1284,7 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 <div class="docs-code-wrap">
   <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
   <pre class="ui-code-block"><code>&lt;nav class=&quot;ui-navbar&quot;&gt;
-  &lt;a class=&quot;ui-navbar-brand&quot; href=&quot;#&quot;&gt;GBT Portal&lt;/a&gt;
+  &lt;a class=&quot;ui-navbar-brand&quot; href=&quot;#&quot;&gt;Admin Portal&lt;/a&gt;
   &lt;a class=&quot;ui-nav-link ui-active&quot; href=&quot;#&quot;&gt;Dashboard&lt;/a&gt;
 &lt;/nav&gt;
 
@@ -1298,12 +1300,12 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 <div class="docs-demo">
 <div class="ui-d-flex ui-flex-column ui-gap-3">
   <nav class="ui-navbar ui-navbar-dark ui-rounded-3">
-    <a class="ui-navbar-brand" href="#">GBT Portal</a>
+    <a class="ui-navbar-brand" href="#">Admin Portal</a>
     <ul class="ui-navbar-nav"><li><a class="ui-nav-link ui-active" href="#">Dashboard</a></li><li><a class="ui-nav-link" href="#">Reports</a></li></ul>
-    <div class="ui-navbar-search"><input type="search" placeholder="Search premises, operators..."></div>
+    <div class="ui-navbar-search"><input type="search" placeholder="Search sites, accounts..."></div>
   </nav>
   <nav class="ui-navbar ui-navbar-primary ui-rounded-3">
-    <a class="ui-navbar-brand" href="#">GBT Portal</a>
+    <a class="ui-navbar-brand" href="#">Admin Portal</a>
     <ul class="ui-navbar-nav"><li><a class="ui-nav-link ui-active" href="#">Dashboard</a></li><li><a class="ui-nav-link" href="#">Reports</a></li></ul>
   </nav>
 </div>
@@ -1311,7 +1313,7 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 <div class="docs-code-wrap">
   <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
   <pre class="ui-code-block"><code>&lt;nav class=&quot;ui-navbar ui-navbar-dark ui-navbar-sticky&quot;&gt;
-  &lt;a class=&quot;ui-navbar-brand&quot; href=&quot;#&quot;&gt;GBT Portal&lt;/a&gt;
+  &lt;a class=&quot;ui-navbar-brand&quot; href=&quot;#&quot;&gt;Admin Portal&lt;/a&gt;
   &lt;a class=&quot;ui-nav-link ui-active&quot; href=&quot;#&quot;&gt;Dashboard&lt;/a&gt;
   &lt;div class=&quot;ui-navbar-search&quot;&gt;
     &lt;input type=&quot;search&quot; placeholder=&quot;Search...&quot;&gt;
@@ -1571,18 +1573,18 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 
 <div class="docs-demo">
 <div class="ui-d-flex ui-gap-3">
-  <button class="ui-btn ui-btn-outline-secondary" type="button" onclick="UI.confirm({title:'Approve application', message:'Mark this licence application as approved?'}).then(function(ok){ UI.toast.show({type: ok ? 'success' : 'info', title: ok ? 'Approved' : 'Cancelled', message: ok ? 'The application was approved.' : 'No changes were made.'}); })">Approve application</button>
-  <button class="ui-btn ui-btn-danger" type="button" onclick="UI.confirm({title:'Revoke licence', message:'This will immediately revoke the operator licence. This cannot be undone.', variant:'danger', confirmText:'Revoke licence'}).then(function(ok){ if (ok) UI.toast.show({type:'danger', title:'Licence revoked', message:'The operator licence was revoked.'}); })">Revoke licence</button>
+  <button class="ui-btn ui-btn-outline-secondary" type="button" onclick="UI.confirm({title:'Approve application', message:'Mark this account request as approved?'}).then(function(ok){ UI.toast.show({type: ok ? 'success' : 'info', title: ok ? 'Approved' : 'Cancelled', message: ok ? 'The application was approved.' : 'No changes were made.'}); })">Approve application</button>
+  <button class="ui-btn ui-btn-danger" type="button" onclick="UI.confirm({title:'Revoke access', message:'This will immediately revoke the account access. This cannot be undone.', variant:'danger', confirmText:'Revoke access'}).then(function(ok){ if (ok) UI.toast.show({type:'danger', title:'Access revoked', message:'The account access was revoked.'}); })">Revoke access</button>
 </div>
 </div>
 <div class="docs-code-wrap">
   <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
   <pre class="ui-code-block"><code>UI.confirm({
-  title: &quot;Revoke licence&quot;,
-  message: &quot;This will immediately revoke the operator licence. &quot; +
+  title: &quot;Revoke access&quot;,
+  message: &quot;This will immediately revoke the account access. &quot; +
            &quot;This cannot be undone.&quot;,
   variant: &quot;danger&quot;,
-  confirmText: &quot;Revoke licence&quot;
+  confirmText: &quot;Revoke access&quot;
 }).then(function (confirmed) {
   if (confirmed) {
     // proceed with the revoke request
@@ -1606,7 +1608,7 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
   <div class="ui-backdrop"></div>
   <aside class="ui-offcanvas ui-offcanvas-end" tabindex="-1">
     <div class="ui-offcanvas-header"><strong>Record details</strong><button class="ui-modal-close" data-ui-offcanvas-close>&times;</button></div>
-    <div class="ui-offcanvas-body"><p>Offcanvas content appears here.</p><ul class="ui-list-group"><li class="ui-list-group-item">Status: Active</li><li class="ui-list-group-item">Region: Dar es Salaam</li></ul></div>
+    <div class="ui-offcanvas-body"><p>Offcanvas content appears here.</p><ul class="ui-list-group"><li class="ui-list-group-item">Status: Active</li><li class="ui-list-group-item">Region: Central</li></ul></div>
   </aside>
 </div>
 </div>
@@ -1821,7 +1823,567 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 
 
 
-      <footer class="docs-footer">UI Framework 1.2.0 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
+
+
+<section class="docs-section" id="validate">
+  <h2 class="ui-h2">Form validation</h2>
+  <p class="docs-section-intro">Add <code class="ui-code">data-ui-validate</code> to a form. Native constraints (<code class="ui-code">required</code>, <code class="ui-code">type</code>, <code class="ui-code">pattern</code>, <code class="ui-code">min</code>/<code class="ui-code">max</code>) are checked alongside cross-field rules, and messages render inline instead of in a native browser bubble — which cannot be styled, is not read out on submit, and disappears on scroll.</p>
+
+<div class="docs-demo">
+<form data-ui-validate action="#" method="post" onsubmit="return false">
+  <div data-ui-validate-summary></div>
+  <div class="ui-row">
+    <div class="ui-col-12 ui-col-md-6">
+      <div class="ui-field">
+        <label class="ui-label" for="v-name">Company name</label>
+        <input class="ui-control" id="v-name" name="name" required>
+      </div>
+    </div>
+    <div class="ui-col-12 ui-col-md-6">
+      <div class="ui-field">
+        <label class="ui-label" for="v-email">Email</label>
+        <input class="ui-control" id="v-email" name="email" type="email" required>
+      </div>
+    </div>
+    <div class="ui-col-12 ui-col-md-6">
+      <div class="ui-field">
+        <label class="ui-label" for="v-start">Start date</label>
+        <input class="ui-control" id="v-start" name="start" type="date" value="2026-06-01">
+      </div>
+    </div>
+    <div class="ui-col-12 ui-col-md-6">
+      <div class="ui-field">
+        <label class="ui-label" for="v-end">End date</label>
+        <input class="ui-control" id="v-end" name="end" type="date" data-ui-rule-after="start">
+      </div>
+    </div>
+  </div>
+  <button class="ui-btn ui-btn-primary" type="submit">Validate</button>
+</form>
+</div>
+
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;form data-ui-validate action=&quot;/save&quot; method=&quot;post&quot;&gt;
+  &lt;div data-ui-validate-summary&gt;&lt;/div&gt;
+
+  &lt;div class=&quot;ui-field&quot;&gt;
+    &lt;label class=&quot;ui-label&quot; for=&quot;email&quot;&gt;Email&lt;/label&gt;
+    &lt;input class=&quot;ui-control&quot; id=&quot;email&quot; name=&quot;email&quot; type=&quot;email&quot; required&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;ui-field&quot;&gt;
+    &lt;label class=&quot;ui-label&quot; for=&quot;end&quot;&gt;End date&lt;/label&gt;
+    &lt;input class=&quot;ui-control&quot; id=&quot;end&quot; name=&quot;end&quot; type=&quot;date&quot; data-ui-rule-after=&quot;start&quot;&gt;
+  &lt;/div&gt;
+
+  &lt;button class=&quot;ui-btn ui-btn-primary&quot; type=&quot;submit&quot;&gt;Submit&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+</div>
+
+<h3 class="ui-h5 ui-mt-5">Binding server errors</h3>
+<p class="docs-section-intro">The piece that otherwise gets hand-written on every screen: take a failed POST's JSON and put each message on the right control, in the summary, with focus moved.</p>
+
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>fetch(&quot;/save&quot;, { method: &quot;POST&quot;, body: new FormData(form) })
+  .then(function (response) { return response.json(); })
+  .then(function (data) {
+    if (data.errors) {
+      // { &quot;taxId&quot;: &quot;Already registered&quot;, &quot;name&quot;: [&quot;Name is taken&quot;] }
+      UI.validate.showErrors(form, data.errors);
+    }
+  });</code></pre>
+</div>
+
+<h3 class="ui-h5 ui-mt-5">Classes and attributes</h3>
+
+<div class="docs-table-wrap">
+  <table class="ui-table ui-table-sm">
+    <thead><tr><th>Class / attribute</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">data-ui-validate</code></td><td>Enables validation on a <code class="ui-code">&lt;form&gt;</code>. Also sets <code class="ui-code">novalidate</code> so the framework renders messages.</td></tr>
+      <tr><td><code class="ui-code">data-ui-validate-summary</code></td><td>Container for the error summary. Lists every problem, links each to its field, and takes focus on failure.</td></tr>
+      <tr><td><code class="ui-code">data-ui-validate-on</code></td><td><code class="ui-code">submit</code> (default) or <code class="ui-code">input</code>. Fields always re-check on blur once the form has been submitted once.</td></tr>
+      <tr><td><code class="ui-code">data-ui-rule-match</code></td><td>Must equal another field, given by name or selector.</td></tr>
+      <tr><td><code class="ui-code">data-ui-rule-after / -before</code></td><td>Date must fall after / before another field.</td></tr>
+      <tr><td><code class="ui-code">data-ui-rule-integer</code></td><td>Whole numbers only.</td></tr>
+      <tr><td><code class="ui-code">data-ui-message-&lt;rule&gt;</code></td><td>Overrides one rule's message, e.g. <code class="ui-code">data-ui-message-pattern</code>.</td></tr>
+      <tr><td><code class="ui-code">data-ui-label</code></td><td>Overrides the name used for this field in the summary.</td></tr>
+      <tr><td><code class="ui-code">data-ui-validate="false"</code></td><td>Excludes a single control from validation.</td></tr>
+      <tr><td><code class="ui-code">ui-field</code></td><td>Wrapper that scopes where the message is inserted.</td></tr>
+      <tr><td><code class="ui-code">ui-is-invalid / ui-feedback-invalid</code></td><td>Applied automatically to the control and its message.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="mask">
+  <h2 class="ui-h2">Input masks</h2>
+  <p class="docs-section-intro"><code class="ui-code">data-ui-mask</code> formats as the user types. Pattern masks use <code class="ui-code">9</code> for a digit, <code class="ui-code">A</code> for a letter and <code class="ui-code">*</code> for either; anything else is a literal the mask inserts. Numeric and currency masks group thousands for the active locale. The caret keeps its place across reformatting, including mid-string edits.</p>
+
+<div class="docs-demo">
+<div class="ui-row">
+  <div class="ui-col-12 ui-col-md-4">
+    <div class="ui-field">
+      <label class="ui-label" for="m-tax">Tax ID</label>
+      <input class="ui-control" id="m-tax" data-ui-mask="999-999-999" placeholder="123-456-789">
+    </div>
+  </div>
+  <div class="ui-col-12 ui-col-md-4">
+    <div class="ui-field">
+      <label class="ui-label" for="m-phone">Phone</label>
+      <input class="ui-control" id="m-phone" data-ui-mask="+99 999 999 999" placeholder="+44 207 000 000">
+    </div>
+  </div>
+  <div class="ui-col-12 ui-col-md-4">
+    <div class="ui-field">
+      <label class="ui-label" for="m-amount">Amount</label>
+      <input class="ui-control" id="m-amount" data-ui-mask="currency" data-ui-currency="USD" data-ui-decimals="2">
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;input class=&quot;ui-control&quot; data-ui-mask=&quot;999-999-999&quot;&gt;
+&lt;input class=&quot;ui-control&quot; data-ui-mask=&quot;+99 999 999 999&quot;&gt;
+&lt;input class=&quot;ui-control&quot; data-ui-mask=&quot;AAA-9999&quot;&gt;
+
+&lt;!-- Post the raw digits while the user still sees the formatting --&gt;
+&lt;input class=&quot;ui-control&quot; name=&quot;amount&quot;
+       data-ui-mask=&quot;currency&quot;
+       data-ui-currency=&quot;USD&quot;
+       data-ui-decimals=&quot;2&quot;
+       data-ui-mask-raw=&quot;true&quot;&gt;</code></pre>
+</div>
+
+<div class="docs-table-wrap">
+  <table class="ui-table ui-table-sm">
+    <thead><tr><th>Class / attribute</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">data-ui-mask</code></td><td>A pattern, or <code class="ui-code">number</code> / <code class="ui-code">currency</code>.</td></tr>
+      <tr><td><code class="ui-code">data-ui-mask-raw</code></td><td><code class="ui-code">true</code> posts the unformatted value through a hidden field under the original name.</td></tr>
+      <tr><td><code class="ui-code">data-ui-currency</code></td><td>Currency code shown alongside the number.</td></tr>
+      <tr><td><code class="ui-code">data-ui-currency-position</code></td><td><code class="ui-code">before</code> (default) or <code class="ui-code">after</code>.</td></tr>
+      <tr><td><code class="ui-code">data-ui-decimals</code></td><td>Maximum decimal places; the field settles to this precision on blur.</td></tr>
+      <tr><td><code class="ui-code">data-ui-locale</code></td><td>Overrides the locale used for grouping. Defaults to <code class="ui-code">UI.i18n.locale</code>.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="combobox">
+  <h2 class="ui-h2">Combobox</h2>
+  <p class="docs-section-intro">Type-ahead over a single <code class="ui-code">&lt;select&gt;</code>, filtering in place or querying an endpoint. The backing <code class="ui-code">&lt;select&gt;</code> stays in sync, so the field posts normally in a server-rendered form and validation still sees it.</p>
+
+<div class="docs-demo">
+<div class="ui-row">
+  <div class="ui-col-12 ui-col-md-6">
+    <div class="ui-field">
+      <label class="ui-label" for="cb-parent">Parent company</label>
+      <select id="cb-parent" name="parent" data-ui-combobox data-ui-placeholder="Search companies">
+        <option value=""></option>
+        <option value="1">Acme Holdings Ltd</option>
+        <option value="2">Blue Harbour Group</option>
+        <option value="3">Cedar Works PLC</option>
+        <option value="4">Delta Investments</option>
+        <option value="5">Evergreen Capital Partners</option>
+      </select>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;!-- Filter options already in the DOM --&gt;
+&lt;select name=&quot;parent&quot; data-ui-combobox data-ui-placeholder=&quot;Search companies&quot;&gt;
+  &lt;option value=&quot;&quot;&gt;&lt;/option&gt;
+  &lt;option value=&quot;1&quot;&gt;Acme Holdings Ltd&lt;/option&gt;
+&lt;/select&gt;
+
+&lt;!-- Or query a server. The endpoint receives ?q=&lt;term&gt; and returns
+     [{value, label, hint}] or {results: [...]} --&gt;
+&lt;select name=&quot;customer&quot; data-ui-combobox
+        data-ui-url=&quot;/api/customers&quot;
+        data-ui-min-chars=&quot;2&quot;&gt;&lt;/select&gt;</code></pre>
+</div>
+
+<div class="docs-table-wrap">
+  <table class="ui-table ui-table-sm">
+    <thead><tr><th>Class / attribute</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">data-ui-combobox</code></td><td>Enables the combobox on a <code class="ui-code">&lt;select&gt;</code>.</td></tr>
+      <tr><td><code class="ui-code">data-ui-url</code></td><td>Remote endpoint. Receives <code class="ui-code">?q=</code>; a slow earlier response is discarded if a newer one has landed.</td></tr>
+      <tr><td><code class="ui-code">data-ui-min-chars</code></td><td>Characters before a remote query fires. Default 2 for remote, 0 for local.</td></tr>
+      <tr><td><code class="ui-code">data-ui-value-key / -label-key</code></td><td>Map a response shape that does not use <code class="ui-code">value</code> / <code class="ui-code">label</code>.</td></tr>
+      <tr><td><code class="ui-code">data-ui-placeholder</code></td><td>Placeholder for the visible text input.</td></tr>
+      <tr><td><code class="ui-code">data-ui-allow-clear</code></td><td><code class="ui-code">false</code> removes the clear button.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="table-tools">
+  <h2 class="ui-h2">Table selection, columns, and export</h2>
+  <p class="docs-section-intro">Layered onto the same <code class="ui-code">data-ui-table</code> as the smart table: row selection with bulk actions, a column-visibility menu, sticky columns and CSV export. Export covers every row matching the current search and sort, not just the page on screen.</p>
+
+<div class="docs-demo">
+<div data-ui-table data-ui-select data-ui-columns data-ui-export="records" data-ui-page-size="4" id="tt-demo">
+  <div class="ui-table-selection" data-ui-table-selection>
+    <button type="button" class="ui-btn ui-btn-sm ui-btn-outline-secondary"
+            onclick="UI.table.clearSelection('#tt-demo')">Clear selection</button>
+  </div>
+  <table class="ui-table ui-table-hover">
+    <thead>
+      <tr>
+        <th data-ui-sort="text">Company</th>
+        <th data-ui-sort="text">Reference</th>
+        <th data-ui-sort="number">Value</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr data-ui-row-id="1"><td>Acme Industries</td><td>REG-0007</td><td data-ui-export-value="1500000">USD 1,500,000</td><td><span class="ui-status ui-status-active">Active</span></td></tr>
+      <tr data-ui-row-id="2"><td>Blue Harbour Trading</td><td>REG-0002</td><td data-ui-export-value="9000000">USD 9,000,000</td><td><span class="ui-status ui-status-expired">Expired</span></td></tr>
+      <tr data-ui-row-id="3"><td>Cedar Works</td><td>REG-0021</td><td data-ui-export-value="250000">USD 250,000</td><td><span class="ui-status ui-status-active">Active</span></td></tr>
+      <tr data-ui-row-id="4"><td>Delta Logistics</td><td>REG-0013</td><td data-ui-export-value="4200000">USD 4,200,000</td><td><span class="ui-status ui-status-suspended">Suspended</span></td></tr>
+      <tr data-ui-row-id="5"><td>Evergreen Supplies</td><td>REG-0004</td><td data-ui-export-value="780000">USD 780,000</td><td><span class="ui-status ui-status-under-review">Under review</span></td></tr>
+    </tbody>
+  </table>
+</div>
+</div>
+
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div data-ui-table data-ui-select data-ui-columns data-ui-export=&quot;records&quot; id=&quot;register&quot;&gt;
+  &lt;div class=&quot;ui-table-selection&quot; data-ui-table-selection&gt;
+    &lt;button type=&quot;button&quot; class=&quot;ui-btn ui-btn-sm ui-btn-danger&quot; id=&quot;bulk&quot;&gt;Suspend selected&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;table class=&quot;ui-table ui-table-sticky-first&quot;&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;&lt;th data-ui-sort=&quot;text&quot;&gt;Company&lt;/th&gt;&lt;th&gt;Status&lt;/th&gt;&lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr data-ui-row-id=&quot;7&quot;&gt;&lt;td&gt;Acme Industries&lt;/td&gt;&lt;td&gt;Active&lt;/td&gt;&lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+document.getElementById(&quot;bulk&quot;).addEventListener(&quot;click&quot;, function () {
+  var ids = UI.table.selected(&quot;#register&quot;);   // [&quot;7&quot;, ...]
+});
+&lt;/script&gt;</code></pre>
+</div>
+
+<div class="docs-table-wrap">
+  <table class="ui-table ui-table-sm">
+    <thead><tr><th>Class / attribute</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">data-ui-select</code></td><td>Adds a checkbox column and a select-all. Selection survives paging.</td></tr>
+      <tr><td><code class="ui-code">data-ui-row-id</code></td><td>Identifier reported for a selected row. Put it on each <code class="ui-code">&lt;tr&gt;</code>.</td></tr>
+      <tr><td><code class="ui-code">data-ui-table-selection</code></td><td>Bulk-action bar, shown only while something is selected.</td></tr>
+      <tr><td><code class="ui-code">data-ui-columns</code></td><td>Adds the column-visibility menu.</td></tr>
+      <tr><td><code class="ui-code">data-ui-hidden</code></td><td>On a <code class="ui-code">&lt;th&gt;</code>, starts that column hidden.</td></tr>
+      <tr><td><code class="ui-code">data-ui-export</code></td><td>Adds an export button; the value becomes the file name.</td></tr>
+      <tr><td><code class="ui-code">data-ui-export-value</code></td><td>Raw value exported for a formatted cell.</td></tr>
+      <tr><td><code class="ui-code">ui-table-sticky-first</code></td><td>Freezes the first column while scrolling horizontally.</td></tr>
+      <tr><td><code class="ui-code">ui-table-sticky-head</code></td><td>Freezes the header row while scrolling vertically.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<h3 class="ui-h5 ui-mt-5">Server mode</h3>
+<p class="docs-section-intro">Add <code class="ui-code">data-ui-url</code> and the table asks the server for each page instead of holding every row in the DOM. Search is debounced into one request per pause, and an out-of-order response is discarded.</p>
+
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div data-ui-table data-ui-url=&quot;/api/records&quot; data-ui-page-size=&quot;25&quot;&gt;
+  &lt;table class=&quot;ui-table&quot;&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;
+        &lt;th data-ui-field=&quot;company&quot; data-ui-sort=&quot;text&quot;&gt;Company&lt;/th&gt;
+        &lt;th data-ui-field=&quot;status&quot;&gt;Status&lt;/th&gt;
+      &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;&lt;/tbody&gt;
+  &lt;/table&gt;
+&lt;/div&gt;
+
+&lt;!-- GET /api/records?page=1&amp;size=25&amp;q=acme&amp;sort=company&amp;dir=asc
+     -&gt; {&quot;rows&quot;: [{&quot;id&quot;: 7, &quot;company&quot;: &quot;Acme Industries&quot;, &quot;status&quot;: &quot;Active&quot;}],
+         &quot;total&quot;: 128}
+
+     Rows may also be arrays, or a pre-rendered fragment:
+     -&gt; {&quot;html&quot;: &quot;&lt;tr&gt;&lt;td&gt;Acme Industries&lt;/td&gt;&lt;td&gt;Active&lt;/td&gt;&lt;/tr&gt;&quot;, &quot;total&quot;: 128} --&gt;</code></pre>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="charts">
+  <h2 class="ui-h2">Charts</h2>
+  <p class="docs-section-intro">Plain SVG, no charting library. Every chart renders as <code class="ui-code">role="img"</code> with a generated summary label and a visually-hidden data table, so the numbers are available to screen readers and to print. Deliberately limited to the shapes a dashboard needs — anything requiring zoom or streaming still wants a real charting library.</p>
+
+<div class="docs-demo">
+<div class="ui-row">
+  <div class="ui-col-12 ui-col-md-4">
+    <div class="ui-card"><div class="ui-card-body">
+      <h3 class="ui-h6 ui-text-muted">By status</h3>
+      <div data-ui-chart="donut" data-ui-values="4,1,1,1"
+           data-ui-labels="Active,Expired,Suspended,Under review"
+           data-ui-title="Records by status" data-ui-centre="7"
+           data-ui-legend data-ui-legend-percent></div>
+    </div></div>
+  </div>
+  <div class="ui-col-12 ui-col-md-8">
+    <div class="ui-card"><div class="ui-card-body">
+      <h3 class="ui-h6 ui-text-muted">Value by month</h3>
+      <div data-ui-chart="bar" data-ui-values="12,18,9,24,17,31"
+           data-ui-labels="Jan,Feb,Mar,Apr,May,Jun" data-ui-title="Value by month"></div>
+      <p class="ui-help ui-mt-3">Trend <span data-ui-chart="sparkline" data-ui-values="12,18,9,24,17,31"></span> rising</p>
+    </div></div>
+  </div>
+</div>
+</div>
+
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div data-ui-chart=&quot;bar&quot;  data-ui-values=&quot;12,18,9&quot; data-ui-labels=&quot;Jan,Feb,Mar&quot;&gt;&lt;/div&gt;
+&lt;div data-ui-chart=&quot;line&quot; data-ui-values=&quot;12,18,9&quot;&gt;&lt;/div&gt;
+&lt;span data-ui-chart=&quot;sparkline&quot; data-ui-values=&quot;12,18,9&quot;&gt;&lt;/span&gt;
+
+&lt;div data-ui-chart=&quot;donut&quot;
+     data-ui-values=&quot;4,1,1&quot;
+     data-ui-labels=&quot;Active,Expired,Suspended&quot;
+     data-ui-title=&quot;Records by status&quot;
+     data-ui-centre=&quot;6&quot;
+     data-ui-legend data-ui-legend-percent&gt;&lt;/div&gt;
+
+&lt;script&gt;
+  UI.chart.update(&quot;#sales&quot;, [5, 10, 15], [&quot;X&quot;, &quot;Y&quot;, &quot;Z&quot;]);
+&lt;/script&gt;</code></pre>
+</div>
+
+<div class="docs-table-wrap">
+  <table class="ui-table ui-table-sm">
+    <thead><tr><th>Class / attribute</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">data-ui-chart</code></td><td><code class="ui-code">bar</code>, <code class="ui-code">line</code>, <code class="ui-code">sparkline</code> or <code class="ui-code">donut</code>.</td></tr>
+      <tr><td><code class="ui-code">data-ui-values</code></td><td>Comma-separated numbers.</td></tr>
+      <tr><td><code class="ui-code">data-ui-labels</code></td><td>Comma-separated labels, used in the accessible summary and tooltips.</td></tr>
+      <tr><td><code class="ui-code">data-ui-title</code></td><td>Names the chart in its <code class="ui-code">aria-label</code> and data table.</td></tr>
+      <tr><td><code class="ui-code">data-ui-legend</code></td><td>Renders a legend. Add <code class="ui-code">data-ui-legend-percent</code> for percentages.</td></tr>
+      <tr><td><code class="ui-code">data-ui-multicolour</code></td><td>Colours each bar separately. Off by default — one series should read as one series.</td></tr>
+      <tr><td><code class="ui-code">data-ui-centre</code></td><td>Text in the middle of a donut.</td></tr>
+      <tr><td><code class="ui-code">data-ui-format-currency</code></td><td>Formats values as currency in labels and the data table.</td></tr>
+      <tr><td><code class="ui-code">data-ui-orientation</code></td><td><code class="ui-code">horizontal</code> for horizontal bars.</td></tr>
+      <tr><td><code class="ui-code">data-ui-height</code></td><td>Chart height in viewBox units.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="popover">
+  <h2 class="ui-h2">Popovers and copy to clipboard</h2>
+  <p class="docs-section-intro">A popover is richer than a tooltip and lighter than a modal, and can hold interactive content. Copy buttons confirm both visibly and to screen readers — a silent copy leaves people unsure the click registered.</p>
+
+<div class="docs-demo">
+<div class="ui-d-flex ui-flex-wrap ui-gap-2">
+  <button class="ui-btn ui-btn-outline-secondary" data-ui-popover="Values are provisional until reconciled.">
+    Inline popover
+  </button>
+  <button class="ui-btn ui-btn-outline-secondary"
+          data-ui-popover-target="#pop-help" data-ui-popover-title="More detail">
+    From a template
+  </button>
+  <button class="ui-btn ui-btn-outline-secondary" data-ui-copy="REF-2026-0184">
+    Copy reference
+  </button>
+</div>
+<template id="pop-help">
+  <p>Popovers can contain links and buttons.</p>
+  <p class="ui-mb-0"><a href="#popover">A link inside the popover</a></p>
+</template>
+</div>
+
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;button class=&quot;ui-btn&quot; data-ui-popover=&quot;Short explanatory text.&quot;&gt;Why?&lt;/button&gt;
+
+&lt;button class=&quot;ui-btn&quot; data-ui-popover-target=&quot;#help&quot; data-ui-popover-title=&quot;Detail&quot;&gt;Help&lt;/button&gt;
+&lt;template id=&quot;help&quot;&gt;&lt;p&gt;Markup shown in the popover.&lt;/p&gt;&lt;/template&gt;
+
+&lt;button class=&quot;ui-btn&quot; data-ui-copy=&quot;REF-2026-0184&quot;&gt;Copy reference&lt;/button&gt;
+&lt;button class=&quot;ui-btn&quot; data-ui-copy-target=&quot;#taxId&quot;&gt;Copy tax ID&lt;/button&gt;</code></pre>
+</div>
+
+<div class="docs-table-wrap">
+  <table class="ui-table ui-table-sm">
+    <thead><tr><th>Class / attribute</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">data-ui-popover</code></td><td>Inline text content (escaped).</td></tr>
+      <tr><td><code class="ui-code">data-ui-popover-target</code></td><td>Selector for the content, usually a <code class="ui-code">&lt;template&gt;</code>.</td></tr>
+      <tr><td><code class="ui-code">data-ui-popover-title</code></td><td>Optional heading.</td></tr>
+      <tr><td><code class="ui-code">data-ui-popover-align</code></td><td><code class="ui-code">start</code> (default) or <code class="ui-code">end</code>.</td></tr>
+      <tr><td><code class="ui-code">data-ui-copy</code></td><td>Copies this literal string.</td></tr>
+      <tr><td><code class="ui-code">data-ui-copy-target</code></td><td>Copies the value or text of the matched element.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="status">
+  <h2 class="ui-h2">Status lexicon and record header</h2>
+  <p class="docs-section-intro">A fixed vocabulary for record state. The value is not the styling — it is that every screen uses the same words with the same colours, instead of each one inventing its own. Expired and suspended are distinguished by marker and border, not colour alone.</p>
+
+<div class="docs-demo">
+<div class="ui-d-flex ui-flex-wrap ui-gap-2 ui-mb-5">
+  <span class="ui-status ui-status-draft">Draft</span>
+  <span class="ui-status ui-status-submitted">Submitted</span>
+  <span class="ui-status ui-status-under-review">Under review</span>
+  <span class="ui-status ui-status-approved">Approved</span>
+  <span class="ui-status ui-status-active">Active</span>
+  <span class="ui-status ui-status-rejected">Rejected</span>
+  <span class="ui-status ui-status-expired">Expired</span>
+  <span class="ui-status ui-status-suspended">Suspended</span>
+</div>
+
+<header class="ui-record-header">
+  <div>
+    <h3 class="ui-record-title">Acme Industries Ltd</h3>
+    <dl class="ui-record-meta">
+      <dt>Reference</dt><dd class="ui-record-ref">REG-2026-0184</dd>
+      <dt>Status</dt><dd><span class="ui-status ui-status-under-review">Under review</span></dd>
+    </dl>
+  </div>
+  <div class="ui-record-actions">
+    <button class="ui-btn ui-btn-outline-secondary">Reject</button>
+    <button class="ui-btn ui-btn-primary">Approve</button>
+  </div>
+</header>
+</div>
+
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;span class=&quot;ui-status ui-status-under-review&quot;&gt;Under review&lt;/span&gt;
+
+&lt;header class=&quot;ui-record-header&quot;&gt;
+  &lt;div&gt;
+    &lt;h1 class=&quot;ui-record-title&quot;&gt;Acme Industries Ltd&lt;/h1&gt;
+    &lt;dl class=&quot;ui-record-meta&quot;&gt;
+      &lt;dt&gt;Reference&lt;/dt&gt;&lt;dd class=&quot;ui-record-ref&quot;&gt;REG-2026-0184&lt;/dd&gt;
+      &lt;dt&gt;Status&lt;/dt&gt;&lt;dd&gt;&lt;span class=&quot;ui-status ui-status-active&quot;&gt;Active&lt;/span&gt;&lt;/dd&gt;
+    &lt;/dl&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;ui-record-actions&quot;&gt;
+    &lt;button class=&quot;ui-btn ui-btn-primary&quot;&gt;Approve&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/header&gt;</code></pre>
+</div>
+
+<div class="docs-table-wrap">
+  <table class="ui-table ui-table-sm">
+    <thead><tr><th>Class / attribute</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">ui-status-draft</code></td><td>Not yet submitted.</td></tr>
+      <tr><td><code class="ui-code">ui-status-submitted</code></td><td>Received, not yet looked at.</td></tr>
+      <tr><td><code class="ui-code">ui-status-under-review</code></td><td>Being assessed.</td></tr>
+      <tr><td><code class="ui-code">ui-status-approved / ui-status-active</code></td><td>Granted, and in force.</td></tr>
+      <tr><td><code class="ui-code">ui-status-rejected</code></td><td>Refused.</td></tr>
+      <tr><td><code class="ui-code">ui-status-expired</code></td><td>Lapsed by time — ring marker.</td></tr>
+      <tr><td><code class="ui-code">ui-status-suspended</code></td><td>Stopped by decision — dashed border.</td></tr>
+      <tr><td><code class="ui-code">ui-record-header</code></td><td>Title, metadata and actions for a record-detail page.</td></tr>
+      <tr><td><code class="ui-code">ui-record-ref</code></td><td>Monospaced reference number, so digits align.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="document">
+  <h2 class="ui-h2">Printable document sheet</h2>
+  <p class="docs-section-intro">An A4 sheet for certificates, statements and reports. On screen it is a page-like card; printed it fills the sheet, repeats the running header and footer on every page, and repeats a long table's <code class="ui-code">&lt;thead&gt;</code> across page breaks.</p>
+
+<div class="docs-demo">
+<div class="ui-document" style="width:100%;min-height:0;box-shadow:none;border:1px solid var(--ui-border)">
+  <div class="ui-document-header">
+    <span><strong>Example Organisation</strong></span>
+    <span class="ui-record-ref">REG-2026-0184</span>
+  </div>
+  <h3 class="ui-document-title">Certificate of Registration</h3>
+  <p class="ui-document-subtitle">Issued under the supplier registration scheme</p>
+  <div class="ui-document-body">
+    <p>This is to certify that <strong>Acme Industries Ltd</strong> is registered
+    as an approved supplier for the period stated below.</p>
+  </div>
+  <div class="ui-document-seal">
+    <div class="ui-document-signature">Authorised signatory</div>
+    <div class="ui-document-qr" aria-label="Verification QR code"></div>
+  </div>
+  <div class="ui-document-footer"><span>Verify at example.org/verify</span><span>Page 1 of 1</span></div>
+</div>
+</div>
+
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-document&quot;&gt;
+  &lt;div class=&quot;ui-document-watermark&quot;&gt;CERTIFIED&lt;/div&gt;
+  &lt;div class=&quot;ui-document-header&quot;&gt;
+    &lt;span&gt;&lt;strong&gt;Example Organisation&lt;/strong&gt;&lt;/span&gt;
+    &lt;span class=&quot;ui-record-ref&quot;&gt;REG-2026-0184&lt;/span&gt;
+  &lt;/div&gt;
+
+  &lt;h1 class=&quot;ui-document-title&quot;&gt;Certificate of Registration&lt;/h1&gt;
+  &lt;p class=&quot;ui-document-subtitle&quot;&gt;Issued under the supplier registration scheme&lt;/p&gt;
+
+  &lt;div class=&quot;ui-document-body&quot;&gt;
+    &lt;table class=&quot;ui-table ui-document-table&quot;&gt; ... &lt;/table&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;ui-document-seal&quot;&gt;
+    &lt;div class=&quot;ui-document-signature&quot;&gt;Authorised signatory&lt;/div&gt;
+    &lt;div class=&quot;ui-document-qr&quot;&gt;&lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;ui-document-footer&quot;&gt;&lt;span&gt;Verify at example.org/verify&lt;/span&gt;&lt;span&gt;Page 1 of 1&lt;/span&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+</div>
+
+<div class="docs-table-wrap">
+  <table class="ui-table ui-table-sm">
+    <thead><tr><th>Class / attribute</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">ui-document</code></td><td>A4 portrait sheet. Add <code class="ui-code">ui-document-landscape</code> for landscape.</td></tr>
+      <tr><td><code class="ui-code">ui-document-header / -footer</code></td><td>Running header and footer; the footer sits at the foot of the sheet.</td></tr>
+      <tr><td><code class="ui-code">ui-document-title / -subtitle</code></td><td>Centred document heading.</td></tr>
+      <tr><td><code class="ui-code">ui-document-body</code></td><td>Main content at document type size.</td></tr>
+      <tr><td><code class="ui-code">ui-document-table</code></td><td>Repeats <code class="ui-code">&lt;thead&gt;</code> across printed pages and avoids splitting rows.</td></tr>
+      <tr><td><code class="ui-code">ui-document-seal</code></td><td>Signature line and QR slot.</td></tr>
+      <tr><td><code class="ui-code">ui-document-watermark</code></td><td>Diagonal watermark behind the content.</td></tr>
+      <tr><td><code class="ui-code">ui-page-break-before / -after / -avoid</code></td><td>Print page-break control.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</section>
+
+
+      <footer class="docs-footer">UI Framework 1.3.0 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
     </main>
   </div>
   <script src="../dist/ui-framework.js"></script>
