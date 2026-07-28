@@ -28,7 +28,7 @@
       <a class="docs-sidebar-link" href="examples/application-form.html">Application form</a>
       <a class="docs-sidebar-link" href="examples/record-register.html">Record register</a>
       <a class="docs-sidebar-link" href="examples/login.html">Login page</a>
-      <div class="docs-sidebar-title">On this page</div><a class="docs-sidebar-link" href="#try-it">Try it in 10 seconds</a><a class="docs-sidebar-link" href="#concepts">How it works</a><a class="docs-sidebar-link" href="#bundle">Single bundle</a><a class="docs-sidebar-link" href="#modular">Modules</a><a class="docs-sidebar-link" href="#server">Server-side integration</a><a class="docs-sidebar-link" href="#theme">Theming</a><a class="docs-sidebar-link" href="#troubleshooting">Troubleshooting</a>
+      <div class="docs-sidebar-title">On this page</div><a class="docs-sidebar-link" href="#try-it">Try it in 10 seconds</a><a class="docs-sidebar-link" href="#concepts">How it works</a><a class="docs-sidebar-link" href="#bundle">Single bundle</a><a class="docs-sidebar-link" href="#modular">Modules</a><a class="docs-sidebar-link" href="#layers">Using alongside Bootstrap</a><a class="docs-sidebar-link" href="#server">Server-side integration</a><a class="docs-sidebar-link" href="#theme">Theming</a><a class="docs-sidebar-link" href="#troubleshooting">Troubleshooting</a>
     </aside>
     <main class="docs-main">
 
@@ -56,7 +56,7 @@
 
 <section class="docs-section" id="bundle">
   <h2 class="ui-h2">Option 1: single CSS and JavaScript</h2>
-  <p class="docs-section-intro">The easiest deployment option. Copy the complete framework folder into your static resources and include the two files.</p>
+  <p class="docs-section-intro">The easiest deployment option. Copy the complete framework folder into your static resources and include the two files. Already running Bootstrap, CoreUI, or another stylesheet? Use <span class="ui-code">ui-framework.layered.min.css</span> instead &mdash; see <a href="#layers">using alongside Bootstrap</a> below.</p>
   <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>&lt;link rel=&quot;stylesheet&quot; href=&quot;/ui/static/ui-framework/dist/ui-framework.min.css&quot;&gt;
 
 &lt;!-- Page content --&gt;
@@ -77,6 +77,26 @@
 
 &lt;script src=&quot;/ui/static/ui-framework/src/js/00-core.js&quot;&gt;&lt;/script&gt;
 &lt;script src=&quot;/ui/static/ui-framework/src/js/05-modal.js&quot;&gt;&lt;/script&gt;</code></pre></div>
+</section>
+
+<section class="docs-section" id="layers">
+  <h2 class="ui-h2">Using alongside Bootstrap or an existing stylesheet</h2>
+  <p class="docs-section-intro">Every class is prefixed <span class="ui-code">ui-</span>, so there are no class-name collisions with Bootstrap, CoreUI, or your own CSS. The part that <em>can</em> collide is more basic than that: both frameworks style bare HTML elements &mdash; <span class="ui-code">table</span>, <span class="ui-code">h1</span>&ndash;<span class="ui-code">h6</span>, <span class="ui-code">button</span>, form controls &mdash; before either one's classes are even involved.</p>
+
+  <p>With the plain bundle (<span class="ui-code">ui-framework.css</span> / <span class="ui-code">.min.css</span>), whichever stylesheet's <span class="ui-code">&lt;link&gt;</span> comes <em>last</em> in your <span class="ui-code">&lt;head&gt;</span> wins ties on those element selectors &mdash; not per component, the whole file. Load it after Bootstrap and every <span class="ui-code">&lt;table&gt;</span> on the page, including ones you never gave <span class="ui-code">ui-table</span>, can start picking up this framework's default border and padding instead of Bootstrap's. Load it before, and the reverse happens. It isn't a crash, just a silent, page-wide restyle of elements you didn't touch, and the direction depends entirely on link order.</p>
+
+  <p><span class="ui-code">ui-framework.layered.css</span> (and <span class="ui-code">.layered.min.css</span>) fixes this by wrapping every rule in <span class="ui-code">@layer ui-base, ui-components, ui-utilities</span>. The one rule that matters, straight from the CSS spec: <strong>an unlayered stylesheet always beats a layered one</strong>, regardless of link order and regardless of selector specificity. So with nothing more than:</p>
+
+  <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>&lt;link rel=&quot;stylesheet&quot; href=&quot;bootstrap.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;dist/ui-framework.layered.min.css&quot;&gt;</code></pre></div>
+
+  <p>Bootstrap's base styles stay untouched no matter which of those two lines comes first, and this framework's component classes still work normally wherever you use them &mdash; layering doesn't turn a class off, it only settles who wins when the <em>same</em> bare element is targeted by both.</p>
+
+  <p>If "Bootstrap always wins" isn't what you want &mdash; say, you want one specific component from this framework to win over a Bootstrap style in one area &mdash; declare the order yourself, once, at the top of your own stylesheet:</p>
+
+  <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>@layer bootstrap, ui-base, ui-components, ui-utilities, app-overrides;</code></pre></div>
+
+  <p class="ui-mb-0">Precedence is then exactly what you wrote, left to right, later wins &mdash; no specificity math, no <span class="ui-code">!important</span>. Keep your own overrides inside a declared layer (<span class="ui-code">app-overrides</span> above) rather than leaving them unlayered, or the "unlayered always wins" rule will apply to them too.</p>
 </section>
 
 <section class="docs-section" id="server">

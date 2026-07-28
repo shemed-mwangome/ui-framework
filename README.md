@@ -52,7 +52,6 @@ common first-time issues.
 - Toast notifications and tooltips
 - Multi-select with checkboxes, search, select-all and tags
 - Progress bars, spinners, pulse and skeleton loading
-- Upload areas
 - Empty states
 - Stepper and timeline
 - Print helpers
@@ -62,13 +61,16 @@ common first-time issues.
 - Promise-based confirmation dialog (`UI.confirm()`)
 - Smart tables: client-side search, column sorting and pagination over a plain
   `.ui-table`, plus optional server mode (`data-ui-url`), row selection with
-  bulk actions, column visibility, sticky columns and CSV export
+  a collapsible bulk-action bar, column visibility, sticky columns and CSV export
 - Form validation with cross-field rules, an error summary, and server-error
   binding (`UI.validate.showErrors()`)
 - Input masks and number/currency formatting (`data-ui-mask`, `UI.mask.format()`)
 - Combobox with type-ahead over a local `<select>` or a remote endpoint
-- Upload areas with size/type/count gating and per-file upload progress
-- SVG charts without a charting library: bar, line, sparkline and donut
+- Upload areas with size/type/count gating, per-file upload progress, and an
+  optional compact chip layout for the selected-file list
+- SVG charts without a charting library: bar (grouped/stacked, vertical or
+  horizontal), line, area (single or stacked), sparkline and donut, single- or
+  multi-series via a JSON data island
 - Popovers, copy-to-clipboard, a record status lexicon, a record header, and
   an A4 print sheet for certificates and reports
 - Internationalisation (`UI.i18n` / `UI.t()`) and a screen-reader announcer
@@ -230,6 +232,44 @@ The input must immediately precede its label:
 The component explicitly overrides legacy `display:none` checkbox rules while
 keeping the real input visually hidden and keyboard-accessible.
 
+## Form validation
+
+Add `data-ui-validate` to a form. Native constraints (`required`, `type`,
+`pattern`, `min`/`max`) are checked alongside cross-field rules, and messages
+render inline — a red border on the control and a short message directly
+beneath it — instead of in the browser's own bubble, which can't be styled,
+isn't read out on submit, and disappears on scroll.
+
+```html
+<form data-ui-validate action="/save" method="post">
+    <div data-ui-validate-summary></div>
+
+    <div class="ui-field">
+        <label class="ui-label" for="email">Email</label>
+        <input class="ui-control" id="email" name="email" type="email" required>
+    </div>
+
+    <div class="ui-field">
+        <label class="ui-label" for="end">End date</label>
+        <input class="ui-control" id="end" name="end" type="date" data-ui-rule-after="start">
+    </div>
+
+    <button class="ui-btn ui-btn-primary" type="submit">Submit</button>
+</form>
+```
+
+`data-ui-validate-summary` is optional — add it only on longer forms where a
+single at-a-glance list of problems genuinely helps; the field-level
+highlighting works on its own without it. `data-ui-rule-after` /
+`-before` compare two date fields by `id`; register further custom rules
+with `UI.validate.addRule(name, fn)`, usable as `data-ui-rule-<name>`.
+Override any rule's default message with `data-ui-message-<rule>`.
+
+To bind errors that only the server can catch (a duplicate email, a
+uniqueness constraint), call `UI.validate.showErrors(form, errors)` with
+`errors` as `{ fieldName: "message" }` — it applies the same inline styling
+and moves focus to the first invalid field.
+
 ## Multi-select
 
 Use a native `<select multiple>`. It stays in the form and receives all selected
@@ -287,12 +327,16 @@ wizard: wrap each step in `<fieldset data-ui-step>` (all but the first
 `hidden`), add a `.ui-stepper` progress header, and give the wizard its own
 `data-ui-step-back` / `data-ui-step-next` buttons alongside the existing
 `data-ui-save-next-submit` button, which only appears on the last step.
-"Next" validates the current step's fields natively (via `reportValidity()`)
-before advancing, so nothing extra is required beyond marking fields
-`required`.
+"Next" validates the current step's fields before advancing; by default that
+falls back to the browser's own `reportValidity()`, so nothing extra is
+required beyond marking fields `required` — but that native bubble can't be
+styled, isn't read out on submit, and disappears on scroll. Add
+`data-ui-validate` to the same form and it renders those errors with the
+same inline red-border-and-message pattern documented under
+[Form validation](#form-validation) instead.
 
 ```html
-<form data-ui-stepper-form data-ui-save-next
+<form data-ui-stepper-form data-ui-save-next data-ui-validate
       data-ui-position="4" data-ui-total="12"
       action="/applications/4" method="post">
 
@@ -474,6 +518,70 @@ is merged in if it isn't already one of them). Turn it off with
 Additional table designs (independent of `data-ui-table`, just CSS):
 `.ui-table-minimal` (no header fill), `.ui-table-dark-header`, and
 `.ui-table-card-rows` (each row as its own rounded, shadowed card).
+
+Add `data-ui-select` for a checkbox column and bulk-action bar
+(`data-ui-table-selection`), `data-ui-columns` for a column-visibility menu,
+and `data-ui-export="filename"` for a CSV export button that covers every
+row matching the current search and sort, not just the page on screen. The
+selection bar's count doubles as a collapse control — click it to tuck the
+bulk-action buttons away without clearing the selection.
+
+## Charts
+
+Dependency-free SVG charts — `bar`, `line`, `area`, `sparkline`, and `donut`
+— each rendered with `role="img"`, a generated `aria-label`, and a
+visually-hidden data table, so the numbers are available to screen readers
+and to print.
+
+```html
+<div data-ui-chart="bar" data-ui-values="12,19,3" data-ui-labels="Jan,Feb,Mar"
+     data-ui-title="Value by month"></div>
+
+<div data-ui-chart="donut" data-ui-values="4,1,1" data-ui-labels="Active,Expired,Suspended"
+     data-ui-centre="6" data-ui-legend data-ui-legend-percent></div>
+```
+
+A flat `data-ui-values` list only ever holds one series. For grouped/stacked
+bars, multi-line comparisons, or a stacked area chart, give the element a
+JSON data island instead:
+
+```html
+<div data-ui-chart="bar" data-ui-stacked data-ui-legend>
+    <script type="application/json">
+        {"labels": ["Jan", "Feb", "Mar"],
+         "series": [{"name": "North", "values": [12, 19, 7]},
+                    {"name": "South", "values": [8, 11, 14]}]}
+    </script>
+</div>
+```
+
+Drop `data-ui-stacked` for side-by-side grouped bars instead; add
+`data-ui-orientation="horizontal"` to either. `UI.chart.update(target,
+data)` accepts the same `{labels, series}` shape (or the plain `(values,
+labels)` form for a single series) to re-render a chart in place, so one fed
+from an API response doesn't need to hand-build a comma-separated string.
+
+## Uploads
+
+A drag-and-drop dropzone with client-side size/type/count gating (the
+server must still enforce all three — this is a courtesy, not a control)
+and, with `data-ui-url`, an immediate `XMLHttpRequest` upload with a real
+per-file progress bar.
+
+```html
+<div class="ui-upload" data-ui-upload data-ui-max-size="5MB" data-ui-max-files="4"
+     accept=".pdf,.png,.jpg">
+    <label class="ui-upload-dropzone">
+        <input type="file" multiple accept=".pdf,.png,.jpg">
+        <span class="ui-upload-title">Drop files here or click to browse</span>
+    </label>
+    <div class="ui-upload-preview"></div>
+</div>
+```
+
+Add `data-ui-upload-layout="inline"` to list selected files as wrapping
+compact chips instead of one full-width row each — better for a dropzone
+that regularly holds many small files (photos, scans).
 
 ## JavaScript examples
 
