@@ -1,0 +1,48 @@
+name: Deploy docs to GitHub Pages
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # dist/ is committed, but rebuilding here guarantees the deployed site
+      # never drifts from src/ even if a commit slipped through with a stale
+      # dist/ -- the same check the test workflow enforces, applied to what
+      # actually gets published rather than just failing a CI run.
+      - name: Rebuild dist/
+        run: python3 build.py
+
+      - uses: actions/configure-pages@v5
+
+      # docs/*.html reference the framework as ../dist/... and ../assets/...,
+      # so dist/ and docs/ have to be published as siblings, exactly as they
+      # sit in the repo -- publishing docs/ alone would break every one of
+      # those relative paths.
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
