@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Record register — UI Framework</title>
-<link rel="stylesheet" href="../../dist/ui-framework.css?v=1.5.1">
-<link rel="stylesheet" href="../assets/docs.css?v=1.5.1">
+<link rel="stylesheet" href="../../dist/ui-framework.css?v=1.6.0">
+<link rel="stylesheet" href="../assets/docs.css?v=1.6.0">
 </head>
 <body class="ui-scope">
 
@@ -173,7 +173,7 @@
   <!-- Printable certificate ------------------------------------------ -->
   <div class="ui-d-flex ui-justify-between ui-align-center ui-mt-7 ui-mb-3">
     <h2 class="ui-h4 ui-mb-0">Certificate preview</h2>
-    <button type="button" class="ui-btn ui-btn-sm ui-btn-outline-secondary" id="print">
+    <button type="button" class="ui-btn ui-btn-sm ui-btn-outline-secondary" data-ui-print-target="#certificate">
       Print certificate
     </button>
   </div>
@@ -215,7 +215,7 @@
   </div>
 </div>
 
-<script src="../../dist/ui-framework.js?v=1.5.1"></script>
+<script src="../../dist/ui-framework.js?v=1.6.0"></script>
 <script>
   var table = document.getElementById("register-table");
 
@@ -235,10 +235,6 @@
 
   document.getElementById("clear").addEventListener("click", function () {
     UI.table.clearSelection(table);
-  });
-
-  document.getElementById("print").addEventListener("click", function () {
-    window.print();
   });
 </script>
 </body>

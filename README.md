@@ -1,4 +1,4 @@
-# UI Framework 1.5.1
+# UI Framework 1.6.0
 
 A complete, dependency-free CSS and JavaScript UI framework designed for
 server-rendered applications, static HTML, and legacy projects that already
@@ -54,7 +54,8 @@ common first-time issues.
 - Progress bars, spinners, pulse and skeleton loading
 - Empty states
 - Stepper and timeline
-- Print helpers
+- Print helpers, including printing a single element in isolation
+  (`data-ui-print-target`, `UI.print()`) instead of the whole page
 - Save & next form toolbar with an unsaved-changes guard, and a multi-step form wizard built on top of it
 - Save draft: debounced `localStorage` autosave with a restore-on-reload banner
 - Date range picker with quick presets, two-month view, and keyboard navigation, plus a single-date picker counterpart
@@ -582,6 +583,21 @@ per-file progress bar.
 Add `data-ui-upload-layout="inline"` to list selected files as wrapping
 compact chips instead of one full-width row each — better for a dropzone
 that regularly holds many small files (photos, scans).
+
+## Printing a single element
+
+Plain `window.print()` prints everything visible on the page, not just a
+certificate or report sheet a "Print" button implies. Add
+`data-ui-print-target` to the button instead, pointing at the element to
+print in isolation:
+
+```html
+<button data-ui-print-target="#certificate">Print certificate</button>
+<div class="ui-document" id="certificate">...</div>
+```
+
+`UI.print(target)` does the same thing from script, taking a selector or an
+element reference.
 
 ## JavaScript examples
 

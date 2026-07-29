@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.6.0 — 2026-07-29
+
+### Fixed
+
+- **Charts:** a multi-series chart's data lives in a `<script type="application/json">` child, but `build()` set the chart element's `innerHTML` on every render, discarding that child along with the previous SVG. `UI.chart.update()` masked this by recreating the script fresh before every call, but any other way of re-rendering a chart — `UI.destroy()` + `UI.init()`, an AJAX-swapped region under `UI.observe()` — found no data left and silently rendered nothing on the second pass. `build()` now detaches the script before clearing the element and reattaches it after
+
+### Added
+
+- **Print:** `data-ui-print-target="#selector"` on a button (or `UI.print(target)` from script) prints one element instead of the whole page it sits on — a "Print certificate" button previously ran plain `window.print()`, which printed the surrounding dashboard, nav and tables right along with the certificate. Isolation is done with `visibility: hidden` on everything and `visibility: visible` back on the target and its descendants, not `display: none` — hiding an *ancestor* with `display: none` would have taken the target itself out of the render tree along with everything else. The record register example's print button now uses this instead of a hand-written `window.print()` call
+
 ## 1.5.1 — 2026-07-28
 
 - **Docs sidebar:** 1.5.0's `overflow-x: hidden` fix for mobile's off-canvas sidebar was applied to `html` *and* `body`. Setting `overflow-x` on an element computes its `overflow-y` to `auto` instead of `visible` if not set explicitly, so `body` became a second, nested scroll container alongside `html`. With two scrollable ancestors instead of one, `.docs-sidebar`'s `position: sticky` stuck relative to the wrong one and stopped tracking the page scroll the user actually sees — the sidebar scrolled away instead of snapping to the top, breaking navigation on every docs page. Moved the rule to `html` only

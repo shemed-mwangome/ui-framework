@@ -1,5 +1,5 @@
 /*!
- * UI Framework v1.5.1
+ * UI Framework v1.6.0
  * Dependency-free JavaScript bundle.
  * License: MIT
  */
@@ -8,7 +8,7 @@
 
   var UI = window.UI || {};
 
-  UI.version = "1.5.1";
+  UI.version = "1.6.0";
   UI._initializers = UI._initializers || [];
 
   UI.q = function (selector, root) {
@@ -5021,9 +5021,22 @@
       element.classList.add("ui-chart", "ui-chart-" + type, "ui-chart-multi");
       element.setAttribute("role", "img");
       element.setAttribute("aria-label", multiSummary(element, multi.series, multi.categories));
+
+      // The multi-series data lives in a <script> child (see parseSeries
+      // above), and this innerHTML assignment would otherwise discard it
+      // along with the previous render -- fine the first time build() runs
+      // off markup that already has one, but it means any *second*
+      // re-render that isn't routed through UI.chart.update() (which
+      // recreates the script itself) finds no data and silently renders
+      // nothing. Detach it before clearing the element and reattach it
+      // after, so the chart can be reinitialised by ordinary means
+      // (UI.destroy()+UI.init(), a MutationObserver-driven UI.observe()
+      // region, etc.) as many times as needed.
+      var dataScript = element.querySelector('script[type="application/json"]');
       element.innerHTML = mbody +
         renderSeriesLegend(element, multi.series) +
         multiDataTable(element, multi.series, multi.categories);
+      if (dataScript) element.appendChild(dataScript);
 
       UI.emit(element, "ui:chart:rendered", { type: type, series: multi.series });
       return;
@@ -5199,4 +5212,49 @@
   });
 
   UI.clipboard = { copy: copy };
+})(window, document);
+
+
+(function (window, document) {
+  "use strict";
+  var UI = window.UI;
+
+  /**
+   * Prints one element instead of the whole page it sits on.
+   *
+   *   <button data-ui-print-target="#certificate">Print certificate</button>
+   *
+   * Plain window.print() prints everything visible -- the surrounding
+   * dashboard, nav, tables -- not just the document sheet a "Print
+   * certificate" button implies. See UI.print() for the same thing from
+   * script.
+   */
+  function print(target) {
+    var element = typeof target === "string" ? UI.q(target) : target;
+    if (!element) return;
+
+    document.body.classList.add("ui-print-isolate");
+    element.classList.add("ui-print-target");
+
+    function cleanup() {
+      document.body.classList.remove("ui-print-isolate");
+      element.classList.remove("ui-print-target");
+      window.removeEventListener("afterprint", cleanup);
+    }
+    // afterprint fires once the print dialog closes, whether the user
+    // printed or cancelled -- the only reliable point to undo the isolation
+    // classes without guessing at a timeout.
+    window.addEventListener("afterprint", cleanup);
+
+    window.print();
+  }
+
+  document.addEventListener("click", function (event) {
+    var trigger = UI.closest(event.target, "[data-ui-print-target]");
+    if (!trigger) return;
+    event.preventDefault();
+    print(trigger.getAttribute("data-ui-print-target"));
+  });
+
+  UI.print = print;
 })(window, document);
