@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Components · UI Framework</title>
-  <link rel="stylesheet" href="../dist/ui-framework.css?v=1.5.1">
-  <link rel="stylesheet" href="assets/docs.css?v=1.5.1">
+  <link rel="stylesheet" href="../dist/ui-framework.css?v=1.6.0">
+  <link rel="stylesheet" href="assets/docs.css?v=1.6.0">
 </head>
 <body class="ui-scope docs-body">
   <header class="docs-topbar">
@@ -14,7 +14,7 @@
       <a class="docs-brand" href="index.html"><span class="docs-logo">UI</span><span>UI Framework</span></a>
     </div>
     <div class="ui-d-flex ui-align-center ui-gap-2">
-      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.5.1</span>
+      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.6.0</span>
       <button class="ui-btn ui-btn-sm ui-btn-outline-secondary" type="button" data-ui-theme-toggle>Theme</button>
     </div>
   </header>
@@ -2520,7 +2520,7 @@ document.getElementById(&quot;bulk&quot;).addEventListener(&quot;click&quot;, fu
   <p class="docs-section-intro">An A4 sheet for certificates, statements and reports. On screen it is a page-like card; printed it fills the sheet, repeats the running header and footer on every page, and repeats a long table's <code class="ui-code">&lt;thead&gt;</code> across page breaks.</p>
 
 <div class="docs-demo">
-<div class="ui-document" style="width:100%;min-height:0;box-shadow:none;border:1px solid var(--ui-border)">
+<div class="ui-document" id="docsPrintSample" style="width:100%;min-height:0;box-shadow:none;border:1px solid var(--ui-border)">
   <div class="ui-document-watermark">CERTIFIED</div>
   <div class="ui-document-header">
     <span><strong>Example Organisation</strong></span>
@@ -2581,14 +2581,42 @@ document.getElementById(&quot;bulk&quot;).addEventListener(&quot;click&quot;, fu
   </table>
 </div>
 
+<h3 class="ui-h3 ui-mt-5">Printing just the sheet</h3>
+<p class="docs-section-intro">Plain <code class="ui-code">window.print()</code> prints everything visible on the page &mdash; the surrounding dashboard, nav, tables, not just the sheet a "Print" button implies. Add <code class="ui-code">data-ui-print-target</code> to the button instead, pointing at the sheet's selector, and only that element prints. <code class="ui-code">UI.print(target)</code> does the same thing from script.</p>
+
+<div class="docs-demo">
+  <button type="button" class="ui-btn ui-btn-outline-secondary" data-ui-print-target="#docsPrintSample">Print this certificate</button>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;button data-ui-print-target=&quot;#certificate&quot;&gt;Print certificate&lt;/button&gt;
+
+&lt;div class=&quot;ui-document&quot; id=&quot;certificate&quot;&gt;...&lt;/div&gt;
+
+&lt;script&gt;
+  // Same thing from script, e.g. after a Ctrl/Cmd+P shortcut of your own:
+  UI.print(&quot;#certificate&quot;);
+&lt;/script&gt;</code></pre>
+</div>
+
+<div class="docs-table-wrap">
+  <table class="ui-table ui-table-sm">
+    <thead><tr><th>Class / attribute</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">data-ui-print-target</code></td><td>On a button: a selector for the element to print in isolation.</td></tr>
+      <tr><td><code class="ui-code">UI.print(target)</code></td><td>Same, callable directly; accepts a selector string or an element.</td></tr>
+    </tbody>
+  </table>
+</div>
+
 </section>
 
 
 
-      <footer class="docs-footer">UI Framework 1.5.1 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
+      <footer class="docs-footer">UI Framework 1.6.0 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
     </main>
   </div>
-  <script src="../dist/ui-framework.js?v=1.5.1"></script>
-  <script src="assets/docs.js?v=1.5.1"></script>
+  <script src="../dist/ui-framework.js?v=1.6.0"></script>
+  <script src="assets/docs.js?v=1.6.0"></script>
 </body>
 </html>

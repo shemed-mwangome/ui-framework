@@ -494,9 +494,22 @@
       element.classList.add("ui-chart", "ui-chart-" + type, "ui-chart-multi");
       element.setAttribute("role", "img");
       element.setAttribute("aria-label", multiSummary(element, multi.series, multi.categories));
+
+      // The multi-series data lives in a <script> child (see parseSeries
+      // above), and this innerHTML assignment would otherwise discard it
+      // along with the previous render -- fine the first time build() runs
+      // off markup that already has one, but it means any *second*
+      // re-render that isn't routed through UI.chart.update() (which
+      // recreates the script itself) finds no data and silently renders
+      // nothing. Detach it before clearing the element and reattach it
+      // after, so the chart can be reinitialised by ordinary means
+      // (UI.destroy()+UI.init(), a MutationObserver-driven UI.observe()
+      // region, etc.) as many times as needed.
+      var dataScript = element.querySelector('script[type="application/json"]');
       element.innerHTML = mbody +
         renderSeriesLegend(element, multi.series) +
         multiDataTable(element, multi.series, multi.categories);
+      if (dataScript) element.appendChild(dataScript);
 
       UI.emit(element, "ui:chart:rendered", { type: type, series: multi.series });
       return;

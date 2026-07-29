@@ -1,5 +1,5 @@
 /*!
- * UI Framework v1.5.1
+ * UI Framework v1.6.0
  * Original dependency-free CSS/JavaScript framework.
  * Prefix: ui-
  * License: MIT
@@ -4081,6 +4081,33 @@ form[data-ui-save-next].ui-dirty .ui-save-next-dirty { display: inline-flex; }
   a[href]::after {
     content: " (" attr(href) ")";
     font-size: .75em;
+  }
+
+  /*
+   * data-ui-print-target isolates one element (e.g. a certificate built on
+   * .ui-document) so window.print() prints only it, not the whole page it
+   * sits on. Hiding ancestors with display:none is not an option -- it
+   * would remove the target's own rendering along with theirs, since a
+   * hidden ancestor takes every descendant out of the render tree with it.
+   * visibility:hidden does not have that problem (each element's own
+   * visibility can still be overridden by a descendant), so everything is
+   * hidden that way and the target's is set back to visible. The target
+   * still leaves behind the blank space every hidden element around it
+   * used to occupy, so it's pulled out of flow with `position: fixed` to
+   * start at the top of the printed page regardless.
+   */
+  body.ui-print-isolate * {
+    visibility: hidden;
+  }
+  body.ui-print-isolate .ui-print-target,
+  body.ui-print-isolate .ui-print-target * {
+    visibility: visible;
+  }
+  body.ui-print-isolate .ui-print-target {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
   }
 }
 }

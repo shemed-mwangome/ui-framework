@@ -1,5 +1,5 @@
 {
-  "version": "1.5.1",
+  "version": "1.6.0",
   "prefix": "ui-",
   "cssModules": [
     "00-tokens.css",
@@ -53,7 +53,8 @@
     "19-mask.js",
     "20-combobox.js",
     "21-chart.js",
-    "23-clipboard.js"
+    "23-clipboard.js",
+    "24-print.js"
   ],
   "bundles": [
     "dist/ui-framework.css",

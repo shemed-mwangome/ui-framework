@@ -289,6 +289,32 @@ test("UI.chart.update accepts a multi-series data object", async () => {
   });
 });
 
+test("a multi-series chart's data island survives being reinitialised outside UI.chart.update", async () => {
+  await ui.page(
+    `<div id="c" data-ui-chart="bar">
+       <script type="application/json">
+         {"labels": ["Jan","Feb"], "series": [{"name":"North","values":[10,20]}]}
+       </script>
+     </div>`,
+    async (page) => {
+      const before = await page.count("#c rect");
+
+      // Reinitialise the way UI.observe()/AJAX-swapped regions do -- through
+      // UI.destroy()+UI.init(), not through UI.chart.update(). The <script>
+      // data island must not have been silently discarded by the first
+      // render, or this finds no data and renders nothing.
+      await page.evaluate(() => {
+        const el = document.getElementById("c");
+        UI.destroy(el);
+        UI.init(el);
+      });
+
+      assert.equal(await page.count('#c script[type="application/json"]'), 1, "the data island must still be in the DOM");
+      assert.equal(await page.count("#c rect"), before, "re-render should reproduce the same chart, not an empty one");
+    }
+  );
+});
+
 test("a chart with unparsable JSON data falls back to attribute-based values", async () => {
   await ui.page(
     `<div id="c" data-ui-chart="bar" data-ui-values="1,2" data-ui-labels="A,B">
@@ -641,6 +667,68 @@ test("document sheet renders at A4 width on screen", async () => {
       );
     }
   );
+});
+
+test("print isolation hides everything but the target, keyed off visibility not display", () => {
+  const css = readFileSync(join(ROOT, "src/css/19-print.css"), "utf8");
+
+  assert.match(
+    css,
+    /body\.ui-print-isolate \*\s*\{\s*visibility:\s*hidden/,
+    "must use visibility, not display -- display:none on an ancestor would hide the target too"
+  );
+  assert.match(css, /\.ui-print-target[\s\S]*?visibility:\s*visible/);
+  assert.match(
+    css,
+    /\.ui-print-target\s*\{[\s\S]*?position:\s*fixed/,
+    "the target must leave normal flow or hidden siblings' reserved space leaves a blank gap above it"
+  );
+});
+
+test("data-ui-print-target isolates one element instead of printing the whole page", async () => {
+  await ui.page(
+    `<nav>Site nav</nav>
+     <button id="btn" data-ui-print-target="#doc">Print</button>
+     <div class="ui-document" id="doc">Certificate</div>`,
+    async (page) => {
+      await page.evaluate(() => {
+        window.__printCalled = false;
+        window.print = () => { window.__printCalled = true; };
+      });
+
+      await page.click("#btn");
+
+      const during = await page.evaluate(() => ({
+        printCalled: window.__printCalled,
+        bodyIsolating: document.body.classList.contains("ui-print-isolate"),
+        targetMarked: document.getElementById("doc").classList.contains("ui-print-target"),
+      }));
+      assert.deepEqual(during, { printCalled: true, bodyIsolating: true, targetMarked: true });
+
+      // The real dialog closing fires this; the stub above never does, so
+      // dispatch it manually to check the cleanup path runs.
+      await page.evaluate(() => window.dispatchEvent(new Event("afterprint")));
+
+      const after = await page.evaluate(() => ({
+        bodyIsolating: document.body.classList.contains("ui-print-isolate"),
+        targetMarked: document.getElementById("doc").classList.contains("ui-print-target"),
+      }));
+      assert.deepEqual(after, { bodyIsolating: false, targetMarked: false });
+    }
+  );
+});
+
+test("UI.print() does the same thing from script, not just from a data attribute", async () => {
+  await ui.page('<div class="ui-document" id="doc">Certificate</div>', async (page) => {
+    await page.evaluate(() => {
+      window.print = () => {};
+      UI.print("#doc");
+    });
+    assert.equal(
+      await page.evaluate(() => document.getElementById("doc").classList.contains("ui-print-target")),
+      true
+    );
+  });
 });
 
 test("record header lays out title, meta and actions", async () => {
