@@ -1,5 +1,5 @@
 /*!
- * UI Framework v1.8.1
+ * UI Framework v1.8.3
  * Dependency-free JavaScript bundle.
  * License: MIT
  */
@@ -8,7 +8,7 @@
 
   var UI = window.UI || {};
 
-  UI.version = "1.8.1";
+  UI.version = "1.8.3";
   UI._initializers = UI._initializers || [];
 
   UI.q = function (selector, root) {
@@ -5394,9 +5394,29 @@
       .filter(function (value) { return value != null; });
   }
 
+  // A leaf's row is documented (and commonly authored) without a
+  // .ui-tree-toggle at all, since there's nothing to expand/collapse. But
+  // .ui-tree-row is a flex row, and the toggle is the first item in a branch
+  // row -- so a leaf missing that element entirely sits ~1 toggle-width
+  // *closer* to the row's edge than a sibling branch at the same nesting
+  // level, throwing off the whole level's visual alignment. Insert a hidden,
+  // unfocusable placeholder so every row at a level reserves identical space
+  // whether or not its author bothered to include a toggle button.
+  function ensureToggleSlot(node) {
+    var row = node.querySelector(":scope > .ui-tree-row");
+    if (!row || row.querySelector(":scope > .ui-tree-toggle")) return;
+    var placeholder = document.createElement("button");
+    placeholder.type = "button";
+    placeholder.className = "ui-tree-toggle";
+    placeholder.tabIndex = -1;
+    placeholder.setAttribute("aria-hidden", "true");
+    row.insertBefore(placeholder, row.firstChild);
+  }
+
   function initNodeStates(node) {
     if (!directChildrenWrap(node)) {
       node.classList.add("ui-tree-leaf");
+      ensureToggleSlot(node);
       return;
     }
     directChildNodes(node).forEach(initNodeStates);

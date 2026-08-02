@@ -64,6 +64,38 @@ test("leaves without a .ui-tree-children wrapper are auto-marked as leaves", asy
   });
 });
 
+test("a leaf's checkbox lines up with its sibling branches, whether or not its markup included a toggle button", async () => {
+  // TREE's leaves (Apex Gaming, Redwood Leisure) are authored the way the docs
+  // recommend -- no <button class="ui-tree-toggle"> at all, since there's nothing
+  // to expand. .ui-tree-row is a flex row with the toggle as its first item, so a
+  // leaf actually missing that element sits one toggle-width closer to the row's
+  // edge than a branch at the same depth -- every leaf in the tree reads as one
+  // level shallower than it really is. init() must insert a hidden placeholder so
+  // the row always reserves the same space, whether or not one was authored.
+  await ui.page(TREE, async (page) => {
+    const info = await page.evaluate(() => {
+      function leftOf(labelText) {
+        const label = Array.from(document.querySelectorAll(".ui-tree-label"))
+          .find((el) => el.textContent.trim() === labelText);
+        const row = label.closest(".ui-tree-row");
+        return {
+          checkboxLeft: row.querySelector(".ui-tree-check").getBoundingClientRect().left,
+          toggleVisibility: getComputedStyle(row.querySelector(".ui-tree-toggle")).visibility,
+        };
+      }
+      return { region: leftOf("Dar es Salaam"), apex: leftOf("Apex Gaming"), redwood: leftOf("Redwood Leisure") };
+    });
+
+    assert.equal(info.apex.toggleVisibility, "hidden", "the auto-inserted placeholder must not render as a fake expand arrow");
+    assert.equal(info.redwood.toggleVisibility, "hidden");
+    assert.equal(info.apex.checkboxLeft, info.redwood.checkboxLeft, "sibling leaves must align with each other");
+    assert.ok(
+      info.apex.checkboxLeft > info.region.checkboxLeft,
+      "a leaf must sit deeper than its own parent, not level with or shallower than it"
+    );
+  });
+});
+
 test("checking a parent row cascades the check to every descendant", async () => {
   await ui.page(TREE, async (page) => {
     const regionCheckbox = await page.evaluate(() => {

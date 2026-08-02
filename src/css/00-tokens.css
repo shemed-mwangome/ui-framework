@@ -5,7 +5,13 @@
 :root {
   color-scheme: light;
 
-  --ui-font-sans: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  /* The OS's own UI font, not a downloaded webfont -- same choice Bootstrap 4's
+     own default makes, and for the same reason: it renders instantly (no FOUT/
+     FOIT waiting on a font file), looks native on every device, and needs no
+     <link> to a font host or a bundled .woff2. A consuming app can still swap
+     this for a brand webfont by overriding the token; this is the zero-setup
+     default, not a fixed choice. */
+  --ui-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --ui-font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
 
   --ui-primary: #2563eb;

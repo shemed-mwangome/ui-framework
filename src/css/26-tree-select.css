@@ -52,7 +52,7 @@
 }
 
 .ui-tree-node.ui-collapsed > .ui-tree-row .ui-tree-toggle::before { transform: rotate(-45deg); }
-.ui-tree-node.ui-leaf > .ui-tree-row .ui-tree-toggle { visibility: hidden; }
+.ui-tree-node.ui-tree-leaf > .ui-tree-row .ui-tree-toggle { visibility: hidden; }
 
 .ui-tree-check {
   /* Bootstrap 4 globally clips every bare input[type=checkbox] to visually-hidden

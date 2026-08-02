@@ -1,5 +1,5 @@
 /*!
- * UI Framework v1.8.1
+ * UI Framework v1.8.3
  * Original dependency-free CSS/JavaScript framework.
  * Prefix: ui-
  * License: MIT
@@ -11,7 +11,13 @@
 :root {
   color-scheme: light;
 
-  --ui-font-sans: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  /* The OS's own UI font, not a downloaded webfont -- same choice Bootstrap 4's
+     own default makes, and for the same reason: it renders instantly (no FOUT/
+     FOIT waiting on a font file), looks native on every device, and needs no
+     <link> to a font host or a bundled .woff2. A consuming app can still swap
+     this for a brand webfont by overriding the token; this is the zero-setup
+     default, not a fixed choice. */
+  --ui-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --ui-font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
 
   --ui-primary: #2563eb;
@@ -3949,7 +3955,7 @@ form[data-ui-save-next].ui-dirty .ui-save-next-dirty { display: inline-flex; }
 }
 
 .ui-tree-node.ui-collapsed > .ui-tree-row .ui-tree-toggle::before { transform: rotate(-45deg); }
-.ui-tree-node.ui-leaf > .ui-tree-row .ui-tree-toggle { visibility: hidden; }
+.ui-tree-node.ui-tree-leaf > .ui-tree-row .ui-tree-toggle { visibility: hidden; }
 
 .ui-tree-check {
   /* Bootstrap 4 globally clips every bare input[type=checkbox] to visually-hidden
