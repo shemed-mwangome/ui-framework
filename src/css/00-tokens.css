@@ -11,7 +11,7 @@
      <link> to a font host or a bundled .woff2. A consuming app can still swap
      this for a brand webfont by overriding the token; this is the zero-setup
      default, not a fixed choice. */
-  --ui-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --ui-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --ui-font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
 
   --ui-primary: #2563eb;

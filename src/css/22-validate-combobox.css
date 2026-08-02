@@ -118,6 +118,26 @@
   display: block;
 }
 
+/* Same fix as .ui-multiselect-native/.ui-date-range-native: before build()
+   runs, the raw <select> is a real, painted element -- default browser size
+   (sized to its longest option, not its container) and inline instead of
+   filling the row like a real .ui-control. Clamp it to look like the compact
+   full-width control it's about to become for however long that gap lasts.
+   Keyed off .ui-combobox-native, the class build() already adds, so it needs
+   no separate readiness flag and gets out of the way once the real widget
+   takes over. */
+select[data-ui-combobox]:not(.ui-combobox-native) {
+  display: block;
+  width: 100%;
+  min-height: var(--ui-control-md);
+  padding: .55rem .75rem;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-2);
+  background: var(--ui-surface);
+  color: var(--ui-text);
+  font: inherit;
+}
+
 .ui-combobox-native {
   /* The real <select> still posts the value; it is never shown. */
   position: absolute;

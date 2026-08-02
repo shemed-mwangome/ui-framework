@@ -425,8 +425,27 @@
       return sorted;
     }
 
-    function renderPagination(totalPages) {
+    var showStatus = wrapper.getAttribute("data-ui-status") !== "false";
+
+    // "5 of 5 records" -- DataTables' classic always-on info text. Previously
+    // this table only announced it to screen readers (UI.announce, below) and
+    // showed nothing sighted users could see; with a small enough result set
+    // that pagination itself has nothing to render (totalPages <= 1), the
+    // table looked like it had silently dropped the row count entirely.
+    function renderStatus(visible, total) {
+      if (!showStatus) return;
+      var status = UI.q(".ui-table-status", pagination);
+      if (!status) {
+        status = document.createElement("span");
+        status.className = "ui-table-status";
+        pagination.appendChild(status);
+      }
+      status.textContent = UI.t("table.status", { visible: visible, total: total });
+    }
+
+    function renderPagination(visible, total, totalPages) {
       pagination.innerHTML = "";
+      renderStatus(visible, total);
       if (totalPages <= 1) return;
 
       var list = document.createElement("ul");
@@ -473,7 +492,7 @@
         syncSelectAll();
       }
       applyColumnVisibility();
-      renderPagination(totalPages);
+      renderPagination(visible, total, totalPages);
 
       UI.emit(wrapper, "ui:table:change", {
         page: currentPage,

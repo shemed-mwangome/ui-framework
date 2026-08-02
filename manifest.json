@@ -1,5 +1,5 @@
 {
-  "version": "1.8.3",
+  "version": "1.8.8",
   "prefix": "ui-",
   "cssModules": [
     "00-tokens.css",

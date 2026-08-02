@@ -245,6 +245,28 @@ test("pagination is omitted entirely when everything fits on one page", async ()
   });
 });
 
+test("a visible status line reports the row count even with nothing to paginate", async () => {
+  // Previously only announced to screen readers (UI.announce) -- a sighted user
+  // had no visible confirmation of how many records existed at all once the
+  // result set was small enough that .ui-pagination itself rendered empty.
+  await ui.page(table('data-ui-page-size="50"'), async (page) => {
+    assert.equal(await page.text(".ui-table-status"), "7 of 7 records");
+  });
+});
+
+test("the status line tracks a filtered result count, not just the total", async () => {
+  await ui.page(table('data-ui-page-size="50"'), async (page) => {
+    await page.type(".ui-table-search", "active");
+    assert.equal(await page.text(".ui-table-status"), "4 of 7 records", "4 rows are literally 'Active'");
+  });
+});
+
+test("data-ui-status=false suppresses the status line", async () => {
+  await ui.page(table('data-ui-page-size="50" data-ui-status="false"'), async (page) => {
+    assert.equal(await page.count(".ui-table-status"), 0);
+  });
+});
+
 test("toolbar and pagination stay outside a .ui-table-responsive scroll wrapper", async () => {
   // Regression: both were inserted as siblings of the raw <table>, so when
   // the table sat inside the documented .ui-table-responsive scroll wrapper

@@ -17,6 +17,39 @@ const ROOT = join(__dirname, "..");
 // Charts
 // --------------------------------------------------------------------------
 
+test("an unbuilt chart reserves its eventual height instead of collapsing to zero", async () => {
+  // Same fix as .ui-multiselect-native/.ui-date-range-native/.ui-combobox-native:
+  // build() generates the whole SVG from script and only then adds .ui-chart/
+  // .ui-chart-{type} -- until it runs, [data-ui-chart] is a plain, empty <div>
+  // with no dimensions of its own. Unlike those other fixes this isn't
+  // "wrong-looking content" for a moment, it's a card that looks empty and then
+  // suddenly grows by a chart's full height, shoving everything below it down.
+  // Inserting after the page's own initial UI.init() has already run (no
+  // MutationObserver by default) leaves these deliberately unbuilt, standing in
+  // for that same "not reached yet" window on a slow load.
+  await ui.page(`<div id="host"></div>`, async (page) => {
+    await page.evaluate(() => {
+      document.getElementById("host").innerHTML =
+        '<div data-ui-chart="bar" data-ui-values="12,18,9" id="bar"></div>' +
+        '<span data-ui-chart="sparkline" data-ui-values="12,18,9" id="spark"></span>' +
+        '<div data-ui-chart="donut" data-ui-values="1,2,3" id="donut"></div>';
+    });
+
+    const bar = await page.box("#bar");
+    assert.ok(bar.height > 100, "a bar chart must reserve real height, not collapse to 0 (got " + bar.height + "px)");
+
+    const spark = await page.box("#spark");
+    assert.ok(spark.height > 0 && spark.height < 40, "a sparkline reserves its own, smaller height (got " + spark.height + "px)");
+
+    const donut = await page.box("#donut");
+    assert.ok(donut.height > 100, "a donut chart must reserve real height too (got " + donut.height + "px)");
+
+    // And once build() reaches them, the reservation must get out of the way.
+    await page.evaluate(() => UI.init(document.getElementById("host")));
+    assert.equal(await page.count("#host svg"), 3);
+  });
+});
+
 test("bar chart renders one rect per value, scaled to the maximum", async () => {
   await ui.page(
     '<div id="c" data-ui-chart="bar" data-ui-values="10,20,40" data-ui-labels="Jan,Feb,Mar"></div>',

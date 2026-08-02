@@ -93,7 +93,8 @@
 .ui-table-sortable[aria-sort="ascending"]::after { border-top: 0; border-bottom: .35rem solid var(--ui-primary); opacity: 1; }
 .ui-table-sortable[aria-sort="descending"]::after { border-top: .35rem solid var(--ui-primary); opacity: 1; }
 
-.ui-table-pagination { margin-top: .85rem; display: flex; justify-content: flex-end; }
+.ui-table-pagination { margin-top: .85rem; display: flex; align-items: center; justify-content: flex-end; gap: 1rem; }
+.ui-table-status { margin-right: auto; color: var(--ui-muted); font-size: .82rem; }
 .ui-table-empty-row td { padding: 2.5rem; color: var(--ui-muted); text-align: center; }
 
 /* Minimal: no header fill, just a stronger rule under the header row. */
