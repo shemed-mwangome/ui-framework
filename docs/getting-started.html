@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Getting started · UI Framework</title>
-  <link rel="stylesheet" href="../dist/ui-framework.css?v=1.8.0">
-  <link rel="stylesheet" href="assets/docs.css?v=1.8.0">
+  <link rel="stylesheet" href="../dist/ui-framework.css?v=1.8.1">
+  <link rel="stylesheet" href="assets/docs.css?v=1.8.1">
 </head>
 <body class="ui-scope docs-body">
   <header class="docs-topbar">
@@ -14,7 +14,7 @@
       <a class="docs-brand" href="index.html"><span class="docs-logo">UI</span><span>UI Framework</span></a>
     </div>
     <div class="ui-d-flex ui-align-center ui-gap-2">
-      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.8.0</span>
+      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.8.1</span>
       <button class="ui-btn ui-btn-sm ui-btn-outline-secondary" type="button" data-ui-theme-toggle>Theme</button>
     </div>
   </header>
@@ -56,7 +56,7 @@
 
 <section class="docs-section" id="bundle">
   <h2 class="ui-h2">Option 1: single CSS and JavaScript</h2>
-  <p class="docs-section-intro">The easiest deployment option. Copy the complete framework folder into your static resources and include the two files. Already running Bootstrap, CoreUI, or another stylesheet? Use <span class="ui-code">ui-framework.layered.min.css</span> instead &mdash; see <a href="#layers">using alongside Bootstrap</a> below.</p>
+  <p class="docs-section-intro">The easiest deployment option. Copy the complete framework folder into your static resources and include the two files, loaded <em>after</em> Bootstrap/CoreUI/your existing stylesheet if you have one &mdash; see <a href="#layers">using alongside Bootstrap</a> below for why the plain bundle, not <span class="ui-code">ui-framework.layered.min.css</span>, is the right default even then.</p>
   <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>&lt;link rel=&quot;stylesheet&quot; href=&quot;/ui/static/ui-framework/dist/ui-framework.min.css&quot;&gt;
 
 &lt;!-- Page content --&gt;
@@ -85,14 +85,22 @@
 
   <p>With the plain bundle (<span class="ui-code">ui-framework.css</span> / <span class="ui-code">.min.css</span>), whichever stylesheet's <span class="ui-code">&lt;link&gt;</span> comes <em>last</em> in your <span class="ui-code">&lt;head&gt;</span> wins ties on those element selectors &mdash; not per component, the whole file. Load it after Bootstrap and every <span class="ui-code">&lt;table&gt;</span> on the page, including ones you never gave <span class="ui-code">ui-table</span>, can start picking up this framework's default border and padding instead of Bootstrap's. Load it before, and the reverse happens. It isn't a crash, just a silent, page-wide restyle of elements you didn't touch, and the direction depends entirely on link order.</p>
 
-  <p><span class="ui-code">ui-framework.layered.css</span> (and <span class="ui-code">.layered.min.css</span>) fixes this by wrapping every rule in <span class="ui-code">@layer ui-base, ui-components, ui-utilities</span>. The one rule that matters, straight from the CSS spec: <strong>an unlayered stylesheet always beats a layered one</strong>, regardless of link order and regardless of selector specificity. So with nothing more than:</p>
+  <p><span class="ui-code">ui-framework.layered.css</span> (and <span class="ui-code">.layered.min.css</span>) exists for that specific problem: it wraps every rule in <span class="ui-code">@layer ui-base, ui-components, ui-utilities</span>, so this framework's bare-element styles unconditionally lose to Bootstrap's regardless of link order.</p>
+
+  <div class="ui-alert ui-alert-warning">
+    <div class="ui-alert-icon">!</div>
+    <div><div class="ui-alert-title">The layered bundle is not the safe default for Bootstrap coexistence</div>
+    <p class="ui-alert-message">The rule cuts both ways, and the direction that bites is the common one: <strong>an unlayered stylesheet always beats a layered one, regardless of selector specificity</strong> &mdash; not just for the element-selector ties above, but for <em>every</em> declaration. Bootstrap 4 ships plenty of unlayered, low-specificity element resets that this framework's own component classes would normally beat under ordinary cascade rules &mdash; e.g. bare <span class="ui-code">label{display:inline-block}</span>, which every option row in <span class="ui-code">data-ui-multiselect</span> and every <span class="ui-code">.ui-checkbox</span>/<span class="ui-code">.ui-radio</span> pair is built on. Load the layered bundle, and that unlayered Bootstrap rule silently wins anyway, breaking layout that the plain bundle would have gotten right for free. Reach for the layered bundle only when you specifically need to guarantee a win against a legacy rule that's <em>more</em> specific than this framework's own selector (an ID, a long descendant chain) &mdash; not as a general-purpose "coexist with Bootstrap" default.</p></div>
+  </div>
+
+  <p>So with nothing more than:</p>
 
   <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>&lt;link rel=&quot;stylesheet&quot; href=&quot;bootstrap.css&quot;&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;dist/ui-framework.layered.min.css&quot;&gt;</code></pre></div>
 
-  <p>Bootstrap's base styles stay untouched no matter which of those two lines comes first, and this framework's component classes still work normally wherever you use them &mdash; layering doesn't turn a class off, it only settles who wins when the <em>same</em> bare element is targeted by both.</p>
+  <p>Bootstrap's base styles stay untouched no matter which of those two lines comes first. Component classes still resolve their own internal styling normally (a <span class="ui-code">.ui-btn</span> looks like a <span class="ui-code">.ui-btn</span> either way) &mdash; layering only changes who wins when the <em>same bare element</em> is targeted by both frameworks, which is a narrower guarantee than "everything from this framework works."</p>
 
-  <p>If "Bootstrap always wins" isn't what you want &mdash; say, you want one specific component from this framework to win over a Bootstrap style in one area &mdash; declare the order yourself, once, at the top of your own stylesheet:</p>
+  <p>If you do need the layered bundle for that narrower case, and still want one specific component from this framework to win over a Bootstrap style, declare the order yourself, once, at the top of your own stylesheet:</p>
 
   <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>@layer bootstrap, ui-base, ui-components, ui-utilities, app-overrides;</code></pre></div>
 
@@ -161,10 +169,10 @@
   </div>
 </section>
 
-      <footer class="docs-footer">UI Framework 1.8.0 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
+      <footer class="docs-footer">UI Framework 1.8.1 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
     </main>
   </div>
-  <script src="../dist/ui-framework.js?v=1.8.0"></script>
-  <script src="assets/docs.js?v=1.8.0"></script>
+  <script src="../dist/ui-framework.js?v=1.8.1"></script>
+  <script src="assets/docs.js?v=1.8.1"></script>
 </body>
 </html>
