@@ -304,3 +304,38 @@
 }
 .ui-sidebar-link:hover,
 .ui-sidebar-link.ui-active { background: var(--ui-primary-soft); color: var(--ui-primary); }
+
+/* Dark sidebar, the vertical-nav counterpart to .ui-navbar-dark -- a colored
+   admin shell (GLICA-style navy, or any brand's own dark surface) previously
+   needed custom CSS to override .ui-sidebar's light default, since no variant
+   existed. Reads from the same --ui-dark token .ui-navbar-dark already uses,
+   so overriding just that one token themes both consistently. */
+.ui-sidebar-dark { background: var(--ui-dark); border-right-color: transparent; }
+.ui-sidebar-dark .ui-sidebar-header { border-bottom-color: rgba(255, 255, 255, .12); color: #fff; }
+.ui-sidebar-dark .ui-sidebar-section { color: rgba(255, 255, 255, .5); }
+.ui-sidebar-dark .ui-sidebar-link { color: rgba(255, 255, 255, .82); }
+.ui-sidebar-dark .ui-sidebar-link:hover,
+.ui-sidebar-dark .ui-sidebar-link.ui-active { background: rgba(255, 255, 255, .12); color: #fff; }
+
+/* Collapsible submenu -- a .ui-sidebar-link with data-ui-collapse (the
+   framework's existing generic collapse trigger, see 02-collapse-accordion.js;
+   no new JS needed) toggling a nested .ui-sidebar-submenu. Previously the only
+   way to group related links was the non-interactive .ui-sidebar-section
+   label, so an expandable parent+children group (a "Compliance" item with its
+   own sub-pages, say) needed a hand-rolled accordion bolted onto the sidebar. */
+.ui-sidebar-link[data-ui-collapse] { justify-content: space-between; cursor: pointer; }
+.ui-sidebar-link[data-ui-collapse]::after {
+  content: "";
+  width: .4rem;
+  height: .4rem;
+  flex: none;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  opacity: .55;
+  transform: rotate(45deg);
+  transition: transform var(--ui-transition-fast);
+}
+.ui-sidebar-link[data-ui-collapse][aria-expanded="true"]::after { transform: rotate(225deg); }
+
+.ui-sidebar-submenu { margin: 0; padding: 0; list-style: none; }
+.ui-sidebar-submenu .ui-sidebar-link { padding-left: 2.2rem; font-size: .87rem; }

@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Components · UI Framework</title>
-  <link rel="stylesheet" href="../dist/ui-framework.css?v=1.6.0">
-  <link rel="stylesheet" href="assets/docs.css?v=1.6.0">
+  <link rel="stylesheet" href="../dist/ui-framework.css?v=1.7.0">
+  <link rel="stylesheet" href="assets/docs.css?v=1.7.0">
 </head>
 <body class="ui-scope docs-body">
   <header class="docs-topbar">
@@ -14,7 +14,7 @@
       <a class="docs-brand" href="index.html"><span class="docs-logo">UI</span><span>UI Framework</span></a>
     </div>
     <div class="ui-d-flex ui-align-center ui-gap-2">
-      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.6.0</span>
+      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.7.0</span>
       <button class="ui-btn ui-btn-sm ui-btn-outline-secondary" type="button" data-ui-theme-toggle>Theme</button>
     </div>
   </header>
@@ -28,7 +28,7 @@
       <a class="docs-sidebar-link" href="examples/application-form.html">Application form</a>
       <a class="docs-sidebar-link" href="examples/record-register.html">Record register</a>
       <a class="docs-sidebar-link" href="examples/login.html">Login page</a>
-      <div class="docs-sidebar-title">On this page</div><a class="docs-sidebar-link" href="#buttons">Buttons</a><a class="docs-sidebar-link" href="#typography">Typography</a><a class="docs-sidebar-link" href="#forms">Forms</a><a class="docs-sidebar-link" href="#validate">Validation</a><a class="docs-sidebar-link" href="#mask">Input masks</a><a class="docs-sidebar-link" href="#selection">Selection</a><a class="docs-sidebar-link" href="#multiselect">Multi-select</a><a class="docs-sidebar-link" href="#combobox">Combobox</a><a class="docs-sidebar-link" href="#date-range">Date range</a><a class="docs-sidebar-link" href="#date-picker">Date picker</a><a class="docs-sidebar-link" href="#upload">Upload</a><a class="docs-sidebar-link" href="#save-next">Multi-step form</a><a class="docs-sidebar-link" href="#draft">Save draft</a><a class="docs-sidebar-link" href="#alerts">Alerts</a><a class="docs-sidebar-link" href="#status">Status &amp; record header</a><a class="docs-sidebar-link" href="#cards">Cards</a><a class="docs-sidebar-link" href="#charts">Charts</a><a class="docs-sidebar-link" href="#images">Images</a><a class="docs-sidebar-link" href="#tables">Tables</a><a class="docs-sidebar-link" href="#data-table">Smart tables</a><a class="docs-sidebar-link" href="#table-tools">Table tools</a><a class="docs-sidebar-link" href="#navigation">Navigation</a><a class="docs-sidebar-link" href="#tabs">Tabs</a><a class="docs-sidebar-link" href="#dropdown">Dropdown</a><a class="docs-sidebar-link" href="#accordion">Accordion</a><a class="docs-sidebar-link" href="#modal">Modal</a><a class="docs-sidebar-link" href="#confirm">Confirm dialog</a><a class="docs-sidebar-link" href="#popover">Popover &amp; copy</a><a class="docs-sidebar-link" href="#offcanvas">Offcanvas</a><a class="docs-sidebar-link" href="#tooltips">Tooltips</a><a class="docs-sidebar-link" href="#toast">Toast</a><a class="docs-sidebar-link" href="#loaders">Loaders</a><a class="docs-sidebar-link" href="#empty-stepper">Workflow UI</a><a class="docs-sidebar-link" href="#document">Document sheet</a>
+      <div class="docs-sidebar-title">On this page</div><a class="docs-sidebar-link" href="#buttons">Buttons</a><a class="docs-sidebar-link" href="#typography">Typography</a><a class="docs-sidebar-link" href="#forms">Forms</a><a class="docs-sidebar-link" href="#validate">Validation</a><a class="docs-sidebar-link" href="#mask">Input masks</a><a class="docs-sidebar-link" href="#selection">Selection</a><a class="docs-sidebar-link" href="#multiselect">Multi-select</a><a class="docs-sidebar-link" href="#combobox">Combobox</a><a class="docs-sidebar-link" href="#date-range">Date range</a><a class="docs-sidebar-link" href="#date-picker">Date picker</a><a class="docs-sidebar-link" href="#upload">Upload</a><a class="docs-sidebar-link" href="#save-next">Multi-step form</a><a class="docs-sidebar-link" href="#draft">Save draft</a><a class="docs-sidebar-link" href="#alerts">Alerts</a><a class="docs-sidebar-link" href="#status">Status &amp; record header</a><a class="docs-sidebar-link" href="#cards">Cards</a><a class="docs-sidebar-link" href="#charts">Charts</a><a class="docs-sidebar-link" href="#images">Images</a><a class="docs-sidebar-link" href="#tables">Tables</a><a class="docs-sidebar-link" href="#data-table">Smart tables</a><a class="docs-sidebar-link" href="#table-tools">Table tools</a><a class="docs-sidebar-link" href="#navigation">Navigation</a><a class="docs-sidebar-link" href="#tabs">Tabs</a><a class="docs-sidebar-link" href="#dropdown">Dropdown</a><a class="docs-sidebar-link" href="#accordion">Accordion</a><a class="docs-sidebar-link" href="#tree">Tree select</a><a class="docs-sidebar-link" href="#modal">Modal</a><a class="docs-sidebar-link" href="#confirm">Confirm dialog</a><a class="docs-sidebar-link" href="#popover">Popover &amp; copy</a><a class="docs-sidebar-link" href="#offcanvas">Offcanvas</a><a class="docs-sidebar-link" href="#tooltips">Tooltips</a><a class="docs-sidebar-link" href="#toast">Toast</a><a class="docs-sidebar-link" href="#loaders">Loaders</a><a class="docs-sidebar-link" href="#empty-stepper">Workflow UI</a><a class="docs-sidebar-link" href="#document">Document sheet</a>
     </aside>
     <main class="docs-main">
 
@@ -680,15 +680,20 @@
   <h2 class="ui-h2">Date range</h2>
   <p class="docs-section-intro">A two-month calendar popover with quick presets, built over two native <code class="ui-code">&lt;input type="date"&gt;</code> fields so the chosen range still posts with a plain HTML form. Supports full keyboard navigation (arrow keys, Home/End, Page Up/Down, Enter), <code class="ui-code">data-min-date</code>/<code class="ui-code">data-max-date</code> bounds, <code class="ui-code">data-disabled-dates</code>, and a clear button — smart-positioned so it flips above the field and escapes clipping when opened near the edge of the screen or inside a scrollable container.</p>
 
+<p class="docs-section-intro">Like <code class="ui-code">ui-select</code>/<code class="ui-code">ui-control</code>, the trigger is <code class="ui-code">width: 100%</code> by default — it fills whatever column it's placed in, the same way a native form field would, so it lines up with its neighbours in a grid row instead of shrinking to its own content. That's the right default inside a form, but wrong for a standalone field with nothing to line up with (a toolbar filter, a compact "as of" date next to a page title) — the demo below is deliberately narrowed to <code class="ui-code">20rem</code> to show that shape; without a surrounding grid column it would otherwise stretch to the full width of whatever container it sits in, however wide that happens to be. Add <code class="ui-code">ui-date-range-inline</code> to size to content instead:</p>
+
 <div class="docs-demo">
+<div style="max-width: 20rem;">
 <div class="ui-date-range" data-ui-date-range data-ui-placeholder="Select date range">
   <input type="date" name="reportStart" aria-label="Start date">
   <input type="date" name="reportEnd" aria-label="End date">
 </div>
 </div>
+</div>
 <div class="docs-code-wrap">
   <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
-  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-date-range&quot; data-ui-date-range
+  <pre class="ui-code-block"><code>&lt;!-- default: fills its column, e.g. ui-col-md-4 alongside other fields --&gt;
+&lt;div class=&quot;ui-date-range&quot; data-ui-date-range
      data-ui-placeholder=&quot;Select date range&quot;
      data-min-date=&quot;2026-01-01&quot;
      data-max-date=&quot;2026-12-31&quot;
@@ -705,11 +710,28 @@ document.querySelector(&quot;[data-ui-date-range]&quot;)
 &lt;/script&gt;</code></pre>
 </div>
 
+<div class="docs-demo">
+<div class="ui-date-range ui-date-range-inline" data-ui-date-range data-ui-placeholder="Select date range">
+  <input type="date" name="asOfStart" aria-label="Start date">
+  <input type="date" name="asOfEnd" aria-label="End date">
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;!-- ui-date-range-inline: sizes to its own content, sits anywhere --&gt;
+&lt;div class=&quot;ui-date-range ui-date-range-inline&quot; data-ui-date-range&gt;
+  &lt;input type=&quot;date&quot; name=&quot;asOfStart&quot;&gt;
+  &lt;input type=&quot;date&quot; name=&quot;asOfEnd&quot;&gt;
+&lt;/div&gt;</code></pre>
+</div>
+
 <p class="docs-section-intro">Prefer a single form field over two? Wrap just one <code class="ui-code">&lt;input&gt;</code> instead of two &mdash; the component detects this and stores the range as one machine-parseable value (<code class="ui-code">YYYY-MM-DD - YYYY-MM-DD</code>) in it. Use <code class="ui-code">type="text"</code>, since a native <code class="ui-code">type="date"</code> input can only ever hold a single date and would silently reject the combined value.</p>
 
 <div class="docs-demo">
+<div style="max-width: 20rem;">
 <div class="ui-date-range" data-ui-date-range data-ui-placeholder="Select date range">
   <input type="text" name="reportRange">
+</div>
 </div>
 </div>
 <div class="docs-code-wrap">
@@ -740,6 +762,8 @@ document.querySelector(&quot;[data-ui-date-range]&quot;)
       <tr><td><code class="ui-code">ui-date-range-presets</code> / <code class="ui-code">ui-date-range-preset</code></td><td>The quick-range button row and each preset button.</td></tr>
       <tr><td><code class="ui-code">ui-date-range-clear</code></td><td>The clear-selection button.</td></tr>
       <tr><td><code class="ui-code">ui-open</code></td><td>Applied to the root while the calendar popover is visible.</td></tr>
+      <tr><td><code class="ui-code">ui-date-range-inline</code></td><td>Author-supplied. Sizes the trigger to its own content instead of filling its container — for a standalone field with no grid row to line up with.</td></tr>
+      <tr><td><code class="ui-code">ui-date-range-sm</code> / <code class="ui-code">ui-date-range-lg</code></td><td>Author-supplied. Matches the <code class="ui-code">ui-control-sm</code>/<code class="ui-code">-lg</code> control heights.</td></tr>
     </tbody>
   </table>
 </div>
@@ -749,11 +773,13 @@ document.querySelector(&quot;[data-ui-date-range]&quot;)
 
 <section class="docs-section" id="date-picker">
   <h2 class="ui-h2">Date picker</h2>
-  <p class="docs-section-intro">The single-date counterpart to the date range picker: one month, one native <code class="ui-code">&lt;input type="date"&gt;</code>, and simple Yesterday/Today/Tomorrow presets. Shares the same keyboard navigation, positioning, <code class="ui-code">data-min-date</code>/<code class="ui-code">data-max-date</code>/<code class="ui-code">data-disabled-dates</code>, and clear button as the range picker.</p>
+  <p class="docs-section-intro">The single-date counterpart to the date range picker: one month, one native <code class="ui-code">&lt;input type="date"&gt;</code>, and simple Yesterday/Today/Tomorrow presets. Shares the same keyboard navigation, positioning, sizing (<code class="ui-code">ui-date-range-inline</code>/<code class="ui-code">-sm</code>/<code class="ui-code">-lg</code> all apply here too), <code class="ui-code">data-min-date</code>/<code class="ui-code">data-max-date</code>/<code class="ui-code">data-disabled-dates</code>, and clear button as the range picker.</p>
 
 <div class="docs-demo">
+<div style="max-width: 20rem;">
 <div class="ui-date-picker" data-ui-date-picker data-ui-placeholder="Select date">
   <input type="date" name="reviewDate" aria-label="Review date">
+</div>
 </div>
 </div>
 <div class="docs-code-wrap">
@@ -772,7 +798,7 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 </div>
 
 <h3 class="ui-h3 ui-mt-5">Date picker classes reference</h3>
-<p class="docs-section-intro">The date picker reuses every <code class="ui-code">ui-date-range-*</code> class from the <a href="#date-range">Date range</a> reference above (single month instead of two). Only its own wrapper class differs:</p>
+<p class="docs-section-intro">The date picker reuses every <code class="ui-code">ui-date-range-*</code> class from the <a href="#date-range">Date range</a> reference above (single month instead of two, including <code class="ui-code">ui-date-range-inline</code>/<code class="ui-code">-sm</code>/<code class="ui-code">-lg</code>). Only its own wrapper class differs:</p>
 <div class="ui-table-responsive ui-shadow-1">
   <table class="ui-table ui-table-striped">
     <thead><tr><th>Class</th><th>Effect</th></tr></thead>
@@ -1085,7 +1111,7 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 </div>
 
 <h3 class="ui-h3 ui-mt-5">Badges and status dots</h3>
-<p class="docs-section-intro">Badges come in solid and <span class="ui-code">.ui-badge-soft-*</span> styles, all four colors plus <span class="ui-code">secondary</span>, and an optional <span class="ui-code">.ui-badge-pill</span>. <span class="ui-code">.ui-dot</span> is a small standalone status indicator (no label) for table rows or lists.</p>
+<p class="docs-section-intro">Badges come in solid and <span class="ui-code">.ui-badge-soft-*</span> styles, every semantic color plus <span class="ui-code">secondary</span> and <span class="ui-code">dark</span>, and an optional <span class="ui-code">.ui-badge-pill</span>. <span class="ui-code">.ui-dot</span> is a small standalone status indicator (no label) for table rows or lists.</p>
 
 <div class="docs-demo">
 <div class="ui-d-flex ui-flex-column ui-gap-3">
@@ -1096,12 +1122,15 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
     <span class="ui-badge ui-badge-danger">Danger</span>
     <span class="ui-badge ui-badge-warning">Warning</span>
     <span class="ui-badge ui-badge-info">Info</span>
+    <span class="ui-badge ui-badge-dark">Dark</span>
   </div>
   <div class="ui-d-flex ui-flex-wrap ui-gap-2 ui-align-center">
     <span class="ui-badge ui-badge-soft-primary ui-badge-pill">Soft primary</span>
+    <span class="ui-badge ui-badge-soft-secondary ui-badge-pill">Not started</span>
     <span class="ui-badge ui-badge-soft-success ui-badge-pill">Approved</span>
     <span class="ui-badge ui-badge-soft-danger ui-badge-pill">Rejected</span>
     <span class="ui-badge ui-badge-soft-warning ui-badge-pill">Pending</span>
+    <span class="ui-badge ui-badge-soft-info ui-badge-pill">In review</span>
   </div>
   <div class="ui-d-flex ui-flex-wrap ui-gap-3 ui-align-center">
     <span><span class="ui-dot ui-dot-success"></span> Online</span>
@@ -1166,8 +1195,8 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
       <tr><td><code class="ui-code">ui-alert-actions</code></td><td>Row for action buttons inside the alert.</td></tr>
       <tr><td><code class="ui-code">ui-alert-close</code></td><td>Dismiss (&times;) button; pair with <code class="ui-code">data-ui-alert-close</code>.</td></tr>
       <tr><td><code class="ui-code">ui-badge</code></td><td>Base badge/pill label.</td></tr>
-      <tr><td><code class="ui-code">ui-badge-primary</code> / <code class="ui-code">-secondary</code> / <code class="ui-code">-success</code> / <code class="ui-code">-danger</code> / <code class="ui-code">-warning</code> / <code class="ui-code">-info</code></td><td>Solid badge colors.</td></tr>
-      <tr><td><code class="ui-code">ui-badge-soft-primary</code> / <code class="ui-code">-success</code> / <code class="ui-code">-danger</code> / <code class="ui-code">-warning</code></td><td>Tinted, lower-contrast badge colors.</td></tr>
+      <tr><td><code class="ui-code">ui-badge-primary</code> / <code class="ui-code">-secondary</code> / <code class="ui-code">-success</code> / <code class="ui-code">-danger</code> / <code class="ui-code">-warning</code> / <code class="ui-code">-info</code> / <code class="ui-code">-dark</code></td><td>Solid badge colors.</td></tr>
+      <tr><td><code class="ui-code">ui-badge-soft-primary</code> / <code class="ui-code">-secondary</code> / <code class="ui-code">-success</code> / <code class="ui-code">-danger</code> / <code class="ui-code">-warning</code> / <code class="ui-code">-info</code></td><td>Tinted, lower-contrast badge colors.</td></tr>
       <tr><td><code class="ui-code">ui-badge-pill</code></td><td>Fully rounded badge shape.</td></tr>
       <tr><td><code class="ui-code">ui-dot</code></td><td>Small standalone status indicator (no label), for table rows/lists.</td></tr>
       <tr><td><code class="ui-code">ui-dot-success</code> / <code class="ui-code">-warning</code> / <code class="ui-code">-danger</code> / <code class="ui-code">-info</code></td><td>Status dot color.</td></tr>
@@ -1300,6 +1329,24 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 &lt;/ul&gt;</code></pre>
 </div>
 
+<h3 class="ui-h3 ui-mt-5">Card header accent</h3>
+<p class="docs-section-intro">A colored underline specifically beneath the header — a different flourish from the top accent stripe above, common in dashboards that want the header to read as a distinct zone. Reads from <code class="ui-code">--ui-card-header-accent</code> (defaults to the card's own border color, so a plain header is unaffected), with <code class="ui-code">.ui-card-header-accent-*</code> presets or an inline override for a one-off brand color.</p>
+
+<div class="docs-demo">
+<div class="ui-css-grid ui-css-grid-sm">
+  <div class="ui-card"><div class="ui-card-header ui-card-header-accent-primary"><h3 class="ui-card-title ui-mb-0">Accent primary</h3></div><div class="ui-card-body">Card body</div></div>
+  <div class="ui-card"><div class="ui-card-header ui-card-header-accent-warning"><h3 class="ui-card-title ui-mb-0">Accent warning</h3></div><div class="ui-card-body">Card body</div></div>
+  <div class="ui-card"><div class="ui-card-header" style="--ui-card-header-accent: #7c3aed"><h3 class="ui-card-title ui-mb-0">Custom inline color</h3></div><div class="ui-card-body">Card body</div></div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-card-header ui-card-header-accent-warning&quot;&gt;...&lt;/div&gt;
+
+&lt;!-- fully custom, no preset needed --&gt;
+&lt;div class=&quot;ui-card-header&quot; style=&quot;--ui-card-header-accent: #7c3aed&quot;&gt;...&lt;/div&gt;</code></pre>
+</div>
+
 <h3 class="ui-h3 ui-mt-5">Cards and lists classes reference</h3>
 <div class="ui-table-responsive ui-shadow-1">
   <table class="ui-table ui-table-striped">
@@ -1312,6 +1359,7 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
       <tr><td><code class="ui-code">ui-card-body</code></td><td>Padded content area.</td></tr>
       <tr><td><code class="ui-code">ui-card-title</code> / <code class="ui-code">ui-card-subtitle</code></td><td>Heading and secondary text inside the body.</td></tr>
       <tr><td><code class="ui-code">ui-card-footer</code></td><td>Separated footer strip.</td></tr>
+      <tr><td><code class="ui-code">ui-card-header-accent-primary</code> / <code class="ui-code">-success</code> / <code class="ui-code">-danger</code> / <code class="ui-code">-warning</code> / <code class="ui-code">-info</code></td><td>Colors just the header's own bottom border, via <code class="ui-code">--ui-card-header-accent</code>.</td></tr>
       <tr><td><code class="ui-code">ui-list-group</code></td><td>Bordered vertical list of items.</td></tr>
       <tr><td><code class="ui-code">ui-list-group-flush</code></td><td>Removes outer border/rounding, for dropping inside a card body.</td></tr>
       <tr><td><code class="ui-code">ui-list-group-item</code></td><td>An individual list row.</td></tr>
@@ -1918,6 +1966,75 @@ document.getElementById(&quot;bulk&quot;).addEventListener(&quot;click&quot;, fu
 &lt;/nav&gt;</code></pre>
 </div>
 
+<h3 class="ui-h3 ui-mt-5">Sidebar variants</h3>
+<p class="docs-section-intro"><code class="ui-code">.ui-sidebar</code> defaults to a light panel matching the page; add <code class="ui-code">.ui-sidebar-dark</code> for a colored admin-shell rail (reads from the same <code class="ui-code">--ui-dark</code> token <code class="ui-code">.ui-navbar-dark</code> uses, so retheming one token colors both consistently — no extra CSS needed for a branded dark shell).</p>
+
+<div class="docs-demo">
+<div class="ui-d-flex ui-gap-3 ui-flex-wrap">
+  <aside class="ui-sidebar ui-rounded-3" style="width:14rem">
+    <div class="ui-sidebar-header"><strong>Admin Portal</strong></div>
+    <ul class="ui-sidebar-nav">
+      <li class="ui-sidebar-section">Workspace</li>
+      <li><a class="ui-sidebar-link ui-active" href="#">Dashboard</a></li>
+      <li><a class="ui-sidebar-link" href="#">Compliance</a></li>
+      <li><a class="ui-sidebar-link" href="#">Accounts</a></li>
+    </ul>
+  </aside>
+  <aside class="ui-sidebar ui-sidebar-dark ui-rounded-3" style="width:14rem">
+    <div class="ui-sidebar-header"><strong>Admin Portal</strong></div>
+    <ul class="ui-sidebar-nav">
+      <li class="ui-sidebar-section">Workspace</li>
+      <li><a class="ui-sidebar-link ui-active" href="#">Dashboard</a></li>
+      <li><a class="ui-sidebar-link" href="#">Compliance</a></li>
+      <li><a class="ui-sidebar-link" href="#">Accounts</a></li>
+    </ul>
+  </aside>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;aside class=&quot;ui-sidebar ui-sidebar-dark&quot;&gt;
+  &lt;div class=&quot;ui-sidebar-header&quot;&gt;&lt;strong&gt;Admin Portal&lt;/strong&gt;&lt;/div&gt;
+  &lt;ul class=&quot;ui-sidebar-nav&quot;&gt;
+    &lt;li class=&quot;ui-sidebar-section&quot;&gt;Workspace&lt;/li&gt;
+    &lt;li&gt;&lt;a class=&quot;ui-sidebar-link ui-active&quot; href=&quot;#&quot;&gt;Dashboard&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/aside&gt;</code></pre>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">Collapsible sidebar submenu</h3>
+<p class="docs-section-intro">A <code class="ui-code">.ui-sidebar-link</code> with <code class="ui-code">data-ui-collapse</code> (the same generic collapse trigger <a href="#accordion">Accordion</a> uses — no extra JS) toggles a nested <code class="ui-code">.ui-sidebar-submenu</code>, for a parent item with its own sub-pages instead of the flat <code class="ui-code">.ui-sidebar-section</code> label above.</p>
+
+<div class="docs-demo">
+<aside class="ui-sidebar ui-sidebar-dark ui-rounded-3" style="width:15rem">
+  <div class="ui-sidebar-header"><strong>GLICA</strong></div>
+  <ul class="ui-sidebar-nav">
+    <li><a class="ui-sidebar-link" href="#">Dashboard</a></li>
+    <li>
+      <a class="ui-sidebar-link" href="#" data-ui-collapse data-ui-target="#navCompliance" aria-expanded="true">Compliance</a>
+      <ul class="ui-sidebar-submenu ui-collapse ui-show" id="navCompliance">
+        <li><a class="ui-sidebar-link ui-active" href="#">Schedule Inspection</a></li>
+        <li><a class="ui-sidebar-link" href="#">Supervision Request</a></li>
+        <li><a class="ui-sidebar-link" href="#">Draw Supervision</a></li>
+      </ul>
+    </li>
+    <li><a class="ui-sidebar-link" href="#">Reports</a></li>
+  </ul>
+</aside>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;li&gt;
+  &lt;a class=&quot;ui-sidebar-link&quot; href=&quot;#&quot;
+     data-ui-collapse data-ui-target=&quot;#navCompliance&quot; aria-expanded=&quot;true&quot;&gt;Compliance&lt;/a&gt;
+  &lt;ul class=&quot;ui-sidebar-submenu ui-collapse ui-show&quot; id=&quot;navCompliance&quot;&gt;
+    &lt;li&gt;&lt;a class=&quot;ui-sidebar-link ui-active&quot; href=&quot;#&quot;&gt;Schedule Inspection&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a class=&quot;ui-sidebar-link&quot; href=&quot;#&quot;&gt;Supervision Request&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/li&gt;
+&lt;!-- start collapsed: omit ui-show, set aria-expanded=&quot;false&quot; --&gt;</code></pre>
+</div>
+
 <h3 class="ui-h3 ui-mt-5">Navigation classes reference</h3>
 <div class="ui-table-responsive ui-shadow-1">
   <table class="ui-table ui-table-striped">
@@ -1934,8 +2051,10 @@ document.getElementById(&quot;bulk&quot;).addEventListener(&quot;click&quot;, fu
       <tr><td><code class="ui-code">ui-breadcrumb</code> / <code class="ui-code">ui-breadcrumb-item</code></td><td>Breadcrumb trail and each of its steps.</td></tr>
       <tr><td><code class="ui-code">ui-pagination</code> / <code class="ui-code">ui-page-link</code></td><td>Pagination list and each page/prev/next link.</td></tr>
       <tr><td><code class="ui-code">ui-sidebar</code></td><td>Side navigation panel.</td></tr>
+      <tr><td><code class="ui-code">ui-sidebar-dark</code></td><td>Colored panel background (reads <code class="ui-code">--ui-dark</code>); links/section labels auto-adjust to a light color.</td></tr>
       <tr><td><code class="ui-code">ui-sidebar-header</code> / <code class="ui-code">ui-sidebar-section</code></td><td>Panel title, and a labeled group of links within it.</td></tr>
       <tr><td><code class="ui-code">ui-sidebar-nav</code> / <code class="ui-code">ui-sidebar-link</code></td><td>The link list, and each link.</td></tr>
+      <tr><td><code class="ui-code">ui-sidebar-submenu</code></td><td>Nested link list under a <code class="ui-code">ui-sidebar-link[data-ui-collapse]</code> parent.</td></tr>
     </tbody>
   </table>
 </div>
@@ -2124,6 +2243,168 @@ document.getElementById(&quot;bulk&quot;).addEventListener(&quot;click&quot;, fu
       <tr><td><code class="ui-code">ui-accordion-panel</code></td><td>The collapsible content pane.</td></tr>
       <tr><td><code class="ui-code">ui-collapse</code></td><td>Generic collapsible-content base (animates height); also usable standalone.</td></tr>
       <tr><td><code class="ui-code">ui-show</code></td><td>Marks a <code class="ui-code">.ui-collapse</code> panel as expanded.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="tree">
+  <h2 class="ui-h2">Tree select</h2>
+  <p class="docs-section-intro">A checkbox hierarchy for bulk-select trees — region &rarr; supplier &rarr; site, category &rarr; team &rarr; member, anywhere selecting a whole branch at once needs to be as easy as selecting one leaf. Checking a row cascades the check to every descendant; checking or unchecking a descendant rolls back up to a tri-state (checked / unchecked / indeterminate) ancestor checkbox, the same way a native file-tree or permissions UI behaves. Expand/collapse is independent of selection — click anywhere on a row to toggle it, or its dedicated arrow. A disabled leaf (something already actioned, or not eligible) is excluded from both the cascade and its ancestors' tri-state, so it can never get silently swept into a "select all."</p>
+
+<div class="docs-demo">
+<div class="ui-tree" data-ui-tree id="treeDemo">
+  <div class="ui-tree-node ui-tree-header">
+    <div class="ui-tree-row">
+      <button type="button" class="ui-tree-toggle" aria-expanded="true" aria-label="Toggle Northern region"></button>
+      <input type="checkbox" class="ui-tree-check">
+      <span class="ui-tree-label">Northern region</span>
+      <span class="ui-tree-meta"><span class="ui-tree-count">3 sites</span></span>
+    </div>
+    <div class="ui-tree-children">
+      <div class="ui-tree-node">
+        <div class="ui-tree-row">
+          <button type="button" class="ui-tree-toggle" aria-expanded="true" aria-label="Toggle Apex Supplies"></button>
+          <input type="checkbox" class="ui-tree-check">
+          <span class="ui-tree-label">Apex Supplies</span>
+        </div>
+        <div class="ui-tree-children">
+          <div class="ui-tree-node" data-ui-tree-value="apex-warehouse">
+            <div class="ui-tree-row">
+              <input type="checkbox" class="ui-tree-check">
+              <span class="ui-tree-label">Warehouse A</span>
+            </div>
+          </div>
+          <div class="ui-tree-node" data-ui-tree-value="apex-retail">
+            <div class="ui-tree-row">
+              <input type="checkbox" class="ui-tree-check" disabled title="Already scheduled this quarter">
+              <span class="ui-tree-label">Retail counter <span class="ui-text-muted ui-fw-normal">(already scheduled)</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ui-tree-node" data-ui-tree-value="redwood-depot">
+        <div class="ui-tree-row">
+          <input type="checkbox" class="ui-tree-check">
+          <span class="ui-tree-label">Redwood Depot</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-tree&quot; data-ui-tree id=&quot;treeDemo&quot;&gt;
+  &lt;div class=&quot;ui-tree-node ui-tree-header&quot;&gt;             &lt;!-- ui-tree-header is optional --&gt;
+    &lt;div class=&quot;ui-tree-row&quot;&gt;
+      &lt;button type=&quot;button&quot; class=&quot;ui-tree-toggle&quot; aria-expanded=&quot;true&quot;&gt;&lt;/button&gt;
+      &lt;input type=&quot;checkbox&quot; class=&quot;ui-tree-check&quot;&gt;
+      &lt;span class=&quot;ui-tree-label&quot;&gt;Northern region&lt;/span&gt;
+      &lt;span class=&quot;ui-tree-meta&quot;&gt;&lt;span class=&quot;ui-tree-count&quot;&gt;3 sites&lt;/span&gt;&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;ui-tree-children&quot;&gt;
+      &lt;div class=&quot;ui-tree-node&quot;&gt;                         &lt;!-- has children -&gt; a branch --&gt;
+        &lt;div class=&quot;ui-tree-row&quot;&gt;
+          &lt;button type=&quot;button&quot; class=&quot;ui-tree-toggle&quot; aria-expanded=&quot;true&quot;&gt;&lt;/button&gt;
+          &lt;input type=&quot;checkbox&quot; class=&quot;ui-tree-check&quot;&gt;
+          &lt;span class=&quot;ui-tree-label&quot;&gt;Apex Supplies&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;ui-tree-children&quot;&gt;
+          &lt;div class=&quot;ui-tree-node&quot; data-ui-tree-value=&quot;apex-warehouse&quot;&gt;   &lt;!-- no children -&gt; a leaf --&gt;
+            &lt;div class=&quot;ui-tree-row&quot;&gt;
+              &lt;input type=&quot;checkbox&quot; class=&quot;ui-tree-check&quot;&gt;
+              &lt;span class=&quot;ui-tree-label&quot;&gt;Warehouse A&lt;/span&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;ui-tree-node&quot; data-ui-tree-value=&quot;apex-retail&quot;&gt;
+            &lt;div class=&quot;ui-tree-row&quot;&gt;
+              &lt;input type=&quot;checkbox&quot; class=&quot;ui-tree-check&quot; disabled&gt;        &lt;!-- excluded from cascade + parent tri-state --&gt;
+              &lt;span class=&quot;ui-tree-label&quot;&gt;Retail counter&lt;/span&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;ui-tree-node&quot; data-ui-tree-value=&quot;redwood-depot&quot;&gt;
+        &lt;div class=&quot;ui-tree-row&quot;&gt;
+          &lt;input type=&quot;checkbox&quot; class=&quot;ui-tree-check&quot;&gt;
+          &lt;span class=&quot;ui-tree-label&quot;&gt;Redwood Depot&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+document.getElementById(&quot;treeDemo&quot;).addEventListener(&quot;ui:tree:change&quot;, function (event) {
+  console.log(event.detail.values);          // e.g. [&quot;apex-warehouse&quot;, &quot;redwood-depot&quot;]
+});
+// Read the current selection at any time, not just on change:
+UI.treeSelect.selected(&quot;#treeDemo&quot;);</code></pre>
+</div>
+
+<p class="docs-section-intro">A leaf needs no <code class="ui-code">.ui-tree-toggle</code> button and no <code class="ui-code">.ui-tree-children</code> — the module detects "no children" at init and marks the node <code class="ui-code">.ui-tree-leaf</code> itself, hiding any toggle it does find and skipping it in cascade/rollup maths. <code class="ui-code">data-ui-tree-value</code> is what <code class="ui-code">UI.treeSelect.selected()</code> returns for a checked leaf; omit it and the leaf's own checkbox <code class="ui-code">value</code> attribute is used instead.</p>
+
+<h3 class="ui-h3 ui-mt-5">Styling the top of a branch</h3>
+<p class="docs-section-intro">Add <code class="ui-code">ui-tree-header</code> to a node for a standout row (defaults to <code class="ui-code">--ui-dark</code>, as in the demo above). Layer on a colour preset, or override the two variables directly for a fully custom one-off colour:</p>
+<div class="docs-demo">
+<div class="ui-tree" data-ui-tree>
+  <div class="ui-tree-node ui-tree-header ui-tree-header-primary">
+    <div class="ui-tree-row"><input type="checkbox" class="ui-tree-check"><span class="ui-tree-label">ui-tree-header-primary</span></div>
+  </div>
+  <div class="ui-tree-node ui-tree-header ui-tree-header-success">
+    <div class="ui-tree-row"><input type="checkbox" class="ui-tree-check"><span class="ui-tree-label">ui-tree-header-success</span></div>
+  </div>
+  <div class="ui-tree-node ui-tree-header ui-tree-header-warning">
+    <div class="ui-tree-row"><input type="checkbox" class="ui-tree-check"><span class="ui-tree-label">ui-tree-header-warning</span></div>
+  </div>
+  <div class="ui-tree-node ui-tree-header ui-tree-header-danger">
+    <div class="ui-tree-row"><input type="checkbox" class="ui-tree-check"><span class="ui-tree-label">ui-tree-header-danger</span></div>
+  </div>
+  <div class="ui-tree-node ui-tree-header" style="--ui-tree-header-bg: #7c3aed; --ui-tree-header-color: #fff;">
+    <div class="ui-tree-row"><input type="checkbox" class="ui-tree-check"><span class="ui-tree-label">Custom inline colour</span></div>
+  </div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-tree-node ui-tree-header ui-tree-header-primary&quot;&gt;...&lt;/div&gt;
+
+&lt;!-- fully custom, no preset needed --&gt;
+&lt;div class=&quot;ui-tree-node ui-tree-header&quot;
+     style=&quot;--ui-tree-header-bg: #7c3aed; --ui-tree-header-color: #fff;&quot;&gt;...&lt;/div&gt;</code></pre>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">Tree select classes reference</h3>
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>Class / attribute</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">ui-tree</code></td><td>Root wrapper; add <code class="ui-code">data-ui-tree</code> to enhance.</td></tr>
+      <tr><td><code class="ui-code">ui-tree-node</code></td><td>One row plus its (optional) children. A node with no <code class="ui-code">.ui-tree-children</code> is auto-detected as a leaf.</td></tr>
+      <tr><td><code class="ui-code">ui-tree-row</code></td><td>The visible row: toggle, checkbox, label, meta.</td></tr>
+      <tr><td><code class="ui-code">ui-tree-toggle</code></td><td>Expand/collapse button. Optional on a leaf — hidden automatically if present.</td></tr>
+      <tr><td><code class="ui-code">ui-tree-check</code></td><td>The row's checkbox. A <code class="ui-code">disabled</code> one is skipped by cascade and by its ancestors' tri-state.</td></tr>
+      <tr><td><code class="ui-code">ui-tree-label</code> / <code class="ui-code">ui-tree-meta</code></td><td>Row title, and trailing content (badges, counts) that doesn't toggle the row when clicked.</td></tr>
+      <tr><td><code class="ui-code">ui-tree-count</code></td><td>A small pill for meta content, e.g. a child count.</td></tr>
+      <tr><td><code class="ui-code">ui-tree-children</code></td><td>Wraps a node's child <code class="ui-code">.ui-tree-node</code>s.</td></tr>
+      <tr><td><code class="ui-code">data-ui-tree-value</code></td><td>On a leaf <code class="ui-code">.ui-tree-node</code>; what <code class="ui-code">UI.treeSelect.selected()</code> returns for it when checked.</td></tr>
+      <tr><td><code class="ui-code">ui-collapsed</code></td><td>Applied automatically to a collapsed node.</td></tr>
+      <tr><td><code class="ui-code">ui-tree-header</code></td><td>Author-supplied. Standout row styling, defaults to <code class="ui-code">--ui-dark</code>.</td></tr>
+      <tr><td><code class="ui-code">ui-tree-header-primary</code> / <code class="ui-code">-success</code> / <code class="ui-code">-warning</code> / <code class="ui-code">-danger</code> / <code class="ui-code">-info</code></td><td>Colour presets, used together with <code class="ui-code">ui-tree-header</code>.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">JavaScript API</h3>
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>API</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">UI.treeSelect.selected(target)</code></td><td>Returns the checked leaves' <code class="ui-code">data-ui-tree-value</code>s for a tree (element or selector).</td></tr>
+      <tr><td><code class="ui-code">ui:tree:change</code></td><td>Fires on the <code class="ui-code">.ui-tree</code> root whenever a checkbox changes; <code class="ui-code">event.detail.values</code> is the same array <code class="ui-code">selected()</code> would return.</td></tr>
     </tbody>
   </table>
 </div>
@@ -2657,10 +2938,10 @@ document.getElementById(&quot;bulk&quot;).addEventListener(&quot;click&quot;, fu
 
 
 
-      <footer class="docs-footer">UI Framework 1.6.0 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
+      <footer class="docs-footer">UI Framework 1.7.0 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
     </main>
   </div>
-  <script src="../dist/ui-framework.js?v=1.6.0"></script>
-  <script src="assets/docs.js?v=1.6.0"></script>
+  <script src="../dist/ui-framework.js?v=1.7.0"></script>
+  <script src="assets/docs.js?v=1.7.0"></script>
 </body>
 </html>

@@ -92,11 +92,14 @@
 .ui-badge-danger { --ui-badge-bg: var(--ui-danger); }
 .ui-badge-warning { --ui-badge-bg: var(--ui-warning); --ui-badge-color: #1f2937; }
 .ui-badge-info { --ui-badge-bg: var(--ui-info); }
+.ui-badge-dark { --ui-badge-bg: var(--ui-dark); }
 
 .ui-badge-soft-primary { --ui-badge-bg: var(--ui-primary-soft); --ui-badge-color: var(--ui-primary); }
+.ui-badge-soft-secondary { --ui-badge-bg: var(--ui-surface-muted); --ui-badge-color: var(--ui-muted); }
 .ui-badge-soft-success { --ui-badge-bg: var(--ui-success-soft); --ui-badge-color: var(--ui-success); }
 .ui-badge-soft-danger { --ui-badge-bg: var(--ui-danger-soft); --ui-badge-color: var(--ui-danger); }
 .ui-badge-soft-warning { --ui-badge-bg: var(--ui-warning-soft); --ui-badge-color: #9a6700; }
+.ui-badge-soft-info { --ui-badge-bg: var(--ui-info-soft); --ui-badge-color: var(--ui-info); }
 
 .ui-dot {
   width: .55rem;

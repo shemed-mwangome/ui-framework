@@ -47,14 +47,14 @@
 }
 
 .ui-status-under-review {
-  color: #b45309;
+  color: var(--ui-status-under-review-text);
   background: var(--ui-warning-soft);
   border-color: color-mix(in srgb, var(--ui-warning) 35%, transparent);
 }
 
 .ui-status-approved,
 .ui-status-active {
-  color: #15803d;
+  color: var(--ui-status-active-text);
   background: var(--ui-success-soft);
   border-color: color-mix(in srgb, var(--ui-success) 30%, transparent);
 }
@@ -85,16 +85,15 @@
 }
 
 .ui-status-suspended {
-  color: #9a3412;
-  background: color-mix(in srgb, #f97316 14%, transparent);
-  border-color: color-mix(in srgb, #f97316 40%, transparent);
+  color: var(--ui-status-suspended-text);
+  background: color-mix(in srgb, var(--ui-status-suspended-accent) 14%, transparent);
+  border-color: color-mix(in srgb, var(--ui-status-suspended-accent) 40%, transparent);
   border-style: dashed;
 }
 
-[data-ui-theme="dark"] .ui-status-under-review { color: #fbbf24; }
-[data-ui-theme="dark"] .ui-status-suspended { color: #fb923c; }
-[data-ui-theme="dark"] .ui-status-approved,
-[data-ui-theme="dark"] .ui-status-active { color: #4ade80; }
+/* No per-theme overrides needed here -- the tokens above already carry
+   different light/dark values (see 00-tokens.css), so these three rules
+   repaint automatically under [data-ui-theme="dark"]. */
 
 /* ------------------------------------------------------- Record header */
 

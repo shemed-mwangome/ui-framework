@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Dashboard · UI Framework Example</title>
-  <link rel="stylesheet" href="../../dist/ui-framework.css?v=1.6.0">
+  <link rel="stylesheet" href="../../dist/ui-framework.css?v=1.7.0">
   <style>
 @media (max-width: 52rem) {
   .ui-sidebar { display: none; }
@@ -69,7 +69,7 @@
             <div class="ui-card-header ui-d-flex ui-flex-wrap ui-justify-between ui-align-center ui-gap-2">
               <div><div class="ui-card-title">Recent reviews</div><div class="ui-card-subtitle">Latest scheduled compliance activity</div></div>
               <div class="ui-d-flex ui-gap-2">
-                <div class="ui-date-range" data-ui-date-range data-ui-placeholder="Filter by date">
+                <div class="ui-date-range ui-date-range-inline" data-ui-date-range data-ui-placeholder="Filter by date">
                   <input type="date" name="filterStart" aria-label="Start date">
                   <input type="date" name="filterEnd" aria-label="End date">
                 </div>
@@ -160,6 +160,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
-<script src="../../dist/ui-framework.js?v=1.6.0"></script>
+<script src="../../dist/ui-framework.js?v=1.7.0"></script>
 </body>
 </html>

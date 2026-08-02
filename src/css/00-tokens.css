@@ -37,6 +37,16 @@
   --ui-warning-soft: #fffbeb;
   --ui-info-soft: #ecfeff;
 
+  /* Status lexicon text -- readable-on-soft-background variants of the base
+     success/warning colours, plus suspended's own burnt-orange accent (kept
+     out of --ui-warning so it doesn't collide with under-review's amber).
+     Broken out as their own tokens so a full reskin (e.g. an app with a very
+     different --ui-warning hue) can retune contrast without patching CSS. */
+  --ui-status-under-review-text: #b45309;
+  --ui-status-active-text: #15803d;
+  --ui-status-suspended-text: #9a3412;
+  --ui-status-suspended-accent: #f97316;
+
   --ui-radius-0: 0;
   --ui-radius-1: .25rem;
   --ui-radius-2: .375rem;
@@ -106,6 +116,11 @@
   --ui-danger-soft: rgba(220, 38, 38, .14);
   --ui-warning-soft: rgba(245, 158, 11, .14);
   --ui-info-soft: rgba(8, 145, 178, .14);
+
+  --ui-status-under-review-text: #fbbf24;
+  --ui-status-active-text: #4ade80;
+  --ui-status-suspended-text: #fb923c;
+  --ui-status-suspended-accent: #fb923c;
 
   --ui-shadow-1: 0 1px 2px rgba(0, 0, 0, .20);
   --ui-shadow-2: 0 4px 12px rgba(0, 0, 0, .28);

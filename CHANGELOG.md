@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.7.0 — 2026-08-02
+
+Found while rebuilding a real regulatory-admin screen (a filtered, bulk-schedulable region → operator → premises hierarchy) directly on the framework: the date range/picker didn't behave like a form control when dropped into a foreign grid, and there was no first-class way to build a checkbox tree at all.
+
+### Fixed
+
+- **Date range and date picker:** `.ui-date-range` was `display: inline-block` with no explicit width, so it sized to its own content instead of filling its column — harmless in the framework's own grid, where sibling utility classes size children for you, but it silently refused to stretch to match `.ui-select`/`.ui-control` when dropped into a foreign grid (e.g. Bootstrap's `.col-md-4`), the way every other form field in that row did. Both now render `display: block; width: 100%`, matching `.ui-control`/`.ui-select` sizing exactly, plus new `.ui-date-range-sm`/`.ui-date-range-lg` modifiers for the same two control-height variants those already have. That default doesn't fit every placement — a standalone toolbar filter or a compact "as of" date has no grid row to line up with — so a new `.ui-date-range-inline` modifier opts back out to content width. The docs demo for both components was itself sitting in an unconstrained `.docs-demo` div, so once the trigger correctly started filling its container it stretched across the full page width there and made the popover look mismatched against it (reported as the popover "exceeding" the field) — the demo markup now shows the default at a realistic field width alongside the new inline example, matching the pattern the multi-select demo already used
+
+### Added
+
+- **Tree select (`data-ui-tree`):** a hierarchical checkbox list — region → operator → premises, category → team → member, anywhere a bulk-select tree is needed — where checking a parent row cascades to every descendant, and checking or unchecking a descendant rolls back up to a tri-state (checked/unchecked/indeterminate) ancestor checkbox. Expand/collapse is independent of selection. `UI.treeSelect.selected(target)` returns the checked leaves' `data-ui-tree-value`s. An opt-in `.ui-tree-header` modifier styles a top-level row (e.g. a region bar) to stand out from lighter nested rows — defaults to `--ui-dark`, or add `.ui-tree-header-primary`/`-success`/`-warning`/`-danger`/`-info` for a different preset, or override `--ui-tree-header-bg`/`--ui-tree-header-color` inline for a fully custom one-off colour
+- **Status lexicon theming:** the under-review/active/suspended pills' text colours and suspended's accent were hardcoded hex, independent of `--ui-warning`/`--ui-success`. Broken out into `--ui-status-under-review-text`, `--ui-status-active-text`, `--ui-status-suspended-text` and `--ui-status-suspended-accent` (defaults unchanged) so a full brand reskin can retune contrast from tokens alone instead of patching `25-status-document.css`. Dark theme now gets its values from the same tokens rather than separate `[data-ui-theme="dark"] .ui-status-*` rules
+
+A second pass rebuilding that same screen's app shell (navbar + sidebar + status badges) entirely on the framework, to find what still forced a page to write its own CSS instead of just theming a component:
+
+- **Sidebar (`.ui-sidebar-dark`):** `.ui-navbar` had a `-dark`/`-primary` variant; `.ui-sidebar` had neither, defaulting to a light panel no matter what. A colored admin-shell rail (the common case, not the exception) needed a hand-written override. Reads the same `--ui-dark` token `.ui-navbar-dark` already uses, so retheming one token colors both
+- **Sidebar submenu (`.ui-sidebar-submenu`):** the only way to group related links was the non-interactive `.ui-sidebar-section` label — an expandable parent with its own sub-pages had no supported shape at all. A `.ui-sidebar-link` with `data-ui-collapse` (the same generic trigger `.ui-accordion` already used internally, now documented as public API in its own right) toggles a nested `.ui-sidebar-submenu`; no new JS needed, just CSS for the chevron and indentation. The generic collapse trigger itself had no test coverage anywhere in the suite despite backing the accordion — added
+- **Card header accent (`--ui-card-header-accent`):** `.ui-card` already had a themeable top accent stripe (`.ui-card-border-*`), but a colored underline specifically beneath the header — a different, equally common flourish — had no equivalent and needed a page-level `border-bottom` override. Now a real custom property with `.ui-card-header-accent-primary`/`-success`/`-danger`/`-warning`/`-info` presets, defaulting to the card's own border so a plain header is unaffected
+- **Badges:** `.ui-badge-soft-*` only covered primary/success/danger/warning, with plain `secondary`/`info` stuck solid-only and no `dark` at all — inconsistent with every other color family in the framework. Added `.ui-badge-soft-secondary`, `.ui-badge-soft-info`, `.ui-badge-dark`
+
 ## 1.6.0 — 2026-07-29
 
 ### Fixed
