@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.8.3 — 2026-08-02
+
+### Changed
+
+- **`--ui-font-sans` defaults to the OS's own UI font instead of "Inter".** `Inter` is a webfont this framework has never bundled or loaded — every consumer got the fallback chain (`"Segoe UI", Roboto, Helvetica, Arial`) regardless, which starts one link short of Bootstrap 4's own native-font-stack default (`-apple-system, BlinkMacSystemFont` first). Dropped into a Bootstrap app, that one-link gap was a visible font mismatch inside `.ui-scope` versus the surrounding chrome on Mac/Chrome, fixable only with a per-app token override. Now defaults to the same native stack Bootstrap uses: renders instantly (no font file to wait on), looks correct on every OS out of the box, and needs no override to coexist with a Bootstrap shell. Still just a token — override `--ui-font-sans` for a brand webfont same as before
+
+## 1.8.2 — 2026-08-02
+
+Rendering that same tree in the app it was built for surfaced two more bugs, both invisible until a leaf actually needed to line up next to a branch.
+
+### Fixed
+
+- **A leaf sat one indent level shallower than it actually was.** `.ui-tree-row` is a flex row with the toggle button as its first item — but the documented (and, until now, only demonstrated) way to author a leaf omits that button entirely, since there's nothing to expand. A leaf missing the element outright sits roughly one toggle-width closer to the row's edge than a branch at the same depth, so every leaf in a tree read as shallower than its actual nesting — most visibly, a leaf sibling of a branch (e.g. a standalone site next to a multi-site company under the same region) landed at its *parent's* indent instead of its own. `initNodeStates()` now inserts a hidden, unfocusable placeholder toggle for any leaf that doesn't already have one, so every row at a given depth reserves identical space regardless of how it was authored
+- **The CSS that's supposed to hide a leaf's toggle checked the wrong class.** `.ui-tree-node.ui-leaf > .ui-tree-row .ui-tree-toggle { visibility: hidden; }` has never matched anything — the class the JS actually applies is `.ui-tree-leaf`, not `.ui-leaf`. Silent as long as leaves never had a toggle element at all (nothing to hide), but exposed the moment the fix above started giving every leaf a placeholder: it rendered as a small stray arrow on every leaf row. Selector corrected
+
 ## 1.8.1 — 2026-08-02
 
 Same regulatory-admin screen again, deployed for real this time: the layered CSS bundle turned out to be actively unsafe for Bootstrap 4 coexistence, and one more component was missing the defensive CSS that lets it survive Bootstrap's global form-control resets.
