@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.8.0 — 2026-08-02
+
+Same regulatory-admin screen as 1.7.0's tree-select, one layer deeper: wiring the tree and its sibling filters up to *live* data (an AJAX-driven region → operator cascade, a Reset button) surfaced two components that only supported a one-shot build.
+
+### Added
+
+- **`UI.multiselect.refresh(select)`:** `build()` is a one-shot init guarded by `data-ui-ready` — calling it again on an already-built `<select>` silently no-ops, so a multiselect whose options are replaced after init (e.g. an operator field repopulated by AJAX once its region/department changes) never picked up the new list. `refresh()` unwraps back to the plain `<select>` and rebuilds the widget from its current `<option>`s
+- **`UI.dateRange.clear(container)`** and **`UI.datePicker.clear(container)`:** clearing either widget previously required clicking its own in-panel "Clear" button — there was no way to reset one from outside, which a filter form's Reset button needs. Both accept a selector or element and mirror the existing `.close()` methods' shape
+
 ## 1.7.0 — 2026-08-02
 
 Found while rebuilding a real regulatory-admin screen (a filtered, bulk-schedulable region → operator → premises hierarchy) directly on the framework: the date range/picker didn't behave like a form control when dropped into a foreign grid, and there was no first-class way to build a checkbox tree at all.

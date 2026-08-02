@@ -188,6 +188,7 @@
     container.appendChild(panel);
 
     var state = new State(container);
+    container._uiDatePickerState = state;
     render(state);
 
     trigger.addEventListener("click", function () {
@@ -282,6 +283,13 @@
     event.stopImmediatePropagation();
   });
 
-  UI.datePicker = { close: closeAll };
+  // Resets a value (e.g. a filter form's Reset button) without a matching
+  // "click the day again" affordance in the UI itself, so it needs a public hook.
+  function clear(container) {
+    var target = typeof container === "string" ? UI.q(container) : container;
+    if (target && target._uiDatePickerState) clearValue(target._uiDatePickerState);
+  }
+
+  UI.datePicker = { close: closeAll, clear: clear };
   UI.register(init);
 })(window, document);
