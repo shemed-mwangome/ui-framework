@@ -305,6 +305,7 @@
     container.appendChild(panel);
 
     var state = new State(container);
+    container._uiDateRangeState = state;
     render(state);
 
     trigger.addEventListener("click", function () {
@@ -423,6 +424,13 @@
     event.stopImmediatePropagation();
   });
 
-  UI.dateRange = { close: closeAll };
+  // Resets a range (e.g. a filter form's Reset button) without a matching
+  // "click every cell" affordance in the UI itself, so it needs a public hook.
+  function clear(container) {
+    var target = typeof container === "string" ? UI.q(container) : container;
+    if (target && target._uiDateRangeState) clearRange(target._uiDateRangeState);
+  }
+
+  UI.dateRange = { close: closeAll, clear: clear };
   UI.register(init);
 })(window, document);

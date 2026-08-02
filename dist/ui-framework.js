@@ -1,5 +1,5 @@
 /*!
- * UI Framework v1.7.0
+ * UI Framework v1.8.0
  * Dependency-free JavaScript bundle.
  * License: MIT
  */
@@ -8,7 +8,7 @@
 
   var UI = window.UI || {};
 
-  UI.version = "1.7.0";
+  UI.version = "1.8.0";
   UI._initializers = UI._initializers || [];
 
   UI.q = function (selector, root) {
@@ -850,7 +850,23 @@
     event.stopImmediatePropagation();
   });
 
-  UI.multiselect = { build: build };
+  // build() is a one-shot init guarded by data-ui-ready, so it silently no-ops on an
+  // already-built select. Cascading fields (e.g. an operator list repopulated after
+  // its region changes) need to rebuild the visible widget from a fresh option list --
+  // refresh() unwraps back to the plain <select> and re-runs build() against it.
+  function refresh(select) {
+    if (!select) return;
+    var wrapper = select.closest(".ui-multiselect");
+    if (wrapper) {
+      wrapper.parentNode.insertBefore(select, wrapper);
+      wrapper.remove();
+    }
+    delete select.dataset.uiReady;
+    select.classList.remove("ui-multiselect-native");
+    build(select);
+  }
+
+  UI.multiselect = { build: build, refresh: refresh };
   UI.register(init);
 })(window, document);
 
@@ -1368,6 +1384,7 @@
     container.appendChild(panel);
 
     var state = new State(container);
+    container._uiDateRangeState = state;
     render(state);
 
     trigger.addEventListener("click", function () {
@@ -1486,7 +1503,14 @@
     event.stopImmediatePropagation();
   });
 
-  UI.dateRange = { close: closeAll };
+  // Resets a range (e.g. a filter form's Reset button) without a matching
+  // "click every cell" affordance in the UI itself, so it needs a public hook.
+  function clear(container) {
+    var target = typeof container === "string" ? UI.q(container) : container;
+    if (target && target._uiDateRangeState) clearRange(target._uiDateRangeState);
+  }
+
+  UI.dateRange = { close: closeAll, clear: clear };
   UI.register(init);
 })(window, document);
 
@@ -1681,6 +1705,7 @@
     container.appendChild(panel);
 
     var state = new State(container);
+    container._uiDatePickerState = state;
     render(state);
 
     trigger.addEventListener("click", function () {
@@ -1775,7 +1800,14 @@
     event.stopImmediatePropagation();
   });
 
-  UI.datePicker = { close: closeAll };
+  // Resets a value (e.g. a filter form's Reset button) without a matching
+  // "click the day again" affordance in the UI itself, so it needs a public hook.
+  function clear(container) {
+    var target = typeof container === "string" ? UI.q(container) : container;
+    if (target && target._uiDatePickerState) clearValue(target._uiDatePickerState);
+  }
+
+  UI.datePicker = { close: closeAll, clear: clear };
   UI.register(init);
 })(window, document);
 

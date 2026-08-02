@@ -194,6 +194,22 @@
     event.stopImmediatePropagation();
   });
 
-  UI.multiselect = { build: build };
+  // build() is a one-shot init guarded by data-ui-ready, so it silently no-ops on an
+  // already-built select. Cascading fields (e.g. an operator list repopulated after
+  // its region changes) need to rebuild the visible widget from a fresh option list --
+  // refresh() unwraps back to the plain <select> and re-runs build() against it.
+  function refresh(select) {
+    if (!select) return;
+    var wrapper = select.closest(".ui-multiselect");
+    if (wrapper) {
+      wrapper.parentNode.insertBefore(select, wrapper);
+      wrapper.remove();
+    }
+    delete select.dataset.uiReady;
+    select.classList.remove("ui-multiselect-native");
+    build(select);
+  }
+
+  UI.multiselect = { build: build, refresh: refresh };
   UI.register(init);
 })(window, document);

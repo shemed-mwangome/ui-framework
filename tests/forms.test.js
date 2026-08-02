@@ -286,6 +286,53 @@ test(".ui-date-range-inline opts back out to content width for standalone placem
   );
 });
 
+test("UI.dateRange.clear() resets a filled range back to its placeholder", async () => {
+  // A filter form's Reset button has no "click every day cell again" affordance,
+  // so clearing has to be driven from outside the widget.
+  await ui.page(
+    `<div class="ui-date-range" id="range" data-ui-date-range data-ui-placeholder="Select date range">
+       <input type="date" name="start" value="2026-06-01">
+       <input type="date" name="end" value="2026-06-10">
+     </div>`,
+    async (page) => {
+      const filledText = await page.evaluate(() => {
+        var DU = UI.dateUtils;
+        return DU.formatDisplayDate(DU.parseISODate("2026-06-01")) + " – " +
+          DU.formatDisplayDate(DU.parseISODate("2026-06-10"));
+      });
+      assert.equal(await page.text("#range .ui-date-range-value"), filledText);
+
+      await page.evaluate(() => UI.dateRange.clear("#range"));
+
+      assert.equal(await page.text("#range .ui-date-range-value"), "Select date range");
+      const values = await page.evaluate(() => ({
+        start: document.querySelector('#range input[name="start"]').value,
+        end: document.querySelector('#range input[name="end"]').value,
+      }));
+      assert.deepEqual(values, { start: "", end: "" });
+    }
+  );
+});
+
+test("UI.datePicker.clear() resets a filled value back to its placeholder", async () => {
+  await ui.page(
+    `<div class="ui-date-picker" id="single" data-ui-date-picker data-ui-placeholder="Select date">
+       <input type="date" name="reviewDate" value="2026-06-15">
+     </div>`,
+    async (page) => {
+      const filledText = await page.evaluate(() =>
+        UI.dateUtils.formatDisplayDate(UI.dateUtils.parseISODate("2026-06-15"))
+      );
+      assert.equal(await page.text("#single .ui-date-range-value"), filledText);
+
+      await page.evaluate(() => UI.datePicker.clear(document.getElementById("single")));
+
+      assert.equal(await page.text("#single .ui-date-range-value"), "Select date");
+      assert.equal(await page.value("#single input"), "");
+    }
+  );
+});
+
 test("errors clear as the user fixes them, and the form then submits", async () => {
   await ui.page(APPLICATION_FORM, async (page) => {
     await page.click("#submit");
