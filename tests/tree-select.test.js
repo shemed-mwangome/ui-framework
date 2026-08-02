@@ -248,3 +248,46 @@ test(".ui-tree-header presets and a one-off inline override all read from the sa
     }
   );
 });
+
+test("a tree checkbox stays visible next to Bootstrap 4's global checkbox reset", async () => {
+  // Bootstrap 4 ships `input[type=checkbox]{position:absolute;clip:rect(0,0,0,0);
+  // pointer-events:none}` unconditionally, assuming every checkbox will be restyled
+  // through its own .custom-control wrapper. .ui-multiselect-option input already
+  // guards against this with !important; .ui-tree-check needs the same guard, or a
+  // tree dropped into a Bootstrap 4 app renders with no visible checkboxes at all.
+  await ui.page(
+    `<style>
+       /* A trimmed stand-in for bootstrap.min.css's actual global rule. */
+       input[type=checkbox] { position: absolute; clip: rect(0,0,0,0); pointer-events: none; }
+     </style>
+     <div class="ui-tree" id="regions" data-ui-tree>
+       <div class="ui-tree-node">
+         <div class="ui-tree-row">
+           <input type="checkbox" class="ui-tree-check" id="check">
+           <span class="ui-tree-label">Dar es Salaam</span>
+         </div>
+         <div class="ui-tree-children">
+           <div class="ui-tree-node" data-ui-tree-value="apex">
+             <div class="ui-tree-row">
+               <input type="checkbox" class="ui-tree-check">
+               <span class="ui-tree-label">Apex Gaming</span>
+             </div>
+           </div>
+         </div>
+       </div>
+     </div>`,
+    async (page) => {
+      const style = await page.styles("#check", ["position", "pointer-events", "width"]);
+      assert.equal(style.position, "static", "must not stay clipped out of the document flow");
+      assert.equal(style["pointer-events"], "auto", "must stay clickable despite the global reset");
+      assert.notEqual(style.width, "0px", "must not collapse to a zero-size clip rect");
+
+      await page.click("#check");
+      assert.deepEqual(
+        await page.evaluate(() => UI.treeSelect.selected("#regions")),
+        ["apex"],
+        "clicking the (visually rescued) checkbox must still cascade normally"
+      );
+    }
+  );
+});

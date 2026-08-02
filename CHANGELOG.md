@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.8.1 — 2026-08-02
+
+Same regulatory-admin screen again, deployed for real this time: the layered CSS bundle turned out to be actively unsafe for Bootstrap 4 coexistence, and one more component was missing the defensive CSS that lets it survive Bootstrap's global form-control resets.
+
+### Fixed
+
+- **The layered CSS bundle loses fights it should win.** CSS cascade layers guarantee an *unlayered* rule always beats a *layered* one, regardless of specificity — that's the whole mechanism the layered bundle relies on to stay predictable. But it cuts both ways: Bootstrap 4's own `label{display:inline-block;margin-bottom:.5rem}` is unlayered too, so it silently overrode the layered bundle's `.ui-multiselect-option{display:flex}` (every multiselect option row is a `<label>`), turning a scrollable single-column checklist into text that wraps like a paragraph. The flat bundle doesn't have this failure mode — `.ui-multiselect-option` (a class selector) legitimately beats `label` (an element selector) under ordinary cascade specificity, which is what should have happened either way. Recommending the layered bundle specifically *for* Bootstrap coexistence, when it loses to Bootstrap's own low-specificity element resets more readily than the flat bundle would have, was backwards; docs and examples now default to the flat bundle, with the layered one repositioned for the narrower case of apps that need to guarantee a win against a legacy stylesheet with *higher*-specificity rules than the framework's own
+- **`.ui-tree-check` had no defense against Bootstrap's global checkbox reset.** Bootstrap 4 ships `input[type=checkbox]{position:absolute;clip:rect(0,0,0,0);pointer-events:none}` unconditionally, assuming every checkbox gets restyled through its own `.custom-control` wrapper. `.ui-multiselect-option input` already guarded against exactly this with `!important`; `.ui-tree-check` — added in the same 1.7.0 release — never got the same treatment, so a tree dropped into a Bootstrap 4 app rendered with every checkbox invisibly clipped to nothing. Now guarded identically
+
 ## 1.8.0 — 2026-08-02
 
 Same regulatory-admin screen as 1.7.0's tree-select, one layer deeper: wiring the tree and its sibling filters up to *live* data (an AJAX-driven region → operator cascade, a Reset button) surfaced two components that only supported a one-shot build.

@@ -1,5 +1,5 @@
 /*!
- * UI Framework v1.8.0
+ * UI Framework v1.8.1
  * Original dependency-free CSS/JavaScript framework.
  * Prefix: ui-
  * License: MIT
@@ -4286,12 +4286,24 @@ form[data-ui-save-next].ui-dirty .ui-save-next-dirty { display: inline-flex; }
 .ui-tree-node.ui-leaf > .ui-tree-row .ui-tree-toggle { visibility: hidden; }
 
 .ui-tree-check {
+  /* Bootstrap 4 globally clips every bare input[type=checkbox] to visually-hidden
+     (position:absolute;clip:rect(0,0,0,0)), assuming it'll be restyled through its
+     own .custom-control wrapper -- the same interference .ui-multiselect-option
+     input already guards against with !important. A tree checkbox is meant to stay
+     a plain visible native checkbox, so it needs the identical guard. */
+  display: inline-block !important;
+  position: static !important;
+  clip: auto !important;
   flex: none;
-  width: 1.05rem;
-  height: 1.05rem;
-  margin: 0;
+  width: 1.05rem !important;
+  height: 1.05rem !important;
+  margin: 0 !important;
+  opacity: 1 !important;
+  appearance: auto !important;
+  -webkit-appearance: checkbox !important;
   cursor: pointer;
   accent-color: var(--ui-primary);
+  pointer-events: auto !important;
 }
 
 .ui-tree-label { flex: 1; min-width: 0; font-weight: 600; color: var(--ui-text); cursor: pointer; }

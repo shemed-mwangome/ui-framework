@@ -1,4 +1,4 @@
-# UI Framework 1.8.0
+# UI Framework 1.8.1
 
 A complete, dependency-free CSS and JavaScript UI framework designed for
 server-rendered applications, static HTML, and legacy projects that already
