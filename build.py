@@ -18,6 +18,7 @@ CSS_ORDER = [
     "20-form-flow.css", "21-date-range.css",
     "22-validate-combobox.css", "23-table-tools.css",
     "24-chart-popover.css", "25-status-document.css",
+    "26-tree-select.css",
 ]
 
 
@@ -38,11 +39,11 @@ JS_ORDER = [
     "07-toast.js", "09-upload-theme.js", "10-confirm.js",
     "11-save-next.js", "13-stepper-form.js", "14-data-table.js",
     "17-draft.js", "18-validate.js", "19-mask.js", "20-combobox.js",
-    "21-chart.js", "23-clipboard.js", "24-print.js",
+    "21-chart.js", "23-clipboard.js", "24-print.js", "25-tree-select.js",
 ]
 
 CSS_BANNER = """/*!
- * UI Framework v1.6.0
+ * UI Framework v1.7.0
  * Original dependency-free CSS/JavaScript framework.
  * Prefix: ui-
  * License: MIT
@@ -50,7 +51,7 @@ CSS_BANNER = """/*!
 """
 
 JS_BANNER = """/*!
- * UI Framework v1.6.0
+ * UI Framework v1.7.0
  * Dependency-free JavaScript bundle.
  * License: MIT
  */

@@ -22,7 +22,11 @@
   background: var(--ui-surface-soft);
 }
 
-.ui-card-header { border-bottom: 1px solid var(--ui-border); }
+/* --ui-card-header-accent defaults to the card's own border, so a plain
+   .ui-card-header looks exactly as before -- retint just the underline with
+   a .ui-card-header-accent-* preset, or override the variable directly for a
+   one-off brand color, instead of a page needing its own border-bottom rule. */
+.ui-card-header { --ui-card-header-accent: var(--ui-border); border-bottom: 1px solid var(--ui-card-header-accent); }
 .ui-card-footer { border-top: 1px solid var(--ui-border); }
 .ui-card-body { padding: 1rem; }
 .ui-card-title { margin: 0 0 .35rem; font-size: 1.05rem; font-weight: 700; }
@@ -32,6 +36,11 @@
 .ui-card-border-success { --ui-card-accent: var(--ui-success); }
 .ui-card-border-danger { --ui-card-accent: var(--ui-danger); }
 .ui-card-border-warning { --ui-card-accent: var(--ui-warning); }
+.ui-card-header-accent-primary { --ui-card-header-accent: var(--ui-primary); }
+.ui-card-header-accent-success { --ui-card-header-accent: var(--ui-success); }
+.ui-card-header-accent-danger { --ui-card-header-accent: var(--ui-danger); }
+.ui-card-header-accent-warning { --ui-card-header-accent: var(--ui-warning); }
+.ui-card-header-accent-info { --ui-card-header-accent: var(--ui-info); }
 .ui-card-hover { transition: transform var(--ui-transition), box-shadow var(--ui-transition); }
 .ui-card-hover:hover { transform: translateY(-3px); --ui-card-shadow: var(--ui-shadow-3); }
 

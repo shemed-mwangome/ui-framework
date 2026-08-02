@@ -236,6 +236,56 @@ test("an invalid date-picker field highlights the trigger, not the hidden input"
   );
 });
 
+test("date-range and date-picker fill their container like .ui-control does", async () => {
+  // Regression: .ui-date-range was display:inline-block with no explicit
+  // width, so it sized to its own content instead of the column it sat in --
+  // invisible in the framework's own grid (siblings size children for you),
+  // but it silently refused to match .ui-select/.ui-control's width when
+  // dropped into a foreign grid column, breaking alignment in a mixed row.
+  await ui.page(
+    `<div style="width: 400px;">
+       <select id="type" class="ui-select"><option>Scheduled</option></select>
+       <div class="ui-date-range" data-ui-date-range>
+         <input type="date" name="start">
+         <input type="date" name="end">
+       </div>
+       <div class="ui-date-picker" data-ui-date-picker>
+         <input type="date" name="single">
+       </div>
+     </div>`,
+    async (page) => {
+      const widths = await page.evaluate(() => ({
+        select: document.getElementById("type").getBoundingClientRect().width,
+        range: document.querySelector(".ui-date-range").getBoundingClientRect().width,
+        picker: document.querySelector(".ui-date-picker").getBoundingClientRect().width,
+      }));
+      assert.equal(widths.range, widths.select, "date range must fill its column exactly like .ui-select");
+      assert.equal(widths.picker, widths.select, "date picker must fill its column exactly like .ui-select");
+    }
+  );
+});
+
+test(".ui-date-range-inline opts back out to content width for standalone placement", async () => {
+  // The width:100% default is right for a form grid, wrong for a standalone
+  // toolbar filter or a compact "as of" date -- .ui-date-range-inline must
+  // size to its own content instead of stretching to fill an arbitrarily wide
+  // parent (e.g. an unconstrained docs demo container).
+  await ui.page(
+    `<div style="width: 900px;">
+       <div class="ui-date-range ui-date-range-inline" data-ui-date-range data-ui-placeholder="Select date range">
+         <input type="date" name="start">
+         <input type="date" name="end">
+       </div>
+     </div>`,
+    async (page) => {
+      const width = await page.evaluate(() =>
+        document.querySelector(".ui-date-range").getBoundingClientRect().width
+      );
+      assert.ok(width < 300, "an inline trigger showing a placeholder must not stretch toward its 900px parent, got " + width);
+    }
+  );
+});
+
 test("errors clear as the user fixes them, and the form then submits", async () => {
   await ui.page(APPLICATION_FORM, async (page) => {
     await page.click("#submit");

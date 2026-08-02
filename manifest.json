@@ -1,5 +1,5 @@
 {
-  "version": "1.6.0",
+  "version": "1.7.0",
   "prefix": "ui-",
   "cssModules": [
     "00-tokens.css",
@@ -27,7 +27,8 @@
     "22-validate-combobox.css",
     "23-table-tools.css",
     "24-chart-popover.css",
-    "25-status-document.css"
+    "25-status-document.css",
+    "26-tree-select.css"
   ],
   "jsModules": [
     "00-core.js",
@@ -54,7 +55,8 @@
     "20-combobox.js",
     "21-chart.js",
     "23-clipboard.js",
-    "24-print.js"
+    "24-print.js",
+    "25-tree-select.js"
   ],
   "bundles": [
     "dist/ui-framework.css",

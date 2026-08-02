@@ -1,0 +1,115 @@
+/* ------------------------------------------------------- Tree select
+ *
+ * A hierarchical list of checkboxes -- region -> operator -> premises,
+ * category -> team -> member, and similar bulk-select trees -- where
+ * checking a parent row cascades the check to every descendant, and
+ * checking/unchecking a descendant rolls back up to a tri-state
+ * (checked / unchecked / indeterminate) ancestor checkbox. A plain
+ * .ui-accordion has no opinion about a checkbox in its header at all, so
+ * apps needing this pattern used to hand-roll it per page.
+ */
+
+.ui-tree {
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-3);
+  overflow: hidden;
+}
+
+.ui-tree .ui-tree-node + .ui-tree-node { border-top: 1px solid var(--ui-border); }
+
+.ui-tree-row {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .65rem 1rem;
+  background: var(--ui-surface);
+}
+
+.ui-tree-row:hover { background: var(--ui-surface-soft); }
+
+.ui-tree-toggle {
+  flex: none;
+  width: 1.1rem;
+  height: 1.1rem;
+  border: 0;
+  padding: 0;
+  background: none;
+  color: var(--ui-muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ui-tree-toggle::before {
+  content: "";
+  width: .5rem;
+  height: .5rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform var(--ui-transition-fast);
+}
+
+.ui-tree-node.ui-collapsed > .ui-tree-row .ui-tree-toggle::before { transform: rotate(-45deg); }
+.ui-tree-node.ui-leaf > .ui-tree-row .ui-tree-toggle { visibility: hidden; }
+
+.ui-tree-check {
+  flex: none;
+  width: 1.05rem;
+  height: 1.05rem;
+  margin: 0;
+  cursor: pointer;
+  accent-color: var(--ui-primary);
+}
+
+.ui-tree-label { flex: 1; min-width: 0; font-weight: 600; color: var(--ui-text); cursor: pointer; }
+.ui-tree-leaf .ui-tree-label { font-weight: 400; }
+
+.ui-tree-meta { flex: none; display: inline-flex; align-items: center; gap: .35rem; }
+
+.ui-tree-node.ui-collapsed > .ui-tree-children { display: none; }
+
+.ui-tree-children .ui-tree-row { padding-left: 2.6rem; background: var(--ui-surface-soft); }
+.ui-tree-children .ui-tree-children .ui-tree-row { padding-left: 4.1rem; }
+.ui-tree-children .ui-tree-children .ui-tree-children .ui-tree-row { padding-left: 5.6rem; }
+
+/* Opt-in styled header for a top-level group that should stand out (e.g. a
+   region bar above lighter operator/premise rows) -- base class plus a
+   colour preset (or none, for a fully custom colour):
+
+     <div class="ui-tree-node ui-tree-header ui-tree-header-primary">          preset
+     <div class="ui-tree-node ui-tree-header"
+          style="--ui-tree-header-bg:#7c3aed; --ui-tree-header-color:#fff">    one-off
+
+   Both read from --ui-tree-header-bg/-color, so a one-off inline override on
+   the node always wins over whichever preset class is also present. */
+.ui-tree-header {
+  --ui-tree-header-bg: var(--ui-dark);
+  --ui-tree-header-color: #fff;
+}
+
+.ui-tree-header-primary { --ui-tree-header-bg: var(--ui-primary); }
+.ui-tree-header-success { --ui-tree-header-bg: var(--ui-success); }
+.ui-tree-header-warning { --ui-tree-header-bg: var(--ui-warning); --ui-tree-header-color: #1f2937; }
+.ui-tree-header-danger { --ui-tree-header-bg: var(--ui-danger); }
+.ui-tree-header-info { --ui-tree-header-bg: var(--ui-info); }
+
+.ui-tree-header > .ui-tree-row {
+  background: var(--ui-tree-header-bg);
+  color: var(--ui-tree-header-color);
+}
+.ui-tree-header > .ui-tree-row:hover { filter: brightness(1.08); }
+.ui-tree-header > .ui-tree-row .ui-tree-label,
+.ui-tree-header > .ui-tree-row .ui-tree-toggle { color: inherit; }
+
+.ui-tree-count {
+  font-size: .72rem;
+  font-weight: 600;
+  padding: .1rem .5rem;
+  border-radius: var(--ui-radius-pill);
+  background: var(--ui-primary-soft);
+  color: var(--ui-primary-active);
+}
+
+.ui-tree-header .ui-tree-count { background: rgba(255, 255, 255, .18); color: inherit; }
