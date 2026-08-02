@@ -1,5 +1,5 @@
 /*!
- * UI Framework v1.8.3
+ * UI Framework v1.8.8
  * Original dependency-free CSS/JavaScript framework.
  * Prefix: ui-
  * License: MIT
@@ -17,7 +17,7 @@
      <link> to a font host or a bundled .woff2. A consuming app can still swap
      this for a brand webfont by overriding the token; this is the zero-setup
      default, not a fixed choice. */
-  --ui-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --ui-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --ui-font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
 
   --ui-primary: #2563eb;
@@ -1584,7 +1584,8 @@ input[type="checkbox"].ui-switch-danger + label { --ui-switch-color: var(--ui-da
 .ui-table-sortable[aria-sort="ascending"]::after { border-top: 0; border-bottom: .35rem solid var(--ui-primary); opacity: 1; }
 .ui-table-sortable[aria-sort="descending"]::after { border-top: .35rem solid var(--ui-primary); opacity: 1; }
 
-.ui-table-pagination { margin-top: .85rem; display: flex; justify-content: flex-end; }
+.ui-table-pagination { margin-top: .85rem; display: flex; align-items: center; justify-content: flex-end; gap: 1rem; }
+.ui-table-status { margin-right: auto; color: var(--ui-muted); font-size: .82rem; }
 .ui-table-empty-row td { padding: 2.5rem; color: var(--ui-muted); text-align: center; }
 
 /* Minimal: no header fill, just a stronger rule under the header row. */
@@ -2266,6 +2267,26 @@ body.ui-overlay-open { overflow: hidden; }
 }
 
 
+/* Before build() runs, a <select multiple> is still the plain, unenhanced
+   native element -- browsers render that as a multi-row listbox showing
+   several options at once (its default sizing for `multiple`, absent a
+   `size` attribute), not a compact single-line control. On a slow load it's
+   briefly visible like that, badly out of place next to its own label.
+   .ui-multiselect-native (below) only gets added once build() runs, so this
+   rule -- matching everything build() *hasn't* reached yet -- clamps the raw
+   element to look like the compact control it's about to become instead of
+   its native multi-row self, without needing a second readiness flag. */
+select[multiple][data-ui-multiselect]:not(.ui-multiselect-native) {
+  display: block;
+  width: 100%;
+  height: var(--ui-control-md);
+  overflow: hidden;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-2);
+  padding: .55rem .75rem;
+  color: var(--ui-subtle);
+}
+
 .ui-multiselect-native {
   position: absolute !important;
   width: 1px !important;
@@ -2932,6 +2953,32 @@ form[data-ui-save-next].ui-dirty .ui-save-next-dirty { display: inline-flex; }
    content and silently refuses to fill a Bootstrap/foreign-grid column,
    which is what breaks alignment in a mixed grid like a Bootstrap 4 filter row. */
 .ui-date-range { position: relative; display: block; width: 100%; }
+
+/* Before build() runs, the author's raw <input type="date">/<input type="text">
+   is still a real, painted element -- browser-default styling, not this
+   framework's. On a slow load that's visible for however long it takes build()
+   to reach it and swap in the trigger button. Same fix as the equivalent
+   .ui-multiselect-native gap: clamp the raw input(s) to look like the compact
+   control they're about to become. Targets .ui-date-picker too, since its
+   build() only adds the .ui-date-range class to the container *during* init --
+   before that, only the author-supplied .ui-date-picker class is present. */
+.ui-date-range > input:not(.ui-date-range-native),
+.ui-date-picker > input:not(.ui-date-range-native) {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: var(--ui-control-md);
+  margin-bottom: .35rem;
+  padding: .55rem .75rem;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-2);
+  background: var(--ui-surface);
+  color: var(--ui-subtle);
+  font: inherit;
+}
+.ui-date-range > input:not(.ui-date-range-native):last-child,
+.ui-date-picker > input:not(.ui-date-range-native):last-child { margin-bottom: 0; }
+
 .ui-date-range-native { display: none; }
 
 .ui-date-range-trigger {
@@ -2947,6 +2994,12 @@ form[data-ui-save-next].ui-dirty .ui-save-next-dirty { display: inline-flex; }
   color: var(--ui-text);
   cursor: pointer;
   font: inherit;
+  /* It's a <button>, and the browser's default UA stylesheet centers button
+     text -- .ui-multiselect-trigger (also a button playing the same "looks
+     like a form field" role) already guards against this; this trigger needs
+     the same guard so its placeholder/value reads left-aligned like the
+     .ui-label above it and every other field in the row, not centered. */
+  text-align: left;
 }
 
 .ui-date-range-sm .ui-date-range-trigger { min-height: var(--ui-control-sm); padding: .3rem .6rem; font-size: .85rem; }
@@ -3253,6 +3306,26 @@ form[data-ui-save-next].ui-dirty .ui-save-next-dirty { display: inline-flex; }
 .ui-combobox {
   position: relative;
   display: block;
+}
+
+/* Same fix as .ui-multiselect-native/.ui-date-range-native: before build()
+   runs, the raw <select> is a real, painted element -- default browser size
+   (sized to its longest option, not its container) and inline instead of
+   filling the row like a real .ui-control. Clamp it to look like the compact
+   full-width control it's about to become for however long that gap lasts.
+   Keyed off .ui-combobox-native, the class build() already adds, so it needs
+   no separate readiness flag and gets out of the way once the real widget
+   takes over. */
+select[data-ui-combobox]:not(.ui-combobox-native) {
+  display: block;
+  width: 100%;
+  min-height: var(--ui-control-md);
+  padding: .55rem .75rem;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-2);
+  background: var(--ui-surface);
+  color: var(--ui-text);
+  font: inherit;
 }
 
 .ui-combobox-native {
@@ -3688,6 +3761,23 @@ form[data-ui-save-next].ui-dirty .ui-save-next-dirty { display: inline-flex; }
 }
 
 /* ----------------------------------------------------------------- Charts */
+
+/* build() adds .ui-chart/.ui-chart-{type} and generates the SVG entirely
+   from script -- until then, [data-ui-chart] is a plain, empty <div> with no
+   dimensions of its own, collapsing to 0 height. Unlike the multiselect/
+   date-range/combobox/tree fixes, this isn't "wrong-looking content" for a
+   moment -- it's a card that looks empty, then suddenly grows by a chart's
+   full height once JS runs, shoving everything below it down. A .ui-chart's
+   width is unconditional (any chart type stretches full width or is inline-
+   block per its type below), so this reserves the same height its type's
+   .ui-chart-{type} .ui-chart-svg rule (further down this file) resolves to
+   once built -- keyed off the .ui-chart class that rule (and JS) both add,
+   so this stops matching, and yields to the real rules, the moment build()
+   reaches the element. A multi-series chart's <script type="application/json">
+   data island means this can't key off :empty like the other fixes did. */
+[data-ui-chart]:not(.ui-chart) { display: block; width: 100%; height: 10rem; }
+[data-ui-chart="sparkline"]:not(.ui-chart) { display: inline-block; width: 6rem; height: 1.75rem; }
+[data-ui-chart="donut"]:not(.ui-chart) { display: block; width: auto; max-width: 12rem; height: 12rem; margin: 0 auto; }
 
 .ui-chart {
   display: block;
@@ -4263,6 +4353,33 @@ form[data-ui-save-next].ui-dirty .ui-save-next-dirty { display: inline-flex; }
 }
 
 .ui-tree-row:hover { background: var(--ui-surface-soft); }
+
+/* JS inserts a hidden placeholder .ui-tree-toggle for any leaf row authored
+   without one (see 25-tree-select.js's ensureToggleSlot) so the row reserves
+   the same space a toggle-bearing sibling does -- but that only happens once
+   build() runs. Before then, an author-omitted leaf really is missing the
+   element, and sits one toggle-width-plus-gap shallower than it should for
+   however long the page takes to load and enhance it -- the same
+   "misaligned tree" bug ensureToggleSlot fixes, just during the load window
+   ensureToggleSlot itself can't reach.
+
+   This has to be margin on the checkbox, not padding-left on the row: the
+   row's padding-left is *already* set per nesting depth by the .ui-tree-children
+   .ui-tree-children... chain further down this file, each level one selector
+   longer (and so higher-specificity) than the last. A flat padding-left here
+   would only ever win at the shallowest depth and lose -- silently, no
+   visible effect -- at every deeper one. Margin on the checkbox stacks with
+   whatever that depth-based padding already resolved to, instead of
+   replacing it, so it corrects every level uniformly. Self-limiting: once
+   build() inserts the real placeholder toggle, every row has a
+   .ui-tree-toggle child and this stops matching, so there's no double-offset
+   to reconcile against the placeholder's own width.
+
+   !important because .ui-tree-check's own base rule (below) sets
+   `margin: 0 !important` -- a defensive guard against Bootstrap 4's global
+   input[type=checkbox] reset (1.8.1) -- which would otherwise silently beat
+   this regardless of this selector's higher specificity. */
+.ui-tree-row:not(:has(> .ui-tree-toggle)) > .ui-tree-check { margin-left: 1.7rem !important; }
 
 .ui-tree-toggle {
   flex: none;

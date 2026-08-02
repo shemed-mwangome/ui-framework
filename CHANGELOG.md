@@ -1,5 +1,49 @@
 # Changelog
 
+## 1.8.8 — 2026-08-02
+
+Closed out the pre-build audit from 1.8.7 by checking the two components it flagged as lower-priority: smart tables and charts.
+
+### Checked, not changed
+
+- **Smart tables**: a raw `.ui-table` looks genuinely fine before `data-ui-table` enhances it -- properly styled headers and striped rows, just without the toolbar/pagination chrome yet. Reserving space for that chrome isn't reliably possible from CSS alone (it depends on `data-ui-search`/`data-ui-page-size-selector`, and the row-count shrink from pagination is data-dependent, not something CSS can know) without risking an *empty* reserved gap on tables that opt out of both. Left as-is: unlike the other fixes, this was never "wrong-looking content," just a modest reflow when the toolbar appears.
+
+### Fixed
+
+- **Charts collapsed to zero height until fully built, then popped in at full size.** `build()` generates the whole SVG from script and only adds `.ui-chart`/`.ui-chart-{type}` once it does -- until then, `[data-ui-chart]` is a plain, empty `<div>` with no dimensions of its own. Unlike the multiselect/date-range/combobox/tree fixes this was never wrong-looking content, it was a card that looked empty and then suddenly grew by a chart's full height, shoving everything below it down -- arguably the most jarring of this whole family, since the jump is a chart's entire height rather than a few pixels of misalignment. `[data-ui-chart]:not(.ui-chart)` now reserves the same height its type's `.ui-chart-{type} .ui-chart-svg` rule resolves to once built (`10rem` for bar/line/area, `6rem × 1.75rem` for sparkline, `12rem` square for donut) -- keyed off the `.ui-chart` class both that rule and `build()` add, so it steps aside the moment the real SVG lands. Couldn't key off `:empty` the way the other fixes did: a multi-series chart's `<script type="application/json">` data island means the element already has a child before `build()` ever touches it
+
+## 1.8.7 — 2026-08-02
+
+Audited every JS-enhanced component for the same pre-build flash pattern fixed in 1.8.5/1.8.6 (multiselect, date range/picker). Most turned out already safe -- accordion/collapse, tabs, dropdown, popover, modal/offcanvas, upload, and the step-form wizard all hide their not-yet-relevant markup through plain CSS or the native `hidden` attribute, independent of JS timing. Two more had the same real gap:
+
+### Fixed
+
+- **Tree select: a leaf authored without a toggle button sat shallower than it should, before `build()` ever ran.** `ensureToggleSlot()` (1.8.2) only inserts a leaf's hidden placeholder toggle once `build()` reaches it -- before that, an author-omitted leaf really is missing the element, and for however long the page takes to load, its checkbox sits one toggle-width-plus-gap shallower than its siblings. `.ui-tree-row:not(:has(> .ui-tree-toggle)) > .ui-tree-check` now applies that same offset as a `margin-left` purely via CSS, so it's correct from first paint. This has to be a margin on the checkbox rather than `padding-left` on the row: the row's own `padding-left` is already set per nesting depth by the `.ui-tree-children .ui-tree-children...` chain, each level one selector longer (and higher-specificity) than the last, so a flat `padding-left` here would only ever win at the shallowest depth. Margin stacks on top of whatever that depth-based padding already resolved to instead of replacing it, correcting every level uniformly -- and needs `!important` to beat `.ui-tree-check`'s own `margin: 0 !important` (1.8.1's Bootstrap-checkbox-reset guard)
+- **Combobox: the raw `<select>` rendered tiny and inline instead of filling its row.** Same root cause as the multiselect/date-range fixes -- a `<select>` is a real, painted element the instant the parser reaches it, sized to its longest option and `inline-block`, not the full-width block control it's about to become. `select[data-ui-combobox]:not(.ui-combobox-native)` now clamps it the same way, keyed off the `.ui-combobox-native` class `build()` already adds
+
+## 1.8.6 — 2026-08-02
+
+### Fixed
+
+- **Same pre-build flash as 1.8.5's multiselect fix, now for date range/picker.** An `<input type="date">`/`<input type="text">` is a real, painted element from the moment the parser reaches it, browser-default sized -- visibly smaller and plainer than the `.ui-date-range-trigger` button it's about to become for however long build() takes to get there. `.ui-date-range > input:not(.ui-date-range-native)` and `.ui-date-picker > input:not(.ui-date-range-native)` now clamp the raw input(s) to `--ui-control-md` height and control-like padding/border, same as the multiselect fix and keyed off the same already-added `.ui-date-range-native` class -- no separate readiness flag needed. Two-input range mode stacks its pair with a small gap instead of showing two tiny native date fields side by side
+
+## 1.8.5 — 2026-08-02
+
+### Fixed
+
+- **A `data-ui-multiselect` field visibly rendered as a raw, expanded multi-row listbox before JS enhanced it.** A `<select multiple>` is a real, painted element the instant the HTML parser reaches it — browsers default it to showing several options at once absent a `size` attribute, not a compact single-line control. Deferring/preloading the script (1.8.4's fix for the same underlying symptom, applied to the script's own load timing) narrows that window but can't close it: there is always some gap between "parsed" and "enhanced." `select[multiple][data-ui-multiselect]:not(.ui-multiselect-native)` now clamps the raw element to `--ui-control-md` height with `overflow: hidden`, so whatever's visible during that gap reads as a normal-sized loading control instead of a jarring multi-row listbox parked over the label below it. The clamp is keyed off `.ui-multiselect-native` — the class `build()` already adds — so it needs no separate readiness flag and gets out of the way the instant the real widget takes over
+
+## 1.8.4 — 2026-08-02
+
+### Fixed
+
+- **`--ui-font-sans` now matches Bootstrap 4's native stack exactly**, not just approximately: `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif` plus the emoji fallbacks, byte-for-byte Bootstrap's own `--font-family-sans-serif`. 1.8.3 already switched off the unloaded `Inter` webfont onto a native-stack approximation; this closes the small remaining gap so a Bootstrap 4 app gets pixel-identical font rendering with zero token override needed
+- **`.ui-date-range-trigger`'s text rendered centered under a left-aligned `.ui-label`.** It's a `<button>`, and a browser's default UA stylesheet centers button text; `.ui-multiselect-trigger` (the same "looks like a form field" pattern) already guarded against this with `text-align: left`, but the date-range/date-picker trigger never got the same guard
+
+### Added
+
+- **Smart tables now show a persistent "N of M records" status line** (`.ui-table-status`, reusing the existing `table.status` i18n string) instead of only announcing the count to screen readers via `UI.announce()`. Previously, once a result set was small enough that pagination itself had nothing to render, sighted users saw no indication of the row count at all — DataTables' equivalent info text is always visible regardless of page count. Opt out with `data-ui-status="false"`
+
 ## 1.8.3 — 2026-08-02
 
 ### Changed

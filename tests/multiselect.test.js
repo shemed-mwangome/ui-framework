@@ -95,3 +95,31 @@ test("UI.multiselect.refresh() on a never-built select just builds it", async ()
     assert.equal(await page.count(".ui-multiselect-option"), 1);
   });
 });
+
+test("an unbuilt multiselect is clamped to control height instead of its native multi-row size", async () => {
+  // A <select multiple> is a real, painted element from the moment the HTML
+  // parser reaches it -- browsers default it to a multi-row listbox showing
+  // several options at once, absent a `size` attribute. On a slow load, that's
+  // visible for however long it takes build() to reach it and swap in the real
+  // widget. Inserting the select *after* the page's own initial UI.init() has
+  // already run (no MutationObserver by default) leaves it deliberately
+  // unbuilt, standing in for that same "not reached yet" window.
+  await ui.page(`<div id="host"></div>`, async (page) => {
+    await page.evaluate(() => {
+      var select = document.createElement("select");
+      select.multiple = true;
+      select.setAttribute("data-ui-multiselect", "");
+      ["Arusha", "Dar es Salaam", "Dodoma", "Geita", "Iringa", "Kagera"].forEach(function (name) {
+        select.appendChild(new Option(name, name));
+      });
+      document.getElementById("host").appendChild(select);
+    });
+    const before = await page.box("select[data-ui-multiselect]");
+    assert.ok(before.height < 60, "must read as a compact single-line control, not a tall native listbox (got " + before.height + "px)");
+
+    // And once build() does reach it, the clamp must get out of the way rather
+    // than fighting the real widget's own sizing.
+    await page.evaluate(() => UI.multiselect.build(document.querySelector("select[data-ui-multiselect]")));
+    assert.equal(await page.count(".ui-multiselect-trigger"), 1);
+  });
+});

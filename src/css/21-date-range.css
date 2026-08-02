@@ -3,6 +3,32 @@
    content and silently refuses to fill a Bootstrap/foreign-grid column,
    which is what breaks alignment in a mixed grid like a Bootstrap 4 filter row. */
 .ui-date-range { position: relative; display: block; width: 100%; }
+
+/* Before build() runs, the author's raw <input type="date">/<input type="text">
+   is still a real, painted element -- browser-default styling, not this
+   framework's. On a slow load that's visible for however long it takes build()
+   to reach it and swap in the trigger button. Same fix as the equivalent
+   .ui-multiselect-native gap: clamp the raw input(s) to look like the compact
+   control they're about to become. Targets .ui-date-picker too, since its
+   build() only adds the .ui-date-range class to the container *during* init --
+   before that, only the author-supplied .ui-date-picker class is present. */
+.ui-date-range > input:not(.ui-date-range-native),
+.ui-date-picker > input:not(.ui-date-range-native) {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: var(--ui-control-md);
+  margin-bottom: .35rem;
+  padding: .55rem .75rem;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-2);
+  background: var(--ui-surface);
+  color: var(--ui-subtle);
+  font: inherit;
+}
+.ui-date-range > input:not(.ui-date-range-native):last-child,
+.ui-date-picker > input:not(.ui-date-range-native):last-child { margin-bottom: 0; }
+
 .ui-date-range-native { display: none; }
 
 .ui-date-range-trigger {
@@ -18,6 +44,12 @@
   color: var(--ui-text);
   cursor: pointer;
   font: inherit;
+  /* It's a <button>, and the browser's default UA stylesheet centers button
+     text -- .ui-multiselect-trigger (also a button playing the same "looks
+     like a form field" role) already guards against this; this trigger needs
+     the same guard so its placeholder/value reads left-aligned like the
+     .ui-label above it and every other field in the row, not centered. */
+  text-align: left;
 }
 
 .ui-date-range-sm .ui-date-range-trigger { min-height: var(--ui-control-sm); padding: .3rem .6rem; font-size: .85rem; }

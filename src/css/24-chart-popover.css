@@ -14,6 +14,23 @@
 
 /* ----------------------------------------------------------------- Charts */
 
+/* build() adds .ui-chart/.ui-chart-{type} and generates the SVG entirely
+   from script -- until then, [data-ui-chart] is a plain, empty <div> with no
+   dimensions of its own, collapsing to 0 height. Unlike the multiselect/
+   date-range/combobox/tree fixes, this isn't "wrong-looking content" for a
+   moment -- it's a card that looks empty, then suddenly grows by a chart's
+   full height once JS runs, shoving everything below it down. A .ui-chart's
+   width is unconditional (any chart type stretches full width or is inline-
+   block per its type below), so this reserves the same height its type's
+   .ui-chart-{type} .ui-chart-svg rule (further down this file) resolves to
+   once built -- keyed off the .ui-chart class that rule (and JS) both add,
+   so this stops matching, and yields to the real rules, the moment build()
+   reaches the element. A multi-series chart's <script type="application/json">
+   data island means this can't key off :empty like the other fixes did. */
+[data-ui-chart]:not(.ui-chart) { display: block; width: 100%; height: 10rem; }
+[data-ui-chart="sparkline"]:not(.ui-chart) { display: inline-block; width: 6rem; height: 1.75rem; }
+[data-ui-chart="donut"]:not(.ui-chart) { display: block; width: auto; max-width: 12rem; height: 12rem; margin: 0 auto; }
+
 .ui-chart {
   display: block;
   width: 100%;

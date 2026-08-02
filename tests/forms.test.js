@@ -265,6 +265,59 @@ test("date-range and date-picker fill their container like .ui-control does", as
   );
 });
 
+test("the date-range/date-picker trigger reads left-aligned like the field above it, not centered", async () => {
+  // Regression: .ui-date-range-trigger is a <button>, and a browser's default
+  // UA stylesheet centers button text. .ui-multiselect-trigger (also a button
+  // playing the same "looks like a form field" role) already guards against
+  // this with text-align:left; this trigger never got the same guard, so its
+  // placeholder/value sat centered under a left-aligned .ui-label -- visibly
+  // inconsistent with every other field in the same form row.
+  await ui.page(
+    `<div class="ui-date-range" data-ui-date-range data-ui-placeholder="Select date range">
+       <input type="date" name="start"><input type="date" name="end">
+     </div>`,
+    async (page) => {
+      assert.equal(await page.styles(".ui-date-range-trigger", ["text-align"]).then((s) => s["text-align"]), "left");
+    }
+  );
+});
+
+test("an unbuilt date range/picker clamps its raw <input>(s) instead of showing tiny native fields", async () => {
+  // Same fix as the equivalent .ui-multiselect-native gap: an <input type="date">
+  // or <input type="text"> is a real, painted element from the moment the parser
+  // reaches it, browser-default sized -- visibly smaller/plainer than the trigger
+  // button it's about to become for however long build() takes to get there.
+  // Inserting after the page's own initial UI.init() has already run (no
+  // MutationObserver by default) leaves these deliberately unbuilt, standing in
+  // for that same "not reached yet" window.
+  await ui.page(`<div id="host"></div>`, async (page) => {
+    await page.evaluate(() => {
+      document.getElementById("host").innerHTML =
+        '<div class="ui-date-range" id="range" data-ui-date-range>' +
+        '<input type="date" name="start"><input type="date" name="end"></div>' +
+        '<div class="ui-date-picker" id="single" data-ui-date-picker>' +
+        '<input type="date" name="only"></div>';
+    });
+
+    const rangeInputs = await page.evaluate(() =>
+      Array.from(document.querySelectorAll("#range > input")).map((el) => el.getBoundingClientRect().height)
+    );
+    rangeInputs.forEach((height) =>
+      assert.ok(height >= 38 && height < 60, "each raw range input must read as a compact control, not a tiny native field (got " + height + "px)")
+    );
+
+    const singleHeight = await page.box("#single > input").then((box) => box.height);
+    assert.ok(singleHeight >= 38 && singleHeight < 60, "the raw picker input must be clamped the same way (got " + singleHeight + "px)");
+
+    // And once build() reaches them, the clamp must get out of the way.
+    await page.evaluate(() => {
+      UI.init(document.getElementById("host"));
+    });
+    assert.equal(await page.count("#range .ui-date-range-trigger"), 1);
+    assert.equal(await page.count("#single .ui-date-range-trigger"), 1);
+  });
+});
+
 test(".ui-date-range-inline opts back out to content width for standalone placement", async () => {
   // The width:100% default is right for a form grid, wrong for a standalone
   // toolbar filter or a compact "as of" date -- .ui-date-range-inline must
@@ -690,6 +743,31 @@ const LOCAL_COMBOBOX = `
     <option value="3">Meridian Logistics</option>
     <option value="4">Zenith Holdings</option>
   </select>`;
+
+test("an unbuilt combobox clamps its raw <select> instead of showing a tiny inline native dropdown", async () => {
+  // Same fix as .ui-multiselect-native/.ui-date-range-native: a <select> is a
+  // real, painted element from the moment the parser reaches it -- sized to
+  // its longest option and inline, not the full-width block control it's
+  // about to become. Inserting after the page's own initial UI.init() has
+  // already run (no MutationObserver by default) leaves it deliberately
+  // unbuilt, standing in for the "not reached yet" window on a slow load.
+  await ui.page(`<div id="host" style="width:400px"></div>`, async (page) => {
+    await page.evaluate(() => {
+      document.getElementById("host").innerHTML = `
+        <select id="op2" data-ui-combobox>
+          <option value="">Choose…</option>
+          <option value="1">Keystone Industries Ltd</option>
+        </select>`;
+    });
+    const box = await page.box("#op2");
+    assert.ok(box.width > 350, "must fill its container width, not size to its longest option (got " + box.width + "px)");
+    assert.ok(box.height >= 38 && box.height < 60, "must read as a compact control, not native <select> sizing (got " + box.height + "px)");
+
+    // And once build() reaches it, the clamp must get out of the way.
+    await page.evaluate(() => UI.init(document.getElementById("host")));
+    assert.equal(await page.count("#host .ui-combobox-control"), 1);
+  });
+});
 
 test("local combobox filters options as you type", async () => {
   await ui.page(LOCAL_COMBOBOX, async (page) => {

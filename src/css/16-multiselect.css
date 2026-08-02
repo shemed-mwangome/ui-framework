@@ -1,3 +1,23 @@
+/* Before build() runs, a <select multiple> is still the plain, unenhanced
+   native element -- browsers render that as a multi-row listbox showing
+   several options at once (its default sizing for `multiple`, absent a
+   `size` attribute), not a compact single-line control. On a slow load it's
+   briefly visible like that, badly out of place next to its own label.
+   .ui-multiselect-native (below) only gets added once build() runs, so this
+   rule -- matching everything build() *hasn't* reached yet -- clamps the raw
+   element to look like the compact control it's about to become instead of
+   its native multi-row self, without needing a second readiness flag. */
+select[multiple][data-ui-multiselect]:not(.ui-multiselect-native) {
+  display: block;
+  width: 100%;
+  height: var(--ui-control-md);
+  overflow: hidden;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-2);
+  padding: .55rem .75rem;
+  color: var(--ui-subtle);
+}
+
 .ui-multiselect-native {
   position: absolute !important;
   width: 1px !important;

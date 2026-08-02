@@ -27,6 +27,33 @@
 
 .ui-tree-row:hover { background: var(--ui-surface-soft); }
 
+/* JS inserts a hidden placeholder .ui-tree-toggle for any leaf row authored
+   without one (see 25-tree-select.js's ensureToggleSlot) so the row reserves
+   the same space a toggle-bearing sibling does -- but that only happens once
+   build() runs. Before then, an author-omitted leaf really is missing the
+   element, and sits one toggle-width-plus-gap shallower than it should for
+   however long the page takes to load and enhance it -- the same
+   "misaligned tree" bug ensureToggleSlot fixes, just during the load window
+   ensureToggleSlot itself can't reach.
+
+   This has to be margin on the checkbox, not padding-left on the row: the
+   row's padding-left is *already* set per nesting depth by the .ui-tree-children
+   .ui-tree-children... chain further down this file, each level one selector
+   longer (and so higher-specificity) than the last. A flat padding-left here
+   would only ever win at the shallowest depth and lose -- silently, no
+   visible effect -- at every deeper one. Margin on the checkbox stacks with
+   whatever that depth-based padding already resolved to, instead of
+   replacing it, so it corrects every level uniformly. Self-limiting: once
+   build() inserts the real placeholder toggle, every row has a
+   .ui-tree-toggle child and this stops matching, so there's no double-offset
+   to reconcile against the placeholder's own width.
+
+   !important because .ui-tree-check's own base rule (below) sets
+   `margin: 0 !important` -- a defensive guard against Bootstrap 4's global
+   input[type=checkbox] reset (1.8.1) -- which would otherwise silently beat
+   this regardless of this selector's higher specificity. */
+.ui-tree-row:not(:has(> .ui-tree-toggle)) > .ui-tree-check { margin-left: 1.7rem !important; }
+
 .ui-tree-toggle {
   flex: none;
   width: 1.1rem;

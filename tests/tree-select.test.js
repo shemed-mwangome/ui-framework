@@ -64,6 +64,66 @@ test("leaves without a .ui-tree-children wrapper are auto-marked as leaves", asy
   });
 });
 
+test("an unbuilt leaf's checkbox already lines up correctly, before build() ever runs", async () => {
+  // Same gap as the equivalent .ui-multiselect-native/.ui-date-range-native
+  // fixes: ensureToggleSlot() (JS) only inserts a leaf's hidden placeholder
+  // toggle once build() reaches it, so a leaf authored without one sits one
+  // toggle-width-plus-gap shallower than its siblings for however long the
+  // page takes to load -- a pre-JS version of the "misaligned tree" bug
+  // fixed for the *built* state below. Inserting after the page's own initial
+  // UI.init() has already run (no MutationObserver by default) leaves this
+  // deliberately unbuilt, standing in for that same "not reached yet" window.
+  await ui.page(`<div id="host"></div>`, async (page) => {
+    await page.evaluate(() => {
+      document.getElementById("host").innerHTML = `
+        <div class="ui-tree" id="t" data-ui-tree>
+          <div class="ui-tree-node">
+            <div class="ui-tree-row">
+              <button type="button" class="ui-tree-toggle"></button>
+              <input type="checkbox" class="ui-tree-check">
+              <span class="ui-tree-label">Region</span>
+            </div>
+            <div class="ui-tree-children">
+              <div class="ui-tree-node">
+                <div class="ui-tree-row">
+                  <button type="button" class="ui-tree-toggle"></button>
+                  <input type="checkbox" class="ui-tree-check">
+                  <span class="ui-tree-label">Company</span>
+                </div>
+                <div class="ui-tree-children">
+                  <div class="ui-tree-node" data-ui-tree-value="site">
+                    <div class="ui-tree-row">
+                      <input type="checkbox" class="ui-tree-check">
+                      <span class="ui-tree-label">Site</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="ui-tree-node" data-ui-tree-value="sibling">
+                <div class="ui-tree-row">
+                  <input type="checkbox" class="ui-tree-check">
+                  <span class="ui-tree-label">Sibling</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>`;
+    });
+
+    const positions = await page.evaluate(() => {
+      function left(text) {
+        const label = Array.from(document.querySelectorAll(".ui-tree-label")).find((el) => el.textContent.trim() === text);
+        return label.closest(".ui-tree-row").querySelector(".ui-tree-check").getBoundingClientRect().left;
+      }
+      return { region: left("Region"), company: left("Company"), site: left("Site"), sibling: left("Sibling") };
+    });
+
+    assert.ok(positions.company > positions.region, "Company must sit deeper than Region");
+    assert.ok(positions.site > positions.company, "Site (leaf, no authored toggle) must sit deeper than its parent Company");
+    assert.equal(positions.sibling, positions.company, "Sibling (leaf, no authored toggle) must align with Company, its actual sibling");
+  });
+});
+
 test("a leaf's checkbox lines up with its sibling branches, whether or not its markup included a toggle button", async () => {
   // TREE's leaves (Apex Gaming, Redwood Leisure) are authored the way the docs
   // recommend -- no <button class="ui-tree-toggle"> at all, since there's nothing
