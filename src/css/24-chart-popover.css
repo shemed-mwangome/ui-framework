@@ -27,7 +27,7 @@
    so this stops matching, and yields to the real rules, the moment build()
    reaches the element. A multi-series chart's <script type="application/json">
    data island means this can't key off :empty like the other fixes did. */
-[data-ui-chart]:not(.ui-chart) { display: block; width: 100%; height: 10rem; }
+[data-ui-chart]:not(.ui-chart) { display: block; width: 100%; height: 12.5rem; }
 [data-ui-chart="sparkline"]:not(.ui-chart) { display: inline-block; width: 6rem; height: 1.75rem; }
 [data-ui-chart="donut"]:not(.ui-chart) { display: block; width: auto; max-width: 12rem; height: 12rem; margin: 0 auto; }
 
@@ -44,12 +44,15 @@
 }
 
 /*
- * Bar and line charts stretch to their container via preserveAspectRatio="none",
- * so an explicit height is what actually controls their size.
+ * Height is set by the renderer as an inline style, in pixels, because the
+ * chart is drawn in real pixel units rather than stretched to fit (see the
+ * header of 21-chart.js). These remain only as the pre-build fallback for the
+ * window between the element being parsed and build() reaching it; the inline
+ * style wins the moment it lands.
  */
 .ui-chart-bar .ui-chart-svg,
 .ui-chart-line .ui-chart-svg {
-  height: 10rem;
+  height: 12.5rem;
 }
 
 .ui-chart-sparkline {

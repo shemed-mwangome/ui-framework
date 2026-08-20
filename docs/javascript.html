@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>JavaScript API · UI Framework</title>
-  <link rel="stylesheet" href="../dist/ui-framework.css?v=1.9.0">
-  <link rel="stylesheet" href="assets/docs.css?v=1.9.0">
+  <link rel="stylesheet" href="../dist/ui-framework.css?v=1.10.0">
+  <link rel="stylesheet" href="assets/docs.css?v=1.10.0">
 </head>
 <body class="ui-scope docs-body">
   <header class="docs-topbar">
@@ -14,7 +14,7 @@
       <a class="docs-brand" href="index.html"><span class="docs-logo">UI</span><span>UI Framework</span></a>
     </div>
     <div class="ui-d-flex ui-align-center ui-gap-2">
-      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.9.0</span>
+      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.10.0</span>
       <button class="ui-btn ui-btn-sm ui-btn-outline-secondary" type="button" data-ui-theme-toggle>Theme</button>
     </div>
   </header>
@@ -75,6 +75,7 @@
     <tr><td><span class="ui-code">UI.table.clearSelection(target)</span></td><td>Clear the table's selection</td></tr>
     <tr><td><span class="ui-code">UI.chart.update(target, values, labels)</span></td><td>Replace a single-series chart's data and re-render in place</td></tr>
     <tr><td><span class="ui-code">UI.chart.update(target, {labels, series})</span></td><td>Same, for a grouped/stacked bar or multi-line chart (<span class="ui-code">series</span> is <span class="ui-code">[{name, values}, ...]</span>)</td></tr>
+    <tr><td><span class="ui-code">UI.chart.refresh(target)</span></td><td>Re-render without changing the data — after a container resize or a theme change</td></tr>
     <tr><td><span class="ui-code">UI.popover.open(trigger)</span></td><td>Open a popover programmatically</td></tr>
     <tr><td><span class="ui-code">UI.popover.close()</span></td><td>Close the open popover</td></tr>
     <tr><td><span class="ui-code">UI.clipboard.copy(text)</span></td><td>Copy text; resolves to <span class="ui-code">true</span> on success</td></tr>
@@ -193,6 +194,8 @@ document.querySelector(&quot;[data-ui-table]&quot;)
     <tr><td><span class="ui-code">ui:upload:done</span></td><td>A file finished uploading</td></tr>
     <tr><td><span class="ui-code">ui:upload:failed</span></td><td>A file failed to upload</td></tr>
     <tr><td><span class="ui-code">ui:chart:rendered</span></td><td>A chart finished rendering</td></tr>
+    <tr><td><span class="ui-code">ui:chart:select</span></td><td>A data point was clicked; cancellable, so a router can take over from the link</td></tr>
+    <tr><td><span class="ui-code">ui:chart:toggle</span></td><td>A series was switched off or back on from the legend</td></tr>
     <tr><td><span class="ui-code">ui:popover:shown</span></td><td>A popover opened</td></tr>
     <tr><td><span class="ui-code">ui:popover:hidden</span></td><td>A popover closed</td></tr>
     <tr><td><span class="ui-code">ui:copy</span></td><td>Text was copied to the clipboard</td></tr>
@@ -243,10 +246,10 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
-      <footer class="docs-footer">UI Framework 1.9.0 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
+      <footer class="docs-footer">UI Framework 1.10.0 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
     </main>
   </div>
-  <script src="../dist/ui-framework.js?v=1.9.0"></script>
-  <script src="assets/docs.js?v=1.9.0"></script>
+  <script src="../dist/ui-framework.js?v=1.10.0"></script>
+  <script src="assets/docs.js?v=1.10.0"></script>
 </body>
 </html>

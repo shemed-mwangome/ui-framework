@@ -1,5 +1,5 @@
 /*!
- * UI Framework v1.9.0
+ * UI Framework v1.10.0
  * Original dependency-free CSS/JavaScript framework.
  * Prefix: ui-
  * License: MIT
@@ -3496,7 +3496,7 @@ select[data-ui-combobox]:not(.ui-combobox-native) {
    so this stops matching, and yields to the real rules, the moment build()
    reaches the element. A multi-series chart's <script type="application/json">
    data island means this can't key off :empty like the other fixes did. */
-[data-ui-chart]:not(.ui-chart) { display: block; width: 100%; height: 10rem; }
+[data-ui-chart]:not(.ui-chart) { display: block; width: 100%; height: 12.5rem; }
 [data-ui-chart="sparkline"]:not(.ui-chart) { display: inline-block; width: 6rem; height: 1.75rem; }
 [data-ui-chart="donut"]:not(.ui-chart) { display: block; width: auto; max-width: 12rem; height: 12rem; margin: 0 auto; }
 
@@ -3513,12 +3513,15 @@ select[data-ui-combobox]:not(.ui-combobox-native) {
 }
 
 /*
- * Bar and line charts stretch to their container via preserveAspectRatio="none",
- * so an explicit height is what actually controls their size.
+ * Height is set by the renderer as an inline style, in pixels, because the
+ * chart is drawn in real pixel units rather than stretched to fit (see the
+ * header of 21-chart.js). These remain only as the pre-build fallback for the
+ * window between the element being parsed and build() reaching it; the inline
+ * style wins the moment it lands.
  */
 .ui-chart-bar .ui-chart-svg,
 .ui-chart-line .ui-chart-svg {
-  height: 10rem;
+  height: 12.5rem;
 }
 
 .ui-chart-sparkline {
@@ -5038,6 +5041,182 @@ select[data-ui-combobox]:not(.ui-combobox-native) {
 body.ui-is-offline [data-ui-needs-online] {
   opacity: .5;
   pointer-events: none;
+}
+
+/* ------------------------------------------------- Chart chrome
+ *
+ * Axes, gridlines, value labels, target lines, tooltips, links and the empty
+ * state. Split from 24-chart-popover.css because that file predates all of
+ * it and is about the chart's shell; this is about making a chart readable.
+ *
+ * The governing idea: the data is the only thing that should be dark. Axis
+ * lines, gridlines and tick labels are scaffolding -- necessary to read a
+ * value, and actively harmful if they compete with the value itself. So
+ * everything here is deliberately quiet.
+ */
+
+/* ------------------------------------------------------------- axes */
+
+.ui-chart-axis {
+  stroke: var(--ui-border-strong);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+/* Lighter than the axis, and crisp rather than antialiased -- a half-pixel
+   blur across a dozen gridlines reads as a haze behind the data. */
+.ui-chart-grid {
+  stroke: var(--ui-border);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.ui-chart-tick {
+  fill: var(--ui-muted);
+  font-size: 11px;
+  font-family: var(--ui-font-sans);
+}
+
+.ui-chart-axis-title {
+  fill: var(--ui-subtle);
+  font-size: 10.5px;
+  font-weight: 600;
+  font-family: var(--ui-font-sans);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+/* Value labels sit on the data, so they may be as dark as it is. */
+.ui-chart-value {
+  fill: var(--ui-text);
+  font-size: 11px;
+  font-weight: 600;
+  font-family: var(--ui-font-sans);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ----------------------------------------------------- target line */
+
+/* Dashed, because a target is not a measurement. A solid line at 80% reads
+   as another data series. */
+.ui-chart-target {
+  stroke: var(--ui-danger);
+  stroke-width: 1.5;
+  stroke-dasharray: 5 4;
+  opacity: .75;
+}
+
+.ui-chart-target-label {
+  fill: var(--ui-danger);
+  font-size: 10.5px;
+  font-weight: 700;
+  font-family: var(--ui-font-sans);
+}
+
+/* ----------------------------------------------------------- marks */
+
+.ui-chart-bar-rect,
+.ui-chart-dot,
+.ui-chart-segment {
+  transition: opacity var(--ui-transition-fast), stroke-width var(--ui-transition-fast);
+}
+
+.ui-chart-mark:hover .ui-chart-bar-rect,
+.ui-chart-mark:focus-visible .ui-chart-bar-rect { opacity: .82; }
+
+.ui-chart-mark:hover .ui-chart-dot,
+.ui-chart-mark:focus-visible .ui-chart-dot { r: 5; }
+
+.ui-chart-mark:hover .ui-chart-segment,
+.ui-chart-mark:focus-visible .ui-chart-segment { stroke-width: 5.5; }
+
+/* A link inside a chart has to look like one. Without the pointer there is
+   nothing to suggest the bar does anything at all -- and unlike a text link
+   it cannot be underlined. */
+a.ui-chart-mark { cursor: pointer; }
+
+a.ui-chart-mark:focus-visible {
+  outline: 2px solid var(--ui-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* --------------------------------------------------------- tooltip */
+
+.ui-chart-tip {
+  position: fixed;
+  z-index: var(--ui-z-tooltip);
+  max-width: 18rem;
+  padding: .3rem .55rem;
+  border-radius: var(--ui-radius-2);
+  background: var(--ui-dark);
+  color: #fff;
+  font-size: .78rem;
+  font-weight: 500;
+  line-height: 1.4;
+  pointer-events: none;
+  box-shadow: var(--ui-shadow-2);
+}
+
+.ui-chart-tip[hidden] { display: none; }
+
+/* ----------------------------------------------------- empty state */
+
+/* A chart with no data used to render nothing at all, leaving a card with a
+   silent void where a panel should be -- indistinguishable from a failure to
+   load. It says so instead. */
+.ui-chart-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 8rem;
+  padding: 1rem;
+  border: 1px dashed var(--ui-border);
+  border-radius: var(--ui-radius-3);
+  color: var(--ui-muted);
+  font-size: .85rem;
+  text-align: center;
+}
+
+.ui-chart-note {
+  fill: var(--ui-muted);
+  font-size: 12px;
+  font-family: var(--ui-font-sans);
+}
+
+/* --------------------------------------------------- legend toggle */
+
+.ui-chart-legend-toggle .ui-chart-legend-item {
+  cursor: pointer;
+  border-radius: var(--ui-radius-2);
+  padding: .1rem .3rem;
+}
+
+.ui-chart-legend-toggle .ui-chart-legend-item:hover { background: var(--ui-surface-soft); }
+
+.ui-chart-legend-toggle .ui-chart-legend-item:focus-visible {
+  outline: 0;
+  box-shadow: var(--ui-focus-ring);
+}
+
+/* A switched-off series stays listed, dimmed and struck through: hiding it
+   entirely would hide the control that brings it back, and the reader would
+   have no way to tell anything was missing. */
+.ui-chart-legend-item.ui-off { opacity: .45; }
+.ui-chart-legend-item.ui-off .ui-chart-legend-label { text-decoration: line-through; }
+
+/* ----------------------------------------------------------- print */
+
+@media print {
+  .ui-chart-tip { display: none !important; }
+
+  /* Gridlines and fills that read as light grey on screen disappear entirely
+     on a monochrome office printer. Darken the scaffolding and outline the
+     bars so a printed report is still readable. */
+  .ui-chart-grid { stroke: #999; }
+  .ui-chart-axis { stroke: #333; }
+  .ui-chart-tick, .ui-chart-value { fill: #000; }
+  .ui-chart-bar-rect { stroke: #333; stroke-width: .5; }
 }
 }
 

@@ -1,5 +1,84 @@
 # Changelog
 
+## 1.10.0 — 2026-08-20
+
+Rewrote the chart renderer. The previous one was built to a deliberately
+narrow scope — "how many by status, how many by month" — and delivered it.
+The problem was that it could not be read: with no axis and no value labels,
+the only way to get a number out of a chart was to hover a bar and wait for
+the browser's native tooltip, which does not exist on a touch screen. For a
+module used on a phone in the field, and for reports issued to a regulated
+operator, that is not sufficient.
+
+### The root cause
+
+The old renderer drew into a fixed `100x40` viewBox and stretched it with
+`preserveAspectRatio="none"`. At a typical 910x160 box that is a horizontal
+scale of 9.1 against a vertical scale of 4.0, so **every circle rendered as an
+ellipse 2.27 times wider than it was tall** — measured, not estimated — and
+any text would have been distorted by the same factor. That is the real reason
+there were no axis labels: the renderer could not have drawn them legibly.
+
+Charts now render in real pixel units with the default `preserveAspectRatio`,
+measured from the element, with a `ResizeObserver` re-rendering on width
+change. Circles are circles, strokes are uniform, and text can be placed.
+
+### Added
+
+- **Axes** (`data-ui-axis`) — y-axis with round-number ticks chosen the way a
+  person would (steps of 1, 2, 2.5 or 5 × a power of ten), gridlines, a
+  baseline, and category labels that **thin rather than overlap** when there
+  are more of them than there is room for.
+- **Value labels** (`data-ui-value-labels`) printed on each bar or point.
+- **Target line** (`data-ui-target`, `data-ui-target-label`) — dashed, because
+  a target is not a measurement. Without one, "82%" is a number; with one it
+  is a pass or a fail, which is the question the reader actually has.
+- **Axis titles** (`data-ui-axis-x`, `data-ui-axis-y`) and a scale override
+  (`data-ui-max`).
+- **Category names on horizontal bars.** They previously existed only in the
+  hidden data table and the hover tooltip, so a "coverage by region" chart
+  showed four anonymous bars.
+- **Empty state** (`data-ui-empty-text`). A chart with no values rendered
+  *nothing at all* while its container still held 160px — a silent void,
+  indistinguishable from a failure to load.
+- **All-zero note.** Three bars of height zero used to look exactly like a
+  broken chart; it now says so.
+- **Minimum bar height.** Values of `1, 2, 4000` scaled to bar heights of
+  `0.01, 0.02, 40` — the small ones were invisible, which is a value silently
+  dropped from the chart. Non-zero values now have a 2px floor.
+- **Framework-rendered tooltips**, working on hover, focus **and touch**, with
+  `<title>` kept as the print and no-script fallback.
+- **Links** (`data-ui-link-template`, `data-ui-links`, `data-ui-link-target`)
+  — real `<a>` elements inside the SVG, so a clickable data point is keyboard
+  focusable, middle-clickable, copyable and works without JavaScript. An
+  interactive chart becomes `role="group"` with per-link labels rather than
+  `role="img"`, which would have hidden every link inside it.
+- **`ui:chart:select`**, cancellable, for single-page routing without giving
+  up the underlying links.
+- **Legend toggling** (`data-ui-legend-toggle`) with the switched-off series
+  kept visible and struck through.
+- **`UI.chart.refresh(target)`** and re-render on container resize.
+- Print styles that darken gridlines and outline bars, since light grey
+  disappears on a monochrome office printer.
+
+### Fixed
+
+- **Line and area x-labels were offset by half a slot.** A bar occupies a slot
+  and its label belongs in the middle of it; a line's point sits *on* the
+  boundary. Using the bar rule for a line shifted every label right and pushed
+  the last one off the end of the axis — six months rendered five labels.
+- **A dimmed legend item never dimmed.** The modifier class arrived as a
+  second `class` attribute, which the HTML parser silently ignores.
+
+### Compatibility
+
+Existing markup is unchanged. `data-ui-height` below 60 is still read as the
+old viewBox units and scaled to the size those charts already had, so a
+`data-ui-height="40"` chart still renders 160px tall. No axis, value label or
+link appears unless it is asked for.
+
+New spec: `tests/chart.test.js`.
+
 ## 1.9.0 — 2026-08-20
 
 Benchmarked the framework by rebuilding a real regulatory register and a

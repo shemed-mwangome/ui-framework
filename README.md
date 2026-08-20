@@ -1,4 +1,4 @@
-# UI Framework 1.9.0
+# UI Framework 1.10.0
 
 A complete, dependency-free CSS and JavaScript UI framework designed for
 server-rendered applications, static HTML, and legacy projects that already
@@ -724,9 +724,16 @@ bulk-action buttons away without clearing the selection.
 ## Charts
 
 Dependency-free SVG charts — `bar`, `line`, `area`, `sparkline`, and `donut`
-— each rendered with `role="img"`, a generated `aria-label`, and a
-visually-hidden data table, so the numbers are available to screen readers
-and to print.
+— each rendered with a generated `aria-label` and a visually-hidden data
+table, so the numbers are available to screen readers and to print.
+
+Charts render in real pixel units and re-render on resize. Add `data-ui-axis`
+for a y-axis with round-number ticks, gridlines, category labels and a
+baseline; `data-ui-value-labels` to print each value on its mark;
+`data-ui-target="80"` with `data-ui-target-label` for a reference line;
+`data-ui-max` to pin the scale; `data-ui-axis-x` / `data-ui-axis-y` for axis
+titles. A chart with no data renders `data-ui-empty-text` rather than
+nothing.
 
 ```html
 <div data-ui-chart="bar" data-ui-values="12,19,3" data-ui-labels="Jan,Feb,Mar"
@@ -751,10 +758,59 @@ JSON data island instead:
 ```
 
 Drop `data-ui-stacked` for side-by-side grouped bars instead; add
-`data-ui-orientation="horizontal"` to either. `UI.chart.update(target,
-data)` accepts the same `{labels, series}` shape (or the plain `(values,
-labels)` form for a single series) to re-render a chart in place, so one fed
-from an API response doesn't need to hand-build a comma-separated string.
+`data-ui-orientation="horizontal"` to either — a horizontal bar chart prints
+its category names down the left, which is usually what a "by region" or "by
+operator" breakdown wants. `data-ui-legend-toggle` lets the reader switch a
+series off; it stays listed and struck through, because hiding it would also
+hide the control that brings it back.
+
+`UI.chart.update(target, data)` accepts the same `{labels, series}` shape (or
+the plain `(values, labels)` form for a single series) to re-render a chart in
+place, so one fed from an API response doesn't need to hand-build a
+comma-separated string. `UI.chart.refresh(target)` re-renders without changing
+the data.
+
+### Clickable charts
+
+A data point that navigates should be a **link**, not a click handler. An
+`<a>` inside SVG is keyboard focusable, shows its target in the status bar,
+opens in a new tab on middle-click, can be copied from the context menu, and
+still works if the script that would have handled the click fails to load.
+None of that is true of `onclick`.
+
+```html
+<div data-ui-chart="bar" data-ui-axis
+     data-ui-values="14,9,22,5"
+     data-ui-labels="Dar es Salaam,Mwanza,Arusha,Tanga"
+     data-ui-link-template="/inspections?region={label}"></div>
+```
+
+Placeholders: `{label}`, `{value}`, `{series}`, `{index}`, `{seriesIndex}` —
+each URL-encoded. For links that don't follow a pattern, give
+`data-ui-links="/a,/b,/c"` or a `links` array alongside `values` in the JSON
+island. `data-ui-link-target="_blank"` opens in a new tab.
+
+The chart's ARIA role changes to match: a static chart is `role="img"` with
+one description, an interactive one is `role="group"` whose links are each
+labelled — marking a group of links as an image would hide every one of them,
+since an image has no interior.
+
+For a single-page application that routes rather than navigates, listen for
+`ui:chart:select` and cancel it. The `href` stays in the markup, so the chart
+degrades to working links if the router never loads:
+
+```javascript
+chart.addEventListener("ui:chart:select", function (event) {
+    event.preventDefault();
+    router.go(event.detail.label);   // also: value, series, index, href
+});
+```
+
+Tooltips are rendered by the framework rather than left to the browser's
+native `<title>` behaviour: a native tooltip takes about a second to appear,
+cannot be styled, and **never appears on a touch screen** — which meant a
+value was simply unreachable on a phone. `<title>` is still emitted as a
+fallback for print and for scripting-disabled contexts.
 
 ## Uploads
 

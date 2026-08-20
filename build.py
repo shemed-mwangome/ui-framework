@@ -19,7 +19,7 @@ CSS_ORDER = [
     "22-validate-combobox.css", "23-table-tools.css",
     "24-chart-popover.css", "25-status-document.css",
     "26-tree-select.css", "27-select-list.css", "28-filter-bar.css",
-    "29-patterns.css", "30-offline.css",
+    "29-patterns.css", "30-offline.css", "31-chart-axes.css",
 ]
 
 
@@ -48,7 +48,7 @@ JS_ORDER = [
 ]
 
 CSS_BANNER = """/*!
- * UI Framework v1.9.0
+ * UI Framework v1.10.0
  * Original dependency-free CSS/JavaScript framework.
  * Prefix: ui-
  * License: MIT
@@ -56,7 +56,7 @@ CSS_BANNER = """/*!
 """
 
 JS_BANNER = """/*!
- * UI Framework v1.9.0
+ * UI Framework v1.10.0
  * Dependency-free JavaScript bundle.
  * License: MIT
  */

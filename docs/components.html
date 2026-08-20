@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Components · UI Framework</title>
-  <link rel="stylesheet" href="../dist/ui-framework.css?v=1.9.0">
-  <link rel="stylesheet" href="assets/docs.css?v=1.9.0">
+  <link rel="stylesheet" href="../dist/ui-framework.css?v=1.10.0">
+  <link rel="stylesheet" href="assets/docs.css?v=1.10.0">
 </head>
 <body class="ui-scope docs-body">
   <header class="docs-topbar">
@@ -14,7 +14,7 @@
       <a class="docs-brand" href="index.html"><span class="docs-logo">UI</span><span>UI Framework</span></a>
     </div>
     <div class="ui-d-flex ui-align-center ui-gap-2">
-      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.9.0</span>
+      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.10.0</span>
       <button class="ui-btn ui-btn-sm ui-btn-outline-secondary" type="button" data-ui-theme-toggle>Theme</button>
     </div>
   </header>
@@ -1376,7 +1376,7 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
 
 <section class="docs-section" id="charts">
   <h2 class="ui-h2">Charts</h2>
-  <p class="docs-section-intro">Plain SVG, no charting library. Every chart renders as <code class="ui-code">role="img"</code> with a generated summary label and a visually-hidden data table, so the numbers are available to screen readers and to print. Deliberately limited to the shapes a dashboard needs — anything requiring zoom or streaming still wants a real charting library.</p>
+  <p class="docs-section-intro">Plain SVG, no charting library. Every chart carries a generated summary label and a visually-hidden data table, so the numbers are available to screen readers and to print. Charts render in real pixel units and re-render on resize. Deliberately limited to the shapes a back-office application needs — anything requiring zoom, brushing or streaming still wants a real charting library.</p>
 
 <div class="docs-demo">
 <div class="ui-row">
@@ -1431,10 +1431,103 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
       <tr><td><code class="ui-code">data-ui-stacked</code></td><td>Stacks a multi-series bar chart's segments instead of grouping them side by side.</td></tr>
       <tr><td><code class="ui-code">data-ui-centre</code></td><td>Text in the middle of a donut.</td></tr>
       <tr><td><code class="ui-code">data-ui-format-currency</code></td><td>Formats values as currency in labels and the data table.</td></tr>
-      <tr><td><code class="ui-code">data-ui-orientation</code></td><td><code class="ui-code">horizontal</code> for horizontal bars, single- or multi-series.</td></tr>
-      <tr><td><code class="ui-code">data-ui-height</code></td><td>Chart height in viewBox units.</td></tr>
+      <tr><td><code class="ui-code">data-ui-orientation</code></td><td><code class="ui-code">horizontal</code> for horizontal bars, single- or multi-series. Category names print down the left.</td></tr>
+      <tr><td><code class="ui-code">data-ui-height</code></td><td>Chart height. Values of 60 or more are pixels; below 60 they are read as the pre-1.10 viewBox units and scaled, so existing charts keep their size.</td></tr>
+      <tr><td><code class="ui-code">data-ui-axis</code> <span class="ui-badge ui-badge-soft-primary ui-badge-pill">1.10</span></td><td>Y-axis with round-number ticks, gridlines, a baseline and category labels. Add <code class="ui-code">data-ui-no-grid</code> for ticks without gridlines.</td></tr>
+      <tr><td><code class="ui-code">data-ui-value-labels</code> <span class="ui-badge ui-badge-soft-primary ui-badge-pill">1.10</span></td><td>Prints each value on its bar or point.</td></tr>
+      <tr><td><code class="ui-code">data-ui-target</code> / <code class="ui-code">data-ui-target-label</code> <span class="ui-badge ui-badge-soft-primary ui-badge-pill">1.10</span></td><td>A dashed reference line — a statutory minimum, a service target.</td></tr>
+      <tr><td><code class="ui-code">data-ui-max</code> <span class="ui-badge ui-badge-soft-primary ui-badge-pill">1.10</span></td><td>Pins the top of the scale, e.g. <code class="ui-code">100</code> for a percentage.</td></tr>
+      <tr><td><code class="ui-code">data-ui-axis-x</code> / <code class="ui-code">data-ui-axis-y</code> <span class="ui-badge ui-badge-soft-primary ui-badge-pill">1.10</span></td><td>Axis titles.</td></tr>
+      <tr><td><code class="ui-code">data-ui-empty-text</code> <span class="ui-badge ui-badge-soft-primary ui-badge-pill">1.10</span></td><td>Shown when there are no values, instead of rendering nothing.</td></tr>
+      <tr><td><code class="ui-code">data-ui-legend-toggle</code> <span class="ui-badge ui-badge-soft-primary ui-badge-pill">1.10</span></td><td>Lets the reader switch a series off from the legend.</td></tr>
+      <tr><td><code class="ui-code">data-ui-link-template</code> / <code class="ui-code">data-ui-links</code> <span class="ui-badge ui-badge-soft-primary ui-badge-pill">1.10</span></td><td>Makes each data point a real link — see below.</td></tr>
     </tbody>
   </table>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">Readable charts <span class="ui-badge ui-badge-soft-primary ui-badge-pill">1.10</span></h3>
+<p class="docs-section-intro">A chart with no axis and no value labels can be compared but not read: the only way to get a number out of it is to hover a bar and wait for the browser's native tooltip — which does not exist on a touch screen. For anything a reader takes a figure from, turn the axis on.</p>
+
+<div class="docs-demo">
+<div class="ui-card"><div class="ui-card-body">
+  <h3 class="ui-h6 ui-text-muted">Compliance rate by quarter</h3>
+  <div data-ui-chart="bar" data-ui-values="87,64,92,41,78,55"
+       data-ui-labels="Q1,Q2,Q3,Q4,Q5,Q6" data-ui-title="Compliance rate by quarter"
+       data-ui-axis data-ui-value-labels data-ui-max="100"
+       data-ui-target="80" data-ui-target-label="Target 80%" data-ui-axis-y="Rate %"></div>
+</div></div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div data-ui-chart=&quot;bar&quot;
+     data-ui-values=&quot;87,64,92,41,78,55&quot;
+     data-ui-labels=&quot;Q1,Q2,Q3,Q4,Q5,Q6&quot;
+     data-ui-axis
+     data-ui-value-labels
+     data-ui-max=&quot;100&quot;
+     data-ui-target=&quot;80&quot; data-ui-target-label=&quot;Target 80%&quot;
+     data-ui-axis-y=&quot;Rate %&quot;&gt;&lt;/div&gt;</code></pre>
+</div>
+
+<div class="docs-demo ui-mt-4">
+<div class="ui-card"><div class="ui-card-body">
+  <h3 class="ui-h6 ui-text-muted">Coverage by region — horizontal, with names</h3>
+  <div data-ui-chart="bar" data-ui-orientation="horizontal" data-ui-axis data-ui-value-labels
+       data-ui-values="14,9,22,5" data-ui-labels="Dar es Salaam,Mwanza,Arusha,Tanga"
+       data-ui-title="Coverage by region"></div>
+</div></div>
+</div>
+
+<div class="docs-demo ui-mt-4">
+<div class="ui-card"><div class="ui-card-body">
+  <h3 class="ui-h6 ui-text-muted">No data</h3>
+  <div data-ui-chart="bar" data-ui-values=""
+       data-ui-empty-text="No findings recorded for this period."></div>
+</div></div>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">Clickable charts <span class="ui-badge ui-badge-soft-primary ui-badge-pill">1.10</span></h3>
+<p class="docs-section-intro">A data point that navigates is a <strong>link</strong>, not a click handler. An <code class="ui-code">&lt;a&gt;</code> inside SVG is keyboard focusable, shows its target in the status bar, opens in a new tab on middle-click, can be copied from the context menu, and still works if the script that would have handled the click fails to load. None of that is true of <code class="ui-code">onclick</code>, and all of it is behaviour people expect from something that navigates.</p>
+
+<div class="docs-demo">
+<div class="ui-card"><div class="ui-card-body">
+  <h3 class="ui-h6 ui-text-muted">Open findings by region — click a bar</h3>
+  <div id="docsChartLinks" data-ui-chart="bar" data-ui-axis
+       data-ui-values="14,9,22,5" data-ui-labels="Dar es Salaam,Mwanza,Arusha,Tanga"
+       data-ui-link-template="#region-{label}"
+       data-ui-title="Open findings by region"></div>
+  <p class="ui-help ui-mt-2" id="docsChartPicked">Nothing selected yet.</p>
+</div></div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div data-ui-chart=&quot;bar&quot; data-ui-axis
+     data-ui-values=&quot;14,9,22,5&quot;
+     data-ui-labels=&quot;Dar es Salaam,Mwanza,Arusha,Tanga&quot;
+     data-ui-link-template=&quot;/inspections?region={label}&quot;&gt;&lt;/div&gt;</code></pre>
+</div>
+
+<div class="docs-table-wrap ui-mt-3">
+  <table class="ui-table ui-table-sm">
+    <thead><tr><th>Attribute</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">data-ui-link-template</code></td><td>A pattern. Placeholders <code class="ui-code">{label}</code>, <code class="ui-code">{value}</code>, <code class="ui-code">{series}</code>, <code class="ui-code">{index}</code>, <code class="ui-code">{seriesIndex}</code>, each URL-encoded.</td></tr>
+      <tr><td><code class="ui-code">data-ui-links</code></td><td>One URL per point, comma-separated, when they don't follow a pattern. Wins over the template.</td></tr>
+      <tr><td><code class="ui-code">links</code> in the JSON island</td><td>Per-point URLs for a named series, alongside its <code class="ui-code">values</code>.</td></tr>
+      <tr><td><code class="ui-code">data-ui-link-target</code></td><td><code class="ui-code">_blank</code> to open in a new tab (<code class="ui-code">rel="noopener"</code> is added).</td></tr>
+      <tr><td><code class="ui-code">ui:chart:select</code></td><td>Fires on the chart with <code class="ui-code">{ label, value, series, index, href, mark }</code>. Call <code class="ui-code">preventDefault()</code> to route in a single-page application instead of navigating.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<p class="docs-section-intro ui-mt-3">The ARIA role changes to match: a static chart is <code class="ui-code">role="img"</code> with one description, an interactive one is <code class="ui-code">role="group"</code> whose links are each labelled. Marking a group of links as an image would hide every one of them from a screen reader, because an image has no interior.</p>
+
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>chart.addEventListener(&quot;ui:chart:select&quot;, function (event) {
+    event.preventDefault();          // keep the href, take over the navigation
+    router.go(event.detail.label);
+});</code></pre>
 </div>
 
 <h3 class="ui-h3 ui-mt-5">Grouped and stacked series</h3>
@@ -3463,17 +3556,29 @@ UI.blocker.clear(button);                                  // enable + clear
 
 
 
-      <footer class="docs-footer">UI Framework 1.9.0 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
+      <footer class="docs-footer">UI Framework 1.10.0 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
     </main>
   </div>
-  <script src="../dist/ui-framework.js?v=1.9.0"></script>
-  <script src="assets/docs.js?v=1.9.0"></script>
+  <script src="../dist/ui-framework.js?v=1.10.0"></script>
+  <script src="assets/docs.js?v=1.10.0"></script>
   <script>
     // The offline demo queues against a dummy URL. Left to flush, fetch("#demo")
     // would resolve against this very page, return 200, and the item would
     // vanish before anyone saw it -- so autoFlush is off here. In a real
     // application leave it on; that is the whole point of the component.
     if (window.UI && UI.offline) UI.offline.configure({ autoFlush: false });
+
+    // The clickable-chart demo shows the selection rather than navigating,
+    // so the page does not jump away from the example that produced it.
+    var linkChart = document.getElementById("docsChartLinks");
+    if (linkChart) {
+      linkChart.addEventListener("ui:chart:select", function (event) {
+        event.preventDefault();
+        document.getElementById("docsChartPicked").textContent =
+          "Selected: " + event.detail.label + " (" + event.detail.value +
+          ") — would have gone to " + event.detail.href;
+      });
+    }
   </script>
 </body>
 </html>

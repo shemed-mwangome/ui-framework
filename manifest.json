@@ -1,5 +1,5 @@
 {
-  "version": "1.9.0",
+  "version": "1.10.0",
   "prefix": "ui-",
   "cssModules": [
     "00-tokens.css",
@@ -32,7 +32,8 @@
     "27-select-list.css",
     "28-filter-bar.css",
     "29-patterns.css",
-    "30-offline.css"
+    "30-offline.css",
+    "31-chart-axes.css"
   ],
   "jsModules": [
     "00-core.js",
