@@ -255,16 +255,24 @@
    * URL-encoded. Charts with no links behave exactly as before.
    */
   function linkFor(cfg, point) {
-    if (cfg.linkList && cfg.linkList[point.index]) return cfg.linkList[point.index];
-    if (point.seriesLinks && point.seriesLinks[point.index]) return point.seriesLinks[point.index];
+    // Every one of these can arrive in a server response now that charts load
+    // from data-ui-url -- a `links` array in the JSON, or a template rendered
+    // into the attribute. UI.escape would make `javascript:alert(1)` safe to
+    // sit inside the attribute and entirely happy to execute when followed,
+    // so the scheme is checked too. A rejected URL returns null and the mark
+    // renders without a link rather than with a dangerous one.
+    if (cfg.linkList && cfg.linkList[point.index]) return UI.safeUrl(cfg.linkList[point.index]);
+    if (point.seriesLinks && point.seriesLinks[point.index]) {
+      return UI.safeUrl(point.seriesLinks[point.index]);
+    }
     if (!cfg.linkTemplate) return null;
 
-    return cfg.linkTemplate
+    return UI.safeUrl(cfg.linkTemplate
       .replace(/\{label\}/g, encodeURIComponent(point.label == null ? "" : point.label))
       .replace(/\{value\}/g, encodeURIComponent(point.value))
       .replace(/\{series\}/g, encodeURIComponent(point.series == null ? "" : point.series))
       .replace(/\{seriesIndex\}/g, encodeURIComponent(point.seriesIndex == null ? 0 : point.seriesIndex))
-      .replace(/\{index\}/g, encodeURIComponent(point.index));
+      .replace(/\{index\}/g, encodeURIComponent(point.index)));
   }
 
   /**
@@ -407,6 +415,7 @@
       axisXTitle: attr(element, "axis-x", null),
       axisYTitle: attr(element, "axis-y", null),
       emptyText: attr(element, "empty-text", "No data to display"),
+      errorText: attr(element, "error-text", "This chart could not be loaded."),
       linkTemplate: attr(element, "link-template", null),
       linkList: linkList.length ? linkList : null,
       linkTarget: attr(element, "link-target", null),
@@ -1144,8 +1153,137 @@
     build(element);
   }
 
+  /* ==================================================================== */
+  /* Server data source                                                   */
+  /* ==================================================================== */
+
+  /**
+   * Smart tables have had `data-ui-url` since they were written; charts did
+   * not, so every dashboard hand-rolled the same fetch-then-update. This
+   * closes that gap.
+   *
+   *   <div data-ui-chart="bar" data-ui-axis
+   *        data-ui-url="/compliance/rates"
+   *        data-ui-refresh-on="#inspectionFilters"></div>
+   *
+   * Accepted response shapes, matching UI.chart.update():
+   *   [1, 2, 3]
+   *   { "values": [...], "labels": [...] }
+   *   { "labels": [...], "series": [{ "name": …, "values": [...] }] }
+   *
+   * `data-ui-refresh-on` names an element whose changes should re-query --
+   * usually a filter bar. The current filter state goes out as query
+   * parameters, so one endpoint serves the chart and the table beside it.
+   */
+  function loadingState(element, cfg) {
+    element.classList.add("ui-chart", "ui-chart-" + cfg.type, "ui-chart-is-loading");
+    element.setAttribute("aria-busy", "true");
+    // A skeleton rather than a spinner: it reserves the height the chart is
+    // about to take, so the page does not jump when the data lands.
+    element.innerHTML = '<div class="ui-chart-skeleton" aria-hidden="true">' +
+      '<span></span><span></span><span></span><span></span><span></span>' +
+      "</div>";
+  }
+
+  function errorState(element, cfg, status) {
+    element.classList.add("ui-chart", "ui-chart-" + cfg.type, "ui-chart-is-error");
+    element.classList.remove("ui-chart-is-loading");
+    element.removeAttribute("aria-busy");
+    element.setAttribute("role", "img");
+    element.setAttribute("aria-label", attr(element, "title", "Chart") + ": " + cfg.errorText);
+    element.innerHTML = '<div class="ui-chart-error">' + esc(cfg.errorText) + "</div>";
+    UI.emit(element, "ui:chart:error", { status: status });
+  }
+
+  function queryFor(element) {
+    var params = new window.URLSearchParams();
+    var source = attr(element, "refresh-on", null);
+    var bar = source ? UI.q(source) : null;
+    if (bar && UI.filter) {
+      var state = UI.filter.state(bar);
+      Object.keys(state).forEach(function (key) { params.set(key, state[key].join(",")); });
+    }
+    return params;
+  }
+
+  function load(element) {
+    var url = attr(element, "url", null);
+    if (!url) return;
+
+    var cfg = readConfig(element, attr(element, "chart", "bar"));
+
+    // A filter changed while the previous request was still in flight would
+    // otherwise race: whichever response arrived last would win, which is not
+    // necessarily the one the user is waiting for.
+    if (element._uiChartAbort) element._uiChartAbort.abort();
+    var controller = window.AbortController ? new window.AbortController() : null;
+    element._uiChartAbort = controller;
+
+    var target = new URL(url, window.location.href);
+    queryFor(element).forEach(function (value, key) { target.searchParams.set(key, value); });
+
+    loadingState(element, cfg);
+
+    window.fetch(target.toString(), {
+      headers: { "Accept": "application/json", "X-Requested-With": "ui-chart" },
+      credentials: "same-origin",
+      signal: controller ? controller.signal : undefined
+    }).then(function (response) {
+      if (!response.ok) {
+        var error = new Error("HTTP " + response.status);
+        error.status = response.status;
+        throw error;
+      }
+      return response.json();
+    }).then(function (data) {
+      element._uiChartAbort = null;
+      element.classList.remove("ui-chart-is-loading", "ui-chart-is-error");
+      element.removeAttribute("aria-busy");
+      apply(element, data);
+      UI.emit(element, "ui:chart:loaded", { data: data });
+    }).catch(function (error) {
+      if (error && error.name === "AbortError") return;   // superseded, not failed
+      element._uiChartAbort = null;
+      errorState(element, cfg, error && error.status);
+    });
+  }
+
+  function apply(element, data) {
+    if (Array.isArray(data)) { UI.chart.update(element, data); return; }
+    if (data && Array.isArray(data.series)) {
+      UI.chart.update(element, { labels: data.labels || [], series: data.series });
+      return;
+    }
+    UI.chart.update(element, (data && data.values) || [], (data && data.labels) || null);
+  }
+
+  function bindRefresh(element) {
+    var source = attr(element, "refresh-on", null);
+    if (!source) return;
+    var bar = UI.q(source);
+    if (!bar) return;
+
+    var handler = function () { load(element); };
+    ["ui:filter:change", "ui:segment:change", "ui:daterange:change"].forEach(function (name) {
+      bar.addEventListener(name, handler);
+    });
+    UI.cleanup(element, function () {
+      ["ui:filter:change", "ui:segment:change", "ui:daterange:change"].forEach(function (name) {
+        bar.removeEventListener(name, handler);
+      });
+    });
+  }
+
   function init(root) {
     UI.matchAll("[data-ui-chart]", root).forEach(function (element) {
+      if (element.hasAttribute("data-ui-url")) {
+        if (element.dataset.uiChartReady) return;
+        element.dataset.uiChartReady = "true";
+        bindRefresh(element);
+        load(element);
+        watch(element);
+        return;
+      }
       build(element);
       watch(element);
     });
@@ -1189,6 +1327,12 @@
     refresh: function (target) {
       var element = typeof target === "string" ? UI.q(target) : target;
       if (element) refresh(element);
+    },
+
+    /** Re-query a `data-ui-url` chart — after saving a record, say. */
+    load: function (target) {
+      var element = typeof target === "string" ? UI.q(target) : target;
+      if (element) load(element);
     }
   };
 })(window, document);

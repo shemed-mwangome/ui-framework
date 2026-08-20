@@ -43,8 +43,13 @@
   }
 
   function build(wrapper) {
-    if (wrapper.dataset.uiReady) return;
-    wrapper.dataset.uiReady = "true";
+    // Component-specific rather than the generic `uiReady` that four modules
+    // used to share. UI.destroy()'s /^ui[A-Za-z]*Ready$/ clears either, so
+    // this was never a teardown bug -- but two of them on the same element
+    // would have had one silently skip its own build, and a generic flag
+    // tells a reader nothing about which component claimed the element.
+    if (wrapper.dataset.uiTableReady) return;
+    wrapper.dataset.uiTableReady = "true";
 
     var table = wrapper.tagName === "TABLE" ? wrapper : UI.q("table", wrapper);
     if (!table) return;

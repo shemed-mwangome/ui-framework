@@ -48,7 +48,7 @@ JS_ORDER = [
 ]
 
 CSS_BANNER = """/*!
- * UI Framework v1.10.0
+ * UI Framework v1.12.0
  * Original dependency-free CSS/JavaScript framework.
  * Prefix: ui-
  * License: MIT
@@ -56,7 +56,7 @@ CSS_BANNER = """/*!
 """
 
 JS_BANNER = """/*!
- * UI Framework v1.10.0
+ * UI Framework v1.12.0
  * Dependency-free JavaScript bundle.
  * License: MIT
  */

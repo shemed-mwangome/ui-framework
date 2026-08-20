@@ -1,5 +1,122 @@
 # Changelog
 
+## 1.12.0 — 2026-08-20
+
+A security review of all 30 JavaScript modules, the two remaining consistency
+gaps closed, and `SECURITY.md` added stating what the framework guarantees,
+what it deliberately does not, and where the trust boundaries sit.
+
+### Security — fixed
+
+- **`UI.escape()` did not escape quotes.** It set `textContent` on a detached
+  element and read back `innerHTML` — the well-known trick, and wrong for this
+  use. The HTML serialiser escapes `&`, `<` and `>` in a text node but has no
+  reason to touch quotes, because in text content they are not special. Every
+  one of the framework's own call sites, though, interpolates into an
+  attribute: `'<span title="' + UI.escape(v) + '">'`. A value containing a
+  double quote closed the attribute and everything after it was parsed as
+  further attributes, so **`x" onerror="…` was a working injection** anywhere a
+  server-supplied label, filename, operator name or error message reached
+  generated markup. Verified in a browser, not inferred. `UI.escape()` now
+  escapes `& < > " '` explicitly. This is the most significant fix in the
+  1.9–1.12 series and it required no call-site changes.
+- **`UI.safeUrl()` added, and every generated `href` routed through it.**
+  Escaping makes a URL safe to sit in an attribute; it says nothing about what
+  the URL does. Now that charts load from `data-ui-url`, a link target can
+  arrive in a server response — so `javascript:`, `data:` and `vbscript:` are
+  rejected and the mark renders without a link rather than with a dangerous
+  one. Control characters and whitespace are stripped before the scheme is
+  tested, because browsers follow `java\tscript:` as `javascript:`. Verified
+  against plain, mixed-case, tab-embedded, newline-embedded and
+  leading-whitespace payloads.
+- **CSRF tokens are now sent automatically.** `UI.http` reads the token per
+  request from the conventional `csrf-token` / `csrf-header` meta tags (with
+  `_csrf` aliases) — what Spring Security, Rails and Django emit. The
+  save-and-next form, draft autosave and the offline queue all route through
+  it. Previously each was left to solve this alone: one had a configuration
+  hook and the rest had nothing, so on a CSRF-protected server every one of
+  those writes was rejected, and the failure looked like an ordinary save
+  error. The offline queue reads the token **at send time, not at queue time**
+  — an item may sit on the device for hours, by which point a token captured
+  when it was queued is long dead.
+
+### Added
+
+- **`data-ui-url` on multi-select.** The combobox and smart table have loaded
+  from an endpoint since they were written; the multi-select could not, so a
+  list of 400 operators was rendered into the page as 400 `<option>` elements
+  whether or not the field was ever opened. Options are fetched on **first
+  open**, not on page load, and existing selections survive the load.
+  `UI.multiselect.load()` forces a reload for cascading fields.
+- **`ui:validate:checked`.** Every other component names its events
+  `ui:<component>:<verb>`; validation was the one exception, so anything
+  subscribing generically had to special-case it. `ui:validate` is still
+  emitted — deprecated, not removed.
+
+### Documentation
+
+- **`SECURITY.md`** — the escaping contract, the three places server-supplied
+  HTML is trusted by design and why the JSON alternatives are preferable, URL
+  scheme handling, CSRF, exactly what `data-ui-draft` and `UI.offline` write
+  to disk and the sign-out obligations that follow, a list of categories
+  reviewed and found clean, the findings deliberately rejected, and CSP
+  guidance.
+
+## 1.11.0 — 2026-08-20
+
+Closes the gap that made charts the odd one out: smart tables and comboboxes
+could load their own data from an endpoint, charts could not, so every
+dashboard hand-rolled the same fetch-then-update. Plus the consistency fixes
+from a framework-wide audit.
+
+### Added
+
+- **`data-ui-url` on charts.** Fetches on init and accepts the same response
+  shapes `UI.chart.update()` takes — a bare array, `{values, labels}`, or
+  `{labels, series}`.
+- **`data-ui-refresh-on="#filterBar"`** — re-queries when the named element
+  emits `ui:filter:change`, `ui:segment:change` or `ui:daterange:change`, and
+  sends the current filter state as query parameters, so one endpoint serves
+  the chart and the table beside it.
+- **Loading skeleton** shaped like the chart, so the page does not jump when
+  the data arrives, with `aria-busy` set while in flight.
+- **A distinct error state.** Rendering "No data to display" when the server
+  is down tells the reader there is nothing to see, which is false — and is
+  the kind of thing that ends up in a report. `ui:chart:error` carries the
+  HTTP status; `ui:chart:loaded` fires on success.
+- **In-flight abort.** A filter changed while the previous request was still
+  running would otherwise race, and whichever response arrived last would win
+  — not necessarily the one the user is waiting for.
+- **`UI.chart.load(target)`** to re-query on demand.
+
+### Fixed
+
+- **Four modules shared a generic `data-ui-ready` guard** — multiselect,
+  date-range, date-picker and data-table. `UI.destroy()`'s
+  `/^ui[A-Za-z]*Ready$/` clears either form, so this was never the teardown
+  bug it looked like, but two of them on one element would have had one
+  silently skip its build. Now `uiMultiselectReady`, `uiDateRangeReady`,
+  `uiDatePickerReady` and `uiTableReady`.
+- **A combobox search was visible but silent.** "Searching…" appeared on
+  screen while a screen reader was left with the previous results;
+  `aria-busy` now marks the listbox as in-flight.
+- **A failed combobox request lost its status code**, so an application could
+  not tell a 403 from a 503 or decide whether retrying was worth offering.
+  `ui:combobox:error` now carries `status`.
+
+### Audit notes — findings deliberately not acted on
+
+An automated pass flagged fifteen modules for "leaking document-level
+listeners". They do not: those listeners are registered once when the module
+evaluates, not per element, so an AJAX swap adds nothing. The real leak of
+that kind — `floatPanel`'s capture-phase scroll handler — was already
+released through `UI.cleanup()`. Recorded here so the same false positive
+does not get "fixed" later.
+
+Also rejected: a report that `UI.floatPanel`'s doc comment contained a syntax
+error (a grep artifact — the file is correct), and that charts should validate
+a values/labels length mismatch (`labels()` already pads).
+
 ## 1.10.0 — 2026-08-20
 
 Rewrote the chart renderer. The previous one was built to a deliberately

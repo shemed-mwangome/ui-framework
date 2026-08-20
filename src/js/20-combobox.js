@@ -141,6 +141,14 @@
       listbox.innerHTML =
         '<div class="ui-combobox-message' + (modifier ? " " + modifier : "") + '">' +
         UI.escape(text) + "</div>";
+
+      // "Searching…" was visible but silent: a sighted user saw the state
+      // change and a screen-reader user was left with the previous results
+      // until new ones happened to arrive. aria-busy marks the region as
+      // in-flight so assistive technology waits rather than reading stale
+      // options.
+      if (modifier === "ui-combobox-loading") listbox.setAttribute("aria-busy", "true");
+      else listbox.removeAttribute("aria-busy");
     }
 
     function renderOptions() {
@@ -235,7 +243,13 @@
 
       fetch(endpoint, { headers: { Accept: "application/json", "X-Requested-With": "XMLHttpRequest" } })
         .then(function (response) {
-          if (!response.ok) throw new Error("HTTP " + response.status);
+          if (!response.ok) {
+            // Carry the status so the application can tell a 403 from a 503
+            // and decide whether retrying is even worth offering.
+            var httpError = new Error("HTTP " + response.status);
+            httpError.status = response.status;
+            throw httpError;
+          }
           return response.json();
         })
         .then(function (data) {
@@ -253,7 +267,9 @@
           if (token !== requestToken) return;
           options = [];
           renderMessage(UI.t("combobox.error"), "ui-combobox-error");
-          UI.emit(wrapper, "ui:combobox:error", { term: term, error: error });
+          UI.emit(wrapper, "ui:combobox:error", {
+            term: term, error: error, status: error && error.status
+          });
         });
     }
 

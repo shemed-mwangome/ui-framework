@@ -79,20 +79,22 @@
       .catch(function () { return null; });
   }
 
+  // POST and DELETE go through UI.http so the CSRF token travels with them.
+  // Without it a protected server rejects every draft sync, and because these
+  // failures are deliberately swallowed the symptom is simply that
+  // server-side drafts never appear -- silent, and hard to trace.
   function remoteSave(form, url, record) {
-    fetch(url, {
+    UI.http.fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(record)
-    }).then(function (response) {
-      if (!response.ok) throw new Error("Draft sync failed with status " + response.status);
     }).catch(function (error) {
-      UI.emit(form, "ui:draft:sync-error", { error: error });
+      UI.emit(form, "ui:draft:sync-error", { error: error, status: error && error.status });
     });
   }
 
   function remoteDiscard(url) {
-    fetch(url, { method: "DELETE" }).catch(function () {});
+    UI.http.fetch(url, { method: "DELETE" }).catch(function () {});
   }
 
   function build(form) {

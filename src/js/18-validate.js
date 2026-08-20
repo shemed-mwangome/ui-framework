@@ -313,7 +313,14 @@
 
     if (options.silent !== true) {
       renderSummary(form, errors);
-      UI.emit(form, "ui:validate", { valid: !errors.length, errors: errors });
+      // Every other component names its events ui:<component>:<verb>; this
+      // was the single exception, so anything subscribing generically had to
+      // special-case it. `ui:validate:checked` fits the convention;
+      // `ui:validate` is still emitted so existing listeners keep working,
+      // and is documented as deprecated rather than removed.
+      var detail = { valid: !errors.length, errors: errors };
+      UI.emit(form, "ui:validate:checked", detail);
+      UI.emit(form, "ui:validate", detail);
     }
 
     return { valid: errors.length === 0, errors: errors };

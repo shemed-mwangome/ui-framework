@@ -3,8 +3,8 @@
   var UI = window.UI;
 
   function build(select) {
-    if (!select || select.dataset.uiReady) return;
-    select.dataset.uiReady = "true";
+    if (!select || select.dataset.uiMultiselectReady) return;
+    select.dataset.uiMultiselectReady = "true";
     select.classList.add("ui-multiselect-native");
 
     var wrapper = document.createElement("div");
@@ -120,6 +120,10 @@
     trigger.addEventListener("click", function () {
       var open = wrapper.classList.toggle("ui-open");
       trigger.setAttribute("aria-expanded", open ? "true" : "false");
+      // Fetched on first open rather than on page load: a filter the user
+      // never touches should not cost a request, and a form with six remote
+      // multi-selects should not fire six on arrival.
+      if (open && select.hasAttribute("data-ui-url")) loadRemote(select);
       if (open) {
         wrapper._uiFloatCleanup = UI.floatPanel(trigger, menu, {
           matchWidth: true,
@@ -166,6 +170,64 @@
     update();
   }
 
+  /**
+   * Remote options.
+   *
+   * The combobox and the smart table have both been able to load from an
+   * endpoint since they were written; the multi-select could not, so a list
+   * of 400 operators had to be rendered into the page as 400 <option>
+   * elements whether or not the field was ever opened.
+   *
+   *   <select multiple data-ui-multiselect
+   *           data-ui-url="/operators/options"
+   *           data-ui-value-key="id" data-ui-label-key="name"></select>
+   *
+   * The endpoint returns `[{id, name}]`, or `{results: [...]}`. Options are
+   * fetched once, on first open rather than on page load -- a filter the user
+   * never touches should not cost a request. Whatever is already selected in
+   * the markup is preserved, so a server-rendered page that arrives with
+   * values set does not lose them when the full list lands.
+   */
+  function loadRemote(select) {
+    if (select._uiOptionsLoaded || select._uiOptionsLoading) return Promise.resolve();
+    var url = select.getAttribute("data-ui-url");
+    if (!url) return Promise.resolve();
+
+    select._uiOptionsLoading = true;
+    var valueKey = select.getAttribute("data-ui-value-key") || "value";
+    var labelKey = select.getAttribute("data-ui-label-key") || "label";
+
+    return UI.http.fetch(url, { headers: { Accept: "application/json" } })
+      .then(function (response) { return response.json(); })
+      .then(function (data) {
+        var list = Array.isArray(data) ? data : (data.results || data.items || []);
+        var chosen = {};
+        UI.qa("option", select).forEach(function (option) {
+          if (option.selected) chosen[option.value] = true;
+        });
+
+        select.innerHTML = "";
+        list.forEach(function (item) {
+          var option = document.createElement("option");
+          option.value = item && item[valueKey] != null ? String(item[valueKey]) : String(item);
+          // textContent, not innerHTML: a label is data and may legitimately
+          // contain characters that would otherwise be parsed as markup.
+          option.textContent = item && item[labelKey] != null ? String(item[labelKey]) : String(item);
+          if (chosen[option.value]) option.selected = true;
+          select.appendChild(option);
+        });
+
+        select._uiOptionsLoaded = true;
+        select._uiOptionsLoading = false;
+        UI.emit(select, "ui:multiselect:options", { count: list.length });
+        refresh(select);
+      })
+      .catch(function (error) {
+        select._uiOptionsLoading = false;
+        UI.emit(select, "ui:multiselect:error", { error: error, status: error && error.status });
+      });
+  }
+
   function init(root) {
     UI.matchAll("select[multiple][data-ui-multiselect]", root).forEach(build);
   }
@@ -194,10 +256,11 @@
     event.stopImmediatePropagation();
   });
 
-  // build() is a one-shot init guarded by data-ui-ready, so it silently no-ops on an
-  // already-built select. Cascading fields (e.g. an operator list repopulated after
-  // its region changes) need to rebuild the visible widget from a fresh option list --
-  // refresh() unwraps back to the plain <select> and re-runs build() against it.
+  // build() is a one-shot init guarded by data-ui-multiselect-ready, so it silently
+  // no-ops on an already-built select. Cascading fields (e.g. an operator list
+  // repopulated after its region changes) need to rebuild the visible widget from a
+  // fresh option list -- refresh() unwraps back to the plain <select> and re-runs
+  // build() against it.
   function refresh(select) {
     if (!select) return;
     var wrapper = select.closest(".ui-multiselect");
@@ -205,11 +268,21 @@
       wrapper.parentNode.insertBefore(select, wrapper);
       wrapper.remove();
     }
-    delete select.dataset.uiReady;
+    delete select.dataset.uiMultiselectReady;
     select.classList.remove("ui-multiselect-native");
     build(select);
   }
 
-  UI.multiselect = { build: build, refresh: refresh };
+  UI.multiselect = {
+    build: build,
+    refresh: refresh,
+    /** Force a remote option list to reload — after the parent field changes. */
+    load: function (target) {
+      var select = typeof target === "string" ? UI.q(target) : target;
+      if (!select) return Promise.resolve();
+      select._uiOptionsLoaded = false;
+      return loadRemote(select);
+    }
+  };
   UI.register(init);
 })(window, document);

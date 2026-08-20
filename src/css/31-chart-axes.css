@@ -139,6 +139,59 @@ a.ui-chart-mark:focus-visible {
   font-family: var(--ui-font-sans);
 }
 
+/* ------------------------------------------------- loading and error */
+
+/* A skeleton in the shape of the chart, not a spinner. It reserves the height
+   the bars are about to occupy, so the page does not jump when the data
+   arrives -- the same reason [data-ui-chart]:not(.ui-chart) reserves height
+   before build() runs. */
+.ui-chart-skeleton {
+  display: flex;
+  align-items: flex-end;
+  gap: 6%;
+  height: 12.5rem;
+  padding: 1rem 1rem 1.75rem;
+}
+
+.ui-chart-skeleton span {
+  flex: 1;
+  border-radius: var(--ui-radius-2) var(--ui-radius-2) 0 0;
+  background: var(--ui-surface-muted);
+  animation: ui-chart-pulse 1.4s ease-in-out infinite;
+}
+
+.ui-chart-skeleton span:nth-child(1) { height: 55%; animation-delay: 0s; }
+.ui-chart-skeleton span:nth-child(2) { height: 80%; animation-delay: .1s; }
+.ui-chart-skeleton span:nth-child(3) { height: 40%; animation-delay: .2s; }
+.ui-chart-skeleton span:nth-child(4) { height: 68%; animation-delay: .3s; }
+.ui-chart-skeleton span:nth-child(5) { height: 30%; animation-delay: .4s; }
+
+@keyframes ui-chart-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .5; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-chart-skeleton span { animation: none; }
+}
+
+/* An error is not an empty state. "No data to display" when the server is
+   down tells the reader there is nothing to see, which is false and is the
+   kind of thing that ends up in a report. */
+.ui-chart-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 8rem;
+  padding: 1rem;
+  border: 1px solid color-mix(in srgb, var(--ui-danger) 40%, transparent);
+  border-radius: var(--ui-radius-3);
+  background: color-mix(in srgb, var(--ui-danger) 6%, var(--ui-surface));
+  color: var(--ui-danger);
+  font-size: .85rem;
+  text-align: center;
+}
+
 /* --------------------------------------------------- legend toggle */
 
 .ui-chart-legend-toggle .ui-chart-legend-item {

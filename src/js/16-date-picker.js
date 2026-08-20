@@ -131,8 +131,8 @@
   }
 
   function build(container) {
-    if (container.dataset.uiReady) return;
-    container.dataset.uiReady = "true";
+    if (container.dataset.uiDatePickerReady) return;
+    container.dataset.uiDatePickerReady = "true";
     container.classList.add("ui-date-range", "ui-date-picker-shell");
 
     var input = UI.q("input", container);

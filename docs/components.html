@@ -1441,6 +1441,39 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
       <tr><td><code class="ui-code">data-ui-empty-text</code> <span class="ui-badge ui-badge-soft-primary ui-badge-pill">1.10</span></td><td>Shown when there are no values, instead of rendering nothing.</td></tr>
       <tr><td><code class="ui-code">data-ui-legend-toggle</code> <span class="ui-badge ui-badge-soft-primary ui-badge-pill">1.10</span></td><td>Lets the reader switch a series off from the legend.</td></tr>
       <tr><td><code class="ui-code">data-ui-link-template</code> / <code class="ui-code">data-ui-links</code> <span class="ui-badge ui-badge-soft-primary ui-badge-pill">1.10</span></td><td>Makes each data point a real link — see below.</td></tr>
+      <tr><td><code class="ui-code">data-ui-url</code> <span class="ui-badge ui-badge-soft-primary ui-badge-pill">1.11</span></td><td>Fetches the chart's data from an endpoint instead of reading it from attributes.</td></tr>
+      <tr><td><code class="ui-code">data-ui-refresh-on</code> <span class="ui-badge ui-badge-soft-primary ui-badge-pill">1.11</span></td><td>Selector for an element whose changes re-query — usually a filter bar.</td></tr>
+      <tr><td><code class="ui-code">data-ui-error-text</code> <span class="ui-badge ui-badge-soft-primary ui-badge-pill">1.11</span></td><td>Shown when the request fails. Distinct from the empty state.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">Charts from an endpoint <span class="ui-badge ui-badge-soft-primary ui-badge-pill">1.11</span></h3>
+<p class="docs-section-intro">Smart tables have had <code class="ui-code">data-ui-url</code> since they were written; charts did not, so every dashboard hand-rolled the same fetch-then-update. Point the chart at an endpoint and name the control that should re-query it.</p>
+
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div data-ui-chart=&quot;bar&quot; data-ui-axis
+     data-ui-url=&quot;/compliance/rates&quot;
+     data-ui-refresh-on=&quot;#inspectionFilters&quot;
+     data-ui-error-text=&quot;Rates could not be loaded.&quot;&gt;&lt;/div&gt;
+
+&lt;!-- any of these response shapes --&gt;
+[87, 64, 92]
+{ &quot;values&quot;: [87, 64], &quot;labels&quot;: [&quot;Q1&quot;, &quot;Q2&quot;] }
+{ &quot;labels&quot;: [&quot;Q1&quot;, &quot;Q2&quot;],
+  &quot;series&quot;: [{ &quot;name&quot;: &quot;Planned&quot;, &quot;values&quot;: [12, 19] }] }</code></pre>
+</div>
+
+<div class="ui-table-responsive ui-shadow-1 ui-mt-3">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>Behaviour</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Loading shows a skeleton in the chart's own shape, with <code class="ui-code">aria-busy</code></td><td>Reserves the height the chart is about to take, so the page does not jump when the data lands.</td></tr>
+      <tr><td>A failure renders an <strong>error</strong> state, not an empty one</td><td>"No data to display" when the server is down tells the reader there is nothing to see. That is false, and it is the kind of thing that ends up in a report.</td></tr>
+      <tr><td>An in-flight request is aborted when a new one starts</td><td>Otherwise a rapid filter change races, and whichever response arrives last wins — not necessarily the one the user is waiting for.</td></tr>
+      <tr><td>Filter state is sent as query parameters</td><td>One endpoint can serve the chart and the table beside it.</td></tr>
+      <tr><td><code class="ui-code">ui:chart:loaded</code> / <code class="ui-code">ui:chart:error</code></td><td>The error event carries the HTTP status, so the application can tell a 403 from a 503.</td></tr>
     </tbody>
   </table>
 </div>

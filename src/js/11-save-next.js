@@ -46,9 +46,12 @@
 
     UI.emit(form, "ui:savenext:submit", { submitter: submitter });
 
-    fetch(action, { method: method, body: body, headers: { "X-Requested-With": "XMLHttpRequest" } })
+    // Through UI.http so the CSRF token travels with it. A server with CSRF
+    // protection enabled rejected every one of these submissions, and the
+    // failure looked like an ordinary save error rather than a missing
+    // token -- the form's own error toast hid the cause.
+    UI.http.fetch(action, { method: method, body: body, headers: { "X-Requested-With": "XMLHttpRequest" } })
       .then(function (response) {
-        if (!response.ok) throw new Error("Request failed with status " + response.status);
         setDirty(form, false);
         UI.emit(form, "ui:savenext:success", { response: response, submitter: submitter });
         if (UI.toast) UI.toast.show({ type: "success", title: "Saved", message: form.getAttribute("data-ui-success-message") || "Your changes were saved." });
@@ -56,7 +59,9 @@
         if (isSaveNext) navigate(form.getAttribute("data-ui-next-url"));
       })
       .catch(function (error) {
-        UI.emit(form, "ui:savenext:error", { error: error, submitter: submitter });
+        UI.emit(form, "ui:savenext:error", {
+          error: error, status: error && error.status, submitter: submitter
+        });
         if (UI.toast) UI.toast.show({ type: "danger", title: "Save failed", message: form.getAttribute("data-ui-error-message") || "The record could not be saved." });
       });
   }

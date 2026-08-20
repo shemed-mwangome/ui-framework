@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>JavaScript API · UI Framework</title>
-  <link rel="stylesheet" href="../dist/ui-framework.css?v=1.10.0">
-  <link rel="stylesheet" href="assets/docs.css?v=1.10.0">
+  <link rel="stylesheet" href="../dist/ui-framework.css?v=1.12.0">
+  <link rel="stylesheet" href="assets/docs.css?v=1.12.0">
 </head>
 <body class="ui-scope docs-body">
   <header class="docs-topbar">
@@ -14,7 +14,7 @@
       <a class="docs-brand" href="index.html"><span class="docs-logo">UI</span><span>UI Framework</span></a>
     </div>
     <div class="ui-d-flex ui-align-center ui-gap-2">
-      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.10.0</span>
+      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.12.0</span>
       <button class="ui-btn ui-btn-sm ui-btn-outline-secondary" type="button" data-ui-theme-toggle>Theme</button>
     </div>
   </header>
@@ -53,6 +53,11 @@
     <tr><td><span class="ui-code">UI.matchAll(selector, root)</span></td><td>Like <span class="ui-code">UI.qa</span>, but also matches <span class="ui-code">root</span> itself</td></tr>
     <tr><td><span class="ui-code">UI.closest(element, selector)</span></td><td>Like <span class="ui-code">Element.closest</span>, but safe to call with a non-<span class="ui-code">Element</span> event target</td></tr>
     <tr><td><span class="ui-code">UI.uid(prefix)</span></td><td>A short random id, for wiring up generated markup (<span class="ui-code">aria-controls</span> and the like)</td></tr>
+    <tr><td><span class="ui-code">UI.escape(value)</span></td><td>Escapes <span class="ui-code">&amp; &lt; &gt; " '</span> — safe in text and in either kind of quoted attribute</td></tr>
+    <tr><td><span class="ui-code">UI.safeUrl(value)</span></td><td>Returns the URL, or <span class="ui-code">null</span> if its scheme is not one of http/https/mailto/tel/ftp. Relative URLs pass through</td></tr>
+    <tr><td><span class="ui-code">UI.http.fetch(url, options)</span></td><td><span class="ui-code">fetch</span> with same-origin credentials, the CSRF header on unsafe methods, and a rejection carrying <span class="ui-code">.status</span></td></tr>
+    <tr><td><span class="ui-code">UI.http.csrfHeader()</span></td><td>The CSRF header as <span class="ui-code">{ name: value }</span>, read from the page's meta tags</td></tr>
+    <tr><td><span class="ui-code">UI.multiselect.load(target)</span></td><td>Force a remote option list to reload — for cascading fields</td></tr>
     <tr><td><span class="ui-code">UI.version</span></td><td>The loaded bundle's version string</td></tr>
     <tr><td><span class="ui-code">UI.destroy(root)</span></td><td>Run teardown for a subtree and clear its ready guards, before replacing it</td></tr>
     <tr><td><span class="ui-code">UI.cleanup(element, fn)</span></td><td>Register a teardown callback for <span class="ui-code">UI.destroy</span></td></tr>
@@ -76,6 +81,7 @@
     <tr><td><span class="ui-code">UI.chart.update(target, values, labels)</span></td><td>Replace a single-series chart's data and re-render in place</td></tr>
     <tr><td><span class="ui-code">UI.chart.update(target, {labels, series})</span></td><td>Same, for a grouped/stacked bar or multi-line chart (<span class="ui-code">series</span> is <span class="ui-code">[{name, values}, ...]</span>)</td></tr>
     <tr><td><span class="ui-code">UI.chart.refresh(target)</span></td><td>Re-render without changing the data — after a container resize or a theme change</td></tr>
+    <tr><td><span class="ui-code">UI.chart.load(target)</span></td><td>Re-query a <span class="ui-code">data-ui-url</span> chart — after saving a record, say</td></tr>
     <tr><td><span class="ui-code">UI.popover.open(trigger)</span></td><td>Open a popover programmatically</td></tr>
     <tr><td><span class="ui-code">UI.popover.close()</span></td><td>Close the open popover</td></tr>
     <tr><td><span class="ui-code">UI.clipboard.copy(text)</span></td><td>Copy text; resolves to <span class="ui-code">true</span> on success</td></tr>
@@ -196,6 +202,9 @@ document.querySelector(&quot;[data-ui-table]&quot;)
     <tr><td><span class="ui-code">ui:chart:rendered</span></td><td>A chart finished rendering</td></tr>
     <tr><td><span class="ui-code">ui:chart:select</span></td><td>A data point was clicked; cancellable, so a router can take over from the link</td></tr>
     <tr><td><span class="ui-code">ui:chart:toggle</span></td><td>A series was switched off or back on from the legend</td></tr>
+    <tr><td><span class="ui-code">ui:chart:loaded</span> / <span class="ui-code">ui:chart:error</span></td><td>A <span class="ui-code">data-ui-url</span> chart finished loading, or failed (<span class="ui-code">detail.status</span> is the HTTP status)</td></tr>
+    <tr><td><span class="ui-code">ui:multiselect:options</span> / <span class="ui-code">:error</span></td><td>A remote option list loaded, or failed</td></tr>
+    <tr><td><span class="ui-code">ui:validate:checked</span></td><td>A form was validated. Replaces <span class="ui-code">ui:validate</span>, which is still emitted but deprecated</td></tr>
     <tr><td><span class="ui-code">ui:popover:shown</span></td><td>A popover opened</td></tr>
     <tr><td><span class="ui-code">ui:popover:hidden</span></td><td>A popover closed</td></tr>
     <tr><td><span class="ui-code">ui:copy</span></td><td>Text was copied to the clipboard</td></tr>
@@ -246,10 +255,10 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
-      <footer class="docs-footer">UI Framework 1.10.0 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
+      <footer class="docs-footer">UI Framework 1.12.0 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
     </main>
   </div>
-  <script src="../dist/ui-framework.js?v=1.10.0"></script>
-  <script src="assets/docs.js?v=1.10.0"></script>
+  <script src="../dist/ui-framework.js?v=1.12.0"></script>
+  <script src="assets/docs.js?v=1.12.0"></script>
 </body>
 </html>

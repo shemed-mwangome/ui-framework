@@ -244,8 +244,8 @@
   }
 
   function build(container) {
-    if (container.dataset.uiReady) return;
-    container.dataset.uiReady = "true";
+    if (container.dataset.uiDateRangeReady) return;
+    container.dataset.uiDateRangeReady = "true";
 
     var trigger = document.createElement("button");
     trigger.type = "button";

@@ -172,8 +172,12 @@
   }
 
   function send(item) {
+    // The CSRF token is read at send time, not at queue time. An item may sit
+    // in the queue for hours while the officer is out of signal, by which
+    // point the token captured when it was queued is long dead -- and a stale
+    // token fails exactly like a missing one.
     var headers = Object.assign({ "Content-Type": "application/json" },
-      config.endpointHeaders, item.headers || {});
+      UI.http.csrfHeader(), config.endpointHeaders, item.headers || {});
 
     return window.fetch(item.url, {
       method: item.method || "POST",

@@ -1,4 +1,4 @@
-# UI Framework 1.10.0
+# UI Framework 1.12.0
 
 A complete, dependency-free CSS and JavaScript UI framework designed for
 server-rendered applications, static HTML, and legacy projects that already
@@ -281,6 +281,28 @@ To bind errors that only the server can catch (a duplicate email, a
 uniqueness constraint), call `UI.validate.showErrors(form, errors)` with
 `errors` as `{ fieldName: "message" }` — it applies the same inline styling
 and moves focus to the first invalid field.
+
+## Security
+
+See [`SECURITY.md`](SECURITY.md) for the escaping contract, the three places
+server-supplied HTML is trusted by design, URL-scheme handling, CSRF, and what
+`data-ui-draft` and `UI.offline` write to the device.
+
+Two things worth knowing before you build anything:
+
+- **CSRF is automatic** if the page carries the conventional meta tags. Add
+  them once in your layout and every framework write — save-and-next, draft
+  autosave, the offline queue — sends the token:
+
+  ```html
+  <meta name="csrf-token"  content="${_csrf.token}">
+  <meta name="csrf-header" content="${_csrf.headerName}">
+  ```
+
+- **`data-ui-draft` and `UI.offline` persist form data unencrypted**, and do
+  not exclude sensitive fields. Do not put `data-ui-draft` on a form
+  containing anything you would not write to disk in plain text, and clear
+  both on sign-out (`UI.offline.clear()` plus the `ui-draft:` keys).
 
 ## Multi-select
 
@@ -769,6 +791,41 @@ the plain `(values, labels)` form for a single series) to re-render a chart in
 place, so one fed from an API response doesn't need to hand-build a
 comma-separated string. `UI.chart.refresh(target)` re-renders without changing
 the data.
+
+### Charts from an endpoint
+
+Smart tables have had `data-ui-url` since they were written; charts did not,
+so every dashboard hand-rolled the same fetch-then-update.
+
+```html
+<div data-ui-chart="bar" data-ui-axis
+     data-ui-url="/compliance/rates"
+     data-ui-refresh-on="#inspectionFilters"
+     data-ui-error-text="Rates could not be loaded."></div>
+```
+
+Accepted response shapes — the same ones `UI.chart.update()` takes:
+
+```json
+[1, 2, 3]
+{ "values": [87, 64], "labels": ["Q1", "Q2"] }
+{ "labels": ["Q1", "Q2"], "series": [{ "name": "Planned", "values": [12, 19] }] }
+```
+
+`data-ui-refresh-on` names an element whose changes re-query — usually a
+filter bar, and it listens for `ui:filter:change`, `ui:segment:change` and
+`ui:daterange:change`. The current filter state goes out as query parameters,
+so one endpoint can serve the chart and the table beside it.
+
+While loading, the chart shows a skeleton in its own shape (so the page does
+not jump when the data lands) and sets `aria-busy`. A failed request renders
+**an error state, not an empty one** — "No data to display" when the server is
+down tells the reader there is nothing to see, which is false and is the kind
+of thing that ends up in a report. Listen for `ui:chart:error` (carries the
+HTTP status) or `ui:chart:loaded`. An in-flight request is aborted when a new
+one starts, so rapid filter changes cannot let a stale response win.
+
+`UI.chart.load(target)` re-queries on demand — after saving a record, say.
 
 ### Clickable charts
 
