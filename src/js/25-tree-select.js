@@ -152,6 +152,16 @@
     container.addEventListener("click", function (event) {
       if (UI.closest(event.target, ".ui-tree-check")) return;
       if (UI.closest(event.target, ".ui-tree-meta")) return;
+      // Any other control living in the row -- a per-group "Select all", a
+      // row-level action button -- does its own job and must not also fold
+      // the group it sits in. Listing individual classes here does not
+      // scale (and missed .ui-tree-actions when the select list added it),
+      // so the rule is structural: a control that is not the toggle is not
+      // a collapse target. Opt an element out explicitly with
+      // data-ui-tree-ignore if it is neither a button nor an input.
+      if (UI.closest(event.target, "[data-ui-tree-ignore]")) return;
+      var control = UI.closest(event.target, "button, a, input, select, textarea, label");
+      if (control && !control.classList.contains("ui-tree-toggle")) return;
       var row = UI.closest(event.target, ".ui-tree-row");
       if (!row) return;
       toggle(UI.closest(row, ".ui-tree-node"));

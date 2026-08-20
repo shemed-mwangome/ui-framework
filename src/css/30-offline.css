@@ -1,0 +1,155 @@
+/* ----------------------------------------------------------- Offline
+ *
+ * For applications used away from a desk -- an inspector working through
+ * premises in a bar at 9pm, a surveyor in a district office with one bar of
+ * signal. The framework already has data-ui-draft, but that is autosave for
+ * one form on one device: it protects a page you are on. This is different.
+ * It is a queue of completed work that could not be sent yet, and it has to
+ * survive the app being closed, the phone being restarted, and the user
+ * moving on to the next premise.
+ *
+ * The rule the visual design follows: field data is never silently lost and
+ * never silently discarded. A conflict is surfaced for a person to resolve,
+ * not resolved by whichever write happened to arrive last.
+ *
+ * Behaviour lives in 29-offline.js.
+ */
+
+/* ------------------------------------------------------- Status strip */
+
+.ui-sync {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .6rem;
+  padding: .5rem .8rem;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-3);
+  background: var(--ui-surface);
+  font-size: .82rem;
+}
+
+.ui-sync-dot {
+  flex: none;
+  width: .55rem;
+  height: .55rem;
+  border-radius: 50%;
+  background: var(--ui-success);
+}
+
+.ui-sync-text { flex: 1; min-width: 0; color: var(--ui-text); }
+
+.ui-sync-detail {
+  display: block;
+  color: var(--ui-muted);
+  font-size: .76rem;
+}
+
+.ui-sync-actions { flex: none; display: flex; gap: .4rem; }
+
+/* Offline is a state, not an error. It is the expected condition in the
+   field, and styling it red trains people to ignore red. */
+.ui-sync[data-ui-state="offline"] {
+  border-color: color-mix(in srgb, var(--ui-warning) 45%, transparent);
+  background: color-mix(in srgb, var(--ui-warning) 8%, var(--ui-surface));
+}
+
+.ui-sync[data-ui-state="offline"] .ui-sync-dot { background: var(--ui-warning); }
+
+.ui-sync[data-ui-state="syncing"] .ui-sync-dot {
+  background: var(--ui-info);
+  animation: ui-sync-pulse 1.1s ease-in-out infinite;
+}
+
+/* Failure and conflict *are* errors, because they need a person. */
+.ui-sync[data-ui-state="failed"],
+.ui-sync[data-ui-state="conflict"] {
+  border-color: color-mix(in srgb, var(--ui-danger) 45%, transparent);
+  background: color-mix(in srgb, var(--ui-danger) 7%, var(--ui-surface));
+}
+
+.ui-sync[data-ui-state="failed"] .ui-sync-dot,
+.ui-sync[data-ui-state="conflict"] .ui-sync-dot { background: var(--ui-danger); }
+
+@keyframes ui-sync-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .45; transform: scale(.8); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-sync[data-ui-state="syncing"] .ui-sync-dot { animation: none; }
+}
+
+/* A fixed strip for the field: always visible, never covering the last row
+   of a form, and above the page but below overlays. */
+.ui-sync-fixed {
+  position: fixed;
+  right: .75rem;
+  bottom: .75rem;
+  left: .75rem;
+  z-index: var(--ui-z-sticky);
+  box-shadow: var(--ui-shadow-3);
+}
+
+@media (min-width: 48rem) {
+  .ui-sync-fixed { left: auto; max-width: 26rem; }
+}
+
+/* ---------------------------------------------------------- Queue list */
+
+.ui-sync-queue { display: flex; flex-direction: column; gap: .4rem; }
+
+.ui-sync-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .75rem;
+  padding: .55rem .7rem;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-2);
+  background: var(--ui-surface);
+}
+
+.ui-sync-item-label { min-width: 0; font-size: .85rem; font-weight: 600; }
+
+.ui-sync-item-meta {
+  display: block;
+  margin-top: .1rem;
+  color: var(--ui-muted);
+  font-size: .75rem;
+  font-weight: 400;
+}
+
+.ui-sync-item[data-ui-status="conflict"] { border-color: var(--ui-danger); }
+.ui-sync-item[data-ui-status="failed"] { border-color: color-mix(in srgb, var(--ui-danger) 55%, transparent); }
+.ui-sync-item[data-ui-status="sending"] { border-color: var(--ui-info); }
+
+.ui-sync-badge {
+  flex: none;
+  padding: .05rem .45rem;
+  border-radius: var(--ui-radius-pill);
+  background: var(--ui-surface-muted);
+  color: var(--ui-text-soft);
+  font-size: .7rem;
+  font-weight: 700;
+}
+
+.ui-sync-item[data-ui-status="conflict"] .ui-sync-badge {
+  background: color-mix(in srgb, var(--ui-danger) 14%, var(--ui-surface));
+  color: var(--ui-danger);
+}
+
+.ui-sync-empty {
+  padding: 1.25rem .75rem;
+  color: var(--ui-muted);
+  font-size: .84rem;
+  text-align: center;
+}
+
+/* Anything that only makes sense with a connection. The control stays
+   visible and disabled rather than disappearing -- a control that vanishes
+   teaches nothing about why it is unavailable. */
+body.ui-is-offline [data-ui-needs-online] {
+  opacity: .5;
+  pointer-events: none;
+}

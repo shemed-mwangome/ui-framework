@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>JavaScript API · UI Framework</title>
-  <link rel="stylesheet" href="../dist/ui-framework.css?v=1.8.8">
-  <link rel="stylesheet" href="assets/docs.css?v=1.8.8">
+  <link rel="stylesheet" href="../dist/ui-framework.css?v=1.9.0">
+  <link rel="stylesheet" href="assets/docs.css?v=1.9.0">
 </head>
 <body class="ui-scope docs-body">
   <header class="docs-topbar">
@@ -14,7 +14,7 @@
       <a class="docs-brand" href="index.html"><span class="docs-logo">UI</span><span>UI Framework</span></a>
     </div>
     <div class="ui-d-flex ui-align-center ui-gap-2">
-      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.8.8</span>
+      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.9.0</span>
       <button class="ui-btn ui-btn-sm ui-btn-outline-secondary" type="button" data-ui-theme-toggle>Theme</button>
     </div>
   </header>
@@ -91,6 +91,21 @@
     <tr><td><span class="ui-code">UI.alert.create(options)</span> / <span class="ui-code">.close(alert)</span></td><td>Create or dismiss an inline alert</td></tr>
     <tr><td><span class="ui-code">UI.confirm(options)</span></td><td>Promise-based confirmation modal; resolves <span class="ui-code">true</span>/<span class="ui-code">false</span></td></tr>
     <tr><td><span class="ui-code">UI.multiselect.build(select)</span></td><td>Enhance a native multiple select</td></tr>
+    <tr><td><span class="ui-code">UI.treeSelect.selected(target)</span></td><td>Checked leaf values of a tree</td></tr>
+    <tr><td><span class="ui-code">UI.selectList.refresh(target)</span></td><td>Recompute a select list's counts, totals and action states after replacing rows</td></tr>
+    <tr><td><span class="ui-code">UI.selectList.search(target, term)</span></td><td>Apply a search to a select list programmatically</td></tr>
+    <tr><td><span class="ui-code">UI.filter.state(bar)</span></td><td>A filter bar's current state as <span class="ui-code">{ dimension: [values] }</span></td></tr>
+    <tr><td><span class="ui-code">UI.filter.set(bar, key, values)</span></td><td>Set one filter dimension and fire the change event</td></tr>
+    <tr><td><span class="ui-code">UI.filter.clear(bar)</span></td><td>Clear every dimension on a bar</td></tr>
+    <tr><td><span class="ui-code">UI.segmented.value(group)</span> / <span class="ui-code">.select(group, value)</span></td><td>Read or move a segmented control's selection</td></tr>
+    <tr><td><span class="ui-code">UI.blocker.set(control, reason)</span></td><td>Disable a control and state why, in one call</td></tr>
+    <tr><td><span class="ui-code">UI.blocker.clear(control)</span></td><td>Re-enable a control and clear its reason</td></tr>
+    <tr><td><span class="ui-code">UI.offline.queue(item)</span></td><td>Queue a write for later delivery; resolves once it is durably stored</td></tr>
+    <tr><td><span class="ui-code">UI.offline.status()</span></td><td><span class="ui-code">{ state, total, pending, sending, conflict, failed, online }</span></td></tr>
+    <tr><td><span class="ui-code">UI.offline.pending()</span> / <span class="ui-code">.flush()</span></td><td>List the queue, oldest first / try to send it now</td></tr>
+    <tr><td><span class="ui-code">UI.offline.resolve(id, action)</span></td><td><span class="ui-code">&quot;retry&quot;</span> or <span class="ui-code">&quot;discard&quot;</span> a conflicted or failed item</td></tr>
+    <tr><td><span class="ui-code">UI.offline.configure(options)</span></td><td><span class="ui-code">autoFlush</span>, <span class="ui-code">interval</span>, <span class="ui-code">endpointHeaders</span></td></tr>
+    <tr><td><span class="ui-code">UI.offline.clear()</span></td><td>Empty the queue — for sign-out on a shared device</td></tr>
     <tr><td><span class="ui-code">UI.dateRange.close()</span></td><td>Close any open date range popover</td></tr>
     <tr><td><span class="ui-code">UI.datePicker.close()</span></td><td>Close any open date picker popover</td></tr>
     <tr><td><span class="ui-code">UI.dateUtils</span></td><td>Shared date helpers (<span class="ui-code">parseISODate</span>, <span class="ui-code">formatISODate</span>, <span class="ui-code">addDays</span>, <span class="ui-code">addMonths</span>, etc.) used by both date components</td></tr>
@@ -196,6 +211,12 @@ document.querySelector(&quot;[data-ui-table]&quot;)
     <tr><td><span class="ui-code">ui:savenext:submit</span> / <span class="ui-code">:success</span> / <span class="ui-code">:error</span></td><td>the save-next form</td><td><span class="ui-code">{ submitter }</span> (and <span class="ui-code">response</span>/<span class="ui-code">error</span>)</td></tr>
     <tr><td><span class="ui-code">ui:draft:saved</span> / <span class="ui-code">:restored</span> / <span class="ui-code">:discarded</span></td><td>the draft form</td><td><span class="ui-code">{ savedAt }</span></td></tr>
     <tr><td><span class="ui-code">ui:table:change</span></td><td>the <span class="ui-code">[data-ui-table]</span> wrapper</td><td><span class="ui-code">{ page, totalPages, visible, total }</span></td></tr>
+    <tr><td><span class="ui-code">ui:tree:change</span></td><td>the <span class="ui-code">.ui-tree</span> root</td><td><span class="ui-code">{ values }</span></td></tr>
+    <tr><td><span class="ui-code">ui:selectlist:search</span></td><td>the <span class="ui-code">.ui-tree</span> root</td><td><span class="ui-code">{ term, shown, total }</span></td></tr>
+    <tr><td><span class="ui-code">ui:filter:change</span></td><td>the <span class="ui-code">[data-ui-filter-bar]</span></td><td><span class="ui-code">{ key, state, count }</span></td></tr>
+    <tr><td><span class="ui-code">ui:segment:change</span></td><td>the <span class="ui-code">.ui-segmented</span> group</td><td><span class="ui-code">{ value, segment }</span></td></tr>
+    <tr><td><span class="ui-code">ui:offline:queued</span> / <span class="ui-code">:synced</span> / <span class="ui-code">:failed</span> / <span class="ui-code">:conflict</span></td><td><span class="ui-code">document</span></td><td><span class="ui-code">{ item }</span> (plus <span class="ui-code">status</span> / <span class="ui-code">detail</span>)</td></tr>
+    <tr><td><span class="ui-code">ui:offline:state</span></td><td><span class="ui-code">document</span></td><td><span class="ui-code">{ state, total, pending, sending, conflict, failed, online }</span></td></tr>
   </tbody></table></div>
   <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>document.addEventListener(&quot;ui:modal:shown&quot;, function (event) {
   console.log(&quot;Opened modal:&quot;, event.target.id);
@@ -222,10 +243,10 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
-      <footer class="docs-footer">UI Framework 1.8.8 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
+      <footer class="docs-footer">UI Framework 1.9.0 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
     </main>
   </div>
-  <script src="../dist/ui-framework.js?v=1.8.8"></script>
-  <script src="assets/docs.js?v=1.8.8"></script>
+  <script src="../dist/ui-framework.js?v=1.9.0"></script>
+  <script src="assets/docs.js?v=1.9.0"></script>
 </body>
 </html>

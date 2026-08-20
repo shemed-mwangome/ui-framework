@@ -141,6 +141,27 @@
   .ui-col-lg-12 { flex: 0 0 auto; width: 100%; }
 }
 
+/* The grid stopped at lg (64rem/1024px), so a 1920px monitor and a 1024px
+   laptop resolved to the same layout -- and back-office registers are used
+   on large monitors precisely because they are dense. xl adds a column set
+   that only engages where there is genuinely room for it. */
+@media (min-width: 80rem) {
+  .ui-col-xl { flex: 1 0 0%; }
+  .ui-col-xl-auto { flex: 0 0 auto; width: auto; }
+  .ui-col-xl-1 { flex: 0 0 auto; width: 8.333333%; }
+  .ui-col-xl-2 { flex: 0 0 auto; width: 16.666667%; }
+  .ui-col-xl-3 { flex: 0 0 auto; width: 25%; }
+  .ui-col-xl-4 { flex: 0 0 auto; width: 33.333333%; }
+  .ui-col-xl-5 { flex: 0 0 auto; width: 41.666667%; }
+  .ui-col-xl-6 { flex: 0 0 auto; width: 50%; }
+  .ui-col-xl-7 { flex: 0 0 auto; width: 58.333333%; }
+  .ui-col-xl-8 { flex: 0 0 auto; width: 66.666667%; }
+  .ui-col-xl-9 { flex: 0 0 auto; width: 75%; }
+  .ui-col-xl-10 { flex: 0 0 auto; width: 83.333333%; }
+  .ui-col-xl-11 { flex: 0 0 auto; width: 91.666667%; }
+  .ui-col-xl-12 { flex: 0 0 auto; width: 100%; }
+}
+
 @media (max-width: 47.999rem) {
   .ui-grid > [class*="ui-span-"] { grid-column: 1 / -1; }
 }

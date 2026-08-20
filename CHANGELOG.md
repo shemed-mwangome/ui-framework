@@ -1,5 +1,104 @@
 # Changelog
 
+## 1.9.0 — 2026-08-20
+
+Benchmarked the framework by rebuilding a real regulatory register and a
+six-step planning wizard using nothing but `ui-` classes, then filled every
+gap that forced hand-written CSS. Twelve were found; ten are addressed here,
+one was already covered (`.ui-range`) and one is out of scope (evidence-file
+upload queueing, deliberately left to the application).
+
+The framework held up well: tables, stepper, tree select, modals, validation,
+charts and print all did their jobs unchanged. What was missing was the layer
+above them — the components that turn a set of controls into a screen someone
+can make a decision on.
+
+### Added
+
+- **Select list** (`27-select-list.css`, `26-select-list.js`) — a decision
+  layer over `.ui-tree`. The tree shows what you can pick; this shows what
+  picking it costs. Aligned numeric columns (counts of 14, 3 and 217 now start
+  at the same x, so a column can be read downwards — previously they landed up
+  to 8px apart and could not be compared), a sub-line under each label,
+  per-group `n / total`, per-group Select all / Clear that disable when they
+  would do nothing, automatic column totals on group rows, an explanation row
+  for a legitimately empty group, and a search. Opt in with
+  `data-ui-tree-columns` on an existing tree; nothing else changes.
+- **Filter bar** (`28-filter-bar.css`, `27-filter-bar.js`) — one compact button
+  per filterable dimension, each opening a select list in a modal. Four
+  dimensions as chip rows take four wrapped lines and push the table below the
+  fold; as a filter bar they take one line, and a fifth dimension costs a
+  button rather than a row. State is scoped per bar — narrowing a findings
+  register must not silently narrow an inspections register — and optionally
+  mirrored into the query string so a filtered list can be linked to.
+  `data-ui-filter-src` fetches the picker from the server, which is where
+  counts conditional on the other active filters have to be computed.
+- **Segmented control** (`.ui-segmented`) — a scope switch with a real selected
+  state, keyboard navigation and counts. `.ui-btn-group` has no selected state,
+  so this was being hand-rolled.
+- **Page header** (`.ui-page-head`) — `.ui-record-header` is for a record with a
+  reference and a status; a list page has a different shape.
+- **Severity scale** (`.ui-severity-*`) — Critical / Major / Moderate / Minor.
+  The record-status lexicon answers "where is this in its life cycle"; severity
+  answers "how bad is it", and the two are independent axes. Each level keeps
+  its word and the ranking survives greyscale print.
+- **Summary rail** (`.ui-rail`) — the running summary beside a wizard, with the
+  third state `.ui-record-meta` lacks: not yet answered.
+- **Disabled reasons** (`data-ui-disabled-reason`, `UI.blocker`) — a disabled
+  control states why, wired to it with `aria-describedby`, kept in sync by a
+  `MutationObserver` so application code only has to set `disabled`.
+- **Offline work queue** (`30-offline.css`, `29-offline.js`, `UI.offline`) — a
+  durable IndexedDB queue of writes that could not be sent, with a
+  `localStorage` fallback, automatic flush on reconnect, and a sync-status
+  strip. `data-ui-draft` protects the form you are on; this protects work you
+  have finished. Responses are classified rather than blanket-retried: 5xx and
+  network failures are transient and retried, other 4xx are marked failed and
+  left alone (retrying them forever buries the one item that needs a person),
+  and 409 is retained as a conflict with the server's detail attached rather
+  than resolved by last-write-wins. Items send oldest-first and a blocked item
+  stops the rest of its own group, so a later edit never lands before the
+  create it depends on.
+- **Neutral button** (`.ui-btn-default`) — a bare `.ui-btn` resolves to primary,
+  which is right for the one button that submits a form and wrong for a
+  toolbar, where it produced six primary buttons and therefore none.
+  `.ui-btn-secondary` is a filled slate button, a colour rather than a neutral.
+- **`xl` breakpoint** (`.ui-col-xl-*`, 80rem) — the grid stopped at lg, so a
+  1920px monitor and a 1024px laptop resolved to the same layout.
+- **Table stacking** (`.ui-table-stack`) — one card per row below 48rem, driven
+  by `data-label`, for a table read on a phone in the field.
+- **Touch sizing** (`.ui-touch`) — 44px targets, scoped to a region rather than
+  applied globally, since the same components are used on a desk.
+
+### Fixed
+
+- **A control inside a tree row also collapsed the row.** `.ui-tree-row` is a
+  collapse target, so the select list's per-group "Select all" folded the group
+  shut the moment it filled it. The row handler previously excluded
+  `.ui-tree-check` and `.ui-tree-meta` by name, which does not scale — it
+  missed `.ui-tree-actions` as soon as that existed. The rule is now
+  structural: a control that is not the toggle is not a collapse target. Opt an
+  element out explicitly with `data-ui-tree-ignore`.
+
+### Documentation
+
+- `docs/components.html` gains four sections with live, working demos —
+  **Select list**, **Filter bar**, **Register patterns** (page header, neutral
+  button, segmented control, severity, summary rail, disabled reasons, table
+  stacking) and **Offline work queue**, each with a markup reference and the
+  reasoning behind the design.
+- `docs/javascript.html` lists the new `UI.selectList`, `UI.filter`,
+  `UI.segmented`, `UI.blocker` and `UI.offline` APIs and their events.
+- `docs/layout.html` documents the `xl` breakpoint; `docs/index.html` lists the
+  new capabilities. Version strings updated across the docs site.
+
+### Note
+
+`python3 build.py` must be run before `npm test` — the test harness serves
+`dist/`, and the four new CSS and four new JS modules are only in the bundle
+after a rebuild. The docs site loads `dist/` too, so the new demos stay inert
+until it is rebuilt. New specs: `tests/select-list.test.js`,
+`tests/filter-bar.test.js`, `tests/patterns.test.js`, `tests/offline.test.js`.
+
 ## 1.8.8 — 2026-08-02
 
 Closed out the pre-build audit from 1.8.7 by checking the two components it flagged as lower-priority: smart tables and charts.

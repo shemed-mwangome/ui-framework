@@ -1,4 +1,4 @@
-# UI Framework 1.8.8
+# UI Framework 1.9.0
 
 A complete, dependency-free CSS and JavaScript UI framework designed for
 server-rendered applications, static HTML, and legacy projects that already
@@ -51,6 +51,17 @@ common first-time issues.
 - Modal and offcanvas
 - Toast notifications and tooltips
 - Multi-select with checkboxes, search, select-all and tags
+- Hierarchical tree select with cascading tri-state checkboxes, and a **select
+  list** layer over it: aligned numeric columns, per-group counts and
+  select-all/clear, an explanation row for a legitimately empty group, and a
+  search
+- **Filter bar**: one compact button per filterable dimension, each opening a
+  grouped picker; state scoped per bar and optionally mirrored into the URL
+- **Segmented control** for a scope switch, and a **page header** for list pages
+- **Severity scale** (`.ui-severity-*`) alongside the record-status lexicon
+- **Offline work queue**: a durable IndexedDB queue of writes that could not be
+  sent, with automatic flush, retry classification, conflict retention, and a
+  sync-status strip
 - Progress bars, spinners, pulse and skeleton loading
 - Empty states
 - Stepper and timeline
@@ -291,6 +302,189 @@ to see the remaining labels) so the trigger doesn't grow unbounded.
     <option value="2">Baraka J.</option>
 </select>
 ```
+
+## Select list
+
+The tree select handles *selection*. A select list adds what someone needs in
+order to *decide*: the numbers behind each option, per-group totals, and a
+search. Add `data-ui-tree-columns` (and optionally `data-ui-tree-search`) to an
+existing `.ui-tree` and it upgrades in place.
+
+```html
+<div class="ui-tree" data-ui-tree
+     data-ui-tree-columns="Operators,Premises"
+     data-ui-tree-search="Search 26 regions">
+
+  <div class="ui-tree-node">
+    <div class="ui-tree-row">
+      <button type="button" class="ui-tree-toggle"></button>
+      <input type="checkbox" class="ui-tree-check">
+      <span class="ui-tree-label">
+        <span class="ui-tree-name">Eastern Zone</span>
+        <span class="ui-tree-sub">3 regions</span>
+      </span>
+      <span class="ui-tree-actions">
+        <button type="button" class="ui-tree-action" data-ui-tree-all>Select all</button>
+        <button type="button" class="ui-tree-action" data-ui-tree-none>Clear</button>
+      </span>
+      <span class="ui-tree-nums">
+        <span class="ui-tree-num" data-ui-tree-total></span>
+        <span class="ui-tree-num ui-tree-num-optional" data-ui-tree-total></span>
+      </span>
+      <span class="ui-tree-count" data-ui-tree-selected></span>
+    </div>
+    <div class="ui-tree-children">
+      <div class="ui-tree-node" data-ui-tree-value="DSM">
+        <div class="ui-tree-row">
+          <input type="checkbox" class="ui-tree-check">
+          <span class="ui-tree-label">
+            <span class="ui-tree-name">Dar es Salaam</span>
+            <span class="ui-tree-sub">HQ Dar es Salaam &middot; 5 districts</span>
+          </span>
+          <span class="ui-tree-nums">
+            <span class="ui-tree-num">14</span>
+            <span class="ui-tree-num ui-tree-num-optional">86</span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shown only when the group really has no rows. -->
+    <div class="ui-tree-empty">
+      Operation types for Casino have not been defined yet.
+    </div>
+  </div>
+</div>
+```
+
+`[data-ui-tree-selected]` is filled with `n / total`; a `.ui-tree-num` marked
+`data-ui-tree-total` on a group row is filled with the sum of that column
+across the group's visible children. Columns are a fixed width so numbers of
+different lengths line up — override with `--ui-tree-num-width`. Mark any
+column past the first `.ui-tree-num-optional` and it drops out below 36rem.
+
+`UI.selectList.refresh(target)` recomputes after you replace rows;
+`UI.selectList.search(target, term)` applies a search programmatically.
+
+## Filter bar
+
+One button per filterable dimension instead of a chip row per dimension. Each
+opens a select list in a modal.
+
+```html
+<div class="ui-filter-bar" data-ui-filter-bar id="inspectionFilters"
+     data-ui-filter-url="f_">
+  <span class="ui-filter-bar-label">Filter</span>
+
+  <button class="ui-filter-btn" data-ui-filter="region" data-ui-filter-title="Region"
+          data-ui-filter-target="#regionPicker">Region:
+    <span class="ui-filter-value">All</span></button>
+
+  <button class="ui-filter-clear" hidden>Clear</button>
+</div>
+
+<template id="regionPicker"> ...a .ui-tree select list... </template>
+```
+
+Counts beside each option should be *conditional* — how many rows you would
+see if you added this value to the filters already active. That is a server
+calculation, so use `data-ui-filter-src="/inspections/filters/region"` instead
+of a local template: it is fetched with the current state as query parameters
+and must return the picker's HTML.
+
+`data-ui-filter-url="f_"` mirrors the state into the query string with that
+prefix, so a filtered list can be linked to, and arrives filtered.
+
+State is scoped to the bar. Filtering a findings register does not narrow an
+inspections register elsewhere on the site. Listen for `ui:filter:change`, or
+read `UI.filter.state(bar)`; set with `UI.filter.set(bar, key, values)`.
+
+## Segmented control
+
+For a scope switch — the question the screen is answering, as opposed to a
+filter that narrows it.
+
+```html
+<div class="ui-segmented" id="scope">
+  <button class="ui-segment ui-active" data-ui-value="MINE">Assigned to me
+    <span class="ui-segment-count">4</span></button>
+  <button class="ui-segment" data-ui-value="ALL">All
+    <span class="ui-segment-count">15</span></button>
+</div>
+```
+
+Emits `ui:segment:change`. `UI.segmented.value(group)` reads the selection.
+
+## Disabled reasons
+
+A disabled control with nothing beside it makes the user hunt the screen for
+what they missed.
+
+```html
+<button class="ui-btn ui-btn-primary" disabled
+        data-ui-disabled-reason="Select at least one region to continue.">
+  Continue
+</button>
+```
+
+The reason renders next to the control, is wired to it with
+`aria-describedby`, and disappears by itself when the control becomes usable.
+From script: `UI.blocker.set(button, reason)` and `UI.blocker.clear(button)`.
+
+## Offline work queue
+
+`data-ui-draft` protects the form you are looking at. This protects work you
+have finished but could not send — an inspector completing premise visits with
+no signal, an officer in a district office on one bar.
+
+```html
+<form data-ui-offline-form data-ui-offline-url="/api/premise-visits"
+      data-ui-offline-label="Premise visit — Kariakoo"
+      data-ui-offline-group="INSP-2026-101"
+      action="/api/premise-visits" method="post">
+  ...fields...
+</form>
+
+<div class="ui-sync ui-sync-fixed" data-ui-sync></div>
+<div class="ui-sync-queue" data-ui-sync-queue></div>
+```
+
+By default the form posts normally when online and queues when offline. Use
+`data-ui-offline-form="always"` to queue every submission, so the offline path
+is the same code path rather than a rarely-exercised branch.
+
+From script:
+
+```javascript
+UI.offline.queue({
+    url: "/api/premise-visits",
+    body: { premiseId: "P-001", outcome: "COMPLETE" },
+    label: "Premise visit — Kariakoo",
+    group: "INSP-2026-101"   // ordering scope
+});
+
+UI.offline.status();   // { state, total, pending, conflict, failed, online }
+UI.offline.flush();    // try now
+UI.offline.resolve(id, "retry" | "discard");
+```
+
+How responses are treated, and why:
+
+| Response | Treatment |
+| --- | --- |
+| 2xx | Removed from the queue; `ui:offline:synced` |
+| Network failure, 408, 429, 5xx | Kept as `pending` and retried — transient |
+| Other 4xx | Marked `failed` and **not** retried; it will fail identically forever, and a retry loop buries the one item that needs a person |
+| 409 | Marked `conflict` and kept, with the server's detail attached; `ui:offline:conflict` |
+
+Items are sent oldest-first, and a blocked item stops the rest of *its own
+group* so a later edit never lands before the create it depends on. Storage is
+IndexedDB with a `localStorage` fallback. `resolve(id, "discard")` is the only
+path by which field data ever leaves the device unsent — deliberately a
+separate, explicit act.
+
+Evidence files are out of scope: queue the metadata and upload binaries
+separately.
 
 ## Save & next forms
 

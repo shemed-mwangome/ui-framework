@@ -1,0 +1,217 @@
+/* ------------------------------------------------------- Select list
+ *
+ * A decision layer over .ui-tree. The tree already gets the hard part right
+ * -- cascade down, tri-state roll-up -- but it is a *selection* control, not
+ * a *decision* control: it shows you what you can pick, not what picking it
+ * costs. Choosing 4 of 26 regions for an inspection programme is a decision
+ * about workload, and the numbers behind each option (operators, premises,
+ * open findings) are what the decision is actually made on. Without them the
+ * user picks blind, then discovers the consequence two screens later.
+ *
+ * Three things this adds, all of which were being hand-rolled per page:
+ *
+ *   1. Aligned numeric columns. .ui-tree-meta is a free-form flex slot, so
+ *      counts of different digit-widths (14 / 3 / 217) land at different x
+ *      positions and cannot be compared down the column by eye. Here every
+ *      cell is a fixed width, so they line up like a table -- which is what a
+ *      column of numbers is.
+ *   2. A sub-line under the label. "Dar es Salaam" alone is not enough to
+ *      choose between 26 of them; "HQ Dar es Salaam - 5 districts" is.
+ *   3. Group-level affordances: n/total selected, Select all / Clear scoped
+ *      to that group, and -- critically -- an explanatory row when a group is
+ *      legitimately empty. A group that expands into nothing is
+ *      indistinguishable from a broken one.
+ *
+ * Markup is the ordinary .ui-tree markup plus opt-in hooks, so an existing
+ * tree keeps working unchanged and gains columns by adding one attribute.
+ * Behaviour lives in 26-select-list.js.
+ */
+
+/* Width of one numeric column. Override per instance for wide values:
+   style="--ui-tree-num-width:6rem". */
+.ui-tree-columns { --ui-tree-num-width: 4.25rem; }
+
+/* --------------------------------------------------- Numeric columns */
+
+.ui-tree-nums {
+  flex: none;
+  display: flex;
+  align-items: baseline;
+  gap: .35rem;
+}
+
+.ui-tree-num {
+  width: var(--ui-tree-num-width, 4.25rem);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  font-size: .82rem;
+  color: var(--ui-text);
+}
+
+/* A zero is information -- "no operators of this type in the regions you
+   chose" -- but it should not compete with the counts that matter. */
+.ui-tree-num[data-ui-zero] { color: var(--ui-subtle); font-weight: 500; }
+
+/* The group's own row carries the aggregate of its children, in the same
+   columns, so a zone total sits directly above the regions that make it. */
+.ui-tree-node:not(.ui-tree-leaf) > .ui-tree-row .ui-tree-num {
+  color: var(--ui-text-soft);
+}
+
+.ui-tree-header > .ui-tree-row .ui-tree-num { color: inherit; }
+
+/* Column headings. Optional, but with more than one numeric column the
+   reader has to be told which is which. Sits flush above the first group and
+   scrolls with the list rather than floating. */
+.ui-tree-colhead {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .4rem 1rem;
+  border-bottom: 1px solid var(--ui-border);
+  background: var(--ui-surface-muted);
+  color: var(--ui-subtle);
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+.ui-tree-colhead-spacer { flex: 1; min-width: 0; }
+
+.ui-tree-colhead .ui-tree-num {
+  color: inherit;
+  font-size: .68rem;
+  font-weight: 700;
+}
+
+/* ------------------------------------------------------- Label block */
+
+/* .ui-tree-label is flex:1 already; making it a block container lets the
+   name and its qualifier stack without a second wrapper element. */
+.ui-tree-label { display: block; }
+
+.ui-tree-name { display: block; }
+
+.ui-tree-sub {
+  display: block;
+  margin-top: .1rem;
+  color: var(--ui-muted);
+  font-size: .76rem;
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+.ui-tree-header > .ui-tree-row .ui-tree-sub { color: inherit; opacity: .85; }
+
+/* --------------------------------------------------- Group actions */
+
+.ui-tree-actions {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: .1rem;
+}
+
+.ui-tree-action {
+  border: 0;
+  padding: .15rem .45rem;
+  border-radius: var(--ui-radius-2);
+  background: none;
+  color: var(--ui-primary);
+  font: inherit;
+  font-size: .74rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ui-tree-action:hover { background: var(--ui-primary-soft); }
+.ui-tree-action:focus-visible { outline: 0; box-shadow: var(--ui-focus-ring); }
+.ui-tree-action[disabled] { opacity: .4; pointer-events: none; }
+
+.ui-tree-header .ui-tree-action { color: inherit; }
+.ui-tree-header .ui-tree-action:hover { background: rgba(255, 255, 255, .18); }
+
+/* Selected-count chip on a group row. Reuses .ui-tree-count's shape but
+   stays neutral until something is actually selected, so a list of 7 zones
+   isn't 7 blue chips before the user has done anything. */
+.ui-tree-count[data-ui-empty] {
+  background: var(--ui-surface-muted);
+  color: var(--ui-subtle);
+}
+
+/* ----------------------------------------------------- Empty group */
+
+.ui-tree-empty {
+  padding: .7rem 1rem .7rem 2.6rem;
+  background: var(--ui-surface-soft);
+  color: var(--ui-muted);
+  font-size: .8rem;
+  line-height: 1.45;
+}
+
+.ui-tree-node.ui-collapsed > .ui-tree-empty { display: none; }
+
+/* ---------------------------------------------------------- Search */
+
+.ui-tree-search {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .55rem .75rem;
+  border-bottom: 1px solid var(--ui-border);
+  background: var(--ui-surface);
+}
+
+.ui-tree-search input {
+  flex: 1;
+  min-width: 0;
+  min-height: var(--ui-control-sm);
+  padding: .3rem .6rem;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-2);
+  background: var(--ui-surface);
+  color: var(--ui-text);
+  font: inherit;
+  font-size: .85rem;
+}
+
+.ui-tree-search input:focus-visible { outline: 0; box-shadow: var(--ui-focus-ring); }
+
+.ui-tree-search-count {
+  flex: none;
+  color: var(--ui-muted);
+  font-size: .76rem;
+}
+
+/* Hidden by search rather than by collapse -- a separate axis, so restoring
+   the search does not disturb which groups the user had open. */
+.ui-tree-node[data-ui-filtered],
+.ui-tree-empty[data-ui-filtered] { display: none; }
+
+.ui-tree-noresults {
+  padding: 1.4rem 1rem;
+  color: var(--ui-muted);
+  font-size: .85rem;
+  text-align: center;
+}
+
+/* --------------------------------------------------------- Compact */
+
+/* For a list inside a modal, where vertical space is the scarce resource. */
+.ui-tree-compact .ui-tree-row { padding-top: .4rem; padding-bottom: .4rem; }
+.ui-tree-compact .ui-tree-sub { font-size: .73rem; }
+
+/* ---------------------------------------------------------- Narrow */
+
+/* On a phone the secondary columns are the first thing to go: the name and
+   the primary count are what the choice is made on, and three numbers on a
+   360px row leaves no room for the name they describe. Mark any column past
+   the first with .ui-tree-num-optional. */
+@media (max-width: 36rem) {
+  .ui-tree-columns { --ui-tree-num-width: 3.25rem; }
+  .ui-tree-num-optional { display: none; }
+  .ui-tree-actions { display: none; }
+  .ui-tree-row { flex-wrap: wrap; }
+}

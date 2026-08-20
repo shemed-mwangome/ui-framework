@@ -1,0 +1,134 @@
+/* -------------------------------------------------------- Filter bar
+ *
+ * The problem: a register with four filterable dimensions -- domain, type,
+ * region, status -- rendered as chip rows takes four or five wrapped lines
+ * and pushes the table it filters below the fold. The user scrolls past the
+ * controls to reach the data, then scrolls back up to change them.
+ *
+ * The fix: one compact button per dimension, reading its current state
+ * ("Region: All", "Region: Mwanza", "Region: 4 selected"). Clicking opens a
+ * picker -- a .ui-tree select list (27-select-list.css) in a modal -- with a
+ * count beside every option. The whole bar is one line regardless of how
+ * many dimensions there are, and adding a fifth costs one button, not a
+ * fifth row.
+ *
+ * Counts in the picker should be *conditional*: how many rows you would see
+ * if you added this value to what is already filtered, not a static total.
+ * That calculation belongs on the server next to the query, which is why
+ * data-ui-filter-src fetches the picker rather than building it client-side.
+ * A zero then means a genuinely empty combination instead of a stale number.
+ *
+ * Behaviour lives in 27-filter-bar.js.
+ */
+
+.ui-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .45rem;
+}
+
+.ui-filter-bar + .ui-filter-bar { margin-top: .4rem; }
+
+/* Fixed-width so the buttons on stacked bars (SHOW / FILTER) line up. */
+.ui-filter-bar-label {
+  flex: none;
+  width: 3.25rem;
+  color: var(--ui-subtle);
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+.ui-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  min-height: var(--ui-control-sm);
+  padding: .25rem .6rem;
+  border: 1px solid var(--ui-border-strong);
+  border-radius: var(--ui-radius-2);
+  background: var(--ui-surface);
+  color: var(--ui-text);
+  font: inherit;
+  font-size: .82rem;
+  font-weight: 500;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: background var(--ui-transition-fast), border-color var(--ui-transition-fast);
+}
+
+.ui-filter-btn:hover { background: var(--ui-surface-soft); }
+.ui-filter-btn:focus-visible { outline: 0; box-shadow: var(--ui-focus-ring); }
+
+/* An active dimension has to be legible at a glance from across the row --
+   this is the difference between "you are looking at everything" and "you
+   are looking at a subset", which is the single most common source of
+   misread reports. */
+.ui-filter-btn[data-ui-active] {
+  border-color: var(--ui-primary);
+  background: var(--ui-primary-soft);
+  color: var(--ui-primary-active);
+  font-weight: 650;
+}
+
+.ui-filter-btn::after {
+  content: "";
+  width: .4rem;
+  height: .4rem;
+  margin-left: .1rem;
+  border-right: 1.6px solid currentColor;
+  border-bottom: 1.6px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+}
+
+.ui-filter-value { font-weight: 650; }
+
+.ui-filter-clear {
+  border: 0;
+  padding: .25rem .5rem;
+  border-radius: var(--ui-radius-2);
+  background: none;
+  color: var(--ui-primary);
+  font: inherit;
+  font-size: .8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ui-filter-clear:hover { background: var(--ui-primary-soft); }
+.ui-filter-clear:focus-visible { outline: 0; box-shadow: var(--ui-focus-ring); }
+.ui-filter-clear[hidden] { display: none; }
+
+/* ------------------------------------------------------------ picker */
+
+.ui-filter-picker .ui-modal-body { padding: 0; }
+
+.ui-filter-picker .ui-tree {
+  border: 0;
+  border-radius: 0;
+  max-height: min(60vh, 32rem);
+  overflow-y: auto;
+}
+
+.ui-filter-picker-note {
+  padding: .5rem 1rem;
+  border-top: 1px solid var(--ui-border);
+  color: var(--ui-muted);
+  font-size: .76rem;
+}
+
+.ui-filter-loading {
+  padding: 2rem 1rem;
+  color: var(--ui-muted);
+  font-size: .85rem;
+  text-align: center;
+}
+
+/* ------------------------------------------------------------ narrow */
+
+@media (max-width: 36rem) {
+  .ui-filter-bar-label { width: 100%; }
+  .ui-filter-btn { flex: 1 1 auto; justify-content: space-between; }
+}

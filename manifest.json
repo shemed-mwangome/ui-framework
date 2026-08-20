@@ -1,5 +1,5 @@
 {
-  "version": "1.8.8",
+  "version": "1.9.0",
   "prefix": "ui-",
   "cssModules": [
     "00-tokens.css",
@@ -28,7 +28,11 @@
     "23-table-tools.css",
     "24-chart-popover.css",
     "25-status-document.css",
-    "26-tree-select.css"
+    "26-tree-select.css",
+    "27-select-list.css",
+    "28-filter-bar.css",
+    "29-patterns.css",
+    "30-offline.css"
   ],
   "jsModules": [
     "00-core.js",
@@ -56,7 +60,11 @@
     "21-chart.js",
     "23-clipboard.js",
     "24-print.js",
-    "25-tree-select.js"
+    "25-tree-select.js",
+    "26-select-list.js",
+    "27-filter-bar.js",
+    "28-patterns.js",
+    "29-offline.js"
   ],
   "bundles": [
     "dist/ui-framework.css",

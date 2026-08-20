@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Components · UI Framework</title>
-  <link rel="stylesheet" href="../dist/ui-framework.css?v=1.8.8">
-  <link rel="stylesheet" href="assets/docs.css?v=1.8.8">
+  <link rel="stylesheet" href="../dist/ui-framework.css?v=1.9.0">
+  <link rel="stylesheet" href="assets/docs.css?v=1.9.0">
 </head>
 <body class="ui-scope docs-body">
   <header class="docs-topbar">
@@ -14,7 +14,7 @@
       <a class="docs-brand" href="index.html"><span class="docs-logo">UI</span><span>UI Framework</span></a>
     </div>
     <div class="ui-d-flex ui-align-center ui-gap-2">
-      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.8.8</span>
+      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.9.0</span>
       <button class="ui-btn ui-btn-sm ui-btn-outline-secondary" type="button" data-ui-theme-toggle>Theme</button>
     </div>
   </header>
@@ -28,7 +28,7 @@
       <a class="docs-sidebar-link" href="examples/application-form.html">Application form</a>
       <a class="docs-sidebar-link" href="examples/record-register.html">Record register</a>
       <a class="docs-sidebar-link" href="examples/login.html">Login page</a>
-      <div class="docs-sidebar-title">On this page</div><a class="docs-sidebar-link" href="#buttons">Buttons</a><a class="docs-sidebar-link" href="#typography">Typography</a><a class="docs-sidebar-link" href="#forms">Forms</a><a class="docs-sidebar-link" href="#validate">Validation</a><a class="docs-sidebar-link" href="#mask">Input masks</a><a class="docs-sidebar-link" href="#selection">Selection</a><a class="docs-sidebar-link" href="#multiselect">Multi-select</a><a class="docs-sidebar-link" href="#combobox">Combobox</a><a class="docs-sidebar-link" href="#date-range">Date range</a><a class="docs-sidebar-link" href="#date-picker">Date picker</a><a class="docs-sidebar-link" href="#upload">Upload</a><a class="docs-sidebar-link" href="#save-next">Multi-step form</a><a class="docs-sidebar-link" href="#draft">Save draft</a><a class="docs-sidebar-link" href="#alerts">Alerts</a><a class="docs-sidebar-link" href="#status">Status &amp; record header</a><a class="docs-sidebar-link" href="#cards">Cards</a><a class="docs-sidebar-link" href="#charts">Charts</a><a class="docs-sidebar-link" href="#images">Images</a><a class="docs-sidebar-link" href="#tables">Tables</a><a class="docs-sidebar-link" href="#data-table">Smart tables</a><a class="docs-sidebar-link" href="#table-tools">Table tools</a><a class="docs-sidebar-link" href="#navigation">Navigation</a><a class="docs-sidebar-link" href="#tabs">Tabs</a><a class="docs-sidebar-link" href="#dropdown">Dropdown</a><a class="docs-sidebar-link" href="#accordion">Accordion</a><a class="docs-sidebar-link" href="#tree">Tree select</a><a class="docs-sidebar-link" href="#modal">Modal</a><a class="docs-sidebar-link" href="#confirm">Confirm dialog</a><a class="docs-sidebar-link" href="#popover">Popover &amp; copy</a><a class="docs-sidebar-link" href="#offcanvas">Offcanvas</a><a class="docs-sidebar-link" href="#tooltips">Tooltips</a><a class="docs-sidebar-link" href="#toast">Toast</a><a class="docs-sidebar-link" href="#loaders">Loaders</a><a class="docs-sidebar-link" href="#empty-stepper">Workflow UI</a><a class="docs-sidebar-link" href="#document">Document sheet</a>
+      <div class="docs-sidebar-title">On this page</div><a class="docs-sidebar-link" href="#buttons">Buttons</a><a class="docs-sidebar-link" href="#typography">Typography</a><a class="docs-sidebar-link" href="#forms">Forms</a><a class="docs-sidebar-link" href="#validate">Validation</a><a class="docs-sidebar-link" href="#mask">Input masks</a><a class="docs-sidebar-link" href="#selection">Selection</a><a class="docs-sidebar-link" href="#multiselect">Multi-select</a><a class="docs-sidebar-link" href="#combobox">Combobox</a><a class="docs-sidebar-link" href="#date-range">Date range</a><a class="docs-sidebar-link" href="#date-picker">Date picker</a><a class="docs-sidebar-link" href="#upload">Upload</a><a class="docs-sidebar-link" href="#save-next">Multi-step form</a><a class="docs-sidebar-link" href="#draft">Save draft</a><a class="docs-sidebar-link" href="#alerts">Alerts</a><a class="docs-sidebar-link" href="#status">Status &amp; record header</a><a class="docs-sidebar-link" href="#cards">Cards</a><a class="docs-sidebar-link" href="#charts">Charts</a><a class="docs-sidebar-link" href="#images">Images</a><a class="docs-sidebar-link" href="#tables">Tables</a><a class="docs-sidebar-link" href="#data-table">Smart tables</a><a class="docs-sidebar-link" href="#table-tools">Table tools</a><a class="docs-sidebar-link" href="#navigation">Navigation</a><a class="docs-sidebar-link" href="#tabs">Tabs</a><a class="docs-sidebar-link" href="#dropdown">Dropdown</a><a class="docs-sidebar-link" href="#accordion">Accordion</a><a class="docs-sidebar-link" href="#tree">Tree select</a><a class="docs-sidebar-link" href="#select-list">Select list</a><a class="docs-sidebar-link" href="#filter-bar">Filter bar</a><a class="docs-sidebar-link" href="#register-patterns">Register patterns</a><a class="docs-sidebar-link" href="#offline">Offline queue</a><a class="docs-sidebar-link" href="#modal">Modal</a><a class="docs-sidebar-link" href="#confirm">Confirm dialog</a><a class="docs-sidebar-link" href="#popover">Popover &amp; copy</a><a class="docs-sidebar-link" href="#offcanvas">Offcanvas</a><a class="docs-sidebar-link" href="#tooltips">Tooltips</a><a class="docs-sidebar-link" href="#toast">Toast</a><a class="docs-sidebar-link" href="#loaders">Loaders</a><a class="docs-sidebar-link" href="#empty-stepper">Workflow UI</a><a class="docs-sidebar-link" href="#document">Document sheet</a>
     </aside>
     <main class="docs-main">
 
@@ -2412,6 +2412,531 @@ UI.treeSelect.selected(&quot;#treeDemo&quot;);</code></pre>
 </section>
 
 
+<section class="docs-section" id="select-list">
+  <h2 class="ui-h2">Select list <span class="ui-badge ui-badge-soft-primary ui-badge-pill">1.9</span></h2>
+  <p class="docs-section-intro">A decision layer over the tree select. The tree shows what you <em>can</em> pick; this shows what picking it <em>costs</em>. Choosing 4 of 26 regions for an inspection programme is a decision about workload, and the numbers behind each option — operators, premises, open cases — are what the decision is actually made on. Add <code class="ui-code">data-ui-tree-columns</code> to any existing <code class="ui-code">.ui-tree</code> and it upgrades in place: aligned numeric columns, a sub-line under each label, per-group <em>n / total</em> and Select&nbsp;all / Clear, automatic column totals on the group row, an explanation when a group is legitimately empty, and an optional search.</p>
+
+<div class="docs-demo">
+<div class="ui-tree" id="selectListDemo" data-ui-tree
+     data-ui-tree-columns="Operators,Premises"
+     data-ui-tree-search="Search regions">
+
+  <div class="ui-tree-node" id="selectListEast">
+    <div class="ui-tree-row">
+      <button type="button" class="ui-tree-toggle" aria-label="Toggle Eastern Zone"></button>
+      <input type="checkbox" class="ui-tree-check">
+      <span class="ui-tree-label">
+        <span class="ui-tree-name">Eastern Zone</span>
+        <span class="ui-tree-sub">3 regions</span>
+      </span>
+      <span class="ui-tree-actions">
+        <button type="button" class="ui-tree-action" data-ui-tree-all>Select all</button>
+        <button type="button" class="ui-tree-action" data-ui-tree-none>Clear</button>
+      </span>
+      <span class="ui-tree-nums">
+        <span class="ui-tree-num" data-ui-tree-total></span>
+        <span class="ui-tree-num ui-tree-num-optional" data-ui-tree-total></span>
+      </span>
+      <span class="ui-tree-count" data-ui-tree-selected></span>
+    </div>
+    <div class="ui-tree-children">
+      <div class="ui-tree-node" data-ui-tree-value="DSM">
+        <div class="ui-tree-row">
+          <input type="checkbox" class="ui-tree-check" checked>
+          <span class="ui-tree-label">
+            <span class="ui-tree-name">Dar es Salaam</span>
+            <span class="ui-tree-sub">HQ Dar es Salaam &middot; 5 districts</span>
+          </span>
+          <span class="ui-tree-nums">
+            <span class="ui-tree-num">14</span>
+            <span class="ui-tree-num ui-tree-num-optional">86</span>
+          </span>
+        </div>
+      </div>
+      <div class="ui-tree-node" data-ui-tree-value="PWA">
+        <div class="ui-tree-row">
+          <input type="checkbox" class="ui-tree-check">
+          <span class="ui-tree-label">
+            <span class="ui-tree-name">Pwani</span>
+            <span class="ui-tree-sub">HQ Kibaha &middot; 6 districts</span>
+          </span>
+          <span class="ui-tree-nums">
+            <span class="ui-tree-num">3</span>
+            <span class="ui-tree-num ui-tree-num-optional">19</span>
+          </span>
+        </div>
+      </div>
+      <div class="ui-tree-node" data-ui-tree-value="MOR">
+        <div class="ui-tree-row">
+          <input type="checkbox" class="ui-tree-check">
+          <span class="ui-tree-label">
+            <span class="ui-tree-name">Morogoro</span>
+            <span class="ui-tree-sub">HQ Morogoro &middot; 7 districts</span>
+          </span>
+          <span class="ui-tree-nums">
+            <span class="ui-tree-num">217</span>
+            <span class="ui-tree-num ui-tree-num-optional">0</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui-tree-node ui-collapsed">
+    <div class="ui-tree-row">
+      <button type="button" class="ui-tree-toggle" aria-label="Toggle Casino"></button>
+      <input type="checkbox" class="ui-tree-check">
+      <span class="ui-tree-label">
+        <span class="ui-tree-name">Casino</span>
+        <span class="ui-tree-sub">requirements in preparation</span>
+      </span>
+      <span class="ui-tree-count" data-ui-tree-selected></span>
+    </div>
+    <div class="ui-tree-children"></div>
+    <div class="ui-tree-empty">Operation types for Casino have not been defined yet. When the requirements are approved they appear here — no change to this screen.</div>
+  </div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-tree&quot; data-ui-tree
+     data-ui-tree-columns=&quot;Operators,Premises&quot;
+     data-ui-tree-search=&quot;Search regions&quot;&gt;
+
+  &lt;div class=&quot;ui-tree-node&quot;&gt;
+    &lt;div class=&quot;ui-tree-row&quot;&gt;
+      &lt;button type=&quot;button&quot; class=&quot;ui-tree-toggle&quot;&gt;&lt;/button&gt;
+      &lt;input type=&quot;checkbox&quot; class=&quot;ui-tree-check&quot;&gt;
+      &lt;span class=&quot;ui-tree-label&quot;&gt;
+        &lt;span class=&quot;ui-tree-name&quot;&gt;Eastern Zone&lt;/span&gt;
+        &lt;span class=&quot;ui-tree-sub&quot;&gt;3 regions&lt;/span&gt;
+      &lt;/span&gt;
+      &lt;span class=&quot;ui-tree-actions&quot;&gt;
+        &lt;button type=&quot;button&quot; class=&quot;ui-tree-action&quot; data-ui-tree-all&gt;Select all&lt;/button&gt;
+        &lt;button type=&quot;button&quot; class=&quot;ui-tree-action&quot; data-ui-tree-none&gt;Clear&lt;/button&gt;
+      &lt;/span&gt;
+      &lt;span class=&quot;ui-tree-nums&quot;&gt;
+        &lt;span class=&quot;ui-tree-num&quot; data-ui-tree-total&gt;&lt;/span&gt;
+        &lt;span class=&quot;ui-tree-num ui-tree-num-optional&quot; data-ui-tree-total&gt;&lt;/span&gt;
+      &lt;/span&gt;
+      &lt;span class=&quot;ui-tree-count&quot; data-ui-tree-selected&gt;&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;ui-tree-children&quot;&gt;
+      &lt;div class=&quot;ui-tree-node&quot; data-ui-tree-value=&quot;DSM&quot;&gt;
+        &lt;div class=&quot;ui-tree-row&quot;&gt;
+          &lt;input type=&quot;checkbox&quot; class=&quot;ui-tree-check&quot;&gt;
+          &lt;span class=&quot;ui-tree-label&quot;&gt;
+            &lt;span class=&quot;ui-tree-name&quot;&gt;Dar es Salaam&lt;/span&gt;
+            &lt;span class=&quot;ui-tree-sub&quot;&gt;HQ Dar es Salaam &middot; 5 districts&lt;/span&gt;
+          &lt;/span&gt;
+          &lt;span class=&quot;ui-tree-nums&quot;&gt;
+            &lt;span class=&quot;ui-tree-num&quot;&gt;14&lt;/span&gt;
+            &lt;span class=&quot;ui-tree-num ui-tree-num-optional&quot;&gt;86&lt;/span&gt;
+          &lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- shown only when the group really has no rows --&gt;
+    &lt;div class=&quot;ui-tree-empty&quot;&gt;Operation types have not been defined yet.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">Why the columns are fixed-width</h3>
+<p class="docs-section-intro">A count of <code class="ui-code">14</code>, a count of <code class="ui-code">3</code> and a count of <code class="ui-code">217</code> are different widths. Laid out with a plain flex gap they start at three different x positions and the column cannot be read downwards, which is the only reason to have a column of numbers at all. Each <code class="ui-code">.ui-tree-num</code> is therefore a fixed width — override with <code class="ui-code">--ui-tree-num-width</code> for long values. Mark any column past the first <code class="ui-code">.ui-tree-num-optional</code> and it drops out below 36rem, where the name matters more than the second number.</p>
+
+<h3 class="ui-h3 ui-mt-5">Markup reference</h3>
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>Hook</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">data-ui-tree-columns</code></td><td>Comma-separated column headings. Presence of this attribute is what turns a tree into a select list.</td></tr>
+      <tr><td><code class="ui-code">data-ui-tree-search</code></td><td>Adds a search box; the value is its placeholder.</td></tr>
+      <tr><td><code class="ui-code">ui-tree-name</code> / <code class="ui-code">ui-tree-sub</code></td><td>The label's first line and its qualifier.</td></tr>
+      <tr><td><code class="ui-code">ui-tree-nums</code> / <code class="ui-code">ui-tree-num</code></td><td>The numeric cells. One <code class="ui-code">.ui-tree-num</code> per declared column.</td></tr>
+      <tr><td><code class="ui-code">data-ui-tree-total</code></td><td>On a group row's cell: filled with the sum of that column across the group's visible children.</td></tr>
+      <tr><td><code class="ui-code">data-ui-tree-selected</code></td><td>Filled with <em>n / total</em> for the group.</td></tr>
+      <tr><td><code class="ui-code">data-ui-tree-all</code> / <code class="ui-code">data-ui-tree-none</code></td><td>Select all / Clear, scoped to their own group. Disabled when they would do nothing.</td></tr>
+      <tr><td><code class="ui-code">ui-tree-empty</code></td><td>Shown only when the group has no visible rows.</td></tr>
+      <tr><td><code class="ui-code">data-ui-value</code></td><td>On a <code class="ui-code">.ui-tree-num</code>: the raw number to add up, when the displayed text is formatted (<code class="ui-code">1,204</code>).</td></tr>
+      <tr><td><code class="ui-code">ui-tree-compact</code></td><td>Tighter rows, for a list inside a modal.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">JavaScript API</h3>
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>API</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">UI.selectList.refresh(target)</code></td><td>Recomputes counts, totals and action states — call after replacing rows.</td></tr>
+      <tr><td><code class="ui-code">UI.selectList.search(target, term)</code></td><td>Applies a search programmatically, e.g. from a URL parameter.</td></tr>
+      <tr><td><code class="ui-code">UI.selectList.selected(target)</code></td><td>Selected leaf values (delegates to the tree, which owns selection).</td></tr>
+      <tr><td><code class="ui-code">ui:selectlist:search</code></td><td>Fires on the root after a search; <code class="ui-code">detail</code> carries <code class="ui-code">term</code>, <code class="ui-code">shown</code>, <code class="ui-code">total</code>.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="filter-bar">
+  <h2 class="ui-h2">Filter bar <span class="ui-badge ui-badge-soft-primary ui-badge-pill">1.9</span></h2>
+  <p class="docs-section-intro">A register with four filterable dimensions rendered as chip rows takes four or five wrapped lines and pushes the table it filters below the fold — the user scrolls past the controls to reach the data, then scrolls back up to change them. A filter bar is one compact button per dimension, reading its own state, each opening a select list in a modal. The whole bar stays one line however many dimensions there are, and a fifth costs a button rather than a row.</p>
+
+<div class="docs-demo">
+<div class="ui-filter-bar ui-mb-2">
+  <span class="ui-filter-bar-label">Show</span>
+  <div class="ui-segmented" id="filterScopeDemo">
+    <button class="ui-segment ui-active" data-ui-value="MINE">Assigned to me <span class="ui-segment-count">4</span></button>
+    <button class="ui-segment" data-ui-value="REGION">My region <span class="ui-segment-count">9</span></button>
+    <button class="ui-segment" data-ui-value="ALL">All <span class="ui-segment-count">15</span></button>
+  </div>
+</div>
+
+<div class="ui-filter-bar" data-ui-filter-bar id="filterBarDemo">
+  <span class="ui-filter-bar-label">Filter</span>
+  <button class="ui-filter-btn" data-ui-filter="region" data-ui-filter-title="Region"
+          data-ui-filter-target="#filterRegionPicker">Region: <span class="ui-filter-value">All</span></button>
+  <button class="ui-filter-btn" data-ui-filter="type" data-ui-filter-title="Type of operation"
+          data-ui-filter-target="#filterTypePicker">Type: <span class="ui-filter-value">All</span></button>
+  <button class="ui-filter-clear" hidden>Clear</button>
+</div>
+
+<template id="filterRegionPicker">
+  <div class="ui-tree ui-tree-compact" data-ui-tree data-ui-tree-columns="Records">
+    <div class="ui-tree-node">
+      <div class="ui-tree-row">
+        <button type="button" class="ui-tree-toggle"></button>
+        <input type="checkbox" class="ui-tree-check">
+        <span class="ui-tree-label"><span class="ui-tree-name">Eastern Zone</span></span>
+        <span class="ui-tree-actions">
+          <button type="button" class="ui-tree-action" data-ui-tree-all>Select all</button>
+          <button type="button" class="ui-tree-action" data-ui-tree-none>Clear</button>
+        </span>
+        <span class="ui-tree-nums"><span class="ui-tree-num" data-ui-tree-total></span></span>
+        <span class="ui-tree-count" data-ui-tree-selected></span>
+      </div>
+      <div class="ui-tree-children">
+        <div class="ui-tree-node" data-ui-tree-value="DSM">
+          <div class="ui-tree-row"><input type="checkbox" class="ui-tree-check">
+            <span class="ui-tree-label"><span class="ui-tree-name">Dar es Salaam</span></span>
+            <span class="ui-tree-nums"><span class="ui-tree-num">9</span></span></div>
+        </div>
+        <div class="ui-tree-node" data-ui-tree-value="PWA">
+          <div class="ui-tree-row"><input type="checkbox" class="ui-tree-check">
+            <span class="ui-tree-label"><span class="ui-tree-name">Pwani</span></span>
+            <span class="ui-tree-nums"><span class="ui-tree-num">2</span></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template id="filterTypePicker">
+  <div class="ui-tree ui-tree-compact" data-ui-tree data-ui-tree-columns="Records">
+    <div class="ui-tree-node">
+      <div class="ui-tree-row">
+        <button type="button" class="ui-tree-toggle"></button>
+        <input type="checkbox" class="ui-tree-check">
+        <span class="ui-tree-label"><span class="ui-tree-name">Route Operations</span></span>
+        <span class="ui-tree-count" data-ui-tree-selected></span>
+      </div>
+      <div class="ui-tree-children">
+        <div class="ui-tree-node" data-ui-tree-value="BAR">
+          <div class="ui-tree-row"><input type="checkbox" class="ui-tree-check">
+            <span class="ui-tree-label"><span class="ui-tree-name">Bar Site</span></span>
+            <span class="ui-tree-nums"><span class="ui-tree-num">7</span></span></div>
+        </div>
+        <div class="ui-tree-node" data-ui-tree-value="SLOT">
+          <div class="ui-tree-row"><input type="checkbox" class="ui-tree-check">
+            <span class="ui-tree-label"><span class="ui-tree-name">Slot Shop</span></span>
+            <span class="ui-tree-nums"><span class="ui-tree-num">5</span></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-filter-bar&quot; data-ui-filter-bar id=&quot;inspectionFilters&quot;
+     data-ui-filter-url=&quot;f_&quot;&gt;
+  &lt;span class=&quot;ui-filter-bar-label&quot;&gt;Filter&lt;/span&gt;
+
+  &lt;button class=&quot;ui-filter-btn&quot; data-ui-filter=&quot;region&quot;
+          data-ui-filter-title=&quot;Region&quot;
+          data-ui-filter-target=&quot;#regionPicker&quot;&gt;Region:
+    &lt;span class=&quot;ui-filter-value&quot;&gt;All&lt;/span&gt;&lt;/button&gt;
+
+  &lt;button class=&quot;ui-filter-clear&quot; hidden&gt;Clear&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;template id=&quot;regionPicker&quot;&gt; ...a .ui-tree select list... &lt;/template&gt;</code></pre>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">Counts should be conditional, which means they come from the server</h3>
+<p class="docs-section-intro">The number beside each option should be <em>how many rows you would see if you added this value to the filters already active</em> — not a static total. A stale count looks authoritative and is worse than no count at all. That calculation belongs next to the query, so use <code class="ui-code">data-ui-filter-src</code> instead of a local template: it is fetched with the current state as query parameters and must return the picker's HTML.</p>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;button class=&quot;ui-filter-btn&quot; data-ui-filter=&quot;region&quot;
+        data-ui-filter-title=&quot;Region&quot;
+        data-ui-filter-src=&quot;/inspections/filters/region&quot;&gt;Region:
+  &lt;span class=&quot;ui-filter-value&quot;&gt;All&lt;/span&gt;&lt;/button&gt;
+
+&lt;!-- GET /inspections/filters/region?type=BAR&amp;stage=OPEN
+     -&gt; returns the .ui-tree markup, counts already narrowed --&gt;</code></pre>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">Filters belong to the screen, not the session</h3>
+<p class="docs-section-intro">State is stored on the buttons of one bar. Narrowing a findings register to <em>Critical</em> does not silently narrow an inspections register when the user navigates back — a defect that is invisible until someone reports a number they cannot reproduce. Because the state lives in the DOM, a server-rendered page can arrive already filtered simply by writing <code class="ui-code">data-ui-filter-values</code>, with no JavaScript handshake. Add <code class="ui-code">data-ui-filter-url</code> to mirror the state into the query string as well, so a filtered list can be linked to.</p>
+
+<h3 class="ui-h3 ui-mt-5">JavaScript API</h3>
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>API</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">UI.filter.state(bar)</code></td><td>Current state as <code class="ui-code">{ dimension: [values] }</code>.</td></tr>
+      <tr><td><code class="ui-code">UI.filter.set(bar, key, values)</code></td><td>Sets one dimension and fires the change event.</td></tr>
+      <tr><td><code class="ui-code">UI.filter.clear(bar)</code></td><td>Clears every dimension on that bar.</td></tr>
+      <tr><td><code class="ui-code">ui:filter:change</code></td><td>Fires on the bar; <code class="ui-code">detail</code> carries <code class="ui-code">key</code>, the whole <code class="ui-code">state</code>, and <code class="ui-code">count</code>.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="register-patterns">
+  <h2 class="ui-h2">Register patterns <span class="ui-badge ui-badge-soft-primary ui-badge-pill">1.9</span></h2>
+  <p class="docs-section-intro">Small recurring page-level patterns that every register and workflow screen otherwise re-invents from utilities: the page header, a scope switch, a severity scale, the running summary beside a wizard, and the reason a control is disabled.</p>
+
+<h3 class="ui-h3">Page header</h3>
+<p class="docs-section-intro"><code class="ui-code">.ui-record-header</code> is for a record — a thing with a reference number and a status. A list page has a different shape: a title, one sentence saying what the list is, and the action that creates a new one. The lead is capped at a readable measure even when the page itself is full width, because a 1900px line of prose is unreadable however wide the table below it needs to be.</p>
+
+<div class="docs-demo">
+<div class="ui-page-head">
+  <div class="ui-page-head-main">
+    <h1 class="ui-page-title">Inspections</h1>
+    <p class="ui-page-lead">Every inspection record across all domains. Lifecycle stage is a status on the record, not a separate screen.</p>
+  </div>
+  <div class="ui-page-actions">
+    <button class="ui-btn ui-btn-default">Export</button>
+    <button class="ui-btn ui-btn-primary">New inspection plan</button>
+  </div>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-page-head&quot;&gt;
+  &lt;div class=&quot;ui-page-head-main&quot;&gt;
+    &lt;h1 class=&quot;ui-page-title&quot;&gt;Inspections&lt;/h1&gt;
+    &lt;p class=&quot;ui-page-lead&quot;&gt;Every inspection record across all domains.&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;ui-page-actions&quot;&gt;
+    &lt;button class=&quot;ui-btn ui-btn-default&quot;&gt;Export&lt;/button&gt;
+    &lt;button class=&quot;ui-btn ui-btn-primary&quot;&gt;New inspection plan&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">Neutral button</h3>
+<p class="docs-section-intro">A bare <code class="ui-code">.ui-btn</code> resolves to primary. That is right for the one button on a form that submits it, and wrong for a toolbar — six bare buttons render six primary buttons, and a screen with six primary actions has none. <code class="ui-code">.ui-btn-default</code> is the neutral: a plain surface with a border. (<code class="ui-code">.ui-btn-secondary</code> is a filled slate button — a colour, not a neutral.) Add <code class="ui-code">.ui-active</code> or <code class="ui-code">aria-pressed</code> for a toggle.</p>
+
+<div class="docs-demo">
+<div class="ui-d-flex ui-flex-wrap ui-gap-2 ui-align-center">
+  <button class="ui-btn ui-btn-primary">Save changes</button>
+  <button class="ui-btn ui-btn-default">Cancel</button>
+  <button class="ui-btn ui-btn-default">Export</button>
+  <button class="ui-btn ui-btn-default ui-active">List</button>
+  <button class="ui-btn ui-btn-default">Calendar</button>
+</div>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">Segmented control</h3>
+<p class="docs-section-intro">A scope switch is not a filter. It is the question the screen is answering, it is mutually exclusive, and it usually has a default that depends on who is signed in — an inspector sees their own work first, a manager sees the region. <code class="ui-code">.ui-btn-group</code> has no selected state, so this needs its own control. Left/Right arrows move between segments, matching the tab pattern.</p>
+
+<div class="docs-demo">
+<div class="ui-segmented" id="segmentDemo">
+  <button class="ui-segment ui-active" data-ui-value="MINE">Assigned to me <span class="ui-segment-count">4</span></button>
+  <button class="ui-segment" data-ui-value="REGION">My region <span class="ui-segment-count">9</span></button>
+  <button class="ui-segment" data-ui-value="ALL">All <span class="ui-segment-count">15</span></button>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;div class=&quot;ui-segmented&quot; id=&quot;scope&quot;&gt;
+  &lt;button class=&quot;ui-segment ui-active&quot; data-ui-value=&quot;MINE&quot;&gt;Assigned to me
+    &lt;span class=&quot;ui-segment-count&quot;&gt;4&lt;/span&gt;&lt;/button&gt;
+  &lt;button class=&quot;ui-segment&quot; data-ui-value=&quot;ALL&quot;&gt;All
+    &lt;span class=&quot;ui-segment-count&quot;&gt;15&lt;/span&gt;&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+document.getElementById(&quot;scope&quot;)
+    .addEventListener(&quot;ui:segment:change&quot;, function (event) {
+        console.log(event.detail.value);
+    });
+&lt;/script&gt;</code></pre>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">Severity</h3>
+<p class="docs-section-intro">The record-status lexicon answers <em>where is this in its life cycle</em>. Severity answers <em>how bad is it</em>, and the two are independent axes — an approved report can contain a critical finding. Reusing a status class for severity conflates them. Each level keeps its word rather than relying on colour, and the top two carry a filled dot so the ranking survives a greyscale print.</p>
+
+<div class="docs-demo">
+<div class="ui-d-flex ui-flex-wrap ui-gap-2 ui-align-center">
+  <span class="ui-severity ui-severity-critical">Critical</span>
+  <span class="ui-severity ui-severity-major">Major</span>
+  <span class="ui-severity ui-severity-moderate">Moderate</span>
+  <span class="ui-severity ui-severity-minor">Minor</span>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;span class=&quot;ui-severity ui-severity-critical&quot;&gt;Critical&lt;/span&gt;
+&lt;span class=&quot;ui-severity ui-severity-major&quot;&gt;Major&lt;/span&gt;
+&lt;span class=&quot;ui-severity ui-severity-moderate&quot;&gt;Moderate&lt;/span&gt;
+&lt;span class=&quot;ui-severity ui-severity-minor&quot;&gt;Minor&lt;/span&gt;
+
+&lt;!-- a row needing attention, legible even when scrolled sideways --&gt;
+&lt;tr class=&quot;ui-row-attention&quot;&gt;...&lt;/tr&gt;</code></pre>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">Summary rail</h3>
+<p class="docs-section-intro">The running summary beside a multi-step form. <code class="ui-code">.ui-record-meta</code> lists a finished record's facts; a form in progress needs a third state — not yet answered — and it has to look different from an empty value rather than just blank.</p>
+
+<div class="docs-demo">
+<div class="ui-card" style="max-width:22rem">
+  <div class="ui-card-header"><h3 class="ui-card-title">Plan summary</h3></div>
+  <div class="ui-card-body">
+    <div class="ui-rail">
+      <div class="ui-rail-row"><span class="ui-rail-key">Regions</span>
+        <span class="ui-rail-value">Dar es Salaam, Pwani<small>2 selected</small></span></div>
+      <div class="ui-rail-row"><span class="ui-rail-key">Operators</span>
+        <span class="ui-rail-value">17 in scope</span></div>
+      <div class="ui-rail-row ui-pending"><span class="ui-rail-key">Sample</span>
+        <span class="ui-rail-value">Not selected</span></div>
+      <div class="ui-rail-row ui-pending"><span class="ui-rail-key">Team</span>
+        <span class="ui-rail-value">Not selected</span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">Disabled reasons</h3>
+<p class="docs-section-intro">A disabled Continue button with nothing beside it is the most common dead end in a multi-step form: the user can see they are stuck and cannot see why. Add <code class="ui-code">data-ui-disabled-reason</code> and the reason renders next to the control, is wired to it with <code class="ui-code">aria-describedby</code> so it is announced rather than merely displayed, and disappears by itself when the control becomes usable — application code only ever has to set <code class="ui-code">disabled</code>.</p>
+
+<div class="docs-demo">
+<div class="ui-d-flex ui-gap-3 ui-align-center ui-flex-wrap ui-justify-end">
+  <button class="ui-btn ui-btn-primary" id="blockerDemo" disabled
+          data-ui-disabled-reason="Select at least one region to continue.">Continue to operations</button>
+</div>
+<div class="ui-mt-3">
+  <button class="ui-btn ui-btn-sm ui-btn-default" type="button"
+          onclick="var b=document.getElementById('blockerDemo');b.disabled=!b.disabled;">Toggle the control</button>
+</div>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;button class=&quot;ui-btn ui-btn-primary&quot; disabled
+        data-ui-disabled-reason=&quot;Select at least one region to continue.&quot;&gt;
+  Continue
+&lt;/button&gt;
+
+&lt;script&gt;
+UI.blocker.set(button, &quot;Add at least one team member.&quot;);  // disable + explain
+UI.blocker.clear(button);                                  // enable + clear
+&lt;/script&gt;</code></pre>
+</div>
+
+<h3 class="ui-h3 ui-mt-5">Tables on a phone</h3>
+<p class="docs-section-intro">Horizontal scroll preserves column alignment and is the right default for a dense register. But a table worked through in the field — a checklist of premises, a list of findings — is better as one card per row. Add <code class="ui-code">.ui-table-stack</code> and give every cell a <code class="ui-code">data-label</code>; below 48rem the header is hidden and each cell becomes a labelled line. Wrap a field region in <code class="ui-code">.ui-touch</code> for 44px targets.</p>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;table class=&quot;ui-table ui-table-hover ui-table-stack&quot;&gt;
+  &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Inspection&lt;/th&gt;&lt;th&gt;Operator&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td data-label=&quot;Inspection&quot;&gt;INSP-101/01&lt;/td&gt;
+      &lt;td data-label=&quot;Operator&quot;&gt;Simba Bet&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</code></pre>
+</div>
+
+</section>
+
+
+<section class="docs-section" id="offline">
+  <h2 class="ui-h2">Offline work queue <span class="ui-badge ui-badge-soft-primary ui-badge-pill">1.9</span></h2>
+  <p class="docs-section-intro"><a href="#draft">Save draft</a> protects the form you are looking at. This protects work you have <em>finished</em> but could not send — an inspector completing premise visits with no signal, an officer in a district office on one bar. Completed submissions go into a durable IndexedDB queue (with a <code class="ui-code">localStorage</code> fallback) and are flushed automatically when a connection returns.</p>
+
+<div class="docs-demo">
+<div class="ui-sync" data-ui-sync></div>
+<div class="ui-sync-queue ui-mt-3" data-ui-sync-queue></div>
+<div class="ui-mt-3 ui-d-flex ui-gap-2 ui-flex-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-default" type="button"
+          onclick="UI.offline.queue({url:'#demo',label:'Premise visit — Kariakoo',group:'DEMO'});">Queue an item</button>
+  <button class="ui-btn ui-btn-sm ui-btn-default" type="button"
+          onclick="UI.offline.clear();">Clear the queue</button>
+</div>
+<p class="ui-small ui-text-muted ui-mt-2 ui-mb-0">The demo queues against a dummy URL and does not flush, so items stay visible. Reload the page and they are still there — that is the point.</p>
+</div>
+<div class="docs-code-wrap">
+  <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+  <pre class="ui-code-block"><code>&lt;form data-ui-offline-form data-ui-offline-url=&quot;/api/premise-visits&quot;
+      data-ui-offline-label=&quot;Premise visit — Kariakoo&quot;
+      data-ui-offline-group=&quot;INSP-2026-101&quot;
+      action=&quot;/api/premise-visits&quot; method=&quot;post&quot;&gt;
+  ...fields...
+&lt;/form&gt;
+
+&lt;div class=&quot;ui-sync ui-sync-fixed&quot; data-ui-sync&gt;&lt;/div&gt;
+&lt;div class=&quot;ui-sync-queue&quot; data-ui-sync-queue&gt;&lt;/div&gt;</code></pre>
+</div>
+
+<p class="docs-section-intro ui-mt-4">By default the form posts normally when online and queues when offline. Use <code class="ui-code">data-ui-offline-form=&quot;always&quot;</code> to queue every submission, so the offline path is the same code path rather than a rarely-exercised branch that breaks unnoticed.</p>
+
+<h3 class="ui-h3 ui-mt-5">How responses are treated, and why</h3>
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>Response</th><th>Treatment</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">2xx</code></td><td>Removed from the queue; <code class="ui-code">ui:offline:synced</code>.</td></tr>
+      <tr><td>Network failure, <code class="ui-code">408</code>, <code class="ui-code">429</code>, <code class="ui-code">5xx</code></td><td>Kept as <em>pending</em> and retried — transient.</td></tr>
+      <tr><td>Other <code class="ui-code">4xx</code></td><td>Marked <em>failed</em> and <strong>not</strong> retried. It will fail identically forever, and a retry loop buries the one item that needs a person.</td></tr>
+      <tr><td><code class="ui-code">409</code></td><td>Marked <em>conflict</em> and kept, with the server's detail attached. Someone else changed the record; nothing is overwritten by whichever write happened to arrive last.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<p class="docs-section-intro ui-mt-4">Items are sent oldest-first, and a blocked item stops the rest of <em>its own group</em> so a later edit never lands before the create it depends on. <code class="ui-code">UI.offline.resolve(id, &quot;discard&quot;)</code> is the only path by which field data ever leaves the device unsent — deliberately a separate, explicit act with the item in front of the person doing it.</p>
+
+<h3 class="ui-h3 ui-mt-5">JavaScript API</h3>
+<div class="ui-table-responsive ui-shadow-1">
+  <table class="ui-table ui-table-striped">
+    <thead><tr><th>API</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code class="ui-code">UI.offline.queue(item)</code></td><td>Queues one write. Resolves once it is <em>durably stored</em>, not once it is sent — so the caller can navigate away immediately. <code class="ui-code">item</code> takes <code class="ui-code">url</code>, <code class="ui-code">method</code>, <code class="ui-code">body</code>, <code class="ui-code">label</code>, <code class="ui-code">group</code>.</td></tr>
+      <tr><td><code class="ui-code">UI.offline.status()</code></td><td><code class="ui-code">{ state, total, pending, sending, conflict, failed, online }</code>.</td></tr>
+      <tr><td><code class="ui-code">UI.offline.pending()</code></td><td>Everything queued, oldest first.</td></tr>
+      <tr><td><code class="ui-code">UI.offline.flush()</code></td><td>Try to send everything now.</td></tr>
+      <tr><td><code class="ui-code">UI.offline.resolve(id, action)</code></td><td><code class="ui-code">&quot;retry&quot;</code> re-queues a conflicted or failed item; <code class="ui-code">&quot;discard&quot;</code> removes it.</td></tr>
+      <tr><td><code class="ui-code">UI.offline.configure(options)</code></td><td><code class="ui-code">autoFlush</code>, <code class="ui-code">interval</code>, <code class="ui-code">endpointHeaders</code> (e.g. a CSRF token).</td></tr>
+      <tr><td><code class="ui-code">UI.offline.clear()</code></td><td>Removes everything. Intended for sign-out on a shared device.</td></tr>
+      <tr><td colspan="2" class="ui-text-muted"><code class="ui-code">ui:offline:queued</code> · <code class="ui-code">:synced</code> · <code class="ui-code">:failed</code> · <code class="ui-code">:conflict</code> · <code class="ui-code">:state</code> all fire on <code class="ui-code">document</code>. <code class="ui-code">body.ui-is-offline</code> is toggled, and anything marked <code class="ui-code">data-ui-needs-online</code> is disabled while offline.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="ui-alert ui-alert-info ui-mt-4">
+  <div class="ui-alert-message">Evidence files are out of scope: queue the metadata here and upload binaries through a separate resumable path. The two have different retry and storage-quota characteristics, and folding them together makes both worse.</div>
+</div>
+
+</section>
+
+
 <section class="docs-section" id="modal">
   <h2 class="ui-h2">Modal</h2>
   <p class="docs-section-intro">Small, default, large, extra-large, and fullscreen dialog sizes with focus trapping, Escape handling, and backdrop closing.</p>
@@ -2938,10 +3463,17 @@ UI.treeSelect.selected(&quot;#treeDemo&quot;);</code></pre>
 
 
 
-      <footer class="docs-footer">UI Framework 1.8.8 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
+      <footer class="docs-footer">UI Framework 1.9.0 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
     </main>
   </div>
-  <script src="../dist/ui-framework.js?v=1.8.8"></script>
-  <script src="assets/docs.js?v=1.8.8"></script>
+  <script src="../dist/ui-framework.js?v=1.9.0"></script>
+  <script src="assets/docs.js?v=1.9.0"></script>
+  <script>
+    // The offline demo queues against a dummy URL. Left to flush, fetch("#demo")
+    // would resolve against this very page, return 200, and the item would
+    // vanish before anyone saw it -- so autoFlush is off here. In a real
+    // application leave it on; that is the whole point of the component.
+    if (window.UI && UI.offline) UI.offline.configure({ autoFlush: false });
+  </script>
 </body>
 </html>

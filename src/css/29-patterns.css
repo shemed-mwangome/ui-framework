@@ -1,0 +1,336 @@
+/* ------------------------------------------------- Register patterns
+ *
+ * Small, recurring page-level patterns that every register and workflow
+ * screen re-invents: the page header, a scope switch, a severity scale, a
+ * summary rail beside a wizard, the reason a button is disabled, and a table
+ * that has to survive a phone. None of them is large enough to be its own
+ * component; collectively they are the difference between a page assembled
+ * from utilities and a page that looks designed.
+ */
+
+/* ------------------------------------------------------- Page header */
+
+/* .ui-record-header is for a record -- a thing with a reference number and a
+   status. A list page has a different shape: a title, a sentence explaining
+   what the list is, and the one action that creates a new one. */
+.ui-page-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.35rem;
+}
+
+.ui-page-head-main { min-width: 0; }
+
+.ui-page-title {
+  margin: 0;
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  line-height: 1.25;
+}
+
+/* Capped at a readable measure even when the page itself is full width --
+   a 1900px line of explanatory prose is unreadable however wide the table
+   below it needs to be. */
+.ui-page-lead {
+  margin: .3rem 0 0;
+  max-width: 80ch;
+  color: var(--ui-muted);
+  font-size: .9rem;
+  line-height: 1.55;
+}
+
+.ui-page-actions {
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem;
+}
+
+.ui-page-head .ui-breadcrumb { margin-bottom: .35rem; }
+
+@media (max-width: 48rem) {
+  .ui-page-head { gap: .75rem; }
+  .ui-page-actions { width: 100%; }
+  .ui-page-actions > .ui-btn { flex: 1 1 auto; }
+}
+
+/* --------------------------------------------------- Segmented control */
+
+/* A scope switch -- "assigned to me / my region / all" -- is not a filter.
+   It is the question the screen is answering, it is mutually exclusive, and
+   it usually has a default that depends on who is signed in. .ui-btn-group
+   has no selected state, so this needs its own control. */
+.ui-segmented {
+  display: inline-flex;
+  padding: .17rem;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-3);
+  background: var(--ui-surface-muted);
+}
+
+.ui-segment {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .3rem .7rem;
+  border: 0;
+  border-radius: calc(var(--ui-radius-3) - .15rem);
+  background: none;
+  color: var(--ui-text-soft);
+  font: inherit;
+  font-size: .82rem;
+  font-weight: 550;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background var(--ui-transition-fast), color var(--ui-transition-fast);
+}
+
+.ui-segment:hover { color: var(--ui-text); }
+.ui-segment:focus-visible { outline: 0; box-shadow: var(--ui-focus-ring); }
+
+.ui-segment.ui-active,
+.ui-segment[aria-pressed="true"] {
+  background: var(--ui-surface);
+  color: var(--ui-text);
+  font-weight: 700;
+  box-shadow: var(--ui-shadow-1);
+}
+
+.ui-segment-count {
+  padding: 0 .32rem;
+  border-radius: var(--ui-radius-pill);
+  background: var(--ui-surface-muted);
+  color: var(--ui-muted);
+  font-size: .72rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.ui-segment.ui-active .ui-segment-count {
+  background: var(--ui-primary-soft);
+  color: var(--ui-primary-active);
+}
+
+@media (max-width: 36rem) {
+  /* flex:1 and min-width:0 both matter: inside a .ui-filter-bar the control
+     is itself a flex item, and without them it keeps its content width and
+     the last segment is clipped off the right edge rather than shrinking. */
+  .ui-segmented { display: flex; flex: 1 1 100%; width: 100%; min-width: 0; }
+  .ui-segment { flex: 1 1 0; min-width: 0; justify-content: center; padding-inline: .4rem; }
+  .ui-segment-count { flex: none; }
+}
+
+/* ----------------------------------------------------- Severity scale */
+
+/* The record-status lexicon in 25-status-document.css answers "where is this
+   in its life cycle". Severity answers a different question -- "how bad is
+   it" -- and the two axes are independent: an approved report can contain a
+   critical finding. Reusing a status class for severity conflates them.
+   Order is deliberate: red, amber, ochre, slate, descending. */
+.ui-severity {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .1rem .5rem;
+  border: 1px solid transparent;
+  border-radius: var(--ui-radius-pill);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .01em;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+/* Never colour alone: each level keeps its word, and the highest two carry a
+   filled dot so the ranking survives a greyscale print of the report. */
+.ui-severity::before {
+  content: "";
+  width: .4rem;
+  height: .4rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.ui-severity-minor::before { background: transparent; box-shadow: inset 0 0 0 1.5px currentColor; }
+
+.ui-severity-critical {
+  border-color: color-mix(in srgb, var(--ui-danger) 35%, transparent);
+  background: color-mix(in srgb, var(--ui-danger) 12%, var(--ui-surface));
+  color: var(--ui-danger);
+}
+
+.ui-severity-major {
+  border-color: color-mix(in srgb, var(--ui-warning) 40%, transparent);
+  background: color-mix(in srgb, var(--ui-warning) 16%, var(--ui-surface));
+  color: #92400e;
+}
+
+.ui-severity-moderate {
+  border-color: color-mix(in srgb, var(--ui-warning) 25%, transparent);
+  background: color-mix(in srgb, var(--ui-warning) 8%, var(--ui-surface));
+  color: #a16207;
+}
+
+.ui-severity-minor {
+  border-color: var(--ui-border-strong);
+  background: var(--ui-surface-muted);
+  color: var(--ui-text-soft);
+}
+
+/* An overdue or otherwise attention-worthy row. Tinting the whole row is the
+   only treatment that survives horizontal scrolling on a phone, where the
+   cell carrying the badge may be off-screen. */
+.ui-table tr.ui-row-attention > td {
+  background: color-mix(in srgb, var(--ui-danger) 5%, var(--ui-surface));
+}
+
+.ui-table tr.ui-row-attention > td:first-child {
+  box-shadow: inset 3px 0 0 var(--ui-danger);
+}
+
+/* -------------------------------------------------------- Summary rail */
+
+/* The running summary beside a multi-step form. .ui-record-meta is a
+   finished record's facts; this is a form in progress, so every row needs a
+   third state -- not yet answered -- and it has to be visibly different from
+   an empty value rather than just blank. */
+.ui-rail { display: flex; flex-direction: column; }
+
+.ui-rail-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .75rem;
+  padding: .55rem 0;
+  border-bottom: 1px solid var(--ui-border);
+}
+
+.ui-rail-row:last-child { border-bottom: 0; }
+
+.ui-rail-key {
+  flex: none;
+  color: var(--ui-muted);
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+}
+
+.ui-rail-value {
+  min-width: 0;
+  color: var(--ui-text);
+  font-size: .87rem;
+  font-weight: 600;
+  text-align: right;
+}
+
+.ui-rail-value small {
+  display: block;
+  margin-top: .1rem;
+  color: var(--ui-muted);
+  font-size: .75rem;
+  font-weight: 400;
+}
+
+.ui-rail-row.ui-pending .ui-rail-value {
+  color: var(--ui-subtle);
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* ------------------------------------------------- Disabled reasons */
+
+/* A disabled control with no explanation makes the user hunt the screen for
+   the thing they missed. Behaviour in 28-patterns.js keeps this in sync with
+   the control's disabled state and wires aria-describedby, so the reason is
+   announced rather than only seen. */
+.ui-blocker {
+  display: inline-block;
+  max-width: 22rem;
+  color: #92400e;
+  font-size: .78rem;
+  line-height: 1.4;
+  text-align: right;
+}
+
+.ui-blocker[hidden] { display: none; }
+
+/* -------------------------------------------- Table stacking on phones */
+
+/* Horizontal scroll preserves column alignment and is the right default for
+   a dense register. But a table read on a phone in the field -- a checklist
+   of premises, a list of findings to work through -- is better as one card
+   per row. Opt in with .ui-table-stack, and give every cell a data-label. */
+@media (max-width: 48rem) {
+  .ui-table-stack,
+  .ui-table-stack thead,
+  .ui-table-stack tbody,
+  .ui-table-stack tr,
+  .ui-table-stack td { display: block; width: 100%; }
+
+  .ui-table-stack thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+  .ui-table-stack tr {
+    margin-bottom: .75rem;
+    border: 1px solid var(--ui-border);
+    border-radius: var(--ui-radius-3);
+    background: var(--ui-surface);
+    box-shadow: var(--ui-shadow-1);
+    overflow: hidden;
+  }
+
+  .ui-table-stack td {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: .5rem .8rem;
+    border: 0;
+    border-bottom: 1px solid var(--ui-border);
+    text-align: right;
+  }
+
+  .ui-table-stack td:last-child { border-bottom: 0; }
+
+  .ui-table-stack td::before {
+    content: attr(data-label);
+    flex: none;
+    color: var(--ui-muted);
+    font-size: .74rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-align: left;
+    text-transform: uppercase;
+  }
+
+  /* A cell with no data-label (an actions cell) spans the card instead of
+     pretending to be a labelled field. */
+  .ui-table-stack td:not([data-label]) { justify-content: flex-end; }
+  .ui-table-stack td:not([data-label])::before { content: none; }
+
+  .ui-table-stack tr.ui-row-attention > td:first-child { box-shadow: none; }
+  .ui-table-stack tr.ui-row-attention { border-left: 3px solid var(--ui-danger); }
+}
+
+/* ------------------------------------------------------- Touch sizing */
+
+/* Field use: a control tapped with a thumb, outdoors, one-handed. 44px is
+   the smallest target that is reliably hit. Opt in per region rather than
+   globally, because the same components are used on a desk at 13px. */
+.ui-touch .ui-btn,
+.ui-touch .ui-control,
+.ui-touch .ui-select,
+.ui-touch .ui-segment,
+.ui-touch .ui-filter-btn { min-height: 2.75rem; }
+
+.ui-touch .ui-checkbox,
+.ui-touch .ui-radio,
+.ui-touch .ui-tree-check { width: 1.35rem !important; height: 1.35rem !important; }
+
+.ui-touch .ui-tree-row { padding-top: .8rem; padding-bottom: .8rem; }

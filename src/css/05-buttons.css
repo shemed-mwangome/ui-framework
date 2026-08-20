@@ -58,6 +58,33 @@
 .ui-btn-pill { --ui-btn-radius: var(--ui-radius-pill); }
 .ui-btn-square { --ui-btn-radius: 0; }
 
+/* The neutral button. .ui-btn on its own resolves to primary, which is the
+   right default for the one button on a form that submits it -- but it means
+   a toolbar of six bare .ui-btn elements renders six primary buttons, and a
+   screen with six primary actions has none. Anything that is not *the*
+   action on the screen should carry .ui-btn-default: a plain surface with a
+   border, which is what a secondary control looks like in every register,
+   filter row and table toolbar. (.ui-btn-secondary is a filled slate button
+   -- a colour, not a neutral.) */
+.ui-btn-default {
+  --ui-btn-bg: var(--ui-surface);
+  --ui-btn-border: var(--ui-border-strong);
+  --ui-btn-color: var(--ui-text);
+  --ui-btn-hover-bg: var(--ui-surface-soft);
+  --ui-btn-hover-border: var(--ui-border-strong);
+}
+
+/* A neutral button used as a toggle (view switch, layout switch) needs a
+   pressed state that is legible without relying on colour alone -- the
+   weight change carries it for anyone who cannot see the tint. */
+.ui-btn-default.ui-active,
+.ui-btn-default[aria-pressed="true"] {
+  --ui-btn-bg: var(--ui-primary-soft);
+  --ui-btn-border: var(--ui-primary);
+  --ui-btn-color: var(--ui-primary-active);
+  font-weight: 700;
+}
+
 .ui-btn-primary { --ui-btn-bg: var(--ui-primary); --ui-btn-hover-bg: var(--ui-primary-hover); }
 .ui-btn-secondary { --ui-btn-bg: var(--ui-secondary); --ui-btn-hover-bg: #475569; }
 .ui-btn-success { --ui-btn-bg: var(--ui-success); --ui-btn-hover-bg: #15803d; }
