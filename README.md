@@ -1,4 +1,4 @@
-# UI Framework 1.12.0
+# UI Framework 1.14.0
 
 A complete, dependency-free CSS and JavaScript UI framework designed for
 server-rendered applications, static HTML, and legacy projects that already
@@ -179,9 +179,114 @@ The documentation includes:
 - Worked examples: dashboard, form workflow, login, a combined
   application form, and a record register with charts and a print sheet
 
-## Custom theme
+## Repeater
 
-Override tokens after loading the framework:
+A table that grows a row at a time — the control behind "add a row for every
+unlicensed premise / unregistered device / unlicensed employee".
+
+```html
+<div class="ui-repeater ui-repeater-stack" data-ui-repeater
+     data-ui-name="unlicensedPremises" data-ui-min="1" data-ui-max="20">
+  <table class="ui-repeater-table">
+    <thead><tr><th class="ui-repeater-num">#</th><th>Premise</th><th></th></tr></thead>
+    <tbody></tbody>
+  </table>
+
+  <template data-ui-repeater-row>
+    <tr>
+      <td class="ui-repeater-num"></td>
+      <td data-label="Premise"><input class="ui-control" name="{name}[{i}].premise"></td>
+      <td><button type="button" class="ui-repeater-remove" data-ui-repeater-remove
+                  aria-label="Remove row">&times;</button></td>
+    </tr>
+  </template>
+
+  <div class="ui-repeater-empty">No unlicensed premises recorded.</div>
+  <div class="ui-repeater-foot">
+    <button type="button" class="ui-btn ui-btn-sm" data-ui-repeater-add>Add premise</button>
+    <span class="ui-repeater-count"></span>
+  </div>
+</div>
+```
+
+`{i}` and `{name}` are rewritten on every add and remove, so the collection
+posts as `unlicensedPremises[0].premise` — the indexed form Spring binds to a
+`List` without a custom binder. Removing the middle row re-indexes the
+survivors contiguously.
+
+`.ui-repeater-stack` turns each row into a card below 48rem, using the same
+`data-label` mechanism as `.ui-table-stack`. At the minimum the remove buttons
+are disabled rather than hidden. `UI.repeater.add()`, `.count()`, `.clear()`;
+events `ui:repeater:add`, `:remove`, `:change`.
+
+## Yes / No / N-A
+
+Three states, not a checkbox. "Not applicable" is a real answer in a
+compliance checklist and is materially different from "not answered" — the
+compliance rate excludes one and is blocked by the other.
+
+```html
+<div class="ui-yn" data-ui-yn>
+  <input type="hidden" name="premiseLicensed" value="">
+  <button type="button" data-ui-yn-value="YES">Yes</button>
+  <button type="button" data-ui-yn-value="NO">No</button>
+  <button type="button" data-ui-yn-value="NA">N/A</button>
+</div>
+```
+
+Clicking the selected answer clears it, so a mis-tap on a phone is
+recoverable. Read with `UI.yn.value(target)`; listen for `ui:yn:change`.
+
+## Themes
+
+Load the core stylesheet, then a theme:
+
+```html
+<link rel="stylesheet" href="/static/ui-framework/dist/ui-framework.min.css">
+<link rel="stylesheet" href="/static/ui-framework/dist/themes/default.min.css">
+```
+
+Swapping one theme for another changes every screen — buttons, links, focus
+rings, charts, badges, the navigation rail, the stage tags. **A theme is only
+design tokens**: no component CSS is touched and nothing needs `!important`,
+which is what makes adopting the framework in a new product a one-line change
+rather than an afternoon of overrides.
+
+Two ship, as worked examples rather than as anybody's house style:
+
+| Theme | Looks like |
+| --- | --- |
+| `default` | Blue primary, comfortable sizing. Start here. |
+| `forest` | Green primary, slate neutrals, dense back-office sizing. |
+
+Themes are **not** in the core bundle. The framework is meant to be used by
+more than one product, and baking one product's palette into the shared
+artefact is how a shared framework stops being shareable.
+
+To make your own: copy `src/themes/default.css`, change the values, add the
+filename to `THEMES` in `build.py`. Getting the five `--ui-primary-*` values
+right is most of the job.
+
+**[THEMING.md](THEMING.md)** has the full token contract, dark mode,
+per-region and per-tenant overrides, runtime switching, and the three things
+worth knowing before picking colours. The docs site has a
+[live theme switcher](docs/theming.html) you can click through.
+
+## Application chrome
+
+Token-driven, so these recolour with the theme:
+
+| Class | Use |
+| --- | --- |
+| `.ui-stage` + `.ui-stage-1/2/3/4` | Phase tag above a page title |
+| `.ui-sidebar-brand` | Branded navigation rail |
+| `.ui-brandmark` | Square logo tile |
+| `.ui-notice` | Full-width standing banner — reads as chrome, not as content to action |
+| `.ui-badge-dot` | Adds a status dot to a badge |
+
+## Custom tokens
+
+To adjust a theme rather than replace it, override tokens after loading it:
 
 ```css
 :root {

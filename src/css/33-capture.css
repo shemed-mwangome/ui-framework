@@ -1,0 +1,390 @@
+/* ------------------------------------------------- Capture patterns
+ *
+ * The controls a field-capture form is built from. Each of these was
+ * hand-rolled in an application before it existed here, which is
+ * the usual sign that it belongs in the framework rather than in a
+ * page: a repeating row table, a three-state yes/no/not-applicable
+ * answer, a selectable option card, a removable chip, a toolbar, a
+ * wizard shell and a horizontal bar readout.
+ *
+ * The repeater in particular is not a convenience. The source
+ * requirements say, of unlicensed premises, unlicensed employees and
+ * unregistered devices alike: "the system should allow users to add
+ * multiple rows where more than one is identified." An inspector who
+ * finds four unregistered machines needs four rows, and a form that
+ * offers three is a form that loses the fourth.
+ */
+
+/* ========================================================== repeater */
+
+.ui-repeater {
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-3);
+  overflow: hidden;
+  background: var(--ui-surface);
+}
+
+.ui-repeater-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 12.4px; }
+
+.ui-repeater-table th {
+  padding: .42rem .55rem;
+  border-bottom: 1px solid var(--ui-border-strong);
+  background: var(--ui-surface-muted);
+  color: var(--ui-text-soft);
+  font-size: 10.4px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.ui-repeater-table td {
+  padding: .3rem .35rem;
+  border-bottom: 1px solid #eef2f6;
+  vertical-align: middle;
+}
+
+/* Inputs fill their cell. A repeater row is a record, not a form
+   layout, so the cell boundary is the field boundary. */
+.ui-repeater-table td .ui-control,
+.ui-repeater-table td .ui-select {
+  width: 100%;
+  min-height: 1.85rem;
+  padding: .28rem .5rem;
+  border-radius: 6px;
+  font-size: 12.4px;
+}
+
+/* The row number is the officer's reference when they are reading a
+   figure off a machine and back to a colleague. Right-aligned and
+   tabular so a list of twenty stays legible. */
+.ui-repeater-num {
+  width: 1.8rem;
+  color: var(--ui-subtle);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  text-align: center;
+}
+
+.ui-repeater-remove {
+  display: grid;
+  place-items: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  border: 1px solid var(--ui-border);
+  border-radius: 6px;
+  background: var(--ui-surface);
+  color: var(--ui-muted);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.ui-repeater-remove:hover {
+  border-color: #fca5a5;
+  background: color-mix(in srgb, var(--ui-danger) 8%, var(--ui-surface));
+  color: var(--ui-danger);
+}
+
+.ui-repeater-remove:focus-visible { outline: 0; box-shadow: var(--ui-focus-ring); }
+.ui-repeater-remove[disabled] { opacity: .35; pointer-events: none; }
+
+.ui-repeater-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem;
+  padding: .55rem;
+  border-top: 1px solid var(--ui-border);
+  background: #fbfcfd;
+}
+
+.ui-repeater-count { color: var(--ui-muted); font-size: 11.6px; }
+
+.ui-repeater-empty {
+  padding: 1.1rem;
+  background: #fbfcfd;
+  color: var(--ui-muted);
+  font-size: 12.2px;
+  text-align: center;
+}
+
+/* Below the breakpoint a repeater row becomes a card, because six
+   columns of inputs on a 360px screen is not a form anyone can fill in
+   standing up. Same data-label mechanism as .ui-table-stack. */
+@media (max-width: 48rem) {
+  .ui-repeater-stack .ui-repeater-table,
+  .ui-repeater-stack .ui-repeater-table tbody,
+  .ui-repeater-stack .ui-repeater-table tr,
+  .ui-repeater-stack .ui-repeater-table td { display: block; width: 100%; }
+
+  .ui-repeater-stack .ui-repeater-table thead { display: none; }
+
+  .ui-repeater-stack .ui-repeater-table tr {
+    position: relative;
+    margin: .5rem;
+    padding: .35rem .5rem .5rem;
+    border: 1px solid var(--ui-border);
+    border-radius: var(--ui-radius-2);
+  }
+
+  .ui-repeater-stack .ui-repeater-table td { border: 0; padding: .25rem 0; }
+
+  .ui-repeater-stack .ui-repeater-table td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: .12rem;
+    color: var(--ui-muted);
+    font-size: 10.4px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+
+  .ui-repeater-stack .ui-repeater-num { position: absolute; top: .4rem; right: 2.4rem; width: auto; }
+  .ui-repeater-stack .ui-repeater-num::before { content: none; }
+  .ui-repeater-stack td:has(> .ui-repeater-remove) { position: absolute; top: .3rem; right: .4rem; width: auto; }
+  .ui-repeater-stack td:has(> .ui-repeater-remove)::before { content: none; }
+}
+
+/* ====================================================== yes/no/n-a */
+
+/* Three states, not a checkbox. "Not applicable" is a real answer in a
+   compliance checklist and is materially different from "not answered"
+   -- the compliance rate excludes one and is blocked by the other. A
+   checkbox cannot express that; three explicit buttons can. */
+.ui-yn {
+  display: inline-flex;
+  border: 1px solid var(--ui-border-strong);
+  border-radius: 7px;
+  overflow: hidden;
+}
+
+.ui-yn button {
+  padding: .26rem .7rem;
+  border: 0;
+  background: var(--ui-surface);
+  color: var(--ui-muted);
+  font: inherit;
+  font-size: 11.8px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.ui-yn button + button { border-left: 1px solid var(--ui-border-strong); }
+.ui-yn button:hover { background: var(--ui-surface-soft); color: var(--ui-text); }
+.ui-yn button:focus-visible { outline: 0; box-shadow: inset 0 0 0 2px var(--ui-primary); }
+
+.ui-yn button.ui-on[data-ui-yn-value="YES"] { background: var(--ui-success); color: #fff; }
+.ui-yn button.ui-on[data-ui-yn-value="NO"] { background: var(--ui-danger); color: #fff; }
+.ui-yn button.ui-on[data-ui-yn-value="NA"] { background: var(--ui-muted); color: #fff; }
+.ui-yn button.ui-on[data-ui-yn-value="PARTIAL"] { background: var(--ui-warning); color: #1f2937; }
+
+/* ===================================================== option cards */
+
+/* For a choice that needs more than a label -- a description and the
+   figures the decision is actually made on. The select list (§7.1)
+   handles long lists; this handles four or five options that each
+   deserve explaining. */
+.ui-option-grid { display: grid; gap: .55rem; }
+
+@media (min-width: 48rem) {
+  .ui-option-grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ui-option-grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+.ui-option {
+  display: flex;
+  align-items: flex-start;
+  gap: .6rem;
+  padding: .65rem .7rem;
+  border: 1.5px solid var(--ui-border);
+  border-radius: var(--ui-radius-3);
+  background: var(--ui-surface);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--ui-transition-fast), background var(--ui-transition-fast);
+}
+
+.ui-option:hover { border-color: var(--ui-primary-100, var(--ui-primary-soft)); background: #fbfefd; }
+
+.ui-option.ui-on {
+  border-color: var(--ui-primary);
+  background: var(--ui-primary-soft);
+  box-shadow: 0 0 0 2px var(--ui-primary-soft);
+}
+
+.ui-option:focus-visible { outline: 0; box-shadow: var(--ui-focus-ring); }
+
+.ui-option-box {
+  display: grid;
+  place-items: center;
+  width: 1rem;
+  height: 1rem;
+  flex: none;
+  margin-top: .1rem;
+  border: 1.5px solid var(--ui-border-strong);
+  border-radius: 5px;
+  background: var(--ui-surface);
+  color: #fff;
+}
+
+.ui-option-radio .ui-option-box { border-radius: 50%; }
+.ui-option.ui-on .ui-option-box { border-color: var(--ui-primary); background: var(--ui-primary); }
+.ui-option-box svg { opacity: 0; }
+.ui-option.ui-on .ui-option-box svg { opacity: 1; }
+
+.ui-option-main { min-width: 0; }
+.ui-option-title { font-size: 13px; font-weight: 650; line-height: 1.3; }
+.ui-option-desc { margin-top: .1rem; color: var(--ui-muted); font-size: 11.4px; }
+
+.ui-option-meta {
+  margin-left: auto;
+  color: var(--ui-muted);
+  font-size: 10.6px;
+  font-weight: 600;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.ui-option-meta b { display: block; color: var(--ui-text); font-size: 14px; font-weight: 750; }
+
+/* ============================================================ chips */
+
+.ui-chip-row { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; }
+
+.ui-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .16rem .45rem .16rem .58rem;
+  border: 1px solid var(--ui-primary-100, var(--ui-primary-soft));
+  border-radius: var(--ui-radius-pill);
+  background: var(--ui-primary-soft);
+  color: var(--ui-primary-active);
+  font-size: 11.6px;
+  font-weight: 600;
+}
+
+.ui-chip-grey { border-color: var(--ui-border); background: var(--ui-surface-muted); color: var(--ui-text-soft); }
+
+.ui-chip button {
+  display: grid;
+  place-items: center;
+  width: .9rem;
+  height: .9rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: inherit;
+  font-size: 11px;
+  line-height: 1;
+  opacity: .55;
+  cursor: pointer;
+}
+
+.ui-chip button:hover { background: rgba(0, 0, 0, .08); opacity: 1; }
+.ui-chip button:focus-visible { outline: 0; box-shadow: var(--ui-focus-ring); opacity: 1; }
+
+/* ========================================================= toolbar */
+
+.ui-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem;
+  padding: .65rem .95rem;
+  border-bottom: 1px solid var(--ui-border);
+  background: #fcfdfe;
+}
+
+.ui-searchbox { position: relative; flex: 1; min-width: 10.5rem; }
+
+.ui-searchbox input {
+  width: 100%;
+  min-height: var(--ui-control-md);
+  padding: .35rem .6rem .35rem 1.85rem;
+  border: 1px solid var(--ui-border-strong);
+  border-radius: var(--ui-radius-2);
+  background: var(--ui-surface);
+  color: var(--ui-text);
+  font: inherit;
+  outline: 0;
+}
+
+.ui-searchbox input:focus { border-color: var(--ui-primary); box-shadow: 0 0 0 3px var(--ui-primary-soft); }
+.ui-searchbox svg { position: absolute; left: .6rem; top: 50%; transform: translateY(-50%); color: var(--ui-subtle); }
+
+/* ========================================================== wizard */
+
+.ui-wizard { display: grid; grid-template-columns: 1fr 18.25rem; gap: .9rem; align-items: start; }
+
+@media (max-width: 72rem) { .ui-wizard { grid-template-columns: 1fr; } }
+
+.ui-wizard-body {
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-3);
+  background: var(--ui-surface);
+  box-shadow: var(--ui-shadow-1);
+}
+
+.ui-wizard-head { padding: .95rem 1.05rem 0; }
+.ui-wizard-head h2 { margin: 0 0 .15rem; font-size: 16px; font-weight: 700; }
+.ui-wizard-head p { margin: 0; color: var(--ui-muted); font-size: 12.4px; }
+.ui-wizard-main { padding: .95rem 1.05rem; }
+
+.ui-wizard-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .55rem;
+  padding: .75rem 1.05rem;
+  border-top: 1px solid var(--ui-border);
+  border-radius: 0 0 var(--ui-radius-3) var(--ui-radius-3);
+  background: #fcfdfe;
+}
+
+.ui-wizard-status { color: var(--ui-muted); font-size: 12px; }
+.ui-wizard-status b { color: var(--ui-text); }
+.ui-wizard-actions { margin-left: auto; display: flex; gap: .5rem; }
+
+/* The running summary sticks, because the point of it is to answer
+   "what have I chosen so far" at the moment of the next choice. */
+.ui-wizard-rail { position: sticky; top: 4.25rem; }
+
+/* ================================================ horizontal bars */
+
+/* A labelled bar list. For "coverage by region" this beats a bar chart:
+   the label, the value and the proportion are all readable without a
+   legend or an axis, and it reflows to one column on a phone. */
+.ui-hbars { display: flex; flex-direction: column; gap: .6rem; }
+
+.ui-hbar-label {
+  display: flex;
+  justify-content: space-between;
+  gap: .75rem;
+  margin-bottom: .18rem;
+  font-size: 11.8px;
+}
+
+.ui-hbar-label b { font-weight: 650; }
+.ui-hbar-label span { color: var(--ui-muted); font-variant-numeric: tabular-nums; }
+
+.ui-hbar-track {
+  height: .5rem;
+  border-radius: var(--ui-radius-pill);
+  background: var(--ui-surface-muted);
+  overflow: hidden;
+}
+
+.ui-hbar-track i { display: block; height: 100%; border-radius: inherit; background: var(--ui-primary); }
+.ui-hbar-amber .ui-hbar-track i { background: var(--ui-warning); }
+.ui-hbar-red .ui-hbar-track i { background: var(--ui-danger); }
+
+/* ====================================================== stat states */
+
+.ui-stat-warn { border-color: #fde68a; background: #fffdf5; }
+.ui-stat-bad { border-color: #fecaca; background: #fffafa; }

@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en" data-ui-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Theming · UI Framework</title>
+  <link rel="stylesheet" href="../dist/ui-framework.css?v=1.16.1">
+  <link rel="stylesheet" href="assets/docs.css?v=1.16.1">
+</head>
+<body class="ui-scope docs-body">
+  <header class="docs-topbar">
+    <div class="ui-d-flex ui-align-center ui-gap-2">
+      <button class="ui-btn ui-btn-icon ui-btn-ghost docs-mobile-menu" type="button" data-docs-menu aria-label="Open documentation menu">☰</button>
+      <a class="docs-brand" href="index.html"><span class="docs-logo">UI</span><span>UI Framework</span></a>
+    </div>
+    <div class="ui-d-flex ui-align-center ui-gap-2">
+      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.16.1</span>
+      <button class="ui-btn ui-btn-sm ui-btn-outline-secondary" type="button" data-ui-theme-toggle>Theme</button>
+    </div>
+  </header>
+  <div class="docs-layout">
+    <aside class="docs-sidebar">
+      <div class="docs-sidebar-title">Documentation</div>
+      <a class="docs-sidebar-link" href="index.html">Overview</a><a class="docs-sidebar-link" href="getting-started.html">Getting started</a><a class="docs-sidebar-link" href="layout.html">Layout &amp; grid</a><a class="docs-sidebar-link" href="components.html">Components</a><a class="docs-sidebar-link active" href="theming.html">Theming</a><a class="docs-sidebar-link" href="utilities.html">Utilities</a><a class="docs-sidebar-link" href="javascript.html">JavaScript API</a>
+      <div class="docs-sidebar-title">Examples</div>
+      <a class="docs-sidebar-link" href="examples/dashboard.html">Dashboard</a>
+      <a class="docs-sidebar-link" href="examples/form.html">Form workflow</a>
+      <a class="docs-sidebar-link" href="examples/application-form.html">Application form</a>
+      <a class="docs-sidebar-link" href="examples/record-register.html">Record register</a>
+      <a class="docs-sidebar-link" href="examples/login.html">Login page</a>
+      <div class="docs-sidebar-title">On this page</div>
+      <a class="docs-sidebar-link" href="#try">Try it</a>
+      <a class="docs-sidebar-link" href="#switch">Switching a theme</a>
+      <a class="docs-sidebar-link" href="#minimum">The minimum</a>
+      <a class="docs-sidebar-link" href="#tokens">Token reference</a>
+      <a class="docs-sidebar-link" href="#override">Overriding without a theme</a>
+      <a class="docs-sidebar-link" href="#dark">Dark mode</a>
+      <a class="docs-sidebar-link" href="#advice">Choosing colours</a>
+      <a class="docs-sidebar-link" href="#coexist">Alongside Bootstrap</a>
+    </aside>
+    <main class="docs-main">
+
+<section class="docs-hero">
+  <div class="docs-kicker">Make it yours</div>
+  <h1 class="ui-display-2">A theme is design tokens. Nothing else.</h1>
+  <p class="ui-lead">No component CSS is touched, no selector is more specific than <span class="ui-code">:root</span>, and nothing needs <span class="ui-code">!important</span> -  which is what makes adopting this framework in a new product a one-line change rather than an afternoon of overrides.</p>
+</section>
+
+<section class="docs-section" id="try">
+  <h2 class="ui-h2">Try it</h2>
+  <p class="docs-section-intro">These buttons rewrite a handful of custom properties on the preview below -  nothing else changes. Every component inside it follows, because every component reads its colour from a token rather than from a hard-coded value.</p>
+
+  <div class="docs-demo">
+    <div class="ui-d-flex ui-flex-wrap ui-gap-2 ui-mb-3">
+      <button class="ui-btn ui-btn-sm ui-btn-default ui-active" type="button" data-theme-demo="default">Default</button>
+      <button class="ui-btn ui-btn-sm ui-btn-default" type="button" data-theme-demo="forest">Forest</button>
+      <button class="ui-btn ui-btn-sm ui-btn-default" type="button" data-theme-demo="ocean">Ocean</button>
+      <button class="ui-btn ui-btn-sm ui-btn-default" type="button" data-theme-demo="plum">Plum</button>
+      <button class="ui-btn ui-btn-sm ui-btn-default" type="button" data-theme-demo="dense">Forest, dense</button>
+    </div>
+
+    <div id="themePreview" class="ui-p-3 ui-rounded-3" style="border:1px solid var(--ui-border);background:var(--ui-surface-soft)">
+      <span class="ui-stage ui-stage-1">Stage 1 · Planning</span>
+      <h3 class="ui-page-title ui-mb-1">Inspection plans</h3>
+      <p class="ui-page-lead">Every component in this box reads its colour from a token.</p>
+
+      <div class="ui-d-flex ui-flex-wrap ui-gap-2 ui-mb-3">
+        <button class="ui-btn ui-btn-primary">Primary action</button>
+        <button class="ui-btn ui-btn-default">Secondary</button>
+        <span class="ui-badge ui-badge-soft-primary ui-badge-dot">Active</span>
+        <span class="ui-severity ui-severity-critical">Critical</span>
+        <span class="ui-chip">Dar es Salaam <button type="button" aria-label="Remove">&times;</button></span>
+      </div>
+
+      <div class="ui-row ui-g-3">
+        <div class="ui-col-12 ui-col-md-7">
+          <table class="ui-table ui-table-hover">
+            <thead><tr><th>Operator</th><th>Region</th><th class="ui-text-end">Rate</th></tr></thead>
+            <tbody>
+              <tr><td>Simba Bet</td><td>Dar es Salaam</td><td class="ui-text-end">87%</td></tr>
+              <tr><td>Ushindi Bet</td><td>Mwanza</td><td class="ui-text-end">64%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="ui-col-12 ui-col-md-5">
+          <div data-ui-chart="bar" data-ui-axis data-ui-value-labels data-ui-height="130"
+               data-ui-values="87,64,92" data-ui-labels="Q1,Q2,Q3" data-ui-title="Rate by quarter"></div>
+        </div>
+      </div>
+    </div>
+
+    <pre class="ui-code-block ui-mt-3"><code id="themeCode"></code></pre>
+  </div>
+</section>
+
+<section class="docs-section" id="switch">
+  <h2 class="ui-h2">Switching a theme</h2>
+  <p class="docs-section-intro">Load the core stylesheet, then a theme. Swapping the second line changes every screen in the product.</p>
+
+  <div class="docs-code-wrap">
+    <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+    <pre class="ui-code-block"><code>&lt;link rel=&quot;stylesheet&quot; href=&quot;/static/ui-framework/dist/ui-framework.min.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;/static/ui-framework/dist/themes/default.min.css&quot;&gt;</code></pre>
+  </div>
+
+  <p class="docs-section-intro">Themes are built separately and are <strong>not</strong> part of the core bundle. A framework used by more than one product should not ship one product's palette in the shared artefact -  that is how a shared framework stops being shareable.</p>
+
+  <h3 class="ui-h3 ui-mt-5">Making one for your project -  no build step</h3>
+
+  <p class="docs-section-intro">You do <strong>not</strong> need to rebuild the framework to use your own theme. A theme is an ordinary stylesheet containing custom properties and nothing else, so it lives in <em>your</em> project, is served by <em>your</em> application, and is deployed on <em>your</em> release cycle. The framework never has to know it exists.</p>
+
+  <div class="docs-code-wrap">
+    <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+    <pre class="ui-code-block"><code>&lt;link rel=&quot;stylesheet&quot; href=&quot;/static/ui-framework/dist/ui-framework.min.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;/static/css/acme-theme.css&quot;&gt;   &lt;!-- yours --&gt;</code></pre>
+  </div>
+
+  <p class="docs-section-intro">That is the whole procedure. Copy <span class="ui-code">src/themes/default.css</span> as a starting point if you like, or write the handful of tokens from <a href="#minimum">The minimum worth changing</a> straight into a stylesheet you already have. It does not need a separate file, a particular filename, or a place in this repository.</p>
+
+  <div class="ui-alert ui-alert-info">
+    <div class="ui-alert-message"><strong>Then when <em>would</em> you touch <span class="ui-code">build.py</span>?</strong> Only if you want the framework itself to distribute your theme -  that is, to publish it in <span class="ui-code">dist/themes/</span> alongside <span class="ui-code">default</span> and <span class="ui-code">forest</span> for other projects to consume. The <span class="ui-code">THEMES</span> list exists to minify the worked examples this repository ships. It is not a registry a theme has to be entered in to work.</div>
+  </div>
+
+  <h3 class="ui-h3 ui-mt-5">The one rule: your theme must come last</h3>
+
+  <p class="docs-section-intro">The framework's defaults are declared at <span class="ui-code">:root</span>, and so are yours. Equal specificity means <strong>source order decides</strong> -  a theme linked <em>before</em> the bundle loses every token to the defaults and appears to do nothing at all. There is no warning; the page simply looks unthemed.</p>
+
+  <p class="docs-section-intro">If you cannot control the order -  a parent layout or a Tiles definition owns the <span class="ui-code">&lt;head&gt;</span>, say -  use <span class="ui-code">ui-framework.layered.css</span> instead. Its tokens sit inside <span class="ui-code">@layer ui-base</span>, and unlayered CSS always beats layered CSS regardless of position, so your theme wins wherever it lands.</p>
+
+  <div class="ui-alert ui-alert-warning">
+    <div class="ui-alert-message"><strong>Change the values, leave the names alone.</strong> Token names are the contract between a theme and every component. Rename one and whatever consumed it silently loses its styling -  there is no error, just a button that has gone grey.</div>
+  </div>
+</section>
+
+<section class="docs-section" id="minimum">
+  <h2 class="ui-h2">The minimum worth changing</h2>
+  <p class="docs-section-intro">If you touch nothing else, these five give you a coherent theme. Everything else has a sensible default.</p>
+
+  <div class="docs-code-wrap">
+    <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+    <pre class="ui-code-block"><code>:root {
+  --ui-primary:        #0b6e4f;   /* buttons, links, focus rings, active nav */
+  --ui-primary-hover:  #0a5f45;   /* about 8% darker  */
+  --ui-primary-active: #084c37;   /* about 15% darker */
+  --ui-primary-soft:   #e9f5f0;   /* tints: selected rows, soft badges */
+  --ui-primary-100:    #d2ebe2;   /* borders on those tints */
+}</code></pre>
+  </div>
+
+  <p class="docs-section-intro">Two more are worth setting because they are the most visible surfaces after the primary: <span class="ui-code">--ui-nav-bg</span> (the navigation rail) and <span class="ui-code">--ui-chart-1</span> (the first chart series).</p>
+</section>
+
+<section class="docs-section" id="tokens">
+  <h2 class="ui-h2">Token reference</h2>
+  <p class="docs-section-intro">Everything a theme may set. Anything omitted falls back to the framework default.</p>
+
+  <div class="ui-table-responsive ui-shadow-1">
+    <table class="ui-table ui-table-striped">
+      <thead><tr><th>Group</th><th>Tokens</th><th>Where it shows</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Brand</strong></td><td><span class="ui-code">--ui-primary</span>, <span class="ui-code">-hover</span>, <span class="ui-code">-active</span>, <span class="ui-code">-soft</span>, <span class="ui-code">--ui-primary-100</span>, <span class="ui-code">--ui-brand-gradient-to</span></td><td>Buttons, links, focus rings, active navigation, selected rows, the brandmark</td></tr>
+        <tr><td><strong>Semantic</strong></td><td><span class="ui-code">--ui-success</span>, <span class="ui-code">--ui-warning</span>, <span class="ui-code">--ui-danger</span>, <span class="ui-code">--ui-info</span></td><td>Alerts, toasts, validation, severity, the target line on a chart</td></tr>
+        <tr><td><strong>Neutrals</strong></td><td><span class="ui-code">--ui-text</span>, <span class="ui-code">-soft</span>, <span class="ui-code">--ui-muted</span>, <span class="ui-code">--ui-subtle</span>, <span class="ui-code">--ui-border</span>, <span class="ui-code">-strong</span>, <span class="ui-code">--ui-surface</span>, <span class="ui-code">-soft</span>, <span class="ui-code">-muted</span></td><td>Body text, captions, rules, card and page backgrounds</td></tr>
+        <tr><td><strong>Stage</strong></td><td><span class="ui-code">--ui-stage-1</span>…<span class="ui-code">-4</span>, each with <span class="ui-code">-soft</span> and <span class="ui-code">-line</span></td><td><span class="ui-code">.ui-stage</span> phase tags</td></tr>
+        <tr><td><strong>Navigation</strong></td><td><span class="ui-code">--ui-nav-bg</span>, <span class="ui-code">--ui-nav-fg</span>, <span class="ui-code">--ui-nav-fg-muted</span>, <span class="ui-code">--ui-nav-active-bg</span>, <span class="ui-code">--ui-nav-active-fg</span></td><td><span class="ui-code">.ui-sidebar-brand</span></td></tr>
+        <tr><td><strong>Notice</strong></td><td><span class="ui-code">--ui-notice-bg</span>, <span class="ui-code">-fg</span>, <span class="ui-code">-line</span></td><td><span class="ui-code">.ui-notice</span> standing banner</td></tr>
+        <tr><td><strong>Charts</strong></td><td><span class="ui-code">--ui-chart-1</span>…<span class="ui-code">--ui-chart-6</span></td><td>Series colours, legend swatches</td></tr>
+        <tr><td><strong>Shape</strong></td><td><span class="ui-code">--ui-radius-0</span>…<span class="ui-code">-5</span>, <span class="ui-code">--ui-radius-pill</span>, <span class="ui-code">--ui-shadow-1</span>…<span class="ui-code">-4</span></td><td>Corner rounding and elevation everywhere</td></tr>
+        <tr><td><strong>Density</strong></td><td><span class="ui-code">--ui-font-size</span>, <span class="ui-code">--ui-control-sm/md/lg</span></td><td>Base type size and the height of every control</td></tr>
+        <tr><td><strong>Type</strong></td><td><span class="ui-code">--ui-font-sans</span>, <span class="ui-code">--ui-font-mono</span></td><td>Font stacks</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="docs-section" id="override">
+  <h2 class="ui-h2">Overriding without writing a theme</h2>
+  <p class="docs-section-intro">Tokens cascade like any other custom property, so you can override them at any scope. This is the escape hatch for the cases a theme file is too blunt for.</p>
+
+  <h3 class="ui-h3">Adjust a theme you have loaded</h3>
+  <p class="docs-section-intro">Put your overrides in a stylesheet loaded <em>after</em> the theme. Both are plain <span class="ui-code">:root</span> declarations, so the later one wins -  no specificity contest.</p>
+  <div class="docs-code-wrap">
+    <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+    <pre class="ui-code-block"><code>&lt;link rel=&quot;stylesheet&quot; href=&quot;dist/ui-framework.min.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;dist/themes/default.min.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;/static/css/app.css&quot;&gt;
+
+/* app.css */
+:root {
+  --ui-primary: #7c3aed;      /* keep the theme, change the accent */
+  --ui-radius-3: 4px;         /* squarer cards than the theme ships */
+}</code></pre>
+  </div>
+
+  <h3 class="ui-h3 ui-mt-5">One region only</h3>
+  <p class="docs-section-intro">Useful for a multi-tenant screen, or a panel that belongs to another service.</p>
+  <div class="docs-code-wrap">
+    <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+    <pre class="ui-code-block"><code>&lt;section style=&quot;--ui-primary:#6d28d9; --ui-primary-soft:#f5f3ff&quot;&gt;
+  &lt;button class=&quot;ui-btn ui-btn-primary&quot;&gt;Purple in here only&lt;/button&gt;
+&lt;/section&gt;</code></pre>
+  </div>
+
+  <h3 class="ui-h3 ui-mt-5">By environment</h3>
+  <p class="docs-section-intro">A staging site that cannot be mistaken for production is worth more than any banner. One token does it.</p>
+  <div class="docs-code-wrap">
+    <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+    <pre class="ui-code-block"><code>body.is-staging { --ui-nav-bg: #7f1d1d; }</code></pre>
+  </div>
+
+  <h3 class="ui-h3 ui-mt-5">At runtime</h3>
+  <div class="docs-code-wrap">
+    <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+    <pre class="ui-code-block"><code>document.documentElement.style.setProperty(&quot;--ui-primary&quot;, tenant.colour);
+
+// charts are drawn, not styled, so re-render them after a token change
+UI.qa(&quot;[data-ui-chart]&quot;).forEach(UI.chart.refresh);</code></pre>
+  </div>
+  <div class="ui-alert ui-alert-info">
+    <div class="ui-alert-message">That last line is the one thing tokens do not reach on their own. SVG charts read their palette at render time, so a colour changed after they were drawn needs <span class="ui-code">UI.chart.refresh()</span>. Everything else -  CSS-styled -  updates instantly.</div>
+  </div>
+</section>
+
+<section class="docs-section" id="dark">
+  <h2 class="ui-h2">Dark mode</h2>
+  <p class="docs-section-intro">The framework ships a dark palette, but a theme that sets brand tokens at <span class="ui-code">:root</span> overrides it. If your theme changes the primary, it has to supply the dark variant too -  otherwise a theme switch produces light-mode brand colours on a dark surface. Technically working, visibly wrong.</p>
+
+  <div class="docs-code-wrap">
+    <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+    <pre class="ui-code-block"><code>[data-ui-theme=&quot;dark&quot;] {
+  /* lift the primary -  a dark surface eats saturation */
+  --ui-primary: #2f9e73;
+  --ui-primary-soft: #10261f;
+  --ui-surface: #111827;
+  --ui-text: #e5edf7;
+}</code></pre>
+  </div>
+
+  <p class="docs-section-intro">Switch with <span class="ui-code">&lt;html data-ui-theme=&quot;dark&quot;&gt;</span>, or give the user the built-in toggle: <span class="ui-code">&lt;button data-ui-theme-toggle&gt;</span> -  the button in this page's header is one.</p>
+</section>
+
+<section class="docs-section" id="advice">
+  <h2 class="ui-h2">Three things worth knowing before you pick colours</h2>
+
+  <div class="ui-css-grid ui-css-grid-md ui-mt-4">
+    <div class="ui-card"><div class="ui-card-body">
+      <h3 class="ui-h5">Neutrals are not neutral</h3>
+      <p class="ui-small">Give greys a cast that agrees with the primary -  slate against green, warm grey against red. A true <span class="ui-code">#808080</span> beside a strong primary is the single most common reason a palette looks like a default nobody chose.</p>
+    </div></div>
+    <div class="ui-card"><div class="ui-card-body">
+      <h3 class="ui-h5">Density is two values</h3>
+      <p class="ui-small">Shrinking <span class="ui-code">--ui-font-size</span> without bringing <span class="ui-code">--ui-control-*</span> down with it leaves padding that looked right at 16px looking careless at 13.6px. Move them together or not at all — try the <em>Forest, dense</em> preset above and then imagine it with the original control heights.</p>
+    </div></div>
+    <div class="ui-card"><div class="ui-card-body">
+      <h3 class="ui-h5">Contrast is yours to check</h3>
+      <p class="ui-small">The framework meets WCAG 2.1 AA for its own defaults; it cannot check yours. A primary that fails against white fails on every button in the product at once. Check it before you commit, not after someone reports it.</p>
+    </div></div>
+  </div>
+</section>
+
+<section class="docs-section" id="coexist">
+  <h2 class="ui-h2">Alongside Bootstrap or an existing stylesheet</h2>
+  <p class="docs-section-intro">Use the layered build so precedence is explicit instead of a specificity race.</p>
+  <div class="docs-code-wrap">
+    <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
+    <pre class="ui-code-block"><code>&lt;link rel=&quot;stylesheet&quot; href=&quot;dist/ui-framework.layered.min.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;dist/themes/default.min.css&quot;&gt;
+
+/* your stylesheet */
+@layer app-reset, ui-base, ui-components, ui-utilities, app-overrides;</code></pre>
+  </div>
+  <p class="docs-section-intro">Anything you put in <span class="ui-code">app-overrides</span> then beats the framework regardless of selector specificity. Note that an <em>unlayered</em> stylesheet always outranks a layered one, so keep your own overrides in a declared layer too.</p>
+</section>
+
+<script>
+(function () {
+  var PRESETS = {
+    default: {
+      "--ui-primary": "#2563eb", "--ui-primary-hover": "#1d4ed8",
+      "--ui-primary-active": "#1e40af", "--ui-primary-soft": "#eff6ff",
+      "--ui-primary-100": "#dbeafe", "--ui-chart-1": "#2563eb",
+      "--ui-stage-1": "#2563eb", "--ui-stage-1-soft": "#eff6ff", "--ui-stage-1-line": "#dbeafe",
+      "--ui-font-size": "1rem", "--ui-control-md": "2.5rem", "--ui-radius-3": ".5rem"
+    },
+    forest: {
+      "--ui-primary": "#0b6e4f", "--ui-primary-hover": "#0a5f45",
+      "--ui-primary-active": "#084c37", "--ui-primary-soft": "#e9f5f0",
+      "--ui-primary-100": "#d2ebe2", "--ui-chart-1": "#0b6e4f",
+      "--ui-stage-1": "#1d4ed8", "--ui-stage-1-soft": "#eff6ff", "--ui-stage-1-line": "#dbeafe",
+      "--ui-font-size": "1rem", "--ui-control-md": "2.5rem", "--ui-radius-3": "10px"
+    },
+    ocean: {
+      "--ui-primary": "#0e7490", "--ui-primary-hover": "#0c637b",
+      "--ui-primary-active": "#0a5266", "--ui-primary-soft": "#ecfeff",
+      "--ui-primary-100": "#cffafe", "--ui-chart-1": "#0e7490",
+      "--ui-stage-1": "#0e7490", "--ui-stage-1-soft": "#ecfeff", "--ui-stage-1-line": "#cffafe",
+      "--ui-font-size": "1rem", "--ui-control-md": "2.5rem", "--ui-radius-3": ".75rem"
+    },
+    plum: {
+      "--ui-primary": "#6d28d9", "--ui-primary-hover": "#5b21b6",
+      "--ui-primary-active": "#4c1d95", "--ui-primary-soft": "#f5f3ff",
+      "--ui-primary-100": "#ede9fe", "--ui-chart-1": "#6d28d9",
+      "--ui-stage-1": "#6d28d9", "--ui-stage-1-soft": "#f5f3ff", "--ui-stage-1-line": "#ede9fe",
+      "--ui-font-size": "1rem", "--ui-control-md": "2.5rem", "--ui-radius-3": ".5rem"
+    },
+    dense: {
+      "--ui-primary": "#0b6e4f", "--ui-primary-hover": "#0a5f45",
+      "--ui-primary-active": "#084c37", "--ui-primary-soft": "#e9f5f0",
+      "--ui-primary-100": "#d2ebe2", "--ui-chart-1": "#0b6e4f",
+      "--ui-stage-1": "#1d4ed8", "--ui-stage-1-soft": "#eff6ff", "--ui-stage-1-line": "#dbeafe",
+      "--ui-font-size": "13.6px", "--ui-control-md": "2.12rem", "--ui-radius-3": "10px"
+    }
+  };
+
+  var preview = document.getElementById("themePreview");
+  var code = document.getElementById("themeCode");
+  if (!preview) return;
+
+  function apply(name) {
+    var preset = PRESETS[name];
+    Object.keys(preset).forEach(function (token) {
+      preview.style.setProperty(token, preset[token]);
+    });
+
+    // Charts are drawn rather than styled, so they need re-rendering after a
+    // token change. Everything else in the preview follows on its own.
+    if (window.UI && UI.chart) {
+      Array.prototype.forEach.call(preview.querySelectorAll("[data-ui-chart]"), UI.chart.refresh);
+    }
+
+    code.textContent = ":root {\n" + Object.keys(preset).map(function (token) {
+      return "  " + token + ": " + preset[token] + ";";
+    }).join("\n") + "\n}";
+
+    Array.prototype.forEach.call(document.querySelectorAll("[data-theme-demo]"), function (button) {
+      button.classList.toggle("ui-active", button.getAttribute("data-theme-demo") === name);
+    });
+  }
+
+  document.addEventListener("click", function (event) {
+    var button = event.target.closest("[data-theme-demo]");
+    if (button) apply(button.getAttribute("data-theme-demo"));
+  });
+
+  // Show the default preset's CSS immediately. DOMContentLoaded alone would
+  // leave the code block empty for anyone who loads this page with deferred
+  // scripts, or from a cache that has already fired the event.
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", function () { apply("default"); });
+  } else {
+    apply("default");
+  }
+})();
+</script>
+
+      <footer class="docs-footer">UI Framework 1.16.1 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
+    </main>
+  </div>
+  <script src="../dist/ui-framework.js?v=1.16.1"></script>
+  <script src="assets/docs.js?v=1.16.1"></script>
+</body>
+</html>

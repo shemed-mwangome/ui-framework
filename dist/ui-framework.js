@@ -1,5 +1,5 @@
 /*!
- * UI Framework v1.10.0
+ * UI Framework v1.16.1
  * Dependency-free JavaScript bundle.
  * License: MIT
  */
@@ -8,7 +8,7 @@
 
   var UI = window.UI || {};
 
-  UI.version = "1.10.0";
+  UI.version = "1.16.1";
   UI._initializers = UI._initializers || [];
 
   UI.q = function (selector, root) {
@@ -58,14 +58,156 @@
     }));
   };
 
+  /**
+   * Escapes a value for interpolation into generated HTML.
+   *
+   * This used to set `textContent` on a detached element and read back
+   * `innerHTML`. That is the well-known trick and it is wrong here: the HTML
+   * serialiser escapes `&`, `<` and `>` in a text node, but it has no reason
+   * to touch quotes -- in text content they are not special. Every one of the
+   * framework's own call sites, however, interpolates into a
+   * double-quoted attribute:
+   *
+   *     '<span title="' + UI.escape(value) + '">'
+   *
+   * so a value containing a double quote closed the attribute and everything
+   * after it was parsed as more attributes. `x" onerror="…` was a working
+   * injection anywhere a server-supplied label, filename, operator name or
+   * error message reached generated markup -- verified, not theoretical.
+   *
+   * Escaping explicitly, and including both quote characters, makes the
+   * output safe in text, in double-quoted attributes and in single-quoted
+   * ones. Over-escaping costs nothing: a browser renders `&quot;` as `"` in
+   * text content, so display is unchanged.
+   */
+  var ESCAPE_MAP = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  };
+
   UI.escape = function (value) {
-    var div = document.createElement("div");
-    div.textContent = value == null ? "" : String(value);
-    return div.innerHTML;
+    return String(value == null ? "" : value).replace(/[&<>"']/g, function (character) {
+      return ESCAPE_MAP[character];
+    });
+  };
+
+  /**
+   * Sanitises a URL destined for an `href`.
+   *
+   * `UI.escape` makes a URL safe to sit inside an attribute; it does nothing
+   * about what the URL *does*. `javascript:` and `data:` URIs execute when
+   * followed, so anywhere a link target can come from data rather than from
+   * the page author -- a chart's `links` array arriving in a JSON response,
+   * for instance -- the scheme has to be checked as well.
+   *
+   * Relative URLs, fragments and query strings are left untouched; anything
+   * with a scheme must be one of the safe ones, or it is dropped entirely.
+   * Returns null for a rejected URL so callers can render the mark without a
+   * link rather than with a dangerous one.
+   */
+  var SAFE_SCHEME = /^(https?|mailto|tel|ftp):/i;
+  var HAS_SCHEME = /^[a-z][a-z0-9+.-]*:/i;
+
+  /*
+   * Browsers strip C0 control characters and spaces while parsing a URL, so
+   * "java<TAB>script:alert(1)" and a "javascript:" split across a newline are
+   * both followed as `javascript:`. The noise therefore has to come out
+   * before the scheme is tested, or the test is trivially bypassed.
+   *
+   * Done with a character-code scan rather than a regex on purpose. Writing
+   * the class with literal control characters makes the source file binary to
+   * grep and diff -- and one save through an editor or pipeline that
+   * normalises control characters silently turns the guard off, with no test
+   * failing to say so. Escape sequences avoid that but are themselves fragile
+   * in transit. Comparing numbers is neither.
+   */
+  function stripUrlNoise(value) {
+    var out = "";
+    for (var i = 0; i < value.length; i++) {
+      var code = value.charCodeAt(i);
+      // Everything at or below the space, plus DEL. Printable characters and
+      // anything non-ASCII are left alone -- percent-encoding and IDN are the
+      // server's problem, not this function's.
+      if (code > 32 && code !== 127) out += value.charAt(i);
+    }
+    return out;
+  }
+
+  UI.safeUrl = function (value) {
+    if (value == null) return null;
+    var candidate = stripUrlNoise(String(value));
+    if (!candidate) return null;
+    if (!HAS_SCHEME.test(candidate)) return String(value).trim();
+    return SAFE_SCHEME.test(candidate) ? String(value).trim() : null;
   };
 
   UI.uid = function (prefix) {
     return (prefix || "ui") + "-" + Math.random().toString(36).slice(2, 9);
+  };
+
+  // ---------------------------------------------------------------------
+  // Requests
+  //
+  // Several components POST on the user's behalf -- the save-and-next form,
+  // the draft autosave, the offline queue. A server with CSRF protection
+  // turned on rejects every one of those unless the token travels with the
+  // request, and each component was left to solve that for itself: one had a
+  // configuration hook, the rest had nothing.
+  //
+  // The token is read from the conventional meta tags, which is what Spring
+  // Security, Rails and Django all emit:
+  //
+  //     <meta name="csrf-token"  content="…">
+  //     <meta name="csrf-header" content="X-CSRF-TOKEN">
+  //
+  // Read per request rather than cached, because a session can be renewed
+  // mid-page and a stale token fails exactly like a missing one.
+  // ---------------------------------------------------------------------
+
+  function metaContent(name) {
+    var tag = document.querySelector('meta[name="' + name + '"]');
+    return tag ? tag.getAttribute("content") : null;
+  }
+
+  UI.http = {
+    /** The CSRF header as `{ name: value }`, or `{}` when the page has no token. */
+    csrfHeader: function () {
+      var token = metaContent("csrf-token") || metaContent("_csrf");
+      if (!token) return {};
+      var header = metaContent("csrf-header") || metaContent("_csrf_header") || "X-CSRF-TOKEN";
+      var out = {};
+      out[header] = token;
+      return out;
+    },
+
+    /**
+     * `fetch` with the framework's defaults: same-origin credentials, the
+     * CSRF header on anything that is not a safe method, and a rejected
+     * promise carrying `.status` so callers can tell a 403 from a 503.
+     */
+    fetch: function (url, options) {
+      options = options || {};
+      var method = (options.method || "GET").toUpperCase();
+      var headers = Object.assign({}, options.headers || {});
+
+      if (method !== "GET" && method !== "HEAD") {
+        Object.assign(headers, UI.http.csrfHeader());
+      }
+
+      return window.fetch(url, Object.assign({}, options, {
+        headers: headers,
+        credentials: options.credentials || "same-origin"
+      })).then(function (response) {
+        if (response.ok) return response;
+        var error = new Error("HTTP " + response.status);
+        error.status = response.status;
+        error.response = response;
+        throw error;
+      });
+    }
   };
 
   UI.register = function (initializer) {
@@ -659,8 +801,8 @@
   var UI = window.UI;
 
   function build(select) {
-    if (!select || select.dataset.uiReady) return;
-    select.dataset.uiReady = "true";
+    if (!select || select.dataset.uiMultiselectReady) return;
+    select.dataset.uiMultiselectReady = "true";
     select.classList.add("ui-multiselect-native");
 
     var wrapper = document.createElement("div");
@@ -776,6 +918,10 @@
     trigger.addEventListener("click", function () {
       var open = wrapper.classList.toggle("ui-open");
       trigger.setAttribute("aria-expanded", open ? "true" : "false");
+      // Fetched on first open rather than on page load: a filter the user
+      // never touches should not cost a request, and a form with six remote
+      // multi-selects should not fire six on arrival.
+      if (open && select.hasAttribute("data-ui-url")) loadRemote(select);
       if (open) {
         wrapper._uiFloatCleanup = UI.floatPanel(trigger, menu, {
           matchWidth: true,
@@ -822,6 +968,64 @@
     update();
   }
 
+  /**
+   * Remote options.
+   *
+   * The combobox and the smart table have both been able to load from an
+   * endpoint since they were written; the multi-select could not, so a list
+   * of 400 operators had to be rendered into the page as 400 <option>
+   * elements whether or not the field was ever opened.
+   *
+   *   <select multiple data-ui-multiselect
+   *           data-ui-url="/operators/options"
+   *           data-ui-value-key="id" data-ui-label-key="name"></select>
+   *
+   * The endpoint returns `[{id, name}]`, or `{results: [...]}`. Options are
+   * fetched once, on first open rather than on page load -- a filter the user
+   * never touches should not cost a request. Whatever is already selected in
+   * the markup is preserved, so a server-rendered page that arrives with
+   * values set does not lose them when the full list lands.
+   */
+  function loadRemote(select) {
+    if (select._uiOptionsLoaded || select._uiOptionsLoading) return Promise.resolve();
+    var url = select.getAttribute("data-ui-url");
+    if (!url) return Promise.resolve();
+
+    select._uiOptionsLoading = true;
+    var valueKey = select.getAttribute("data-ui-value-key") || "value";
+    var labelKey = select.getAttribute("data-ui-label-key") || "label";
+
+    return UI.http.fetch(url, { headers: { Accept: "application/json" } })
+      .then(function (response) { return response.json(); })
+      .then(function (data) {
+        var list = Array.isArray(data) ? data : (data.results || data.items || []);
+        var chosen = {};
+        UI.qa("option", select).forEach(function (option) {
+          if (option.selected) chosen[option.value] = true;
+        });
+
+        select.innerHTML = "";
+        list.forEach(function (item) {
+          var option = document.createElement("option");
+          option.value = item && item[valueKey] != null ? String(item[valueKey]) : String(item);
+          // textContent, not innerHTML: a label is data and may legitimately
+          // contain characters that would otherwise be parsed as markup.
+          option.textContent = item && item[labelKey] != null ? String(item[labelKey]) : String(item);
+          if (chosen[option.value]) option.selected = true;
+          select.appendChild(option);
+        });
+
+        select._uiOptionsLoaded = true;
+        select._uiOptionsLoading = false;
+        UI.emit(select, "ui:multiselect:options", { count: list.length });
+        refresh(select);
+      })
+      .catch(function (error) {
+        select._uiOptionsLoading = false;
+        UI.emit(select, "ui:multiselect:error", { error: error, status: error && error.status });
+      });
+  }
+
   function init(root) {
     UI.matchAll("select[multiple][data-ui-multiselect]", root).forEach(build);
   }
@@ -850,10 +1054,11 @@
     event.stopImmediatePropagation();
   });
 
-  // build() is a one-shot init guarded by data-ui-ready, so it silently no-ops on an
-  // already-built select. Cascading fields (e.g. an operator list repopulated after
-  // its region changes) need to rebuild the visible widget from a fresh option list --
-  // refresh() unwraps back to the plain <select> and re-runs build() against it.
+  // build() is a one-shot init guarded by data-ui-multiselect-ready, so it silently
+  // no-ops on an already-built select. Cascading fields (e.g. an operator list
+  // repopulated after its region changes) need to rebuild the visible widget from a
+  // fresh option list -- refresh() unwraps back to the plain <select> and re-runs
+  // build() against it.
   function refresh(select) {
     if (!select) return;
     var wrapper = select.closest(".ui-multiselect");
@@ -861,12 +1066,22 @@
       wrapper.parentNode.insertBefore(select, wrapper);
       wrapper.remove();
     }
-    delete select.dataset.uiReady;
+    delete select.dataset.uiMultiselectReady;
     select.classList.remove("ui-multiselect-native");
     build(select);
   }
 
-  UI.multiselect = { build: build, refresh: refresh };
+  UI.multiselect = {
+    build: build,
+    refresh: refresh,
+    /** Force a remote option list to reload — after the parent field changes. */
+    load: function (target) {
+      var select = typeof target === "string" ? UI.q(target) : target;
+      if (!select) return Promise.resolve();
+      select._uiOptionsLoaded = false;
+      return loadRemote(select);
+    }
+  };
   UI.register(init);
 })(window, document);
 
@@ -1323,8 +1538,8 @@
   }
 
   function build(container) {
-    if (container.dataset.uiReady) return;
-    container.dataset.uiReady = "true";
+    if (container.dataset.uiDateRangeReady) return;
+    container.dataset.uiDateRangeReady = "true";
 
     var trigger = document.createElement("button");
     trigger.type = "button";
@@ -1648,8 +1863,8 @@
   }
 
   function build(container) {
-    if (container.dataset.uiReady) return;
-    container.dataset.uiReady = "true";
+    if (container.dataset.uiDatePickerReady) return;
+    container.dataset.uiDatePickerReady = "true";
     container.classList.add("ui-date-range", "ui-date-picker-shell");
 
     var input = UI.q("input", container);
@@ -2365,9 +2580,12 @@
 
     UI.emit(form, "ui:savenext:submit", { submitter: submitter });
 
-    fetch(action, { method: method, body: body, headers: { "X-Requested-With": "XMLHttpRequest" } })
+    // Through UI.http so the CSRF token travels with it. A server with CSRF
+    // protection enabled rejected every one of these submissions, and the
+    // failure looked like an ordinary save error rather than a missing
+    // token -- the form's own error toast hid the cause.
+    UI.http.fetch(action, { method: method, body: body, headers: { "X-Requested-With": "XMLHttpRequest" } })
       .then(function (response) {
-        if (!response.ok) throw new Error("Request failed with status " + response.status);
         setDirty(form, false);
         UI.emit(form, "ui:savenext:success", { response: response, submitter: submitter });
         if (UI.toast) UI.toast.show({ type: "success", title: "Saved", message: form.getAttribute("data-ui-success-message") || "Your changes were saved." });
@@ -2375,7 +2593,9 @@
         if (isSaveNext) navigate(form.getAttribute("data-ui-next-url"));
       })
       .catch(function (error) {
-        UI.emit(form, "ui:savenext:error", { error: error, submitter: submitter });
+        UI.emit(form, "ui:savenext:error", {
+          error: error, status: error && error.status, submitter: submitter
+        });
         if (UI.toast) UI.toast.show({ type: "danger", title: "Save failed", message: form.getAttribute("data-ui-error-message") || "The record could not be saved." });
       });
   }
@@ -2557,8 +2777,13 @@
   }
 
   function build(wrapper) {
-    if (wrapper.dataset.uiReady) return;
-    wrapper.dataset.uiReady = "true";
+    // Component-specific rather than the generic `uiReady` that four modules
+    // used to share. UI.destroy()'s /^ui[A-Za-z]*Ready$/ clears either, so
+    // this was never a teardown bug -- but two of them on the same element
+    // would have had one silently skip its own build, and a generic flag
+    // tells a reader nothing about which component claimed the element.
+    if (wrapper.dataset.uiTableReady) return;
+    wrapper.dataset.uiTableReady = "true";
 
     var table = wrapper.tagName === "TABLE" ? wrapper : UI.q("table", wrapper);
     if (!table) return;
@@ -3267,20 +3492,22 @@
       .catch(function () { return null; });
   }
 
+  // POST and DELETE go through UI.http so the CSRF token travels with them.
+  // Without it a protected server rejects every draft sync, and because these
+  // failures are deliberately swallowed the symptom is simply that
+  // server-side drafts never appear -- silent, and hard to trace.
   function remoteSave(form, url, record) {
-    fetch(url, {
+    UI.http.fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(record)
-    }).then(function (response) {
-      if (!response.ok) throw new Error("Draft sync failed with status " + response.status);
     }).catch(function (error) {
-      UI.emit(form, "ui:draft:sync-error", { error: error });
+      UI.emit(form, "ui:draft:sync-error", { error: error, status: error && error.status });
     });
   }
 
   function remoteDiscard(url) {
-    fetch(url, { method: "DELETE" }).catch(function () {});
+    UI.http.fetch(url, { method: "DELETE" }).catch(function () {});
   }
 
   function build(form) {
@@ -3715,7 +3942,14 @@
 
     if (options.silent !== true) {
       renderSummary(form, errors);
-      UI.emit(form, "ui:validate", { valid: !errors.length, errors: errors });
+      // Every other component names its events ui:<component>:<verb>; this
+      // was the single exception, so anything subscribing generically had to
+      // special-case it. `ui:validate:checked` fits the convention;
+      // `ui:validate` is still emitted so existing listeners keep working,
+      // and is documented as deprecated rather than removed.
+      var detail = { valid: !errors.length, errors: errors };
+      UI.emit(form, "ui:validate:checked", detail);
+      UI.emit(form, "ui:validate", detail);
     }
 
     return { valid: errors.length === 0, errors: errors };
@@ -4321,6 +4555,14 @@
       listbox.innerHTML =
         '<div class="ui-combobox-message' + (modifier ? " " + modifier : "") + '">' +
         UI.escape(text) + "</div>";
+
+      // "Searching…" was visible but silent: a sighted user saw the state
+      // change and a screen-reader user was left with the previous results
+      // until new ones happened to arrive. aria-busy marks the region as
+      // in-flight so assistive technology waits rather than reading stale
+      // options.
+      if (modifier === "ui-combobox-loading") listbox.setAttribute("aria-busy", "true");
+      else listbox.removeAttribute("aria-busy");
     }
 
     function renderOptions() {
@@ -4415,7 +4657,13 @@
 
       fetch(endpoint, { headers: { Accept: "application/json", "X-Requested-With": "XMLHttpRequest" } })
         .then(function (response) {
-          if (!response.ok) throw new Error("HTTP " + response.status);
+          if (!response.ok) {
+            // Carry the status so the application can tell a 403 from a 503
+            // and decide whether retrying is even worth offering.
+            var httpError = new Error("HTTP " + response.status);
+            httpError.status = response.status;
+            throw httpError;
+          }
           return response.json();
         })
         .then(function (data) {
@@ -4433,7 +4681,9 @@
           if (token !== requestToken) return;
           options = [];
           renderMessage(UI.t("combobox.error"), "ui-combobox-error");
-          UI.emit(wrapper, "ui:combobox:error", { term: term, error: error });
+          UI.emit(wrapper, "ui:combobox:error", {
+            term: term, error: error, status: error && error.status
+          });
         });
     }
 
@@ -4833,16 +5083,24 @@
    * URL-encoded. Charts with no links behave exactly as before.
    */
   function linkFor(cfg, point) {
-    if (cfg.linkList && cfg.linkList[point.index]) return cfg.linkList[point.index];
-    if (point.seriesLinks && point.seriesLinks[point.index]) return point.seriesLinks[point.index];
+    // Every one of these can arrive in a server response now that charts load
+    // from data-ui-url -- a `links` array in the JSON, or a template rendered
+    // into the attribute. UI.escape would make `javascript:alert(1)` safe to
+    // sit inside the attribute and entirely happy to execute when followed,
+    // so the scheme is checked too. A rejected URL returns null and the mark
+    // renders without a link rather than with a dangerous one.
+    if (cfg.linkList && cfg.linkList[point.index]) return UI.safeUrl(cfg.linkList[point.index]);
+    if (point.seriesLinks && point.seriesLinks[point.index]) {
+      return UI.safeUrl(point.seriesLinks[point.index]);
+    }
     if (!cfg.linkTemplate) return null;
 
-    return cfg.linkTemplate
+    return UI.safeUrl(cfg.linkTemplate
       .replace(/\{label\}/g, encodeURIComponent(point.label == null ? "" : point.label))
       .replace(/\{value\}/g, encodeURIComponent(point.value))
       .replace(/\{series\}/g, encodeURIComponent(point.series == null ? "" : point.series))
       .replace(/\{seriesIndex\}/g, encodeURIComponent(point.seriesIndex == null ? 0 : point.seriesIndex))
-      .replace(/\{index\}/g, encodeURIComponent(point.index));
+      .replace(/\{index\}/g, encodeURIComponent(point.index)));
   }
 
   /**
@@ -4985,6 +5243,7 @@
       axisXTitle: attr(element, "axis-x", null),
       axisYTitle: attr(element, "axis-y", null),
       emptyText: attr(element, "empty-text", "No data to display"),
+      errorText: attr(element, "error-text", "This chart could not be loaded."),
       linkTemplate: attr(element, "link-template", null),
       linkList: linkList.length ? linkList : null,
       linkTarget: attr(element, "link-target", null),
@@ -5722,8 +5981,137 @@
     build(element);
   }
 
+  /* ==================================================================== */
+  /* Server data source                                                   */
+  /* ==================================================================== */
+
+  /**
+   * Smart tables have had `data-ui-url` since they were written; charts did
+   * not, so every dashboard hand-rolled the same fetch-then-update. This
+   * closes that gap.
+   *
+   *   <div data-ui-chart="bar" data-ui-axis
+   *        data-ui-url="/compliance/rates"
+   *        data-ui-refresh-on="#inspectionFilters"></div>
+   *
+   * Accepted response shapes, matching UI.chart.update():
+   *   [1, 2, 3]
+   *   { "values": [...], "labels": [...] }
+   *   { "labels": [...], "series": [{ "name": …, "values": [...] }] }
+   *
+   * `data-ui-refresh-on` names an element whose changes should re-query --
+   * usually a filter bar. The current filter state goes out as query
+   * parameters, so one endpoint serves the chart and the table beside it.
+   */
+  function loadingState(element, cfg) {
+    element.classList.add("ui-chart", "ui-chart-" + cfg.type, "ui-chart-is-loading");
+    element.setAttribute("aria-busy", "true");
+    // A skeleton rather than a spinner: it reserves the height the chart is
+    // about to take, so the page does not jump when the data lands.
+    element.innerHTML = '<div class="ui-chart-skeleton" aria-hidden="true">' +
+      '<span></span><span></span><span></span><span></span><span></span>' +
+      "</div>";
+  }
+
+  function errorState(element, cfg, status) {
+    element.classList.add("ui-chart", "ui-chart-" + cfg.type, "ui-chart-is-error");
+    element.classList.remove("ui-chart-is-loading");
+    element.removeAttribute("aria-busy");
+    element.setAttribute("role", "img");
+    element.setAttribute("aria-label", attr(element, "title", "Chart") + ": " + cfg.errorText);
+    element.innerHTML = '<div class="ui-chart-error">' + esc(cfg.errorText) + "</div>";
+    UI.emit(element, "ui:chart:error", { status: status });
+  }
+
+  function queryFor(element) {
+    var params = new window.URLSearchParams();
+    var source = attr(element, "refresh-on", null);
+    var bar = source ? UI.q(source) : null;
+    if (bar && UI.filter) {
+      var state = UI.filter.state(bar);
+      Object.keys(state).forEach(function (key) { params.set(key, state[key].join(",")); });
+    }
+    return params;
+  }
+
+  function load(element) {
+    var url = attr(element, "url", null);
+    if (!url) return;
+
+    var cfg = readConfig(element, attr(element, "chart", "bar"));
+
+    // A filter changed while the previous request was still in flight would
+    // otherwise race: whichever response arrived last would win, which is not
+    // necessarily the one the user is waiting for.
+    if (element._uiChartAbort) element._uiChartAbort.abort();
+    var controller = window.AbortController ? new window.AbortController() : null;
+    element._uiChartAbort = controller;
+
+    var target = new URL(url, window.location.href);
+    queryFor(element).forEach(function (value, key) { target.searchParams.set(key, value); });
+
+    loadingState(element, cfg);
+
+    window.fetch(target.toString(), {
+      headers: { "Accept": "application/json", "X-Requested-With": "ui-chart" },
+      credentials: "same-origin",
+      signal: controller ? controller.signal : undefined
+    }).then(function (response) {
+      if (!response.ok) {
+        var error = new Error("HTTP " + response.status);
+        error.status = response.status;
+        throw error;
+      }
+      return response.json();
+    }).then(function (data) {
+      element._uiChartAbort = null;
+      element.classList.remove("ui-chart-is-loading", "ui-chart-is-error");
+      element.removeAttribute("aria-busy");
+      apply(element, data);
+      UI.emit(element, "ui:chart:loaded", { data: data });
+    }).catch(function (error) {
+      if (error && error.name === "AbortError") return;   // superseded, not failed
+      element._uiChartAbort = null;
+      errorState(element, cfg, error && error.status);
+    });
+  }
+
+  function apply(element, data) {
+    if (Array.isArray(data)) { UI.chart.update(element, data); return; }
+    if (data && Array.isArray(data.series)) {
+      UI.chart.update(element, { labels: data.labels || [], series: data.series });
+      return;
+    }
+    UI.chart.update(element, (data && data.values) || [], (data && data.labels) || null);
+  }
+
+  function bindRefresh(element) {
+    var source = attr(element, "refresh-on", null);
+    if (!source) return;
+    var bar = UI.q(source);
+    if (!bar) return;
+
+    var handler = function () { load(element); };
+    ["ui:filter:change", "ui:segment:change", "ui:daterange:change"].forEach(function (name) {
+      bar.addEventListener(name, handler);
+    });
+    UI.cleanup(element, function () {
+      ["ui:filter:change", "ui:segment:change", "ui:daterange:change"].forEach(function (name) {
+        bar.removeEventListener(name, handler);
+      });
+    });
+  }
+
   function init(root) {
     UI.matchAll("[data-ui-chart]", root).forEach(function (element) {
+      if (element.hasAttribute("data-ui-url")) {
+        if (element.dataset.uiChartReady) return;
+        element.dataset.uiChartReady = "true";
+        bindRefresh(element);
+        load(element);
+        watch(element);
+        return;
+      }
       build(element);
       watch(element);
     });
@@ -5767,6 +6155,12 @@
     refresh: function (target) {
       var element = typeof target === "string" ? UI.q(target) : target;
       if (element) refresh(element);
+    },
+
+    /** Re-query a `data-ui-url` chart — after saving a record, say. */
+    load: function (target) {
+      var element = typeof target === "string" ? UI.q(target) : target;
+      if (element) load(element);
     }
   };
 })(window, document);
@@ -7115,8 +7509,12 @@
   }
 
   function send(item) {
+    // The CSRF token is read at send time, not at queue time. An item may sit
+    // in the queue for hours while the officer is out of signal, by which
+    // point the token captured when it was queued is long dead -- and a stale
+    // token fails exactly like a missing one.
     var headers = Object.assign({ "Content-Type": "application/json" },
-      config.endpointHeaders, item.headers || {});
+      UI.http.csrfHeader(), config.endpointHeaders, item.headers || {});
 
     return window.fetch(item.url, {
       method: item.method || "POST",
@@ -7422,5 +7820,321 @@
   };
 
   UI.offline.configure({});
+  UI.register(init);
+})(window, document);
+
+
+(function (window, document) {
+  "use strict";
+  var UI = window.UI;
+
+  /**
+   * Capture behaviours: the repeating row table, the three-state
+   * yes/no/not-applicable answer, and the selectable option card.
+   *
+   * All three are client-side only. Adding a row must never wait on the
+   * network -- an inspector standing in a bar with one bar of signal may
+   * add twenty rows before saving once, which is also why the API
+   * contract posts child collections in full rather than per row.
+   */
+
+  /* ==================================================== repeater */
+
+  /**
+   *   <div class="ui-repeater" data-ui-repeater data-ui-min="1"
+   *        data-ui-name="unlicensedPremises">
+   *     <table class="ui-repeater-table">
+   *       <thead><tr><th class="ui-repeater-num">#</th>
+   *         <th>Premise</th><th>Devices</th><th></th></tr></thead>
+   *       <tbody></tbody>
+   *     </table>
+   *
+   *     <template data-ui-repeater-row>
+   *       <tr>
+   *         <td class="ui-repeater-num"></td>
+   *         <td data-label="Premise">
+   *           <input class="ui-control" name="{name}[{i}].premise"></td>
+   *         <td data-label="Devices">
+   *           <input class="ui-control" type="number" name="{name}[{i}].devices"></td>
+   *         <td><button type="button" class="ui-repeater-remove"
+   *                     data-ui-repeater-remove aria-label="Remove row">&times;</button></td>
+   *       </tr>
+   *     </template>
+   *
+   *     <div class="ui-repeater-empty">No unlicensed premises recorded.</div>
+   *     <div class="ui-repeater-foot">
+   *       <button type="button" class="ui-btn ui-btn-sm" data-ui-repeater-add>Add row</button>
+   *       <span class="ui-repeater-count"></span>
+   *     </div>
+   *   </div>
+   *
+   * `{i}` in a name or id is replaced with the row index and renumbered
+   * on every add and remove, so the collection posts as
+   * `unlicensedPremises[0].premise` — the indexed form Spring binds to a
+   * List without any custom binder. Getting this wrong is the usual
+   * reason a hand-rolled repeater silently drops every row but the last.
+   */
+
+  function rows(repeater) {
+    return UI.qa(":scope > .ui-repeater-table > tbody > tr", repeater);
+  }
+
+  function renumber(repeater) {
+    var name = repeater.getAttribute("data-ui-name") || "rows";
+    rows(repeater).forEach(function (row, index) {
+      var cell = row.querySelector(".ui-repeater-num");
+      if (cell) cell.textContent = index + 1;
+
+      UI.qa("[name], [id], [for]", row).forEach(function (field) {
+        ["name", "id", "for"].forEach(function (attribute) {
+          var value = field.getAttribute(attribute);
+          if (value == null) return;
+          // The template value is kept on the element the first time it
+          // is seen, so re-indexing is idempotent however many rows are
+          // added and removed in between.
+          var key = "uiTpl" + attribute;
+          if (field.dataset[key] === undefined) {
+            if (value.indexOf("{i}") === -1 && value.indexOf("{name}") === -1) return;
+            field.dataset[key] = value;
+          }
+          field.setAttribute(attribute,
+            field.dataset[key].replace(/\{i\}/g, index).replace(/\{name\}/g, name));
+        });
+      });
+    });
+  }
+
+  function sync(repeater) {
+    var count = rows(repeater).length;
+    var min = Number(repeater.getAttribute("data-ui-min") || 0);
+    var max = Number(repeater.getAttribute("data-ui-max") || 0);
+
+    var empty = repeater.querySelector(":scope > .ui-repeater-empty");
+    if (empty) empty.hidden = count > 0;
+    var table = repeater.querySelector(":scope > .ui-repeater-table");
+    if (table) table.hidden = count === 0;
+
+    // Below the minimum the remove buttons disable rather than vanish: a
+    // control that disappears teaches nothing about why it is gone.
+    UI.qa("[data-ui-repeater-remove]", repeater).forEach(function (button) {
+      button.disabled = count <= min;
+    });
+
+    var add = repeater.querySelector("[data-ui-repeater-add]");
+    if (add && max) add.disabled = count >= max;
+
+    var counter = repeater.querySelector(".ui-repeater-count");
+    if (counter) {
+      counter.textContent = count === 0 ? "" :
+        count + " row" + (count === 1 ? "" : "s") + (max ? " of " + max : "");
+    }
+
+    renumber(repeater);
+    UI.emit(repeater, "ui:repeater:change", { count: count });
+  }
+
+  function addRow(repeater, focus) {
+    var template = repeater.querySelector("[data-ui-repeater-row]");
+    var body = repeater.querySelector(":scope > .ui-repeater-table > tbody");
+    if (!template || !body) return null;
+
+    var max = Number(repeater.getAttribute("data-ui-max") || 0);
+    if (max && rows(repeater).length >= max) return null;
+
+    var row = template.content
+      ? template.content.firstElementChild.cloneNode(true)
+      : template.firstElementChild.cloneNode(true);
+
+    body.appendChild(row);
+    UI.init(row);
+    sync(repeater);
+
+    if (focus !== false) {
+      var first = row.querySelector("input, select, textarea");
+      if (first) first.focus();
+    }
+    UI.emit(repeater, "ui:repeater:add", { row: row });
+    return row;
+  }
+
+  function build(repeater) {
+    if (repeater.dataset.uiRepeaterReady) return;
+    repeater.dataset.uiRepeaterReady = "true";
+
+    var min = Number(repeater.getAttribute("data-ui-min") || 0);
+    while (rows(repeater).length < min) addRow(repeater, false);
+    sync(repeater);
+
+    repeater.addEventListener("click", function (event) {
+      if (UI.closest(event.target, "[data-ui-repeater-add]")) {
+        event.preventDefault();
+        addRow(repeater);
+        return;
+      }
+      var remove = UI.closest(event.target, "[data-ui-repeater-remove]");
+      if (!remove || remove.disabled) return;
+      event.preventDefault();
+      var row = UI.closest(remove, "tr");
+      if (!row) return;
+      UI.destroy(row);
+      row.remove();
+      sync(repeater);
+      UI.emit(repeater, "ui:repeater:remove", {});
+    });
+  }
+
+  /* ================================================== yes/no/n-a */
+
+  /**
+   *   <div class="ui-yn" data-ui-yn>
+   *     <input type="hidden" name="premiseLicensed" value="">
+   *     <button type="button" data-ui-yn-value="YES">Yes</button>
+   *     <button type="button" data-ui-yn-value="NO">No</button>
+   *     <button type="button" data-ui-yn-value="NA">N/A</button>
+   *   </div>
+   *
+   * The value posts through a hidden input, so the control works inside
+   * an ordinary form with no JavaScript on the receiving end.
+   */
+  function buildYn(group) {
+    if (group.dataset.uiYnReady) return;
+    group.dataset.uiYnReady = "true";
+
+    var field = group.querySelector('input[type="hidden"]');
+    var buttons = UI.qa("[data-ui-yn-value]", group);
+
+    group.setAttribute("role", "group");
+
+    function paint(value) {
+      buttons.forEach(function (button) {
+        var on = button.getAttribute("data-ui-yn-value") === value;
+        button.classList.toggle("ui-on", on);
+        button.setAttribute("aria-pressed", String(on));
+      });
+    }
+
+    paint(field ? field.value : "");
+
+    group.addEventListener("click", function (event) {
+      var button = UI.closest(event.target, "[data-ui-yn-value]");
+      if (!button || !group.contains(button)) return;
+      event.preventDefault();
+
+      var value = button.getAttribute("data-ui-yn-value");
+      // Clicking the selected answer clears it. "Not answered" has to be
+      // reachable: an officer who taps the wrong button on a phone
+      // should not be forced to leave a wrong answer in place.
+      if (field && field.value === value) value = "";
+      if (field) field.value = value;
+      paint(value);
+      UI.emit(group, "ui:yn:change", { value: value });
+    });
+  }
+
+  /* =================================================== option card */
+
+  /**
+   *   <div class="ui-option-grid" data-ui-options data-ui-multiple>
+   *     <button type="button" class="ui-option" data-ui-value="BAR"> … </button>
+   *   </div>
+   *
+   * Selection is mirrored onto a hidden input named by data-ui-name, so
+   * this too survives a plain form post.
+   */
+  function buildOptions(grid) {
+    if (grid.dataset.uiOptionsReady) return;
+    grid.dataset.uiOptionsReady = "true";
+
+    var multiple = grid.hasAttribute("data-ui-multiple");
+    var field = grid.querySelector('input[type="hidden"]') ||
+      (grid.getAttribute("data-ui-name") ? createField(grid) : null);
+
+    UI.qa(".ui-option", grid).forEach(function (option) {
+      if (!option.hasAttribute("type")) option.setAttribute("type", "button");
+      option.setAttribute(multiple ? "aria-pressed" : "aria-checked",
+        String(option.classList.contains("ui-on")));
+      if (!multiple) option.setAttribute("role", "radio");
+    });
+    if (!multiple) grid.setAttribute("role", "radiogroup");
+
+    function commit() {
+      if (!field) return;
+      field.value = UI.qa(".ui-option.ui-on", grid)
+        .map(function (o) { return o.getAttribute("data-ui-value"); }).join(",");
+    }
+
+    grid.addEventListener("click", function (event) {
+      var option = UI.closest(event.target, ".ui-option");
+      if (!option || !grid.contains(option) || option.disabled) return;
+
+      if (multiple) {
+        option.classList.toggle("ui-on");
+        option.setAttribute("aria-pressed", String(option.classList.contains("ui-on")));
+      } else {
+        UI.qa(".ui-option", grid).forEach(function (each) {
+          each.classList.toggle("ui-on", each === option);
+          each.setAttribute("aria-checked", String(each === option));
+        });
+      }
+
+      commit();
+      UI.emit(grid, "ui:options:change", {
+        value: option.getAttribute("data-ui-value"),
+        selected: UI.qa(".ui-option.ui-on", grid)
+          .map(function (o) { return o.getAttribute("data-ui-value"); })
+      });
+    });
+
+    commit();
+  }
+
+  function createField(grid) {
+    var field = document.createElement("input");
+    field.type = "hidden";
+    field.name = grid.getAttribute("data-ui-name");
+    grid.appendChild(field);
+    return field;
+  }
+
+  /* ========================================================= init */
+
+  function init(root) {
+    UI.matchAll("[data-ui-repeater]", root).forEach(build);
+    UI.matchAll("[data-ui-yn]", root).forEach(buildYn);
+    UI.matchAll("[data-ui-options]", root).forEach(buildOptions);
+  }
+
+  UI.repeater = {
+    /** Append a row and focus its first field. */
+    add: function (target) {
+      var repeater = typeof target === "string" ? UI.q(target) : target;
+      return repeater ? addRow(repeater) : null;
+    },
+    /** Current row count. */
+    count: function (target) {
+      var repeater = typeof target === "string" ? UI.q(target) : target;
+      return repeater ? rows(repeater).length : 0;
+    },
+    /** Remove every row, back down to the configured minimum. */
+    clear: function (target) {
+      var repeater = typeof target === "string" ? UI.q(target) : target;
+      if (!repeater) return;
+      rows(repeater).forEach(function (row) { UI.destroy(row); row.remove(); });
+      var min = Number(repeater.getAttribute("data-ui-min") || 0);
+      while (rows(repeater).length < min) addRow(repeater, false);
+      sync(repeater);
+    }
+  };
+
+  UI.yn = {
+    /** Read the current answer: "YES", "NO", "NA" or "" for unanswered. */
+    value: function (target) {
+      var group = typeof target === "string" ? UI.q(target) : target;
+      if (!group) return "";
+      var field = group.querySelector('input[type="hidden"]');
+      return field ? field.value : "";
+    }
+  };
+
   UI.register(init);
 })(window, document);

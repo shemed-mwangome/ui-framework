@@ -1,5 +1,282 @@
 # Changelog
 
+## 1.16.2 — 2026-08-21
+
+### Fixed — the theming docs told you to rebuild the framework, which is wrong
+
+Both `THEMING.md` and the Theming page said that making a theme means copying
+`src/themes/default.css`, adding the filename to `THEMES` in `build.py`, and
+running the build. That describes how *this repository* publishes its two
+worked examples. It is not how a consuming project uses a theme, and stating it
+as the procedure implied every palette change requires a framework rebuild —
+which would make the framework's central claim ("swap a theme, nothing else
+changes") false in practice.
+
+A theme is custom properties and nothing else. It lives in the consuming
+project, is served by that application, and ships on that release cycle. Both
+documents now lead with the two-line answer, and explain that `THEMES` exists
+to minify the shipped examples rather than as a registry a theme must join.
+
+### Added — the ordering rule, which was undocumented and is silent when broken
+
+The framework's defaults are declared at `:root` and so is a theme. Equal
+specificity means source order decides, so **a theme linked before the bundle
+loses every token and appears to do nothing** — no error, no warning, the page
+just looks unthemed. Now stated in both documents, together with the escape
+hatch for anyone who does not control the `<head>`: `ui-framework.layered.css`
+puts its tokens in `@layer ui-base`, and unlayered CSS beats layered CSS
+regardless of position.
+
+Verified against the built bundles rather than asserted — theme-after wins,
+theme-before is completely ignored, and the layered build makes order
+irrelevant. The dark-mode interaction was checked at the same time: a theme
+that sets brand tokens at `:root` does override the built-in dark palette, so
+the existing warning about supplying a `[data-ui-theme="dark"]` block is
+correct and now demonstrably so.
+
+## 1.16.1 — 2026-08-21
+
+Follow-up to 1.16.0: verifying the new Theming page turned up three unrelated
+defects, one of them in the security core.
+
+### Fixed
+
+- **`src/js/00-core.js` contained a literal NUL byte**, which made the file
+  *binary* to `grep`, `diff` and most review tools — the entire core module was
+  invisible to a text search, silently. It came from writing the URL-noise
+  character class with literal control characters rather than escapes.
+
+  `UI.safeUrl` strips those characters before testing the scheme, because a
+  browser follows `java<TAB>script:` as `javascript:`. That guard is load-bearing,
+  and writing it with literal control characters made it fragile in a way no
+  test could catch: any editor or pipeline that normalises control characters
+  would have quietly turned it off. It is now a character-code scan
+  (`stripUrlNoise`) — no regex, no escapes, nothing to lose in transit.
+
+  Behaviour is unchanged: verified against 15 vectors including tab-, newline-
+  and NUL-split `javascript:`, `data:`, `vbscript:`, mixed case, leading
+  whitespace, and the relative/fragment/query cases that must pass through.
+
+- **Removed the dead `UI._legacySafeUrlUnused`** — a superseded copy of
+  `safeUrl` that was the source of the NUL byte and had no callers.
+
+- **`examples/jsp-integration.jsp` was deleted as collateral** when the
+  project-specific example was taken out of the repo, leaving dangling links in
+  the README, the manifest and Getting started. Rewritten, and this time
+  checked against the real API rather than from memory — the previous version
+  named six classes and three attributes that do not exist
+  (`ui-app`, `ui-page-header`, `ui-ms-auto`, `data-ui-offcanvas`,
+  `data-ui-value` for sorting, and a declarative `data-ui-confirm` that was
+  never implemented). It now shows CSRF via the meta tags `UI.http` actually
+  reads, and `UI.confirm` wired up explicitly rather than pretending the
+  framework has a convention it does not.
+
+- **The Theming page's live switcher only initialised on `DOMContentLoaded`**,
+  so the generated-CSS block was empty for anyone arriving after that event had
+  already fired — deferred scripts, or a warm cache. Now checks `readyState`.
+
+- `themes/default.css` still referred to `themes/gbt.css` in its header comment.
+
+- **Nine docs pages were cache-busting against the wrong version** — four sat on
+  `?v=1.10.0` and five on `?v=1.8.8` while `dist/` shipped 1.16.1. That is the
+  precise failure cache-busting exists to prevent: a first-time visitor is
+  fine, a returning one gets a months-old bundle behind current markup, and the
+  symptom is a component that is broken *only* for people who have been to the
+  site before — which is the hardest kind of bug to be told about usefully.
+
+### Changed — the build now owns every version number
+
+The two defects above are the same defect. A version typed by hand in 62
+places across 14 files will drift; the only question is which copy is found
+stale first. So none of them are typed by hand any more:
+
+- `build.py` reads the version from `package.json`, and **fails the build** if
+  `UI.version` in `00-core.js` disagrees with it. A bundle that misreports its
+  own version at runtime is a real problem for anyone debugging which build a
+  page loaded, so it is now a hard error rather than a cosmetic mismatch.
+- Banners for the CSS, JS and theme bundles are formatted from that version
+  instead of being three more literals to forget.
+- A new `stamp_docs()` step rewrites the `?v=` query strings, the topbar badge
+  and the footer line on every page under `docs/`, and prints what it changed.
+
+Verified after rebuilding: `dist/ui-framework.js` and `dist/ui-framework.min.js`
+behave identically — same version, same module count, charts, repeaters and
+table tools all initialise, and `safeUrl`, `escape` and the CSRF header survive
+minification. Worth checking rather than assuming, since the minifier strips
+`//` comment lines and a regex or string containing `//` would be mangled by it.
+
+## 1.16.0 — 2026-08-20
+
+The framework is not one organisation's. This release removes the last places
+it looked like it was, and documents theming properly.
+
+### Changed
+
+- **`themes/gbt.css` is now `themes/forest.css`** — described by what it looks
+  like rather than by who commissioned it. A framework any project can adopt
+  should not ship a theme named after one of them; the two shipped themes are
+  worked examples, not anybody's house style.
+- **Two brand-prefixed tokens had leaked into a core component file** —
+  `33-capture.css` referenced `--gbt-primary-100` for the option-card and chip
+  borders. Any project without that token got the fallback, so it looked fine
+  and was quietly wrong. Now `--ui-primary-100`.
+- README no longer describes any theme as "the house style".
+
+### Added
+
+- **`docs/theming.html`** — a Theming page with a **live switcher**: five
+  presets that rewrite tokens on a preview panel containing a page header,
+  buttons, badges, a severity pill, a chip, a table and a chart, with the CSS
+  it applied shown underneath. Clicking through it is a faster explanation
+  than any paragraph.
+
+  It also covers the minimum five tokens worth changing, the full token
+  reference by group with *where each one shows*, overriding a loaded theme,
+  per-region and per-environment overrides, runtime switching, dark mode, and
+  coexisting with Bootstrap via cascade layers.
+
+- **The one thing tokens do not reach**: charts are drawn rather than styled,
+  so a colour changed after render needs `UI.chart.refresh()`. Documented, and
+  the live switcher does it.
+
+- **Theming** added to the docs navigation on every page.
+
+## 1.15.0 — 2026-08-20
+
+### Changed — themes are no longer part of the core bundle
+
+1.13 baked the GBT palette into `dist/ui-framework.css`. That was the wrong
+shape for a framework used by more than one project: it made the shared
+artefact carry one project's brand, so a second project would have had to
+override a theme rather than choose one.
+
+The file is split in two, along the line that actually matters:
+
+- **`src/css/32-chrome.css`** — the *components* it defined (stage tag,
+  branded sidebar, brandmark, notice bar, badge dot) are now driven entirely
+  by tokens and stay in the core bundle. No hex value appears in the file.
+- **`src/themes/*.css`** — the *palette and density*, built separately to
+  `dist/themes/`.
+
+```html
+<link rel="stylesheet" href="dist/ui-framework.min.css">
+<link rel="stylesheet" href="dist/themes/gbt.min.css">
+```
+
+Two themes ship: `default` (blue, comfortable sizing) and `gbt` (green, slate
+neutrals, dense). Swapping the second `<link>` changes every screen and
+touches no component CSS.
+
+`src/css/32-theme-gbt.css` is now an empty tombstone and can be deleted.
+
+### Added
+
+- **`THEMING.md`** — the token contract, how to make a theme for a new
+  project, dark mode, per-region overrides, and the three things worth knowing
+  before choosing colours: give neutrals a cast that agrees with the primary;
+  move `--ui-font-size` and `--ui-control-*` together or not at all; and
+  contrast is the theme author's responsibility, because a primary that fails
+  against white fails on every button in the product at once.
+- **`--ui-stage-4`** — a fourth phase colour, for workflows that have one.
+- **Generic token names for chrome** — `--ui-nav-bg`, `--ui-nav-fg`,
+  `--ui-nav-active-bg`, `--ui-notice-bg`, `--ui-stage-*`. Renamed from the
+  `--gbt-*` names 1.13 used, which was the thing preventing a second theme
+  from working.
+- **`build.py` emits `dist/themes/`** — one plain and one minified file per
+  theme listed in `THEMES`.
+
+### Note
+
+`.ui-sidebar-navy` is now `.ui-sidebar-brand` — it is no longer necessarily
+navy. Badges no longer carry a dot by default; add `.ui-badge-dot` where the
+badge means "state of a record" rather than "category".
+
+## 1.14.0 — 2026-08-20
+
+Nine patterns from the GLICA prototype had no framework equivalent, so every
+capture screen was still hand-rolling them. They are components now.
+
+### Added
+
+- **Repeater** (`.ui-repeater`, `data-ui-repeater`, `UI.repeater`) — a table
+  that grows a row at a time. Not a convenience: the source requirements say,
+  of unlicensed premises, unlicensed employees and unregistered devices alike,
+  *"the system should allow users to add multiple rows where more than one is
+  identified."* An inspector who finds four unregistered machines needs four
+  rows, and a form offering three loses the fourth.
+
+  Field names carry `{i}` and are **rewritten on every add and remove**, so the
+  collection posts as `unlicensedPremises[0].premise` — the indexed form Spring
+  binds to a `List` with no custom binder. Removing the middle of three rows
+  re-indexes the survivors contiguously; getting that wrong is the usual reason
+  a hand-rolled repeater silently drops rows. Verified.
+
+  Also: `data-ui-min` / `data-ui-max` with the remove button *disabled* rather
+  than hidden at the minimum, a row counter, an empty state, and
+  `.ui-repeater-stack` to become one card per row on a phone — six columns of
+  inputs on a 360px screen is not a form anyone can fill in standing up.
+
+- **Yes / No / N-A** (`.ui-yn`, `UI.yn`) — three states, not a checkbox. "Not
+  applicable" is a real answer in a compliance checklist and is materially
+  different from "not answered": the compliance rate excludes one and is
+  blocked by the other. Clicking the selected answer clears it, so an officer
+  who taps the wrong button on a phone is not stuck with it. Posts through a
+  hidden input, so it works in a plain form.
+
+- **Option cards** (`.ui-option`, `data-ui-options`) — for a choice needing a
+  description and the figures the decision is made on. Single or multiple,
+  `role="radiogroup"` or `aria-pressed` accordingly, mirrored to a hidden input.
+
+- **Chips** (`.ui-chip`), **toolbar** (`.ui-toolbar`), **search box**
+  (`.ui-searchbox`), **wizard shell** (`.ui-wizard` with head/main/foot and a
+  sticky summary rail), **horizontal bars** (`.ui-hbars`) and **stat states**
+  (`.ui-stat-warn`, `.ui-stat-bad`).
+
+  The bar list is worth a note: for "coverage by region" it beats a bar chart,
+  because the label, the value and the proportion are all readable without a
+  legend or an axis, and it reflows to one column on a phone.
+
+## 1.13.0 — 2026-08-20
+
+### Added
+
+- **GBT theme** (`src/css/32-theme-gbt.css`) — the house style, loaded last
+  in the bundle so it wins against the component defaults it adjusts. Two
+  things do most of the work, and both are easy to underestimate:
+
+  **Density.** The base drops from 1rem to 13.6px, with control heights,
+  card padding, table cells and button sizes coming down with it. A
+  regulatory register is read all day by someone who wants more rows on
+  screen, not larger ones — and the moment the type is smaller, padding
+  that looked correct at 16px starts looking careless. They have to move
+  together, which is why this is a theme and not a font-size override.
+
+  **Slate, not grey.** Neutrals carry a blue cast (`#0f172a` through
+  `#94a3b8`). Against the green primary that reads as considered; true
+  grey next to green reads as a default nobody chose.
+
+  Also included: the `#0b6e4f` brand ramp, the three stage colours from
+  the inspection life cycle, 10px card radius, the two-layer shadow,
+  Inter, a chart palette led by the brand green, and a matching dark
+  variant — without which a theme switch would have produced light-mode
+  greens on a dark surface.
+
+- **`.ui-stage`** — the phase tag that sits above a page title, in stage 1/2/3
+  colours. An officer who has learnt from the SOP wall chart that planning is
+  blue should not have to relearn it here.
+- **`.ui-sidebar-navy`** — dark navigation rail. It does real work on a wide
+  monitor: it makes the boundary between *where I am* and *what I am doing*
+  unmistakable.
+- **`.ui-brandmark`**, **`.ui-notice`** (full-width standing banner, reads as
+  chrome rather than as content to action), and **`.ui-badge-nodot`** — badges
+  now carry a status dot by default, which survives a greyscale printer.
+
+### Note
+
+The theme is part of the bundle. An application that wants the plain
+framework look can drop `32-theme-gbt.css` from `CSS_ORDER` in `build.py`;
+nothing outside that file depends on it.
+
 ## 1.12.0 — 2026-08-20
 
 A security review of all 30 JavaScript modules, the two remaining consistency

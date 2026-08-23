@@ -2,9 +2,38 @@
 """Build the single-file distribution from modular source files."""
 
 from pathlib import Path
+import json
 import re
 
 ROOT = Path(__file__).resolve().parent
+
+
+def _version() -> str:
+    """Single source of truth for the version number.
+
+    It used to be typed into three banner strings here and into
+    ``UI.version`` in ``00-core.js``, and it drifted -- ``dist/`` shipped
+    v1.14.0 banners for two releases because bumping the sources is easy to
+    remember and bumping the build script is not. Read it instead.
+    """
+    package = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))
+    declared = package["version"]
+
+    # The bundle announces its own version at runtime, so a mismatch between
+    # package.json and UI.version is a real bug for anyone debugging which
+    # build a page loaded. Fail the build rather than ship the disagreement.
+    core = (ROOT / "src" / "js" / "00-core.js").read_text(encoding="utf-8")
+    found = re.search(r'UI\.version\s*=\s*"([^"]+)"', core)
+    if found and found.group(1) != declared:
+        raise SystemExit(
+            "version mismatch: package.json says {} but src/js/00-core.js "
+            "sets UI.version = {}".format(declared, found.group(1))
+        )
+
+    return declared
+
+
+VERSION = _version()
 
 CSS_ORDER = [
     "00-tokens.css", "01-base.css", "02-typography.css",
@@ -20,7 +49,18 @@ CSS_ORDER = [
     "24-chart-popover.css", "25-status-document.css",
     "26-tree-select.css", "27-select-list.css", "28-filter-bar.css",
     "29-patterns.css", "30-offline.css", "31-chart-axes.css",
+    "32-chrome.css", "33-capture.css",
 ]
+
+# Themes are built separately, one file each, into dist/themes/. They are
+# deliberately NOT part of the core bundle: the framework is used by more
+# than one project, and baking one project's palette into the shared
+# artefact is how a "shared" framework stops being shareable.
+#
+# A theme is only tokens, so load order between core and theme does not
+# matter for specificity — but loading the theme second is still the habit
+# to teach, because it is what makes an override obvious in devtools.
+THEMES = ["default.css", "forest.css"]
 
 
 # Filenames keep their numeric prefixes, but load order deliberately breaks
@@ -45,22 +85,29 @@ JS_ORDER = [
     # emits, and 27-filter-bar.js builds its picker out of both -- so the
     # three have to load in this order.
     "26-select-list.js", "27-filter-bar.js", "28-patterns.js", "29-offline.js",
+    "30-capture.js",
 ]
 
 CSS_BANNER = """/*!
- * UI Framework v1.12.0
+ * UI Framework v{version}
  * Original dependency-free CSS/JavaScript framework.
  * Prefix: ui-
  * License: MIT
  */
-"""
+""".format(version=VERSION)
 
 JS_BANNER = """/*!
- * UI Framework v1.12.0
+ * UI Framework v{version}
  * Dependency-free JavaScript bundle.
  * License: MIT
  */
-"""
+""".format(version=VERSION)
+
+THEME_BANNER = """/*!
+ * UI Framework v{version} — theme
+ * Load after ui-framework.css. A theme is only design tokens.
+ */
+""".format(version=VERSION)
 
 
 def compact_css(text: str) -> str:
@@ -141,6 +188,42 @@ def layered_css(directory: Path, order: list[str], banner: str) -> str:
     return "\n".join(out)
 
 
+def stamp_docs() -> list[str]:
+    """Rewrite the version each docs page displays and cache-busts with.
+
+    Every page carries the version in four hand-typed places: two `?v=` query
+    strings in <head>, two more on the scripts at the foot, plus the badge in
+    the topbar and the footer line. Six per page, eight pages. They drifted --
+    pages sat on ?v=1.8.8 and ?v=1.10.0 against a 1.16.1 bundle, which is the
+    exact failure cache-busting exists to prevent: a returning reader gets a
+    stale bundle behind current markup, and the symptom is a component that
+    "doesn't work" only for people who visited before.
+
+    Version numbers are not content, so the build owns them.
+    """
+    changed = []
+    for page in sorted((ROOT / "docs").rglob("*.html")):
+        original = page.read_text(encoding="utf-8")
+
+        text = re.sub(r"(\?v=)\d+\.\d+\.\d+", r"\g<1>" + VERSION, original)
+        text = re.sub(
+            r'(<span class="ui-badge[^"]*">)v\d+\.\d+\.\d+(</span>)',
+            r"\g<1>v" + VERSION + r"\g<2>",
+            text,
+        )
+        text = re.sub(
+            r'(<footer class="docs-footer">UI Framework )\d+\.\d+\.\d+',
+            r"\g<1>" + VERSION,
+            text,
+        )
+
+        if text != original:
+            page.write_text(text, encoding="utf-8")
+            changed.append(str(page.relative_to(ROOT)))
+
+    return changed
+
+
 def main() -> None:
     dist = ROOT / "dist"
     dist.mkdir(exist_ok=True)
@@ -158,7 +241,19 @@ def main() -> None:
     (dist / "ui-framework.js").write_text(js, encoding="utf-8")
     (dist / "ui-framework.min.js").write_text(compact_js(js) + "\n", encoding="utf-8")
 
-    print("Built:")
+    themes_out = dist / "themes"
+    themes_out.mkdir(exist_ok=True)
+    built_themes = []
+    for name in THEMES:
+        text = (ROOT / "src/themes" / name).read_text(encoding="utf-8")
+        (themes_out / name).write_text(THEME_BANNER + text, encoding="utf-8")
+        minified = name.replace(".css", ".min.css")
+        (themes_out / minified).write_text(compact_css(text) + "\n", encoding="utf-8")
+        built_themes += ["themes/" + name, "themes/" + minified]
+
+    stamped = stamp_docs()
+
+    print("Built v%s:" % VERSION)
     for name in (
         "ui-framework.css",
         "ui-framework.min.css",
@@ -166,8 +261,13 @@ def main() -> None:
         "ui-framework.layered.min.css",
         "ui-framework.js",
         "ui-framework.min.js",
-    ):
+    ) + tuple(built_themes):
         print(" - dist/%s (%d bytes)" % (name, (dist / name).stat().st_size))
+
+    if stamped:
+        print("Re-stamped to v%s:" % VERSION)
+        for name in stamped:
+            print(" - %s" % name)
 
 
 if __name__ == "__main__":

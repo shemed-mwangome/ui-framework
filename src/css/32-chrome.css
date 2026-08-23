@@ -1,0 +1,134 @@
+/* ------------------------------------------------- Application chrome
+ *
+ * The shell an internal application is built into: a branded navigation
+ * rail, a brandmark, a standing notice bar, and the phase tag that sits
+ * above a page title.
+ *
+ * Every colour here comes from a token. Nothing in this file names a
+ * brand, which is the whole point -  a project swaps its theme file and
+ * this recolours with it. If you find yourself writing a hex value in
+ * here, it belongs in a theme instead.
+ */
+
+/* ---------------------------------------------------------- density */
+
+/* The theme sets --ui-font-size; this is where it lands. Kept here
+   rather than in the theme so that a theme stays purely a list of
+   values and never a selector. */
+.ui-scope,
+body.ui-scope { font-size: var(--ui-font-size, 1rem); }
+
+/* ----------------------------------------------------------- stage */
+
+/* A workflow with named phases -  planning / execution / reporting,
+   draft / review / issued -  usually has those phases colour-coded in
+   the procedure document people were trained on. Matching that is not
+   decoration; someone who learnt that planning is blue should not have
+   to relearn it here. */
+.ui-stage {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  margin-bottom: .35rem;
+  padding: .1rem .5rem;
+  border: 1px solid transparent;
+  border-radius: var(--ui-radius-pill);
+  font-size: .74rem;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.ui-stage-1 { background: var(--ui-stage-1-soft); color: var(--ui-stage-1); border-color: var(--ui-stage-1-line); }
+.ui-stage-2 { background: var(--ui-stage-2-soft); color: var(--ui-stage-2); border-color: var(--ui-stage-2-line); }
+.ui-stage-3 { background: var(--ui-stage-3-soft); color: var(--ui-stage-3); border-color: var(--ui-stage-3-line); }
+.ui-stage-4 { background: var(--ui-stage-4-soft); color: var(--ui-stage-4); border-color: var(--ui-stage-4-line); }
+
+/* -------------------------------------------------- branded sidebar */
+
+/* A dark rail against a light working area. It earns its place on a
+   wide monitor: it makes the boundary between "where I am" and "what I
+   am doing" unmistakable without a border or a shadow. */
+.ui-sidebar-brand {
+  background: var(--ui-nav-bg);
+  border-right-color: transparent;
+  color: var(--ui-nav-fg);
+}
+
+.ui-sidebar-brand .ui-sidebar-section { color: var(--ui-nav-fg-muted); font-size: .7rem; letter-spacing: .09em; }
+.ui-sidebar-brand .ui-sidebar-link { color: var(--ui-nav-fg); border-radius: 7px; font-weight: 500; }
+.ui-sidebar-brand .ui-sidebar-link:hover { background: rgba(255, 255, 255, .07); color: #fff; }
+
+.ui-sidebar-brand .ui-sidebar-link.ui-active {
+  background: var(--ui-nav-active-bg);
+  color: var(--ui-nav-active-fg);
+  font-weight: 600;
+}
+
+.ui-sidebar-brand .ui-sidebar-header { border-bottom-color: rgba(255, 255, 255, .07); }
+
+.ui-sidebar-brand .ui-nav-count {
+  margin-left: auto;
+  padding: .05rem .35rem;
+  border-radius: var(--ui-radius-pill);
+  background: rgba(255, 255, 255, .15);
+  color: #fff;
+  font-size: .68rem;
+  font-weight: 700;
+}
+
+.ui-sidebar-brand .ui-active .ui-nav-count { background: rgba(0, 0, 0, .25); }
+.ui-sidebar-brand ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, .16); background-clip: content-box; }
+
+/* -------------------------------------------------------- brandmark */
+
+.ui-brandmark {
+  display: grid;
+  place-items: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  flex: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--ui-primary), var(--ui-brand-gradient-to, var(--ui-primary-hover)));
+  color: #fff;
+  font-size: .72rem;
+  font-weight: 800;
+}
+
+/* ----------------------------------------------------------- notice */
+
+/* A standing banner -  an environment warning, a maintenance window, a
+   demo-data note. Full width and flush against the top bar, so it reads
+   as chrome rather than as content someone has to action. An alert card
+   in the content column would be dismissed on sight. */
+.ui-notice {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .38rem 1.25rem;
+  border-bottom: 1px solid var(--ui-notice-line);
+  background: var(--ui-notice-bg);
+  color: var(--ui-notice-fg);
+  font-size: .82rem;
+}
+
+.ui-notice-danger {
+  border-bottom-color: color-mix(in srgb, var(--ui-danger) 40%, transparent);
+  background: color-mix(in srgb, var(--ui-danger) 8%, var(--ui-surface));
+  color: var(--ui-danger);
+}
+
+/* ------------------------------------------------------- status dot */
+
+/* Opt-in, because a dot on every badge everywhere is a lot of dots.
+   Where a badge means "state of a record" rather than "category", the
+   dot reads as a status light and survives a greyscale printer. */
+.ui-badge-dot::before {
+  content: "";
+  width: .34rem;
+  height: .34rem;
+  margin-right: .1rem;
+  border-radius: 50%;
+  background: currentColor;
+  flex: none;
+}

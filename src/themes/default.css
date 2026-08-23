@@ -1,0 +1,86 @@
+/* ==========================================================================
+ * Theme — default
+ *
+ * The neutral starting point: a blue primary, grey-blue neutrals, and
+ * comfortable rather than dense sizing. Load this when a project has no
+ * brand of its own yet, or copy it as the base for one.
+ *
+ * It exists mainly as proof that the theme layer is real. Swap
+ * `themes/forest.css` for `themes/default.css` in a layout and every screen
+ * changes — no component CSS is touched, because a theme is only tokens.
+ * ========================================================================== */
+
+:root {
+  /* ------------------------------------------------------------ brand */
+  --ui-primary: #2563eb;
+  --ui-primary-hover: #1d4ed8;
+  --ui-primary-active: #1e40af;
+  --ui-primary-soft: #eff6ff;
+  --ui-primary-100: #dbeafe;
+  --ui-brand-gradient-to: #60a5fa;
+
+  /* --------------------------------------------------------- semantic */
+  --ui-success: #16a34a;
+  --ui-warning: #d97706;
+  --ui-danger: #dc2626;
+  --ui-info: #0891b2;
+
+  /* --------------------------------------------------------- neutrals */
+  --ui-text: #172033;
+  --ui-text-soft: #334155;
+  --ui-muted: #64748b;
+  --ui-subtle: #94a3b8;
+  --ui-border: #d8e0ea;
+  --ui-border-strong: #b8c4d4;
+  --ui-surface: #ffffff;
+  --ui-surface-soft: #f8fafc;
+  --ui-surface-muted: #f1f5f9;
+
+  /* ------------------------------------------------------------ stage */
+  --ui-stage-1: #2563eb; --ui-stage-1-soft: #eff6ff; --ui-stage-1-line: #dbeafe;
+  --ui-stage-2: #16a34a; --ui-stage-2-soft: #f0fdf4; --ui-stage-2-line: #dcfce7;
+  --ui-stage-3: #7c3aed; --ui-stage-3-soft: #f5f3ff; --ui-stage-3-line: #ede9fe;
+  --ui-stage-4: #d97706; --ui-stage-4-soft: #fffbeb; --ui-stage-4-line: #fde68a;
+
+  /* --------------------------------------------------------------- nav */
+  --ui-nav-bg: #1e293b;
+  --ui-nav-fg: #cbd5e1;
+  --ui-nav-fg-muted: #64748b;
+  --ui-nav-active-bg: var(--ui-primary);
+  --ui-nav-active-fg: #ffffff;
+
+  /* ------------------------------------------------------------ notice */
+  --ui-notice-bg: #fffbeb;
+  --ui-notice-fg: #78350f;
+  --ui-notice-line: #fde68a;
+
+  /* ------------------------------------------------------------ charts */
+  --ui-chart-1: #2563eb;
+  --ui-chart-2: #16a34a;
+  --ui-chart-3: #f59e0b;
+  --ui-chart-4: #dc2626;
+  --ui-chart-5: #0891b2;
+  --ui-chart-6: #7c3aed;
+
+  /* ------------------------------------------------------------- shape */
+  --ui-radius-2: .375rem;
+  --ui-radius-3: .5rem;
+
+  /* ----------------------------------------------------------- density */
+  --ui-font-size: 1rem;
+  --ui-density: 1;
+  --ui-control-sm: 2rem;
+  --ui-control-md: 2.5rem;
+  --ui-control-lg: 3rem;
+}
+
+[data-ui-theme="dark"] {
+  --ui-primary: #60a5fa;
+  --ui-primary-hover: #7cb6fb;
+  --ui-primary-soft: #12203a;
+  --ui-primary-100: #1b3157;
+  --ui-nav-bg: #0b1220;
+  --ui-notice-bg: #2a2413;
+  --ui-notice-fg: #fcd34d;
+  --ui-notice-line: #4a3f1a;
+}

@@ -306,7 +306,7 @@
 .ui-sidebar-link.ui-active { background: var(--ui-primary-soft); color: var(--ui-primary); }
 
 /* Dark sidebar, the vertical-nav counterpart to .ui-navbar-dark -- a colored
-   admin shell (GLICA-style navy, or any brand's own dark surface) previously
+   admin shell (a navy rail, or any brand's own dark surface) previously
    needed custom CSS to override .ui-sidebar's light default, since no variant
    existed. Reads from the same --ui-dark token .ui-navbar-dark already uses,
    so overriding just that one token themes both consistently. */

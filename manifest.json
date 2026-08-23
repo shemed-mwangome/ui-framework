@@ -1,5 +1,5 @@
 {
-  "version": "1.12.0",
+  "version": "1.16.2",
   "prefix": "ui-",
   "cssModules": [
     "00-tokens.css",
@@ -33,7 +33,13 @@
     "28-filter-bar.css",
     "29-patterns.css",
     "30-offline.css",
-    "31-chart-axes.css"
+    "31-chart-axes.css",
+    "32-chrome.css",
+    "33-capture.css"
+  ],
+  "themes": [
+    "src/themes/default.css",
+    "src/themes/forest.css"
   ],
   "jsModules": [
     "00-core.js",
@@ -65,7 +71,8 @@
     "26-select-list.js",
     "27-filter-bar.js",
     "28-patterns.js",
-    "29-offline.js"
+    "29-offline.js",
+    "30-capture.js"
   ],
   "bundles": [
     "dist/ui-framework.css",
@@ -81,8 +88,11 @@
     "docs/getting-started.html",
     "docs/layout.html",
     "docs/components.html",
+    "docs/theming.html",
     "docs/utilities.html",
-    "docs/javascript.html"
+    "docs/javascript.html",
+    "THEMING.md",
+    "SECURITY.md"
   ],
   "examples": [
     "docs/examples/dashboard.html",
@@ -91,5 +101,6 @@
     "docs/examples/application-form.html",
     "docs/examples/record-register.html",
     "examples/jsp-integration.jsp"
-  ]
+  ],
+  "notes": "Themes are worked examples, not any organisation's house style. Copy one, change the values, keep the token names. See THEMING.md."
 }

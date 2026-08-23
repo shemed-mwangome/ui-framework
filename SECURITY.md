@@ -73,7 +73,21 @@ renders without a link rather than with a dangerous one.
 Obfuscation is handled: control characters and whitespace are stripped before
 the scheme is tested, because browsers follow `java\tscript:` and
 `java\nscript:` as `javascript:`. Verified against plain, mixed-case,
-tab-embedded, newline-embedded and leading-whitespace payloads.
+tab-embedded, newline-embedded, NUL-embedded and leading-whitespace payloads.
+
+**How that stripping is written matters, and it was wrong until 1.16.1.** The
+character class had been spelled with the literal control characters. Two
+consequences, both bad and neither visible: the source file became *binary* to
+`grep` and `diff`, so the whole of `00-core.js` silently dropped out of text
+searches and code review; and the guard itself became fragile, because any
+editor, formatter or transfer step that normalises control characters would
+have turned it off without failing a single test. It is now a character-code
+scan — `stripUrlNoise()` compares `charCodeAt(i)` against 32 and 127. No regex,
+no escape sequences, nothing that can be lost in transit.
+
+The general rule for this codebase: **a security check must not depend on a
+byte you cannot see.** If a guard's correctness rests on characters that do not
+survive a copy-paste, it will eventually be silently disabled.
 
 ### What is *not* sanitised
 
