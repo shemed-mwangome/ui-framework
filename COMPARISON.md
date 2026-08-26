@@ -10,7 +10,7 @@
 
 Two exercises, not one opinion.
 
-1. **Inventory.** Every file in `src/css` and `src/js` read and catalogued — 26 CSS modules, 25 JS modules, 58 design tokens, a documented public API.
+1. **Inventory.** Every file in `src/css` and `src/js` read and catalogued: 26 CSS modules, 25 JS modules, 58 design tokens, a documented public API.
 2. **Benchmark.** Three screens from the Compliance module prototype were rebuilt using *only* `ui-` classes: an inspections register with scope and filter controls, the six-step planning wizard's region selection, and a findings list. Every point where the markup had to fall back to a utility soup or an inline style was recorded as a gap.
 
 The benchmark was run in a real browser with the actual `dist/` bundle. Twelve gaps were found. Ten are now closed in 1.9.0, one was a false positive, one is deliberately out of scope.
@@ -46,19 +46,19 @@ It was never a question of quality. Tables, stepper, tree select, modals, valida
 | Component count | ~40 | ~30 | 250+ | ~25 | 80+ |
 | Licence | MIT | MIT | Commercial | MIT | MIT |
 
-The row that matters commercially: **smart table, multi-select, date range picker and stepper are all CoreUI PRO — a paid licence.** This framework has equivalents of all four under MIT, already written and already tested.
+The row that matters commercially: **smart table, multi-select, date range picker and stepper are all CoreUI PRO: a paid licence.** This framework has equivalents of all four under MIT, already written and already tested.
 
 ---
 
 ## 4. What this framework does that none of them do
 
-These are not gaps in the others so much as things a general-purpose library has no reason to build. They exist here because they were needed by a specific class of application — a regulatory back office with field officers — and they are the strongest argument for having built it.
+These are not gaps in the others so much as things a general-purpose library has no reason to build. They exist here because they were needed by a specific class of application: a regulatory back office with field officers: and they are the strongest argument for having built it.
 
 - **Offline work queue.** No mainstream CSS/JS component library ships one. PrimeNG does not. CoreUI does not. It is normally assembled per-project from Workbox plus hand-written IndexedDB code. Field inspection is unbuildable without it.
 - **Filter bar with conditional counts.** Every library gives you a multi-select. None gives you the pattern of one button per dimension whose picker shows how many rows each value would leave, scoped per screen and linkable by URL.
 - **Grouped select with aligned numeric columns.** PrimeNG's `MultiSelect` with option grouping and a custom item template gets perhaps 70% of the way; the aligned count columns, per-group totals and the empty-group explanation are not there.
 - **Charts with no charting library**, rendered with an accessible data table alongside.
-- **Print a single element in isolation** — `window.print()` prints the page, which is not what a "Print certificate" button implies.
+- **Print a single element in isolation**: `window.print()` prints the page, which is not what a "Print certificate" button implies.
 - **Server-error binding** (`UI.validate.showErrors()`), which is exactly the shape a Spring `BindingResult` arrives in.
 - **A `@layer`-wrapped build**, for coexisting with the Bootstrap 4.6 and CoreUI 2 already in the admin application.
 
@@ -68,11 +68,11 @@ These are not gaps in the others so much as things a general-purpose library has
 
 | # | Gap found | Status in 1.9.0 |
 |---|---|---|
-| 1 | No neutral button — a bare `.ui-btn` is primary, so a toolbar rendered six primary buttons | `.ui-btn-default` |
+| 1 | No neutral button. A bare `.ui-btn` is primary, so a toolbar rendered six primary buttons | `.ui-btn-default` |
 | 2 | No page header for a list page | `.ui-page-head` |
 | 3 | No segmented control with a selected state | `.ui-segmented` |
 | 4 | No filter bar; four dimensions took four wrapped chip rows | `.ui-filter-bar` + picker |
-| 5 | Tree counts did not align — 14, 3 and 217 started up to 8px apart | Fixed-width `.ui-tree-num`, verified aligned to the pixel |
+| 5 | Tree counts did not align: 14, 3 and 217 started up to 8px apart | Fixed-width `.ui-tree-num`, verified aligned to the pixel |
 | 6 | No sub-line under a tree label | `.ui-tree-sub` |
 | 7 | No per-group Select all / Clear | `.ui-tree-actions` |
 | 8 | An empty group expanded into nothing, indistinguishable from a bug | `.ui-tree-empty` |
@@ -81,7 +81,7 @@ These are not gaps in the others so much as things a general-purpose library has
 | 11 | Status lexicon had no severity axis | `.ui-severity-*` |
 | 12 | Nothing knew about connectivity or a queue of unsent work | `UI.offline`, `.ui-sync` |
 
-One defect was found in existing code while building on it: **a control inside `.ui-tree-row` also collapsed the row**, so a per-group "Select all" folded the group shut the moment it filled it. The row handler excluded `.ui-tree-check` and `.ui-tree-meta` by name, which does not scale. It is now structural — a control that is not the toggle is not a collapse target.
+One defect was found in existing code while building on it: **a control inside `.ui-tree-row` also collapsed the row**, so a per-group "Select all" folded the group shut the moment it filled it. The row handler excluded `.ui-tree-check` and `.ui-tree-meta` by name, which does not scale. It is now structural. A control that is not the toggle is not a collapse target.
 
 Also added while in there: an `xl` breakpoint (the grid stopped at 1024px, so a 1920px monitor and a laptop resolved identically), `.ui-table-stack` for one-card-per-row on phones, and `.ui-touch` for 44px field targets.
 
@@ -95,7 +95,7 @@ Worth knowing before anyone claims parity.
 |---|---|---|
 | **Time picker** | Low | CoreUI PRO has one. Inspection times are captured as text today; add if a real need appears. |
 | **Virtualised long lists** | Low | Tables paginate server-side, which is the right answer for 10,000 findings. Only bites on a single un-paged list of thousands. |
-| **Evidence upload queueing** | Medium | The offline queue handles JSON writes. Binary evidence needs a separate resumable upload path — deliberately not folded in, because the two have different retry and storage-quota characteristics. |
+| **Evidence upload queueing** | Medium | The offline queue handles JSON writes. Binary evidence needs a separate resumable upload path: deliberately not folded in, because the two have different retry and storage-quota characteristics. |
 | **No Angular components** | Medium | The CSS and the design tokens survive the migration; the JS modules would need Angular equivalents. CoreUI's dual Bootstrap/Angular packaging is its single strongest advantage over this framework. |
 | **Breakpoint set** | Low | Now sm/md/lg/xl. No `xxl`. |
 | **Carousel, rating, callout** | None | CoreUI has them; a regulatory back office does not need them. |
@@ -110,7 +110,7 @@ Worth knowing before anyone claims parity.
 Two conditions:
 
 1. **Keep the tokens as the contract.** Screens should consume `--ui-*` custom properties, never hard-coded values. That is what makes the Angular migration a replacement of the JS layer rather than a redesign.
-2. **Extend the framework, not the page.** Every gap in the table above was found because a screen worked around it locally. A pattern needed twice belongs in `src/`, with a test — which is how the framework stays worth having rather than becoming a second place to look for the same CSS.
+2. **Extend the framework, not the page.** Every gap in the table above was found because a screen worked around it locally. A pattern needed twice belongs in `src/`, with a test: which is how the framework stays worth having rather than becoming a second place to look for the same CSS.
 
 For the Angular wave, revisit CoreUI: `@coreui/angular` tracks Angular 21+ and would let the visual language survive, with this framework's tokens driving its theme. That decision does not need making now, and nothing in 1.9.0 forecloses it.
 

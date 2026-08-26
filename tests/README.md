@@ -11,7 +11,7 @@ node --test --test-name-pattern "Escape" "tests/*.test.js"  # one test
 
 There is no `node_modules` and nothing to install. The harness drives a real
 Chrome over the DevTools Protocol using Node's built-in `WebSocket`, `node:test`
-and `node:http` — the same constraint that keeps the framework itself
+and `node:http`: the same constraint that keeps the framework itself
 dependency-free, so `git clone && npm test` works on a locked-down build box.
 
 You need **Node 18+** and a Chrome/Chromium binary. The harness looks in the
@@ -33,8 +33,8 @@ test("modal closes on Escape", async () => {
 ```
 
 `ui.page(html, fn)` wraps `html` in a full document, serves it over HTTP, loads
-`dist/ui-framework.{css,js}` the way a real page does — so `DOMContentLoaded`
-auto-init is genuinely exercised — and **fails the test if the page threw an
+`dist/ui-framework.{css,js}` the way a real page does: so `DOMContentLoaded`
+auto-init is genuinely exercised: and **fails the test if the page threw an
 uncaught exception**. Every spec therefore doubles as a smoke test for the
 modules it touches.
 
@@ -62,22 +62,22 @@ sitting behind an open modal genuinely isn't clickable, which is what you want.
 The specs deliberately target invariants that isolated per-component demos
 cannot see:
 
-- **`overlays.test.js`** — Escape closes only the *topmost* layer. There is no
+- **`overlays.test.js`**, Escape closes only the *topmost* layer. There is no
   central overlay stack; each module registers its own document-level handler
   and relies on `stopImmediatePropagation()` plus the deliberate ordering in
   `build.py`'s `JS_ORDER`. 1.1.0 shipped a bug where Escape closed everything at
   once. Also covers focus trapping, focus restore, and the shared scroll-lock
   release condition.
-- **`form-flow.test.js`** — `save-next`, `stepper-form` and `draft` composed on
+- **`form-flow.test.js`**: `save-next`, `stepper-form` and `draft` composed on
   a *single* `<form>`, because that is the only configuration in which the 1.1.0
   `dataset.uiReady` guard collision was visible. Includes a static check that
   form-level modules never share a guard key.
-- **`build.test.js`** — `dist/` is regenerated into a scratch directory and
+- **`build.test.js`**: `dist/` is regenerated into a scratch directory and
   diffed against what is committed. Editing `src/` without rebuilding ships
   nothing, and the docs load `dist/`. Also pins the `JS_ORDER` overlay
   constraint, version consistency across five files, and the public design-token
   surface.
-- **`data-table.test.js`** — search, sort, paginate and their compositions.
+- **`data-table.test.js`**: search, sort, paginate and their compositions.
 
 ## Adding a test
 

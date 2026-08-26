@@ -45,20 +45,20 @@
 <section class="docs-hero">
   <div class="docs-kicker">Installation</div>
   <h1 class="ui-display-2">Start without changing your existing theme.</h1>
-  <p class="ui-lead">The framework uses the <span class="ui-code">ui-</span> prefix and scoped base styles, making it suitable for any server-rendered application &mdash; JSP, PHP, Rails, Django, or plain static HTML &mdash; that already uses Bootstrap, CoreUI, or custom master styles.</p>
+  <p class="ui-lead">The framework uses the <span class="ui-code">ui-</span> prefix and scoped base styles, making it suitable for any server-rendered application: JSP, PHP, Rails, Django, or plain static HTML: that already uses Bootstrap, CoreUI, or custom master styles.</p>
 </section>
 
 <section class="docs-section" id="try-it">
   <h2 class="ui-h2">New here? Try it in 10 seconds</h2>
-  <p class="docs-section-intro">No server, no build step, no account. Download or clone the repository, then double-click <span class="ui-code">quick-start.html</span> in the project root to open it directly in your browser (no <span class="ui-code">http://</span> needed &mdash; a plain <span class="ui-code">file://</span> path works). It loads the two bundled files and shows a working button, so you can confirm everything is wired up before touching any of your own pages.</p>
+  <p class="docs-section-intro">No server, no build step, no account. Download or clone the repository, then double-click <span class="ui-code">quick-start.html</span> in the project root to open it directly in your browser (no <span class="ui-code">http://</span> needed, a plain <span class="ui-code">file://</span> path works). It loads the two bundled files and shows a working button, so you can confirm everything is wired up before touching any of your own pages.</p>
 </section>
 
 <section class="docs-section" id="concepts">
   <h2 class="ui-h2">How it works, in plain terms</h2>
-  <p class="docs-section-intro">If you've never used a component library before, here's the whole mental model &mdash; there isn't more to it than this:</p>
+  <p class="docs-section-intro">If you've never used a component library before, here's the whole mental model. There isn't more to it than this:</p>
   <ul>
     <li><strong>CSS classes style things.</strong> Every class starts with <span class="ui-code">ui-</span> (e.g. <span class="ui-code">ui-btn</span>, <span class="ui-code">ui-card</span>) specifically so it can't collide with your existing CSS. Write plain HTML and add these classes the same way you'd add any CSS class.</li>
-    <li><strong><span class="ui-code">data-ui-*</span> attributes trigger behavior &mdash; you write zero JavaScript.</strong> For example, a button with <span class="ui-code">data-ui-modal-open="#myModal"</span> opens a modal when clicked. The framework's JavaScript file scans the page for these attributes once it loads and wires up the click handlers for you automatically.</li>
+    <li><strong><span class="ui-code">data-ui-*</span> attributes trigger behavior: you write zero JavaScript.</strong> For example, a button with <span class="ui-code">data-ui-modal-open="#myModal"</span> opens a modal when clicked. The framework's JavaScript file scans the page for these attributes once it loads and wires up the click handlers for you automatically.</li>
     <li><strong>Nothing needs to be "initialized" for content that's already in the page when it loads.</strong> You only call <span class="ui-code">UI.init(element)</span> manually if you insert new HTML with JavaScript <em>after</em> the page has loaded (see <a href="javascript.html">JavaScript API</a>).</li>
   </ul>
   <p class="docs-section-intro">That's it. Everything else in these docs is just the full list of available <span class="ui-code">ui-*</span> classes and <span class="ui-code">data-ui-*</span> attributes and what each one does.</p>
@@ -66,7 +66,7 @@
 
 <section class="docs-section" id="bundle">
   <h2 class="ui-h2">Option 1: single CSS and JavaScript</h2>
-  <p class="docs-section-intro">The easiest deployment option. Copy the complete framework folder into your static resources and include the two files, loaded <em>after</em> Bootstrap/CoreUI/your existing stylesheet if you have one &mdash; see <a href="#layers">using alongside Bootstrap</a> below for why the plain bundle, not <span class="ui-code">ui-framework.layered.min.css</span>, is the right default even then.</p>
+  <p class="docs-section-intro">The easiest deployment option. Copy the complete framework folder into your static resources and include the two files, loaded <em>after</em> Bootstrap/CoreUI/your existing stylesheet if you have one. See <a href="#layers">using alongside Bootstrap</a> below for why the plain bundle, not <span class="ui-code">ui-framework.layered.min.css</span>, is the right default even then.</p>
   <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>&lt;link rel=&quot;stylesheet&quot; href=&quot;/ui/static/ui-framework/dist/ui-framework.min.css&quot;&gt;
 
 &lt;!-- Page content --&gt;
@@ -91,16 +91,16 @@
 
 <section class="docs-section" id="layers">
   <h2 class="ui-h2">Using alongside Bootstrap or an existing stylesheet</h2>
-  <p class="docs-section-intro">Every class is prefixed <span class="ui-code">ui-</span>, so there are no class-name collisions with Bootstrap, CoreUI, or your own CSS. The part that <em>can</em> collide is more basic than that: both frameworks style bare HTML elements &mdash; <span class="ui-code">table</span>, <span class="ui-code">h1</span>&ndash;<span class="ui-code">h6</span>, <span class="ui-code">button</span>, form controls &mdash; before either one's classes are even involved.</p>
+  <p class="docs-section-intro">Every class is prefixed <span class="ui-code">ui-</span>, so there are no class-name collisions with Bootstrap, CoreUI, or your own CSS. The part that <em>can</em> collide is more basic than that: both frameworks style bare HTML elements: <span class="ui-code">table</span>, <span class="ui-code">h1</span>&ndash;<span class="ui-code">h6</span>, <span class="ui-code">button</span>, form controls: before either one's classes are even involved.</p>
 
-  <p>With the plain bundle (<span class="ui-code">ui-framework.css</span> / <span class="ui-code">.min.css</span>), whichever stylesheet's <span class="ui-code">&lt;link&gt;</span> comes <em>last</em> in your <span class="ui-code">&lt;head&gt;</span> wins ties on those element selectors &mdash; not per component, the whole file. Load it after Bootstrap and every <span class="ui-code">&lt;table&gt;</span> on the page, including ones you never gave <span class="ui-code">ui-table</span>, can start picking up this framework's default border and padding instead of Bootstrap's. Load it before, and the reverse happens. It isn't a crash, just a silent, page-wide restyle of elements you didn't touch, and the direction depends entirely on link order.</p>
+  <p>With the plain bundle (<span class="ui-code">ui-framework.css</span> / <span class="ui-code">.min.css</span>), whichever stylesheet's <span class="ui-code">&lt;link&gt;</span> comes <em>last</em> in your <span class="ui-code">&lt;head&gt;</span> wins ties on those element selectors, not per component, the whole file. Load it after Bootstrap and every <span class="ui-code">&lt;table&gt;</span> on the page, including ones you never gave <span class="ui-code">ui-table</span>, can start picking up this framework's default border and padding instead of Bootstrap's. Load it before, and the reverse happens. It isn't a crash, just a silent, page-wide restyle of elements you didn't touch, and the direction depends entirely on link order.</p>
 
   <p><span class="ui-code">ui-framework.layered.css</span> (and <span class="ui-code">.layered.min.css</span>) exists for that specific problem: it wraps every rule in <span class="ui-code">@layer ui-base, ui-components, ui-utilities</span>, so this framework's bare-element styles unconditionally lose to Bootstrap's regardless of link order.</p>
 
   <div class="ui-alert ui-alert-warning">
     <div class="ui-alert-icon">!</div>
     <div><div class="ui-alert-title">The layered bundle is not the safe default for Bootstrap coexistence</div>
-    <p class="ui-alert-message">The rule cuts both ways, and the direction that bites is the common one: <strong>an unlayered stylesheet always beats a layered one, regardless of selector specificity</strong> &mdash; not just for the element-selector ties above, but for <em>every</em> declaration. Bootstrap 4 ships plenty of unlayered, low-specificity element resets that this framework's own component classes would normally beat under ordinary cascade rules &mdash; e.g. bare <span class="ui-code">label{display:inline-block}</span>, which every option row in <span class="ui-code">data-ui-multiselect</span> and every <span class="ui-code">.ui-checkbox</span>/<span class="ui-code">.ui-radio</span> pair is built on. Load the layered bundle, and that unlayered Bootstrap rule silently wins anyway, breaking layout that the plain bundle would have gotten right for free. Reach for the layered bundle only when you specifically need to guarantee a win against a legacy rule that's <em>more</em> specific than this framework's own selector (an ID, a long descendant chain) &mdash; not as a general-purpose "coexist with Bootstrap" default.</p></div>
+    <p class="ui-alert-message">The rule cuts both ways, and the direction that bites is the common one: <strong>an unlayered stylesheet always beats a layered one, regardless of selector specificity</strong>: not just for the element-selector ties above, but for <em>every</em> declaration. Bootstrap 4 ships plenty of unlayered, low-specificity element resets that this framework's own component classes would normally beat under ordinary cascade rules, e.g. bare <span class="ui-code">label{display:inline-block}</span>, which every option row in <span class="ui-code">data-ui-multiselect</span> and every <span class="ui-code">.ui-checkbox</span>/<span class="ui-code">.ui-radio</span> pair is built on. Load the layered bundle, and that unlayered Bootstrap rule silently wins anyway, breaking layout that the plain bundle would have gotten right for free. Reach for the layered bundle only when you specifically need to guarantee a win against a legacy rule that's <em>more</em> specific than this framework's own selector (an ID, a long descendant chain): not as a general-purpose "coexist with Bootstrap" default.</p></div>
   </div>
 
   <p>So with nothing more than:</p>
@@ -108,18 +108,18 @@
   <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>&lt;link rel=&quot;stylesheet&quot; href=&quot;bootstrap.css&quot;&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;dist/ui-framework.layered.min.css&quot;&gt;</code></pre></div>
 
-  <p>Bootstrap's base styles stay untouched no matter which of those two lines comes first. Component classes still resolve their own internal styling normally (a <span class="ui-code">.ui-btn</span> looks like a <span class="ui-code">.ui-btn</span> either way) &mdash; layering only changes who wins when the <em>same bare element</em> is targeted by both frameworks, which is a narrower guarantee than "everything from this framework works."</p>
+  <p>Bootstrap's base styles stay untouched no matter which of those two lines comes first. Component classes still resolve their own internal styling normally (a <span class="ui-code">.ui-btn</span> looks like a <span class="ui-code">.ui-btn</span> either way): layering only changes who wins when the <em>same bare element</em> is targeted by both frameworks, which is a narrower guarantee than "everything from this framework works."</p>
 
   <p>If you do need the layered bundle for that narrower case, and still want one specific component from this framework to win over a Bootstrap style, declare the order yourself, once, at the top of your own stylesheet:</p>
 
   <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>@layer bootstrap, ui-base, ui-components, ui-utilities, app-overrides;</code></pre></div>
 
-  <p class="ui-mb-0">Precedence is then exactly what you wrote, left to right, later wins &mdash; no specificity math, no <span class="ui-code">!important</span>. Keep your own overrides inside a declared layer (<span class="ui-code">app-overrides</span> above) rather than leaving them unlayered, or the "unlayered always wins" rule will apply to them too.</p>
+  <p class="ui-mb-0">Precedence is then exactly what you wrote, left to right, later wins, no specificity math, no <span class="ui-code">!important</span>. Keep your own overrides inside a declared layer (<span class="ui-code">app-overrides</span> above) rather than leaving them unlayered, or the "unlayered always wins" rule will apply to them too.</p>
 </section>
 
 <section class="docs-section" id="server">
   <h2 class="ui-h2">Server-side integration</h2>
-  <p class="docs-section-intro">Load the framework after your existing CSS. Wrap new content in <span class="ui-code">ui-scope</span> to apply the optional base typography safely. The paths below are plain HTML &mdash; substitute your own templating syntax (JSTL's <span class="ui-code">&lt;c:url&gt;</span>, Thymeleaf, PHP includes, an asset helper, etc.) to resolve them.</p>
+  <p class="docs-section-intro">Load the framework after your existing CSS. Wrap new content in <span class="ui-code">ui-scope</span> to apply the optional base typography safely. The paths below are plain HTML: substitute your own templating syntax (JSTL's <span class="ui-code">&lt;c:url&gt;</span>, Thymeleaf, PHP includes, an asset helper, etc.) to resolve them.</p>
   <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>&lt;link rel=&quot;stylesheet&quot; href=&quot;/static/ui-framework/dist/ui-framework.min.css&quot;&gt;
 
 &lt;main class=&quot;ui-scope&quot;&gt;
@@ -154,19 +154,19 @@
   <div class="ui-d-flex ui-flex-column ui-gap-3">
     <div class="ui-card"><div class="ui-card-body">
       <strong>Everything looks unstyled (no colors, no spacing).</strong>
-      <p class="ui-text-muted ui-mb-0">The CSS file isn't loading. Open your browser's devtools → Network tab and check that <span class="ui-code">ui-framework.min.css</span> returned 200, not 404. The path in your <span class="ui-code">&lt;link&gt;</span> tag is relative to the HTML file it's written in &mdash; a common mistake is copying a snippet without adjusting the path for where your file actually lives.</p>
+      <p class="ui-text-muted ui-mb-0">The CSS file isn't loading. Open your browser's devtools → Network tab and check that <span class="ui-code">ui-framework.min.css</span> returned 200, not 404. The path in your <span class="ui-code">&lt;link&gt;</span> tag is relative to the HTML file it's written in. A common mistake is copying a snippet without adjusting the path for where your file actually lives.</p>
     </div></div>
     <div class="ui-card"><div class="ui-card-body">
       <strong>Clicking a button does nothing (modal, dropdown, tabs, etc.).</strong>
-      <p class="ui-text-muted ui-mb-0">The JavaScript file isn't loaded, or it's loaded <em>before</em> the HTML it needs to scan. Make sure <span class="ui-code">&lt;script src="...ui-framework.min.js"&gt;</span> comes right before <span class="ui-code">&lt;/body&gt;</span>, after all the markup it controls. Also check the browser console for errors &mdash; a JS error earlier on the page can stop the rest of the script from running.</p>
+      <p class="ui-text-muted ui-mb-0">The JavaScript file isn't loaded, or it's loaded <em>before</em> the HTML it needs to scan. Make sure <span class="ui-code">&lt;script src="...ui-framework.min.js"&gt;</span> comes right before <span class="ui-code">&lt;/body&gt;</span>, after all the markup it controls. Also check the browser console for errors: a JS error earlier on the page can stop the rest of the script from running.</p>
     </div></div>
     <div class="ui-card"><div class="ui-card-body">
       <strong>A component's opening/closing ID doesn't match.</strong>
-      <p class="ui-text-muted ui-mb-0">Things like <span class="ui-code">data-ui-modal-open="#myModal"</span> must exactly match the target's <span class="ui-code">id="myModal"</span>, including the <span class="ui-code">#</span>. A typo here fails silently &mdash; no error, the button just does nothing.</p>
+      <p class="ui-text-muted ui-mb-0">Things like <span class="ui-code">data-ui-modal-open="#myModal"</span> must exactly match the target's <span class="ui-code">id="myModal"</span>, including the <span class="ui-code">#</span>. A typo here fails silently: no error, the button just does nothing.</p>
     </div></div>
     <div class="ui-card"><div class="ui-card-body">
       <strong>A checkbox/radio/switch still looks like a plain browser checkbox.</strong>
-      <p class="ui-text-muted ui-mb-0">The <span class="ui-code">&lt;label&gt;</span> must come <em>immediately</em> after the <span class="ui-code">&lt;input&gt;</span> in the HTML (see <a href="components.html#selection">Selection</a>) &mdash; the styling is applied via a CSS sibling selector, so anything in between (a wrapping <span class="ui-code">&lt;div&gt;</span>, extra whitespace-only elements) breaks it.</p>
+      <p class="ui-text-muted ui-mb-0">The <span class="ui-code">&lt;label&gt;</span> must come <em>immediately</em> after the <span class="ui-code">&lt;input&gt;</span> in the HTML (see <a href="components.html#selection">Selection</a>). The styling is applied via a CSS sibling selector, so anything in between (a wrapping <span class="ui-code">&lt;div&gt;</span>, extra whitespace-only elements) breaks it.</p>
     </div></div>
     <div class="ui-card"><div class="ui-card-body">
       <strong>A floating label isn't floating.</strong>
@@ -174,7 +174,7 @@
     </div></div>
     <div class="ui-card"><div class="ui-card-body">
       <strong>Content I added with JavaScript doesn't work (new modal, new tabs, etc.).</strong>
-      <p class="ui-text-muted ui-mb-0">The framework only scans the page once, when it first loads. If your own script inserts new HTML afterward, call <span class="ui-code">UI.init(theNewElement)</span> to wire it up &mdash; see <a href="javascript.html#initialization">Initialization</a>.</p>
+      <p class="ui-text-muted ui-mb-0">The framework only scans the page once, when it first loads. If your own script inserts new HTML afterward, call <span class="ui-code">UI.init(theNewElement)</span> to wire it up. See <a href="javascript.html#initialization">Initialization</a>.</p>
     </div></div>
   </div>
 </section>

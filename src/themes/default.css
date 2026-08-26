@@ -1,5 +1,5 @@
 /* ==========================================================================
- * Theme — default
+ * Theme: default
  *
  * The neutral starting point: a blue primary, grey-blue neutrals, and
  * comfortable rather than dense sizing. Load this when a project has no
@@ -7,7 +7,7 @@
  *
  * It exists mainly as proof that the theme layer is real. Swap
  * `themes/forest.css` for `themes/default.css` in a layout and every screen
- * changes — no component CSS is touched, because a theme is only tokens.
+ * changes -- no component CSS is touched, because a theme is only tokens.
  * ========================================================================== */
 
 :root {

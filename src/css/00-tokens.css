@@ -45,8 +45,8 @@
 
   /* Application chrome: the stage tag, the navigation rail and the standing
      notice bar in 32-chrome.css. These were reachable only from a theme, so
-     an app that loaded the bundle alone — which THEMING.md says is enough,
-     and which every docs page does — got a sidebar with no background and
+     an app that loaded the bundle alone -- which THEMING.md says is enough,
+     and which every docs page does -- got a sidebar with no background and
      text the same colour as the page. Defaults belong here; a theme still
      overrides them, exactly like every other token. */
   --ui-stage-1: #2563eb; --ui-stage-1-soft: #eff6ff; --ui-stage-1-line: #dbeafe;

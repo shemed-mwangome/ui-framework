@@ -1094,7 +1094,7 @@
   UI.multiselect = {
     build: build,
     refresh: refresh,
-    /** Force a remote option list to reload — after the parent field changes. */
+    /** Force a remote option list to reload -- after the parent field changes. */
     load: function (target) {
       var select = typeof target === "string" ? UI.q(target) : target;
       if (!select) return Promise.resolve();
@@ -3414,7 +3414,7 @@
   UI.register(init);
 
   UI.table = {
-    /** Re-runs the current query/page — call after saving a row. */
+    /** Re-runs the current query/page -- call after saving a row. */
     refresh: function (target) {
       var wrapper = typeof target === "string" ? UI.q(target) : target;
       if (wrapper && wrapper._uiTable) wrapper._uiTable.refresh();
@@ -3923,8 +3923,8 @@
       var message = UI.escape(error.message);
       return target
         ? '<li><a href="#' + UI.escape(target) + '" data-ui-summary-link="' + UI.escape(target) + '">' +
-            label + "</a> — " + message + "</li>"
-        : "<li>" + label + " — " + message + "</li>";
+            label + "</a> -- " + message + "</li>"
+        : "<li>" + label + " -- " + message + "</li>";
     });
 
     // A standalone flex layout rather than the generic `.ui-alert` grid,
@@ -6171,13 +6171,13 @@
       refresh(element);
     },
 
-    /** Re-render without changing the data — after a container resize or a theme change. */
+    /** Re-render without changing the data -- after a container resize or a theme change. */
     refresh: function (target) {
       var element = typeof target === "string" ? UI.q(target) : target;
       if (element) refresh(element);
     },
 
-    /** Re-query a `data-ui-url` chart — after saving a record, say. */
+    /** Re-query a `data-ui-url` chart -- after saving a record, say. */
     load: function (target) {
       var element = typeof target === "string" ? UI.q(target) : target;
       if (element) load(element);

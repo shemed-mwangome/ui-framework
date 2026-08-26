@@ -9,7 +9,7 @@ All framework classes use the `ui-` prefix. Interactive behavior uses
 
 New to the framework? Open [`quick-start.html`](quick-start.html) directly in
 a browser (no server needed) to confirm it works, then read
-[`docs/getting-started.html`](docs/getting-started.html) — it includes a
+[`docs/getting-started.html`](docs/getting-started.html): it includes a
 plain-language "how it works" primer and a troubleshooting section for
 common first-time issues.
 
@@ -20,7 +20,7 @@ common first-time issues.
 1. **Single-file distribution**
    - `dist/ui-framework.css`
    - `dist/ui-framework.min.css`
-   - `dist/ui-framework.layered.css` (and `.layered.min.css`) — the same CSS
+   - `dist/ui-framework.layered.css` (and `.layered.min.css`): the same CSS
      wrapped in `@layer`, for apps that also load Bootstrap, CoreUI or an
      existing `master.css`. See [Cascade layers](#cascade-layers).
    - `dist/ui-framework.js`
@@ -98,7 +98,7 @@ it initialises components as the framework inserts them and tears them down as
 it removes them, which covers `*ngIf`, `*ngFor`, router swaps and lazy views
 without a wrapper component per widget. Load the CSS and JS as global assets
 (`angular.json` `styles` / `scripts`, or a `<script>` tag) rather than
-importing them — the bundle is a plain script that assigns `window.UI`.
+importing them. The bundle is a plain script that assigns `window.UI`.
 
 Two things to know before you build wrappers:
 
@@ -111,7 +111,7 @@ Two things to know before you build wrappers:
   or let the framework own the fetch (`data-ui-url`, remote option loading).
 
 Styles that the JavaScript generates at runtime sit outside a component's
-scoped CSS — under Angular's emulated encapsulation they carry no
+scoped CSS: under Angular's emulated encapsulation they carry no
 `_ngcontent-*` attribute. Keep `ui-framework.css` global and override with
 `ViewEncapsulation.None` or `::ng-deep`.
 
@@ -135,7 +135,7 @@ outranks a layered one, so keep your overrides in a declared layer too.
 npm test
 ```
 
-169+ tests against a real Chrome, with **no npm dependencies** — the harness
+169+ tests against a real Chrome, with **no npm dependencies**: the harness
 drives the browser over the DevTools Protocol using Node's built-in
 `WebSocket`. You need Node 18+ and a Chrome/Chromium binary; set `CHROME_PATH`
 if it lives somewhere unusual. See [`tests/README.md`](tests/README.md).
@@ -154,7 +154,7 @@ Load the CSS after your existing theme and the JavaScript before `</body>`.
 <script src="/static/ui-framework/dist/ui-framework.min.js"></script>
 ```
 
-The paths above are plain HTML — swap them for whatever your server templates
+The paths above are plain HTML. Swap them for whatever your server templates
 use (JSTL's `<c:url>`, Thymeleaf, PHP includes, a Rails/Django asset helper,
 and so on all just resolve to the same static file). See
 [`examples/jsp-integration.jsp`](examples/jsp-integration.jsp) for one worked
@@ -207,7 +207,7 @@ The documentation includes:
 
 ## Repeater
 
-A table that grows a row at a time — the control behind "add a row for every
+A table that grows a row at a time: the control behind "add a row for every
 unlicensed premise / unregistered device / unlicensed employee".
 
 ```html
@@ -236,7 +236,7 @@ unlicensed premise / unregistered device / unlicensed employee".
 ```
 
 `{i}` and `{name}` are rewritten on every add and remove, so the collection
-posts as `unlicensedPremises[0].premise` — the indexed form Spring binds to a
+posts as `unlicensedPremises[0].premise`: the indexed form Spring binds to a
 `List` without a custom binder. Removing the middle row re-indexes the
 survivors contiguously.
 
@@ -248,7 +248,7 @@ events `ui:repeater:add`, `:remove`, `:change`.
 ## Yes / No / N-A
 
 Three states, not a checkbox. "Not applicable" is a real answer in a
-compliance checklist and is materially different from "not answered" — the
+compliance checklist and is materially different from "not answered": the
 compliance rate excludes one and is blocked by the other.
 
 ```html
@@ -272,7 +272,7 @@ Load the core stylesheet, then a theme:
 <link rel="stylesheet" href="/static/ui-framework/dist/themes/default.min.css">
 ```
 
-Swapping one theme for another changes every screen — buttons, links, focus
+Swapping one theme for another changes every screen: buttons, links, focus
 rings, charts, badges, the navigation rail, the stage tags. **A theme is only
 design tokens**: no component CSS is touched and nothing needs `!important`,
 which is what makes adopting the framework in a new product a one-line change
@@ -307,7 +307,7 @@ Token-driven, so these recolour with the theme:
 | `.ui-stage` + `.ui-stage-1/2/3/4` | Phase tag above a page title |
 | `.ui-sidebar-brand` | Branded navigation rail |
 | `.ui-brandmark` | Square logo tile |
-| `.ui-notice` | Full-width standing banner — reads as chrome, not as content to action |
+| `.ui-notice` | Full-width standing banner: reads as chrome, not as content to action |
 | `.ui-badge-dot` | Adds a status dot to a badge |
 
 ## Custom tokens
@@ -379,8 +379,8 @@ keeping the real input visually hidden and keyboard-accessible.
 
 Add `data-ui-validate` to a form. Native constraints (`required`, `type`,
 `pattern`, `min`/`max`) are checked alongside cross-field rules, and messages
-render inline — a red border on the control and a short message directly
-beneath it — instead of in the browser's own bubble, which can't be styled,
+render inline: a red border on the control and a short message directly
+beneath it: instead of in the browser's own bubble, which can't be styled,
 isn't read out on submit, and disappears on scroll.
 
 ```html
@@ -401,7 +401,7 @@ isn't read out on submit, and disappears on scroll.
 </form>
 ```
 
-`data-ui-validate-summary` is optional — add it only on longer forms where a
+`data-ui-validate-summary` is optional. Add it only on longer forms where a
 single at-a-glance list of problems genuinely helps; the field-level
 highlighting works on its own without it. `data-ui-rule-after` /
 `-before` compare two date fields by `id`; register further custom rules
@@ -410,7 +410,7 @@ Override any rule's default message with `data-ui-message-<rule>`.
 
 To bind errors that only the server can catch (a duplicate email, a
 uniqueness constraint), call `UI.validate.showErrors(form, errors)` with
-`errors` as `{ fieldName: "message" }` — it applies the same inline styling
+`errors` as `{ fieldName: "message" }`: it applies the same inline styling
 and moves focus to the first invalid field.
 
 ## Security
@@ -422,8 +422,8 @@ server-supplied HTML is trusted by design, URL-scheme handling, CSRF, and what
 Two things worth knowing before you build anything:
 
 - **CSRF is automatic** if the page carries the conventional meta tags. Add
-  them once in your layout and every framework write — save-and-next, draft
-  autosave, the offline queue — sends the token:
+  them once in your layout and every framework write: save-and-next, draft
+  autosave, the offline queue, sends the token:
 
   ```html
   <meta name="csrf-token"  content="${_csrf.token}">
@@ -513,7 +513,7 @@ existing `.ui-tree` and it upgrades in place.
 `[data-ui-tree-selected]` is filled with `n / total`; a `.ui-tree-num` marked
 `data-ui-tree-total` on a group row is filled with the sum of that column
 across the group's visible children. Columns are a fixed width so numbers of
-different lengths line up — override with `--ui-tree-num-width`. Mark any
+different lengths line up. Override with `--ui-tree-num-width`. Mark any
 column past the first `.ui-tree-num-optional` and it drops out below 36rem.
 
 `UI.selectList.refresh(target)` recomputes after you replace rows;
@@ -539,7 +539,7 @@ opens a select list in a modal.
 <template id="regionPicker"> ...a .ui-tree select list... </template>
 ```
 
-Counts beside each option should be *conditional* — how many rows you would
+Counts beside each option should be *conditional*: how many rows you would
 see if you added this value to the filters already active. That is a server
 calculation, so use `data-ui-filter-src="/inspections/filters/region"` instead
 of a local template: it is fetched with the current state as query parameters
@@ -554,7 +554,7 @@ read `UI.filter.state(bar)`; set with `UI.filter.set(bar, key, values)`.
 
 ## Segmented control
 
-For a scope switch — the question the screen is answering, as opposed to a
+For a scope switch. The question the screen is answering, as opposed to a
 filter that narrows it.
 
 ```html
@@ -587,12 +587,12 @@ From script: `UI.blocker.set(button, reason)` and `UI.blocker.clear(button)`.
 ## Offline work queue
 
 `data-ui-draft` protects the form you are looking at. This protects work you
-have finished but could not send — an inspector completing premise visits with
+have finished but could not send: an inspector completing premise visits with
 no signal, an officer in a district office on one bar.
 
 ```html
 <form data-ui-offline-form data-ui-offline-url="/api/premise-visits"
-      data-ui-offline-label="Premise visit — Kariakoo"
+      data-ui-offline-label="Premise visit: Kariakoo"
       data-ui-offline-group="INSP-2026-101"
       action="/api/premise-visits" method="post">
   ...fields...
@@ -612,7 +612,7 @@ From script:
 UI.offline.queue({
     url: "/api/premise-visits",
     body: { premiseId: "P-001", outcome: "COMPLETE" },
-    label: "Premise visit — Kariakoo",
+    label: "Premise visit: Kariakoo",
     group: "INSP-2026-101"   // ordering scope
 });
 
@@ -626,14 +626,14 @@ How responses are treated, and why:
 | Response | Treatment |
 | --- | --- |
 | 2xx | Removed from the queue; `ui:offline:synced` |
-| Network failure, 408, 429, 5xx | Kept as `pending` and retried — transient |
+| Network failure, 408, 429, 5xx | Kept as `pending` and retried: transient |
 | Other 4xx | Marked `failed` and **not** retried; it will fail identically forever, and a retry loop buries the one item that needs a person |
 | 409 | Marked `conflict` and kept, with the server's detail attached; `ui:offline:conflict` |
 
 Items are sent oldest-first, and a blocked item stops the rest of *its own
 group* so a later edit never lands before the create it depends on. Storage is
 IndexedDB with a `localStorage` fallback. `resolve(id, "discard")` is the only
-path by which field data ever leaves the device unsent — deliberately a
+path by which field data ever leaves the device unsent, deliberately a
 separate, explicit act.
 
 Evidence files are out of scope: queue the metadata and upload binaries
@@ -677,7 +677,7 @@ wizard: wrap each step in `<fieldset data-ui-step>` (all but the first
 `data-ui-save-next-submit` button, which only appears on the last step.
 "Next" validates the current step's fields before advancing; by default that
 falls back to the browser's own `reportValidity()`, so nothing extra is
-required beyond marking fields `required` — but that native bubble can't be
+required beyond marking fields `required`: but that native bubble can't be
 styled, isn't read out on submit, and disappears on scroll. Add
 `data-ui-validate` to the same form and it renders those errors with the
 same inline red-border-and-message pattern documented under
@@ -730,7 +730,7 @@ draft is cleared on submit.
 fills with "Draft saved HH:MM". Listen for `ui:draft:saved`,
 `ui:draft:restored`, and `ui:draft:discarded` on the form.
 
-By default this only writes to the browser's `localStorage` — nothing is
+By default this only writes to the browser's `localStorage`. Nothing is
 sent to a server. Open devtools → Application → Local Storage to inspect it,
 or from the console: `JSON.parse(localStorage.getItem("ui-draft:<key>"))`.
 
@@ -749,7 +749,7 @@ endpoint that implements this contract:
 | `POST <url>` | Body is `{"fields": {...}, "savedAt": <ms epoch>}`; store it |
 | `DELETE <url>` | Clear the stored draft |
 
-`localStorage` is still used as an instant local cache — on load, whichever
+`localStorage` is still used as an instant local cache: on load, whichever
 of the local/server copy has the newer `savedAt` wins. Network or server
 failures are swallowed (the local draft keeps working) and reported via
 `ui:draft:sync-error` on the form, so you can surface a "saved locally only"
@@ -783,7 +783,7 @@ document.querySelector("[data-ui-date-range]")
 
 Wrap a single `<input type="text">` instead of two to post the range as one
 field. The component detects the input count and stores the combined value
-as `YYYY-MM-DD - YYYY-MM-DD`. Don't use `type="date"` here — a native date
+as `YYYY-MM-DD - YYYY-MM-DD`. Don't use `type="date"` here. A native date
 input can only hold one date and silently rejects the combined value.
 
 ```html
@@ -871,12 +871,12 @@ Add `data-ui-select` for a checkbox column and bulk-action bar
 (`data-ui-table-selection`), `data-ui-columns` for a column-visibility menu,
 and `data-ui-export="filename"` for a CSV export button that covers every
 row matching the current search and sort, not just the page on screen. The
-selection bar's count doubles as a collapse control — click it to tuck the
+selection bar's count doubles as a collapse control: click it to tuck the
 bulk-action buttons away without clearing the selection.
 
 ## Charts
 
-Dependency-free SVG charts — `bar`, `line`, `area`, `sparkline`, and `donut`
+Dependency-free SVG charts: `bar`, `line`, `area`, `sparkline`, and `donut`:
 — each rendered with a generated `aria-label` and a visually-hidden data
 table, so the numbers are available to screen readers and to print.
 
@@ -911,7 +911,7 @@ JSON data island instead:
 ```
 
 Drop `data-ui-stacked` for side-by-side grouped bars instead; add
-`data-ui-orientation="horizontal"` to either — a horizontal bar chart prints
+`data-ui-orientation="horizontal"` to either: a horizontal bar chart prints
 its category names down the left, which is usually what a "by region" or "by
 operator" breakdown wants. `data-ui-legend-toggle` lets the reader switch a
 series off; it stays listed and struck through, because hiding it would also
@@ -935,7 +935,7 @@ so every dashboard hand-rolled the same fetch-then-update.
      data-ui-error-text="Rates could not be loaded."></div>
 ```
 
-Accepted response shapes — the same ones `UI.chart.update()` takes:
+Accepted response shapes: the same ones `UI.chart.update()` takes:
 
 ```json
 [1, 2, 3]
@@ -943,20 +943,20 @@ Accepted response shapes — the same ones `UI.chart.update()` takes:
 { "labels": ["Q1", "Q2"], "series": [{ "name": "Planned", "values": [12, 19] }] }
 ```
 
-`data-ui-refresh-on` names an element whose changes re-query — usually a
+`data-ui-refresh-on` names an element whose changes re-query: usually a
 filter bar, and it listens for `ui:filter:change`, `ui:segment:change` and
 `ui:daterange:change`. The current filter state goes out as query parameters,
 so one endpoint can serve the chart and the table beside it.
 
 While loading, the chart shows a skeleton in its own shape (so the page does
 not jump when the data lands) and sets `aria-busy`. A failed request renders
-**an error state, not an empty one** — "No data to display" when the server is
+**an error state, not an empty one**: "No data to display" when the server is
 down tells the reader there is nothing to see, which is false and is the kind
 of thing that ends up in a report. Listen for `ui:chart:error` (carries the
 HTTP status) or `ui:chart:loaded`. An in-flight request is aborted when a new
 one starts, so rapid filter changes cannot let a stale response win.
 
-`UI.chart.load(target)` re-queries on demand — after saving a record, say.
+`UI.chart.load(target)` re-queries on demand, after saving a record, say.
 
 ### Clickable charts
 
@@ -973,14 +973,14 @@ None of that is true of `onclick`.
      data-ui-link-template="/inspections?region={label}"></div>
 ```
 
-Placeholders: `{label}`, `{value}`, `{series}`, `{index}`, `{seriesIndex}` —
+Placeholders: `{label}`, `{value}`, `{series}`, `{index}`, `{seriesIndex}`,
 each URL-encoded. For links that don't follow a pattern, give
 `data-ui-links="/a,/b,/c"` or a `links` array alongside `values` in the JSON
 island. `data-ui-link-target="_blank"` opens in a new tab.
 
 The chart's ARIA role changes to match: a static chart is `role="img"` with
 one description, an interactive one is `role="group"` whose links are each
-labelled — marking a group of links as an image would hide every one of them,
+labelled: marking a group of links as an image would hide every one of them,
 since an image has no interior.
 
 For a single-page application that routes rather than navigates, listen for
@@ -996,14 +996,14 @@ chart.addEventListener("ui:chart:select", function (event) {
 
 Tooltips are rendered by the framework rather than left to the browser's
 native `<title>` behaviour: a native tooltip takes about a second to appear,
-cannot be styled, and **never appears on a touch screen** — which meant a
+cannot be styled, and **never appears on a touch screen**: which meant a
 value was simply unreachable on a phone. `<title>` is still emitted as a
 fallback for print and for scripting-disabled contexts.
 
 ## Uploads
 
 A drag-and-drop dropzone with client-side size/type/count gating (the
-server must still enforce all three — this is a courtesy, not a control)
+server must still enforce all three. This is a courtesy, not a control)
 and, with `data-ui-url`, an immediate `XMLHttpRequest` upload with a real
 per-file progress bar.
 
@@ -1019,7 +1019,7 @@ per-file progress bar.
 ```
 
 Add `data-ui-upload-layout="inline"` to list selected files as wrapping
-compact chips instead of one full-width row each — better for a dropzone
+compact chips instead of one full-width row each: better for a dropzone
 that regularly holds many small files (photos, scans).
 
 ## Printing a single element

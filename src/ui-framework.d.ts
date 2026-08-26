@@ -1,5 +1,5 @@
 /*!
- * UI Framework — TypeScript definitions
+ * UI Framework: TypeScript definitions
  *
  * The bundle is a plain script that assigns `window.UI`; there is nothing to
  * import. Consume these types either by listing the package in tsconfig:
@@ -149,7 +149,7 @@ declare namespace UIFramework {
 
   interface Multiselect {
     build(select: HTMLSelectElement): void;
-    /** Unwrap back to the plain select and rebuild — after the options change. */
+    /** Unwrap back to the plain select and rebuild -- after the options change. */
     refresh(select: HTMLSelectElement): void;
     /** Force a remote option list to reload. */
     load(target: Target): Promise<void>;

@@ -276,7 +276,7 @@
   UI.multiselect = {
     build: build,
     refresh: refresh,
-    /** Force a remote option list to reload — after the parent field changes. */
+    /** Force a remote option list to reload -- after the parent field changes. */
     load: function (target) {
       var select = typeof target === "string" ? UI.q(target) : target;
       if (!select) return Promise.resolve();

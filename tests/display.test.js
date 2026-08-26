@@ -182,7 +182,7 @@ test("line chart plots a polyline across the full width", async () => {
       );
 
       // Evenly spaced across the plot, rather than the literal 0/50/100 of the
-      // old 100-unit viewBox — the plot is now inset by the axis gutter.
+      // old 100-unit viewBox -- the plot is now inset by the axis gutter.
       assert.equal(xs.length, 3);
       assert.ok(
         Math.abs((xs[1] - xs[0]) - (xs[2] - xs[1])) < 0.01,

@@ -660,7 +660,7 @@
   UI.register(init);
 
   UI.table = {
-    /** Re-runs the current query/page — call after saving a row. */
+    /** Re-runs the current query/page -- call after saving a row. */
     refresh: function (target) {
       var wrapper = typeof target === "string" ? UI.q(target) : target;
       if (wrapper && wrapper._uiTable) wrapper._uiTable.refresh();

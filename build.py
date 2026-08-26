@@ -59,7 +59,7 @@ CSS_ORDER = [
 # artefact is how a "shared" framework stops being shareable.
 #
 # A theme is only tokens, so load order between core and theme does not
-# matter for specificity — but loading the theme second is still the habit
+# matter for specificity -- but loading the theme second is still the habit
 # to teach, because it is what makes an override obvious in devtools.
 THEMES = ["default.css", "forest.css"]
 
@@ -105,7 +105,7 @@ JS_BANNER = """/*!
 """.format(version=VERSION)
 
 THEME_BANNER = """/*!
- * UI Framework v{version} — theme
+ * UI Framework v{version} theme
  * Load after ui-framework.css. A theme is only design tokens.
  */
 """.format(version=VERSION)

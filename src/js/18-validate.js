@@ -274,8 +274,8 @@
       var message = UI.escape(error.message);
       return target
         ? '<li><a href="#' + UI.escape(target) + '" data-ui-summary-link="' + UI.escape(target) + '">' +
-            label + "</a> — " + message + "</li>"
-        : "<li>" + label + " — " + message + "</li>";
+            label + "</a> -- " + message + "</li>"
+        : "<li>" + label + " -- " + message + "</li>";
     });
 
     // A standalone flex layout rather than the generic `.ui-alert` grid,

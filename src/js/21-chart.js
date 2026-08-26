@@ -1323,13 +1323,13 @@
       refresh(element);
     },
 
-    /** Re-render without changing the data — after a container resize or a theme change. */
+    /** Re-render without changing the data -- after a container resize or a theme change. */
     refresh: function (target) {
       var element = typeof target === "string" ? UI.q(target) : target;
       if (element) refresh(element);
     },
 
-    /** Re-query a `data-ui-url` chart — after saving a record, say. */
+    /** Re-query a `data-ui-url` chart -- after saving a record, say. */
     load: function (target) {
       var element = typeof target === "string" ? UI.q(target) : target;
       if (element) load(element);

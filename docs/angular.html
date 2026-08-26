@@ -45,14 +45,14 @@
 <section class="docs-hero">
   <div class="docs-kicker">Single-page frameworks</div>
   <h1 class="ui-display-2">No wrapper library. One line of setup.</h1>
-  <p class="ui-lead">This framework is markup plus <span class="ui-code">data-ui-*</span> attributes, and it exposes the two lifecycle hooks a component framework needs: initialise a subtree, tear a subtree down. Angular already tells you when those happen, so the integration is a single call &mdash; not a component per widget.</p>
+  <p class="ui-lead">This framework is markup plus <span class="ui-code">data-ui-*</span> attributes, and it exposes the two lifecycle hooks a component framework needs: initialise a subtree, tear a subtree down. Angular already tells you when those happen, so the integration is a single call, not a component per widget.</p>
 </section>
 
 <section class="docs-section" id="setup">
   <h2 class="ui-h2">Setup</h2>
   <p class="docs-section-intro">Three things, once per application. The bundle is a plain script that assigns <span class="ui-code">window.UI</span>, so it is loaded as a global asset rather than imported as a module.</p>
 
-  <p><strong>1. Load the CSS and JS as global assets</strong> in <span class="ui-code">angular.json</span>. Use the layered stylesheet if the application also loads Bootstrap, CoreUI or an existing <span class="ui-code">master.css</span> &mdash; see <a href="getting-started.html#layers">using alongside Bootstrap</a> for which build to pick.</p>
+  <p><strong>1. Load the CSS and JS as global assets</strong> in <span class="ui-code">angular.json</span>. Use the layered stylesheet if the application also loads Bootstrap, CoreUI or an existing <span class="ui-code">master.css</span>. See <a href="getting-started.html#layers">using alongside Bootstrap</a> for which build to pick.</p>
   <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>&quot;styles&quot;: [
   &quot;node_modules/ui-framework/dist/ui-framework.css&quot;
 ],
@@ -80,7 +80,7 @@ bootstrapApplication(AppComponent, appConfig)
 
 <section class="docs-section" id="observe">
   <h2 class="ui-h2">Why one line is enough</h2>
-  <p class="docs-section-intro"><span class="ui-code">UI.observe(root)</span> watches for inserted and removed nodes and calls <span class="ui-code">UI.init()</span> and <span class="ui-code">UI.destroy()</span> on them, batched on an animation frame. That covers every way Angular puts markup on the page &mdash; <span class="ui-code">&#64;if</span> and <span class="ui-code">&#64;for</span>, <span class="ui-code">*ngIf</span> and <span class="ui-code">*ngFor</span>, router navigation, lazily-loaded routes, dialogs &mdash; without a directive on any template.</p>
+  <p class="docs-section-intro"><span class="ui-code">UI.observe(root)</span> watches for inserted and removed nodes and calls <span class="ui-code">UI.init()</span> and <span class="ui-code">UI.destroy()</span> on them, batched on an animation frame. That covers every way Angular puts markup on the page: <span class="ui-code">&#64;if</span> and <span class="ui-code">&#64;for</span>, <span class="ui-code">*ngIf</span> and <span class="ui-code">*ngFor</span>, router navigation, lazily-loaded routes, dialogs: without a directive on any template.</p>
   <p>Teardown matters as much as setup. Components register cleanup with <span class="ui-code">UI.cleanup()</span>, and some of them attach listeners outside their own subtree: an open dropdown or picker registers a capture-phase <span class="ui-code">scroll</span> handler on <span class="ui-code">window</span> so it can reposition. Destroying a route without releasing that leaves a handler running on every scroll for the life of the page. The observer releases it for you.</p>
   <div class="ui-alert ui-alert-info">
     <div class="ui-alert-icon">i</div>
@@ -105,7 +105,7 @@ bootstrapApplication(AppComponent, appConfig)
   &lt;input type=&quot;date&quot; formControlName=&quot;issuedDate&quot;&gt;
 &lt;/div&gt;</code></pre></div>
 
-  <p>That works because of what the components dispatch on the control they own. Angular&rsquo;s built-in value accessors each listen for one specific event, and a widget that fires the wrong one updates the DOM while leaving the form model untouched &mdash; the field looks filled and submits empty. The framework fires the pair a browser fires for a real edit:</p>
+  <p>That works because of what the components dispatch on the control they own. Angular&rsquo;s built-in value accessors each listen for one specific event, and a widget that fires the wrong one updates the DOM while leaving the form model untouched: the field looks filled and submits empty. The framework fires the pair a browser fires for a real edit:</p>
 
   <div class="ui-table-responsive">
     <table class="ui-table ui-table-sm">
@@ -128,7 +128,7 @@ bootstrapApplication(AppComponent, appConfig)
   <div class="ui-alert ui-alert-warning">
     <div class="ui-alert-icon">!</div>
     <div><div class="ui-alert-title">Setting a masked value from code does not notify the form</div>
-    <p class="ui-alert-message"><span class="ui-code">UI.mask.set(field, value)</span> writes the formatted value straight to the field without dispatching anything, on the assumption that code which sets a value already knows it did. Under Angular, prefer setting the <span class="ui-code">FormControl</span> instead &mdash; or call <span class="ui-code">UI.fireChange(field)</span> afterwards if you must write to the DOM.</p></div>
+    <p class="ui-alert-message"><span class="ui-code">UI.mask.set(field, value)</span> writes the formatted value straight to the field without dispatching anything, on the assumption that code which sets a value already knows it did. Under Angular, prefer setting the <span class="ui-code">FormControl</span> instead: or call <span class="ui-code">UI.fireChange(field)</span> afterwards if you must write to the DOM.</p></div>
   </div>
 
   <p class="ui-mb-0">Server-side validation errors bind through <span class="ui-code">UI.validate.showErrors()</span>, which accepts either shape a JSON error body usually takes:</p>
@@ -159,7 +159,7 @@ ngOnInit() {
 
 <section class="docs-section" id="services">
   <h2 class="ui-h2">Wrapping the imperative API</h2>
-  <p class="docs-section-intro">The parts of the framework you call rather than declare &mdash; confirmations, toasts, modals &mdash; are worth a thin injectable so components depend on a typed service instead of a global. There is nothing to re-implement; these are a few lines each.</p>
+  <p class="docs-section-intro">The parts of the framework you call rather than declare: confirmations, toasts, modals: are worth a thin injectable so components depend on a typed service instead of a global. There is nothing to re-implement; these are a few lines each.</p>
   <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>&#64;Injectable({ providedIn: 'root' })
 export class UiDialog {
   private zone = inject(NgZone);
@@ -187,7 +187,7 @@ export class UiDialog {
 
 <section class="docs-section" id="css">
   <h2 class="ui-h2">Scoped CSS and generated markup</h2>
-  <p class="docs-section-intro">Angular&rsquo;s emulated view encapsulation works by stamping a <span class="ui-code">_ngcontent-*</span> attribute onto the elements in a component&rsquo;s template, and rewriting that component&rsquo;s styles to match it. Markup the framework generates at runtime &mdash; a table toolbar, a multiselect panel, a toast &mdash; never passes through that template, so it carries no such attribute and component-scoped rules do not reach it.</p>
+  <p class="docs-section-intro">Angular&rsquo;s emulated view encapsulation works by stamping a <span class="ui-code">_ngcontent-*</span> attribute onto the elements in a component&rsquo;s template, and rewriting that component&rsquo;s styles to match it. Markup the framework generates at runtime: a table toolbar, a multiselect panel, a toast: never passes through that template, so it carries no such attribute and component-scoped rules do not reach it.</p>
   <p class="ui-mb-0">Keep <span class="ui-code">ui-framework.css</span> where it is, in the global <span class="ui-code">styles</span> array, and put overrides for generated markup either in a global stylesheet or in a component that sets <span class="ui-code">encapsulation: ViewEncapsulation.None</span>. Reaching for <span class="ui-code">::ng-deep</span> works too, but it is deprecated and global in effect regardless of how it reads.</p>
 </section>
 

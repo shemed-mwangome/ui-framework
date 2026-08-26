@@ -56,7 +56,7 @@
 
 <section class="docs-section" id="api">
   <h2 class="ui-h2">Public APIs</h2>
-  <p class="docs-section-intro">Everything hangs off the global <span class="ui-code">UI</span> object. Most components also work purely through <span class="ui-code">data-ui-*</span> attributes with no JavaScript calls at all &mdash; these methods are for programmatic control.</p>
+  <p class="docs-section-intro">Everything hangs off the global <span class="ui-code">UI</span> object. Most components also work purely through <span class="ui-code">data-ui-*</span> attributes with no JavaScript calls at all: these methods are for programmatic control.</p>
   <div class="ui-table-responsive"><table class="ui-table ui-table-striped"><thead><tr><th>API</th><th>Purpose</th></tr></thead><tbody>
     <tr><td><span class="ui-code">UI.init(root)</span></td><td>Initialize components within newly inserted HTML</td></tr>
     <tr><td><span class="ui-code">UI.q(selector, root)</span> / <span class="ui-code">UI.qa(selector, root)</span></td><td>Scoped <span class="ui-code">querySelector</span> / <span class="ui-code">querySelectorAll</span> (returns an array), defaulting <span class="ui-code">root</span> to <span class="ui-code">document</span></td></tr>
@@ -228,11 +228,11 @@ document.querySelector(&quot;[data-ui-table]&quot;)
     <tr><td><span class="ui-code">ui:locale:changed</span></td><td><span class="ui-code">UI.i18n.setLocale()</span> was called</td></tr>
     <tr><td><span class="ui-code">ui:destroyed</span></td><td><span class="ui-code">UI.destroy()</span> ran on a subtree</td></tr>
 
-    <tr><td><span class="ui-code">ui:modal:shown</span> / <span class="ui-code">ui:modal:hidden</span></td><td>the modal</td><td>&mdash;</td></tr>
-    <tr><td><span class="ui-code">ui:offcanvas:shown</span> / <span class="ui-code">ui:offcanvas:hidden</span></td><td>the offcanvas root</td><td>&mdash;</td></tr>
-    <tr><td><span class="ui-code">ui:tab:shown</span></td><td>the activated tab</td><td>&mdash;</td></tr>
-    <tr><td><span class="ui-code">ui:collapse:shown</span> / <span class="ui-code">ui:collapse:hidden</span></td><td>the panel</td><td>&mdash;</td></tr>
-    <tr><td><span class="ui-code">ui:alert:close</span> / <span class="ui-code">ui:alert:closed</span></td><td>the alert / <span class="ui-code">document</span></td><td>&mdash;</td></tr>
+    <tr><td><span class="ui-code">ui:modal:shown</span> / <span class="ui-code">ui:modal:hidden</span></td><td>the modal</td><td>: </td></tr>
+    <tr><td><span class="ui-code">ui:offcanvas:shown</span> / <span class="ui-code">ui:offcanvas:hidden</span></td><td>the offcanvas root</td><td>: </td></tr>
+    <tr><td><span class="ui-code">ui:tab:shown</span></td><td>the activated tab</td><td>: </td></tr>
+    <tr><td><span class="ui-code">ui:collapse:shown</span> / <span class="ui-code">ui:collapse:hidden</span></td><td>the panel</td><td>: </td></tr>
+    <tr><td><span class="ui-code">ui:alert:close</span> / <span class="ui-code">ui:alert:closed</span></td><td>the alert / <span class="ui-code">document</span></td><td>: </td></tr>
     <tr><td><span class="ui-code">ui:daterange:change</span></td><td>the <span class="ui-code">[data-ui-date-range]</span> container</td><td><span class="ui-code">{ start, end }</span> (Date or null)</td></tr>
     <tr><td><span class="ui-code">ui:datepicker:change</span></td><td>the <span class="ui-code">[data-ui-date-picker]</span> container</td><td><span class="ui-code">{ value }</span> (Date or null)</td></tr>
     <tr><td><span class="ui-code">ui:stepper:change</span></td><td>the stepper form</td><td><span class="ui-code">{ step, total }</span></td></tr>

@@ -16,7 +16,7 @@ Load the core stylesheet, then a theme:
 <link rel="stylesheet" href="/static/ui-framework/dist/themes/forest.min.css">
 ```
 
-Swap `forest` for `default` and every screen changes — buttons, links, focus
+Swap `forest` for `default` and every screen changes: buttons, links, focus
 rings, charts, badges, the navigation rail, the stage tags. That is the whole
 mechanism.
 
@@ -49,7 +49,7 @@ is required.
 ### When would you touch `build.py`?
 
 Only when you want *this repository* to publish your theme in `dist/themes/`
-for other projects to consume — then add the filename to `THEMES` and run
+for other projects to consume: then add the filename to `THEMES` and run
 `python3 build.py`. The `THEMES` list exists to minify the worked examples this
 repo ships. It is not a registry a theme must be entered in before it works.
 
@@ -57,7 +57,7 @@ repo ships. It is not a registry a theme must be entered in before it works.
 
 The framework's defaults are declared at `:root` and so are yours. Equal
 specificity means **source order decides**. A theme linked *before* the bundle
-loses every token to the defaults and appears to do nothing — no warning, the
+loses every token to the defaults and appears to do nothing: no warning, the
 page just looks unthemed.
 
 If you cannot control the order (a parent layout or a Tiles definition owns the
@@ -113,7 +113,7 @@ right and the framework looks like it was made for you.
 
 ## Three things worth knowing before you pick colours
 
-**Neutrals are not neutral.** Give greys a cast that agrees with the primary —
+**Neutrals are not neutral.** Give greys a cast that agrees with the primary:
 slate against green, warm grey against red. True `#808080` next to a strong
 primary reads as a default nobody chose. This one change does more for how
 considered a palette looks than the primary itself.
@@ -132,7 +132,7 @@ commit, not after someone reports it.
 ## Dark mode
 
 A theme that sets brand tokens at `:root` overrides the framework's own dark
-block — so if you want dark mode, the theme has to supply it too:
+block: so if you want dark mode, the theme has to supply it too:
 
 ```css
 [data-ui-theme="dark"] {
@@ -143,7 +143,7 @@ block — so if you want dark mode, the theme has to supply it too:
 ```
 
 Both shipped themes do this. Omit it and a theme switch produces light-mode
-brand colours on a dark surface — technically working, visibly wrong.
+brand colours on a dark surface, technically working, visibly wrong.
 
 ---
 

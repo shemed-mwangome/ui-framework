@@ -19,7 +19,7 @@ Every string the framework interpolates into generated markup passes through
 `UI.escape()`, which escapes `& < > " '`.
 
 **Both quote characters matter.** Until 1.12.0 `UI.escape()` set `textContent`
-on a detached element and read back `innerHTML` — the well-known trick, and
+on a detached element and read back `innerHTML`: the well-known trick, and
 wrong for this use. The HTML serialiser escapes `&`, `<` and `>` in a text
 node but has no reason to touch quotes, because in text content they are not
 special. Every one of the framework's own call sites, however, interpolates
@@ -38,7 +38,7 @@ fixed by escaping explicitly.
 If you generate markup yourself, use `UI.escape()` for anything that did not
 originate as a literal in your own source.
 
-### Trust boundaries — where the framework hands you the loaded gun
+### Trust boundaries: where the framework hands you the loaded gun
 
 Three features insert **server-supplied HTML** into the page by design. They
 are not vulnerabilities; they are the documented contract, in the same way
@@ -60,14 +60,14 @@ by your own templates from data your own server already trusts.
 ### URL schemes
 
 `UI.escape()` makes a URL safe to sit inside an attribute. It says nothing
-about what the URL *does* — `javascript:` and `data:` URIs execute when
+about what the URL *does*: `javascript:` and `data:` URIs execute when
 followed.
 
 Since charts can load from `data-ui-url`, a link target can arrive in a server
 response (`links` in the JSON island, or `data-ui-links`). Every generated
 `href` therefore passes through `UI.safeUrl()`, which allows relative URLs,
 fragments and query strings unchanged, permits `http`, `https`, `mailto`,
-`tel` and `ftp`, and rejects everything else — returning `null` so the mark
+`tel` and `ftp`, and rejects everything else: returning `null` so the mark
 renders without a link rather than with a dangerous one.
 
 Obfuscation is handled: control characters and whitespace are stripped before
@@ -82,7 +82,7 @@ consequences, both bad and neither visible: the source file became *binary* to
 searches and code review; and the guard itself became fragile, because any
 editor, formatter or transfer step that normalises control characters would
 have turned it off without failing a single test. It is now a character-code
-scan — `stripUrlNoise()` compares `charCodeAt(i)` against 32 and 127. No regex,
+scan: `stripUrlNoise()` compares `charCodeAt(i)` against 32 and 127. No regex,
 no escape sequences, nothing that can be lost in transit.
 
 The general rule for this codebase: **a security check must not depend on a
@@ -92,8 +92,8 @@ survive a copy-paste, it will eventually be silently disabled.
 ### What is *not* sanitised
 
 The framework does **not** ship an HTML sanitiser and does not attempt to
-clean untrusted markup. If you need to render user-authored HTML — a rich-text
-field, an operator's response to a finding — sanitise it server-side or with a
+clean untrusted markup. If you need to render user-authored HTML: a rich-text
+field, an operator's response to a finding: sanitise it server-side or with a
 dedicated library. Escaping and sanitising are different problems and this
 library only does the first.
 
@@ -103,8 +103,8 @@ library only does the first.
 
 ### CSRF
 
-Components that write on the user's behalf — the save-and-next form, draft
-autosave, the offline queue — send the CSRF token automatically. `UI.http`
+Components that write on the user's behalf: the save-and-next form, draft
+autosave, the offline queue, send the CSRF token automatically. `UI.http`
 reads it per request from the conventional meta tags:
 
 ```html
@@ -124,7 +124,7 @@ Safe methods (`GET`, `HEAD`) do not carry the token.
 
 ### Credentials
 
-All requests use `credentials: "same-origin"` — explicitly, though it is also
+All requests use `credentials: "same-origin"`: explicitly, though it is also
 the Fetch default. The framework never sends `credentials: "include"`, so it
 will not attach cookies to a cross-origin request.
 
@@ -157,7 +157,7 @@ what the form contains.
 Consequences you must design around:
 
 - **Do not enable `data-ui-draft` on a form containing anything you would not
-  write to disk in plain text** — identity-document numbers, bank details, a
+  write to disk in plain text**: identity-document numbers, bank details, a
   password field. There is no field-level opt-out; the control is whether you
   put the attribute on the form.
 - **Clear both on sign-out**, especially on shared or kiosk devices. Call
@@ -169,7 +169,7 @@ Consequences you must design around:
 - `UI.offline.resolve(id, "discard")` is the only path by which queued data
   leaves the device unsent. It is deliberately a separate, explicit act.
 
-Evidence files are **not** stored by the offline queue — only the metadata.
+Evidence files are **not** stored by the offline queue, only the metadata.
 Binaries need a separate resumable upload path.
 
 ---
@@ -186,7 +186,7 @@ Checked, nothing found:
   key.
 - **No `document.write`.**
 - **No regular expression evaluated against user input with nested
-  quantifiers** — no ReDoS surface.
+  quantifiers**, no ReDoS surface.
 - **No third-party runtime.** Nothing is loaded from a CDN, so there is no
   supply-chain surface at run time and no subresource integrity to manage.
 
@@ -198,8 +198,8 @@ Recorded so they are not "fixed" later by someone reading a scanner report.
 
 **"Fifteen modules leak document-level listeners."** They do not. Those
 listeners are registered once when the module evaluates, not per element, so
-an AJAX swap adds nothing. The one genuine leak of that shape —
-`UI.floatPanel`'s capture-phase scroll handler — is released through
+an AJAX swap adds nothing. The one genuine leak of that shape:
+`UI.floatPanel`'s capture-phase scroll handler: is released through
 `UI.cleanup()`.
 
 **"Several `fetch()` calls omit `credentials` and so break authentication."**
@@ -208,7 +208,7 @@ on same-origin requests either way. The calls are now explicit for clarity,
 not for correctness.
 
 **"`data-ui-link-template` allows `javascript:`."** It did; it no longer does.
-Note that the template itself is author-controlled — the reason this mattered
+Note that the template itself is author-controlled. The reason this mattered
 is the *data* path (`links` from a fetched response), not the attribute.
 
 ---
@@ -222,11 +222,11 @@ The framework cannot enforce these; your application must.
    positioning (`UI.floatPanel`, chart sizing), so either allow
    `style-src 'unsafe-inline'` or adopt a nonce/hash strategy for styles.
 2. **Serve `dist/` with a long cache lifetime and a version query string**, as
-   the docs do — the bundle contains no secrets.
+   the docs do, the bundle contains no secrets.
 3. **Set `X-Content-Type-Options: nosniff`** so a JSON endpoint feeding a
    chart cannot be coerced into being interpreted as HTML.
 4. **Escape on the server for the three HTML-fragment features** in §1.
-5. **Clear client storage on sign-out** — §3.
+5. **Clear client storage on sign-out**, §3.
 
 ---
 

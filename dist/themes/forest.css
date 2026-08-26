@@ -1,15 +1,15 @@
 /*!
- * UI Framework v1.17.0 — theme
+ * UI Framework v1.17.0 theme
  * Load after ui-framework.css. A theme is only design tokens.
  */
 /* ==========================================================================
- * Theme — forest
+ * Theme: forest
  *
  * A green primary with slate neutrals and dense, back-office sizing. Built
  * for internal registers that are read all day: more rows on screen rather
  * than larger ones.
  *
- * Shipped as a worked example of a complete theme — a real project would
+ * Shipped as a worked example of a complete theme -- a real project would
  * copy this or `default.css`, change the values, and keep the file in its
  * own repository or here. See THEMING.md.
  * ========================================================================== */
@@ -31,7 +31,7 @@
 
   /* --------------------------------------------------------- neutrals
    *
-   * Slate, not grey — the neutrals carry a blue cast. Against a green
+   * Slate, not grey -- the neutrals carry a blue cast. Against a green
    * primary that reads as considered; true grey next to green reads as a
    * default nobody chose. This is the single change that does most to
    * make a palette look deliberate.
