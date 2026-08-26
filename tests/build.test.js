@@ -30,6 +30,11 @@ test("dist/ is up to date with src/", () => {
   try {
     cpSync(join(ROOT, "src"), join(scratch, "src"), { recursive: true });
     cpSync(join(ROOT, "build.py"), join(scratch, "build.py"));
+    // build.py reads the version out of package.json, so the scratch copy
+    // needs it too. Without it the rebuild died on a FileNotFoundError and
+    // this test failed for that reason instead of ever comparing anything --
+    // it could not have caught a stale dist/ if one existed.
+    cpSync(join(ROOT, "package.json"), join(scratch, "package.json"));
     execFileSync("python3", ["build.py"], { cwd: scratch, stdio: "pipe" });
 
     for (const file of [
@@ -156,9 +161,17 @@ test("every var() reference resolves to a property defined somewhere in the bund
   // token, so the check is bundle-wide rather than tokens-only. What it does
   // catch is a typo'd or deleted property name silently falling back to
   // nothing.
+  //
+  // "Falling back to nothing" is the operative part: `var(--ui-font-size, 1rem)`
+  // names a token a theme *may* set and states what to do when it does not, so
+  // it is not a dangling reference. Only bare `var(--x)` is.
   const allCss = read("dist/ui-framework.css");
   const defined = new Set([...allCss.matchAll(/(--ui-[a-z0-9-]+)\s*:/g)].map((m) => m[1]));
-  const used = new Set([...allCss.matchAll(/var\((--ui-[a-z0-9-]+)/g)].map((m) => m[1]));
+  const used = new Set(
+    [...allCss.matchAll(/var\((--ui-[a-z0-9-]+)\s*([,)])/g)]
+      .filter((m) => m[2] === ")")
+      .map((m) => m[1])
+  );
 
   const missing = [...used].filter((name) => !defined.has(name));
   assert.deepEqual(

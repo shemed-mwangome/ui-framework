@@ -1,5 +1,5 @@
 /*!
- * UI Framework v1.16.1
+ * UI Framework v1.17.0
  * Dependency-free JavaScript bundle.
  * License: MIT
  */
@@ -8,7 +8,7 @@
 
   var UI = window.UI || {};
 
-  UI.version = "1.16.1";
+  UI.version = "1.17.0";
   UI._initializers = UI._initializers || [];
 
   UI.q = function (selector, root) {
@@ -56,6 +56,26 @@
       cancelable: true,
       detail: detail || {}
     }));
+  };
+
+  /**
+   * Announces that a widget wrote a new value into a form field.
+   *
+   * Assigning to `input.value` from script fires nothing, so every widget
+   * that writes on the user's behalf has to say so itself. These used to
+   * dispatch `change` alone, which is what a native `<select>` fires and is
+   * enough for a plain page -- but a text input is different. Angular's
+   * DefaultValueAccessor binds to `input`, and React implements onChange on
+   * it too, so a date chosen from the calendar reached the DOM and never
+   * reached the form model: the field looked filled and submitted empty.
+   *
+   * Dispatching both is what a browser does for a real edit, so listeners
+   * that only observe one are unaffected.
+   */
+  UI.fireChange = function (element) {
+    if (!element) return;
+    element.dispatchEvent(new Event("input", { bubbles: true }));
+    element.dispatchEvent(new Event("change", { bubbles: true }));
   };
 
   /**
@@ -1452,12 +1472,12 @@
       state.startInput.value = (state.rangeStart && state.rangeEnd)
         ? DU.formatISODate(state.rangeStart) + SINGLE_INPUT_SEPARATOR + DU.formatISODate(state.rangeEnd)
         : "";
-      state.startInput.dispatchEvent(new Event("change", { bubbles: true }));
+      UI.fireChange(state.startInput);
     } else {
       state.startInput.value = state.rangeStart ? DU.formatISODate(state.rangeStart) : "";
       state.endInput.value = state.rangeEnd ? DU.formatISODate(state.rangeEnd) : "";
-      state.startInput.dispatchEvent(new Event("change", { bubbles: true }));
-      state.endInput.dispatchEvent(new Event("change", { bubbles: true }));
+      UI.fireChange(state.startInput);
+      UI.fireChange(state.endInput);
     }
     UI.emit(state.container, "ui:daterange:change", { start: state.rangeStart, end: state.rangeEnd });
   }
@@ -1811,7 +1831,7 @@
 
   function applyValue(state) {
     state.input.value = state.value ? DU.formatISODate(state.value) : "";
-    state.input.dispatchEvent(new Event("change", { bubbles: true }));
+    UI.fireChange(state.input);
     UI.emit(state.container, "ui:datepicker:change", { value: state.value });
   }
 
@@ -3456,7 +3476,7 @@
       } else {
         fields[0].value = values[0];
       }
-      fields[0].dispatchEvent(new Event("change", { bubbles: true }));
+      UI.fireChange(fields[0]);
     });
   }
 
@@ -7870,7 +7890,7 @@
    *
    * `{i}` in a name or id is replaced with the row index and renumbered
    * on every add and remove, so the collection posts as
-   * `unlicensedPremises[0].premise` — the indexed form Spring binds to a
+   * `unlicensedPremises[0].premise`  the indexed form Spring binds to a
    * List without any custom binder. Getting this wrong is the usual
    * reason a hand-rolled repeater silently drops every row but the last.
    */

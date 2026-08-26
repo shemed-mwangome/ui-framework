@@ -43,7 +43,7 @@
       } else {
         fields[0].value = values[0];
       }
-      fields[0].dispatchEvent(new Event("change", { bubbles: true }));
+      UI.fireChange(fields[0]);
     });
   }
 

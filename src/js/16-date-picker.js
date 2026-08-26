@@ -79,7 +79,7 @@
 
   function applyValue(state) {
     state.input.value = state.value ? DU.formatISODate(state.value) : "";
-    state.input.dispatchEvent(new Event("change", { bubbles: true }));
+    UI.fireChange(state.input);
     UI.emit(state.container, "ui:datepicker:change", { value: state.value });
   }
 

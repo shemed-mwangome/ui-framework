@@ -82,3 +82,89 @@ test("data-ui-multiple keeps every accordion item independently open", async () 
     }
   );
 });
+
+// --------------------------------------------------------------------------
+// Application chrome
+// --------------------------------------------------------------------------
+
+test("the chrome is styled by the bundle alone, with no theme loaded", async () => {
+  // 32-chrome.css draws the nav rail, the stage tag and the notice bar
+  // entirely from tokens, but --ui-nav-*, --ui-stage-* and --ui-notice-*
+  // existed only in the shipped themes. THEMING.md says a theme is optional
+  // and the docs pages load none, so the bundle on its own produced a rail
+  // with no background and text the colour of the page. This fixture loads
+  // dist/ui-framework.css and nothing else, which is the broken condition.
+  await ui.page(
+    `<nav class="ui-sidebar ui-sidebar-brand" id="rail">
+       <a class="ui-sidebar-link ui-active" href="#" id="active">Licences</a>
+     </nav>
+     <span class="ui-stage ui-stage-1" id="stage">Planning</span>
+     <div class="ui-notice" id="notice">Scheduled maintenance on Sunday.</div>`,
+    async (page) => {
+      const transparent = (colour) =>
+        colour === "transparent" || /rgba\(0,\s*0,\s*0,\s*0\)/.test(colour);
+
+      const rail = await page.styles("#rail", ["background-color", "color"]);
+      assert.ok(!transparent(rail["background-color"]), "the nav rail must have a background");
+
+      const active = await page.styles("#active", ["background-color"]);
+      assert.ok(
+        !transparent(active["background-color"]),
+        "the active nav item must be filled, not just bold"
+      );
+
+      const stage = await page.styles("#stage", ["background-color", "color"]);
+      assert.ok(!transparent(stage["background-color"]), "a stage tag must have its fill");
+      assert.notEqual(stage.color, rail.color, "and its own text colour");
+
+      const notice = await page.styles("#notice", ["background-color"]);
+      assert.ok(!transparent(notice["background-color"]), "the notice bar must have a background");
+    }
+  );
+});
+
+test("chrome tokens keep readable contrast in dark mode", async () => {
+  // The dark stage colours are hand-picked, so this checks them rather than
+  // trusting the eye: text on its own -soft fill, composited over the dark
+  // page, must clear the WCAG AA 4.5:1 threshold for body text.
+  await ui.page(
+    `<div data-ui-theme="dark" style="background: var(--ui-surface);" id="shell">
+       <span class="ui-stage ui-stage-1" id="s1">One</span>
+       <span class="ui-stage ui-stage-2" id="s2">Two</span>
+       <span class="ui-stage ui-stage-3" id="s3">Three</span>
+       <span class="ui-stage ui-stage-4" id="s4">Four</span>
+       <div class="ui-notice" id="notice">Notice</div>
+     </div>`,
+    async (page) => {
+      const ratios = await page.evaluate(() => {
+        const parse = (value) => value.match(/[\d.]+/g).map(Number);
+        const channel = (c) => {
+          const s = c / 255;
+          return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+        };
+        const luminance = ([r, g, b]) =>
+          0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+
+        // Composite a possibly-translucent fill over the page behind it.
+        const over = (fg, bg) => {
+          const a = fg.length > 3 ? fg[3] : 1;
+          return [0, 1, 2].map((i) => fg[i] * a + bg[i] * (1 - a));
+        };
+
+        const page_ = parse(getComputedStyle(document.getElementById("shell")).backgroundColor);
+        return ["s1", "s2", "s3", "s4", "notice"].map((id) => {
+          const style = getComputedStyle(document.getElementById(id));
+          const bg = over(parse(style.backgroundColor), page_);
+          const fg = over(parse(style.color), bg);
+          const light = Math.max(luminance(fg), luminance(bg));
+          const dark = Math.min(luminance(fg), luminance(bg));
+          return { id, ratio: (light + 0.05) / (dark + 0.05) };
+        });
+      });
+
+      ratios.forEach(({ id, ratio }) =>
+        assert.ok(ratio >= 4.5, id + " contrast is " + ratio.toFixed(2) + ":1, below AA 4.5:1")
+      );
+    }
+  );
+});

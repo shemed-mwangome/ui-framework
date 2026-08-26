@@ -1,5 +1,87 @@
 # Changelog
 
+## 1.17.0 — 2026-08-26
+
+### Fixed — a picked date never reached a reactive framework's form model
+
+The date picker and date range wrote the chosen date into their `<input>` and
+announced it with a `change` event alone. That is enough for a plain page and
+enough for a `<select>`, but not for a text input under Angular or React:
+Angular's `DefaultValueAccessor` binds to `input`, and React implements
+`onChange` on `input` too. So a date chosen from the calendar was in the DOM,
+visible to the user, and invisible to the form model — the field looked filled
+and submitted empty. The draft restore banner had the same defect for the same
+reason.
+
+All three now go through a new `UI.fireChange(element)`, which dispatches a
+bubbling `input` followed by a bubbling `change`, the pair a browser fires for
+a real edit. Anything listening for only one of them is unaffected.
+
+One behaviour comes along with it: picking a date now triggers the draft
+autosave, which listens on `input` only and so had been ignoring date fields
+entirely. Validation and the save-and-next dirty flag already bound both
+events, so neither changes.
+
+### Added — TypeScript definitions
+
+`src/ui-framework.d.ts`, copied to `dist/` by the build and pointed at by
+`package.json`'s `types`. Hand-written against `src/js` rather than generated,
+and deliberately partial: `UI._initializers` and the `_ui*` element expandos
+are implementation detail and are not declared. Consume with `"types":
+["ui-framework"]` in tsconfig, or a triple-slash reference.
+
+### Fixed — two build defects that made the build tests unable to fail
+
+`stamp_docs()` only ever walked `docs/`, so `quick-start.html` — the page the
+README sends a first-time reader to — was never re-stamped and had been asking
+for `?v=1.10.0` against a 1.16 bundle. And the "dist/ is up to date" test
+rebuilt into a scratch directory without copying `package.json`, which
+`build.py` has needed since 1.16.2 to read the version; the rebuild died on a
+`FileNotFoundError` and the test failed on that instead of ever comparing a
+byte. It could not have caught a stale `dist/`, which is precisely what it was
+there to catch — and `dist/` was in fact stale, shipping 1.16.1 banners on a
+1.16.2 release.
+
+### Fixed — the application chrome had no colours without a theme
+
+`32-chrome.css` draws the navigation rail, the stage tag and the standing
+notice bar entirely from `--ui-nav-*`, `--ui-stage-*` and `--ui-notice-*`, and
+those twenty tokens were defined only in the shipped themes — never in
+`00-tokens.css`. Since `THEMING.md` states a theme is optional, and every docs
+page loads none, the documented configuration produced a rail with no
+background and text the same colour as the page behind it. They now have
+defaults in the bundle like every other token group, with dark-mode
+counterparts, and a theme still overrides them. The dark stage colours are
+checked against the WCAG AA contrast threshold rather than picked by eye.
+
+### Fixed — eight tests that had been failing since 1.10.0
+
+The suite was red on arrival: 14 failures, of which 12 were tests left behind
+by changes to the code they cover, and had been failing for six releases.
+
+- Six chart tests asserted absolute SVG geometry — `height === 40`, points at
+  `0,50,100`, horizontal bars at `x === 0`. Adding axes in 1.10.0 moved the
+  plot into a 1280×200 viewBox behind a gutter, so every one of those numbers
+  changed while the scaling they were checking stayed correct. They now assert
+  proportions: a bar for 10 of 40 is a quarter of the tallest, wherever the
+  plot happens to start. Two of the six also encoded behaviour that was
+  deliberately replaced: an all-zero donut now draws the bare track instead of
+  segments at 0%, and a chart with no values gets a labelled empty state
+  instead of being left untouched.
+- Two teardown tests read `dataset.uiReady`, a guard renamed to per-component
+  names (`uiTableReady`) — they had been comparing `undefined` against
+  `undefined`'s expectation and could never pass.
+- The `var()` check counted `var(--ui-font-size, 1rem)` as a dangling
+  reference. A fallback is the documented way to name a token a theme *may*
+  set; only a bare `var(--x)` falls back to nothing, and that is still caught.
+
+Separately, the harness measured an element for clicking in the same turn as
+it scrolled it into view. Scroll events dispatch asynchronously and
+`UI.floatPanel` repositions an open overlay from a capture-phase scroll
+listener, so a click into a picker panel could be aimed at where the panel
+used to be. That was one intermittent failure per five full runs; the
+measurement now happens a frame after the scroll.
+
 ## 1.16.2 — 2026-08-21
 
 ### Fixed — the theming docs told you to rebuild the framework, which is wrong

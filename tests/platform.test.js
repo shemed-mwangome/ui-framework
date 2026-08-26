@@ -195,10 +195,14 @@ test("UI.destroy runs cleanups and clears ready guards so markup re-inits", asyn
         let cleanupRan = false;
         UI.cleanup(wrapper, () => (cleanupRan = true));
 
-        const guardBefore = wrapper.dataset.uiReady;
+        // The guard is per-component (uiTableReady), not the generic uiReady
+        // four modules once shared. UI.destroy()'s /^ui[A-Za-z]*Ready$/ is
+        // what makes the name irrelevant to teardown -- but not to this test,
+        // which read the old name and so compared undefined against undefined.
+        const guardBefore = wrapper.dataset.uiTableReady;
         UI.destroy(document.getElementById("host"));
 
-        return { cleanupRan, guardBefore, guardAfter: wrapper.dataset.uiReady };
+        return { cleanupRan, guardBefore, guardAfter: wrapper.dataset.uiTableReady };
       });
 
       assert.equal(result.guardBefore, "true");
@@ -311,7 +315,7 @@ test("destroy-then-init rebuilds a component whose attribute is on the root", as
         UI.init(table); // the element itself, not its parent
         return {
           toolbars: document.querySelectorAll(".ui-table-toolbar").length,
-          guard: table.dataset.uiReady,
+          guard: table.dataset.uiTableReady,
           rows: document.querySelectorAll("tbody tr").length,
         };
       });

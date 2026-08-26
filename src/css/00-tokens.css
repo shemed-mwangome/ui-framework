@@ -43,6 +43,27 @@
   --ui-warning-soft: #fffbeb;
   --ui-info-soft: #ecfeff;
 
+  /* Application chrome: the stage tag, the navigation rail and the standing
+     notice bar in 32-chrome.css. These were reachable only from a theme, so
+     an app that loaded the bundle alone — which THEMING.md says is enough,
+     and which every docs page does — got a sidebar with no background and
+     text the same colour as the page. Defaults belong here; a theme still
+     overrides them, exactly like every other token. */
+  --ui-stage-1: #2563eb; --ui-stage-1-soft: #eff6ff; --ui-stage-1-line: #dbeafe;
+  --ui-stage-2: #16a34a; --ui-stage-2-soft: #f0fdf4; --ui-stage-2-line: #dcfce7;
+  --ui-stage-3: #7c3aed; --ui-stage-3-soft: #f5f3ff; --ui-stage-3-line: #ede9fe;
+  --ui-stage-4: #d97706; --ui-stage-4-soft: #fffbeb; --ui-stage-4-line: #fde68a;
+
+  --ui-nav-bg: #1e293b;
+  --ui-nav-fg: #cbd5e1;
+  --ui-nav-fg-muted: #64748b;
+  --ui-nav-active-bg: var(--ui-primary);
+  --ui-nav-active-fg: #ffffff;
+
+  --ui-notice-bg: #fffbeb;
+  --ui-notice-fg: #78350f;
+  --ui-notice-line: #fde68a;
+
   /* Status lexicon text -- readable-on-soft-background variants of the base
      success/warning colours, plus suspended's own burnt-orange accent (kept
      out of --ui-warning so it doesn't collide with under-review's amber).
@@ -127,6 +148,22 @@
   --ui-status-active-text: #4ade80;
   --ui-status-suspended-text: #fb923c;
   --ui-status-suspended-accent: #fb923c;
+
+  /* Chrome in dark. The stage tags need both halves moved: the pale -soft
+     fills inverted, or a phase tag stays a white chip on a dark page, and the
+     text lifted to the 400-weight shades the status tokens above already use,
+     or it is a dark blue on a dark blue. The nav rail only needs to go darker
+     than the surface it now sits against. */
+  --ui-stage-1: #60a5fa; --ui-stage-1-soft: rgba(37, 99, 235, .16);  --ui-stage-1-line: rgba(37, 99, 235, .34);
+  --ui-stage-2: #4ade80; --ui-stage-2-soft: rgba(22, 163, 74, .16);  --ui-stage-2-line: rgba(22, 163, 74, .34);
+  --ui-stage-3: #a78bfa; --ui-stage-3-soft: rgba(124, 58, 237, .16); --ui-stage-3-line: rgba(124, 58, 237, .34);
+  --ui-stage-4: #fbbf24; --ui-stage-4-soft: rgba(217, 119, 6, .16);  --ui-stage-4-line: rgba(217, 119, 6, .34);
+
+  --ui-nav-bg: #0b1220;
+
+  --ui-notice-bg: #2a2413;
+  --ui-notice-fg: #fcd34d;
+  --ui-notice-line: #4a3f1a;
 
   --ui-shadow-1: 0 1px 2px rgba(0, 0, 0, .20);
   --ui-shadow-2: 0 4px 12px rgba(0, 0, 0, .28);

@@ -61,9 +61,22 @@ test("bar chart renders one rect per value, scaled to the maximum", async () => 
         }))
       );
 
+      // Asserted as proportions of the tallest bar, not in absolute units.
+      // These used to read `height === 40` because the chart drew into a
+      // 40-unit viewBox; adding axes in 1.10.0 moved the plot to 190 units
+      // and the assertions have been failing ever since without the scaling
+      // itself ever being wrong.
       assert.equal(bars.length, 3);
-      assert.equal(bars[2].height, 40, "the largest value should fill the chart height");
-      assert.equal(bars[0].height, 10, "10 of 40 is a quarter of the height");
+      const tallest = bars[2].height;
+      assert.ok(tallest > 0, "the largest value should fill the chart height");
+      assert.ok(
+        Math.abs(bars[0].height / tallest - 0.25) < 0.01,
+        "10 of 40 is a quarter of the height (got " + bars[0].height + " of " + tallest + ")"
+      );
+      assert.ok(
+        Math.abs(bars[1].height / tallest - 0.5) < 0.01,
+        "20 of 40 is half the height (got " + bars[1].height + " of " + tallest + ")"
+      );
       assert.equal(bars[1].title, "Feb: 20", "each bar should carry a title for hover");
     }
   );
@@ -139,13 +152,20 @@ test("donut segments are sized as percentages of the total", async () => {
 });
 
 test("donut handles an all-zero dataset without dividing by zero", async () => {
+  // A zero total now short-circuits to the bare track ring rather than
+  // emitting a segment per value at 0% each. Both avoid the division; drawing
+  // nothing over the track is the honest rendering of "no share of anything",
+  // and it is what the module has done since the total <= 0 branch landed.
   await ui.page('<div id="c" data-ui-chart="donut" data-ui-values="0,0"></div>', async (page) => {
-    const dashes = await page.evaluate(() =>
-      [...document.querySelectorAll("#c .ui-chart-segment")].map((c) =>
-        c.getAttribute("stroke-dasharray")
-      )
-    );
-    assert.deepEqual(dashes, ["0.00 100.00", "0.00 100.00"]);
+    const result = await page.evaluate(() => ({
+      segments: document.querySelectorAll("#c .ui-chart-segment").length,
+      circles: document.querySelectorAll("#c circle").length,
+      markup: document.querySelector("#c svg").outerHTML,
+    }));
+
+    assert.equal(result.segments, 0, "no value has a share of a zero total");
+    assert.equal(result.circles, 1, "the track ring should still be drawn");
+    assert.ok(!/NaN|Infinity/.test(result.markup), "no NaN should reach the markup");
   });
 });
 
@@ -157,8 +177,21 @@ test("line chart plots a polyline across the full width", async () => {
         document.querySelector("#c polyline").getAttribute("points")
       );
       const xs = points.split(" ").map((p) => parseFloat(p.split(",")[0]));
+      const width = parseFloat(
+        (await page.attr("#c svg", "viewBox")).split(" ")[2]
+      );
 
-      assert.deepEqual(xs, [0, 50, 100], "points should span 0..100 evenly");
+      // Evenly spaced across the plot, rather than the literal 0/50/100 of the
+      // old 100-unit viewBox — the plot is now inset by the axis gutter.
+      assert.equal(xs.length, 3);
+      assert.ok(
+        Math.abs((xs[1] - xs[0]) - (xs[2] - xs[1])) < 0.01,
+        "points should be evenly spaced (got " + xs.join(", ") + ")"
+      );
+      assert.ok(
+        xs[2] - xs[0] > width * 0.9,
+        "and span the full plot width (got " + (xs[2] - xs[0]) + " of " + width + ")"
+      );
       assert.equal(await page.count("#c circle"), 3, "line charts get hoverable dots");
     }
   );
@@ -222,10 +255,16 @@ test("UI.chart.update re-renders in place", async () => {
   );
 });
 
-test("a chart with no values is left alone rather than rendering an empty frame", async () => {
+test("a chart with no values renders an accessible empty state, not an empty frame", async () => {
+  // Originally this asserted the element was left untouched. It is now given
+  // a labelled empty state instead, which is the better answer: a bare <div>
+  // tells a screen-reader user nothing, where role="img" plus the label says
+  // there is a chart here and it has no data. Still no <svg> either way.
   await ui.page('<div id="c" data-ui-chart="bar" data-ui-values=""></div>', async (page) => {
-    assert.equal(await page.count("#c svg"), 0);
-    assert.equal(await page.attr("#c", "role"), null);
+    assert.equal(await page.count("#c svg"), 0, "no frame should be drawn");
+    assert.equal(await page.attr("#c", "role"), "img");
+    assert.match(await page.attr("#c", "aria-label"), /No data/i);
+    assert.equal(await page.text("#c .ui-chart-empty"), "No data to display");
   });
 });
 
@@ -260,13 +299,24 @@ test("data-ui-stacked stacks series into one bar per category", async () => {
        </script>
      </div>`,
     async (page) => {
-      const heights = await page.evaluate(() =>
-        [...document.querySelectorAll("#c rect")].map((r) => parseFloat(r.getAttribute("height")))
+      const segments = await page.evaluate(() =>
+        [...document.querySelectorAll("#c rect")].map((r) => ({
+          x: parseFloat(r.getAttribute("x")),
+          width: parseFloat(r.getAttribute("width")),
+          height: parseFloat(r.getAttribute("height")),
+        }))
       );
-      assert.equal(heights.length, 2, "one segment per series, not one bar per series");
+
+      assert.equal(segments.length, 2, "one segment per series, not one bar per series");
+      assert.equal(segments[0].x, segments[1].x, "both segments share one bar's column");
+      assert.equal(segments[0].width, segments[1].width);
+      // 10 and 20 stacked: the smaller is a third of the stack. Checked as a
+      // ratio rather than against a 40-unit total, which the axes work moved.
+      const stack = segments[0].height + segments[1].height;
       assert.ok(
-        Math.abs(heights[0] + heights[1] - 40) < 0.01,
-        "stacked segments should sum to the full chart height, the stack being the tallest"
+        Math.abs(segments[0].height / stack - 1 / 3) < 0.01,
+        "segments should be sized in proportion within the stack (got " +
+          segments.map((s) => s.height).join(" + ") + ")"
       );
     }
   );
@@ -374,8 +424,14 @@ test("data-ui-orientation=\"horizontal\" lays out a grouped multi-series bar sid
         }))
       );
       assert.equal(rects.length, 4);
-      // Horizontal bars grow from x=0 rightwards, not upwards from the foot.
-      rects.forEach((r) => assert.equal(r.x, 0, "each horizontal bar should start at x=0"));
+      // Horizontal bars grow rightwards from the value axis, not upwards from
+      // the foot. That baseline used to be x=0; since 1.10.0 the axis gutter
+      // insets it, so what matters is that every bar starts on the same line
+      // rather than which number that line happens to be.
+      const baseline = rects[0].x;
+      rects.forEach((r) =>
+        assert.equal(r.x, baseline, "each horizontal bar should start at the value axis")
+      );
       assert.ok(rects.some((r) => r.width > 0), "bars should have non-zero width");
     }
   );

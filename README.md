@@ -88,6 +88,32 @@ common first-time issues.
 - Internationalisation (`UI.i18n` / `UI.t()`) and a screen-reader announcer
   (`UI.announce()`)
 - Teardown and auto-init for AJAX-swapped regions (`UI.destroy()`, `UI.observe()`)
+- TypeScript definitions (`dist/ui-framework.d.ts`), for consuming the global
+  `UI` from a typed application
+
+## Use from Angular, React or Vue
+
+`UI.observe(document.body)`, called once at startup, is the whole integration:
+it initialises components as the framework inserts them and tears them down as
+it removes them, which covers `*ngIf`, `*ngFor`, router swaps and lazy views
+without a wrapper component per widget. Load the CSS and JS as global assets
+(`angular.json` `styles` / `scripts`, or a `<script>` tag) rather than
+importing them — the bundle is a plain script that assigns `window.UI`.
+
+Two things to know before you build wrappers:
+
+- Widgets keep the original `<select>` or `<input>` and announce every value
+  they write with a native `input` **and** `change` (`UI.fireChange()`), so
+  `formControlName` and `v-model` bind to framework markup directly.
+- Components initialise when their node is inserted. If the host framework
+  fills a `<select>`'s options or a table's rows from a later HTTP response,
+  call `UI.multiselect.refresh()` / `UI.table.refresh()` once the data lands,
+  or let the framework own the fetch (`data-ui-url`, remote option loading).
+
+Styles that the JavaScript generates at runtime sit outside a component's
+scoped CSS — under Angular's emulated encapsulation they carry no
+`_ngcontent-*` attribute. Keep `ui-framework.css` global and override with
+`ViewEncapsulation.None` or `::ng-deep`.
 
 ## Cascade layers
 

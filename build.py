@@ -201,8 +201,14 @@ def stamp_docs() -> list[str]:
 
     Version numbers are not content, so the build owns them.
     """
+    # quick-start.html sits at the repo root, not under docs/, and so was the
+    # one page this function never reached -- it was still asking for ?v=1.10.0
+    # against a 1.16 bundle. It is also the page the README sends a first-time
+    # reader to, so it is the worst one to serve from a stale cache.
+    pages = sorted((ROOT / "docs").rglob("*.html")) + [ROOT / "quick-start.html"]
+
     changed = []
-    for page in sorted((ROOT / "docs").rglob("*.html")):
+    for page in [each for each in pages if each.is_file()]:
         original = page.read_text(encoding="utf-8")
 
         text = re.sub(r"(\?v=)\d+\.\d+\.\d+", r"\g<1>" + VERSION, original)
@@ -241,6 +247,13 @@ def main() -> None:
     (dist / "ui-framework.js").write_text(js, encoding="utf-8")
     (dist / "ui-framework.min.js").write_text(compact_js(js) + "\n", encoding="utf-8")
 
+    # The types sit next to the bundle they describe, because package.json
+    # points `types` at dist/. They are hand-written, not generated, so this
+    # is a copy rather than a build step.
+    (dist / "ui-framework.d.ts").write_text(
+        (ROOT / "src/ui-framework.d.ts").read_text(encoding="utf-8"), encoding="utf-8"
+    )
+
     themes_out = dist / "themes"
     themes_out.mkdir(exist_ok=True)
     built_themes = []
@@ -261,6 +274,7 @@ def main() -> None:
         "ui-framework.layered.min.css",
         "ui-framework.js",
         "ui-framework.min.js",
+        "ui-framework.d.ts",
     ) + tuple(built_themes):
         print(" - dist/%s (%d bytes)" % (name, (dist / name).stat().st_size))
 

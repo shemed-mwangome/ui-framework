@@ -236,10 +236,25 @@ class Page {
   }
 
   async box(selector) {
+    // scrollIntoView and the measurement are deliberately in separate
+    // evaluations with a frame between them. Scrolling dispatches its event
+    // asynchronously, and UI.floatPanel repositions an open overlay from a
+    // capture-phase scroll listener -- so measuring in the same turn read the
+    // panel's pre-scroll position and the click then landed a few pixels off
+    // whatever had moved. Intermittent, and only for overlay content.
+    const found = await this.evaluate((sel) => {
+      const el = document.querySelector(sel);
+      if (!el) return false;
+      el.scrollIntoView({ block: "center", inline: "center" });
+      return true;
+    }, selector);
+    if (!found) throw new Error("Element not found: " + selector);
+
+    await this.raf();
+
     const rect = await this.evaluate((sel) => {
       const el = document.querySelector(sel);
       if (!el) return null;
-      el.scrollIntoView({ block: "center", inline: "center" });
       const r = el.getBoundingClientRect();
       return { x: r.x, y: r.y, width: r.width, height: r.height };
     }, selector);

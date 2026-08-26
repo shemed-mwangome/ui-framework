@@ -158,12 +158,12 @@
       state.startInput.value = (state.rangeStart && state.rangeEnd)
         ? DU.formatISODate(state.rangeStart) + SINGLE_INPUT_SEPARATOR + DU.formatISODate(state.rangeEnd)
         : "";
-      state.startInput.dispatchEvent(new Event("change", { bubbles: true }));
+      UI.fireChange(state.startInput);
     } else {
       state.startInput.value = state.rangeStart ? DU.formatISODate(state.rangeStart) : "";
       state.endInput.value = state.rangeEnd ? DU.formatISODate(state.rangeEnd) : "";
-      state.startInput.dispatchEvent(new Event("change", { bubbles: true }));
-      state.endInput.dispatchEvent(new Event("change", { bubbles: true }));
+      UI.fireChange(state.startInput);
+      UI.fireChange(state.endInput);
     }
     UI.emit(state.container, "ui:daterange:change", { start: state.rangeStart, end: state.rangeEnd });
   }

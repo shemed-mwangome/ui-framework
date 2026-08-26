@@ -1,9 +1,10 @@
 {
   "name": "ui-framework",
-  "version": "1.16.2",
+  "version": "1.17.0",
   "description": "A dependency-free, prefix-safe CSS and JavaScript UI framework for server-rendered and static applications.",
   "main": "dist/ui-framework.js",
   "style": "dist/ui-framework.css",
+  "types": "dist/ui-framework.d.ts",
   "files": [
     "dist",
     "src",

@@ -3,7 +3,7 @@
 
   var UI = window.UI || {};
 
-  UI.version = "1.16.2";
+  UI.version = "1.17.0";
   UI._initializers = UI._initializers || [];
 
   UI.q = function (selector, root) {
@@ -51,6 +51,26 @@
       cancelable: true,
       detail: detail || {}
     }));
+  };
+
+  /**
+   * Announces that a widget wrote a new value into a form field.
+   *
+   * Assigning to `input.value` from script fires nothing, so every widget
+   * that writes on the user's behalf has to say so itself. These used to
+   * dispatch `change` alone, which is what a native `<select>` fires and is
+   * enough for a plain page -- but a text input is different. Angular's
+   * DefaultValueAccessor binds to `input`, and React implements onChange on
+   * it too, so a date chosen from the calendar reached the DOM and never
+   * reached the form model: the field looked filled and submitted empty.
+   *
+   * Dispatching both is what a browser does for a real edit, so listeners
+   * that only observe one are unaffected.
+   */
+  UI.fireChange = function (element) {
+    if (!element) return;
+    element.dispatchEvent(new Event("input", { bubbles: true }));
+    element.dispatchEvent(new Event("change", { bubbles: true }));
   };
 
   /**

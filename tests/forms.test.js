@@ -386,6 +386,60 @@ test("UI.datePicker.clear() resets a filled value back to its placeholder", asyn
   );
 });
 
+test("picking a date fires input as well as change, in that order", async () => {
+  // A widget that writes input.value from script has to announce it, and
+  // `change` alone is not enough: Angular's DefaultValueAccessor and React's
+  // onChange both bind to `input` on a text input. Firing only `change` meant
+  // a picked date sat in the DOM and never reached the form model -- the
+  // field looked filled and submitted empty. Driven through a real click on a
+  // day cell rather than by calling applyValue, because it is the user path
+  // that was broken.
+  await ui.page(
+    `<div class="ui-date-picker" id="single" data-ui-date-picker data-ui-placeholder="Select date">
+       <input type="date" name="reviewDate" value="2026-06-15">
+     </div>`,
+    async (page) => {
+      await page.recordEvents(["input", "change"]);
+      await page.click("#single .ui-date-range-trigger");
+      await page.click('#single [data-ui-date="2026-06-18"]');
+
+      assert.equal(await page.value("#single input"), "2026-06-18");
+      const fired = (await page.recordedEvents()).map((event) => event.name);
+      assert.deepEqual(
+        fired,
+        ["input", "change"],
+        "a pick must fire input then change, the way a browser does for a real edit"
+      );
+    }
+  );
+});
+
+test("picking a range fires input on both ends", async () => {
+  await ui.page(
+    // Seeded so the calendar opens on a known month rather than on today's.
+    `<div class="ui-date-range" id="range" data-ui-date-range data-ui-placeholder="Select range">
+       <input type="date" name="start" value="2026-06-02">
+       <input type="date" name="end" value="2026-06-04">
+     </div>`,
+    async (page) => {
+      await page.evaluate(() => {
+        window.__inputs = [];
+        document.querySelectorAll("#range input").forEach((el) => {
+          el.addEventListener("input", () => window.__inputs.push(el.name));
+        });
+      });
+
+      await page.click("#range .ui-date-range-trigger");
+      await page.click('#range [data-ui-date="2026-06-10"]');
+      await page.click('#range [data-ui-date="2026-06-18"]');
+
+      const names = await page.evaluate(() => window.__inputs);
+      assert.ok(names.includes("start"), "the start input must announce its value");
+      assert.ok(names.includes("end"), "the end input must announce its value");
+    }
+  );
+});
+
 test("errors clear as the user fixes them, and the form then submits", async () => {
   await ui.page(APPLICATION_FORM, async (page) => {
     await page.click("#submit");
