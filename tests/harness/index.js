@@ -77,6 +77,36 @@ function useHarness(options) {
       }
     },
 
+    /**
+     * Opens a real page from the repo, e.g. "/docs/components.html".
+     *
+     * The fixtures above build a document around a snippet, which is the right
+     * shape for testing a component in isolation but cannot test the docs
+     * site itself -- its chrome, its search index and its generated
+     * navigation only exist in the built pages.
+     */
+    async visit(path, fn) {
+      const page = await Page.create(state.browser.connection);
+      try {
+        await page.goto(state.server.origin + path);
+        assert.deepEqual(
+          page.errors(),
+          [],
+          "Page threw during load:\n" + page.errors().join("\n")
+        );
+
+        await fn(page);
+
+        assert.deepEqual(
+          page.errors(),
+          [],
+          "Page threw an uncaught exception:\n" + page.errors().join("\n")
+        );
+      } finally {
+        await page.close();
+      }
+    },
+
     /** Like `page()`, but without the framework bundle -- for load-order specs. */
     async bare(bodyHtml, fn, fixtureOptions) {
       return this.page(bodyHtml, fn, Object.assign({ bare: true }, fixtureOptions));

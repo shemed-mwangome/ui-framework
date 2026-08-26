@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en" data-ui-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Angular & SPAs · UI Framework</title>
+  <link rel="stylesheet" href="../dist/ui-framework.css?v=1.17.0">
+  <link rel="stylesheet" href="assets/docs.css?v=1.17.0">
+</head>
+<body class="ui-scope docs-body">
+  <header class="docs-topbar">
+    <div class="ui-d-flex ui-align-center ui-gap-2">
+      <button class="ui-btn ui-btn-icon ui-btn-ghost docs-mobile-menu" type="button" data-docs-menu aria-label="Open documentation menu">☰</button>
+      <a class="docs-brand" href="index.html"><span class="docs-logo">UI</span><span>UI Framework</span></a>
+    </div>
+    <div class="ui-d-flex ui-align-center ui-gap-2">
+      <button class="docs-search-trigger" type="button" data-docs-search aria-label="Search documentation">
+        <span class="docs-search-trigger-text">Search docs</span>
+        <span class="docs-kbd-group"><kbd class="docs-kbd">Ctrl</kbd><kbd class="docs-kbd">K</kbd></span>
+      </button>
+      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.17.0</span>
+      <button class="ui-btn ui-btn-sm ui-btn-outline-secondary" type="button" data-ui-theme-toggle>Theme</button>
+    </div>
+  </header>
+  <div class="docs-layout">
+    <aside class="docs-sidebar">
+      <div class="docs-sidebar-title">Documentation</div>
+      <a class="docs-sidebar-link" href="index.html">Overview</a>
+      <a class="docs-sidebar-link" href="getting-started.html">Getting started</a>
+      <a class="docs-sidebar-link" href="layout.html">Layout &amp; grid</a>
+      <a class="docs-sidebar-link" href="components.html">Components</a>
+      <a class="docs-sidebar-link" href="theming.html">Theming</a>
+      <a class="docs-sidebar-link" href="utilities.html">Utilities</a>
+      <a class="docs-sidebar-link" href="javascript.html">JavaScript API</a>
+      <a class="docs-sidebar-link active" href="angular.html">Angular &amp; SPAs</a>
+      <div class="docs-sidebar-title">Examples</div>
+      <a class="docs-sidebar-link" href="examples/dashboard.html">Dashboard</a>
+      <a class="docs-sidebar-link" href="examples/form.html">Form workflow</a>
+      <a class="docs-sidebar-link" href="examples/application-form.html">Application form</a>
+      <a class="docs-sidebar-link" href="examples/record-register.html">Record register</a>
+      <a class="docs-sidebar-link" href="examples/login.html">Login page</a>
+    </aside>
+    <main class="docs-main">
+<!-- docs:content -->
+<section class="docs-hero">
+  <div class="docs-kicker">Single-page frameworks</div>
+  <h1 class="ui-display-2">No wrapper library. One line of setup.</h1>
+  <p class="ui-lead">This framework is markup plus <span class="ui-code">data-ui-*</span> attributes, and it exposes the two lifecycle hooks a component framework needs: initialise a subtree, tear a subtree down. Angular already tells you when those happen, so the integration is a single call &mdash; not a component per widget.</p>
+</section>
+
+<section class="docs-section" id="setup">
+  <h2 class="ui-h2">Setup</h2>
+  <p class="docs-section-intro">Three things, once per application. The bundle is a plain script that assigns <span class="ui-code">window.UI</span>, so it is loaded as a global asset rather than imported as a module.</p>
+
+  <p><strong>1. Load the CSS and JS as global assets</strong> in <span class="ui-code">angular.json</span>. Use the layered stylesheet if the application also loads Bootstrap, CoreUI or an existing <span class="ui-code">master.css</span> &mdash; see <a href="getting-started.html#layers">using alongside Bootstrap</a> for which build to pick.</p>
+  <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>&quot;styles&quot;: [
+  &quot;node_modules/ui-framework/dist/ui-framework.css&quot;
+],
+&quot;scripts&quot;: [
+  &quot;node_modules/ui-framework/dist/ui-framework.min.js&quot;
+]</code></pre></div>
+
+  <p><strong>2. Start the observer</strong> once the application has bootstrapped.</p>
+  <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>// main.ts
+bootstrapApplication(AppComponent, appConfig)
+  .then(() =&gt; UI.observe(document.body));</code></pre></div>
+
+  <p>In a large application, register it outside Angular&rsquo;s zone so DOM insertions do not each schedule a change-detection pass:</p>
+  <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>export function provideUiFramework(): EnvironmentProviders {
+  return makeEnvironmentProviders([
+    provideAppInitializer(() =&gt; {
+      const zone = inject(NgZone);
+      zone.runOutsideAngular(() =&gt; UI.observe(document.body));
+    }),
+  ]);
+}</code></pre></div>
+
+  <p class="ui-mb-0"><strong>3. Pick up the types</strong> by adding the package to <span class="ui-code">tsconfig.app.json</span>: <span class="ui-code">&quot;types&quot;: [&quot;ui-framework&quot;]</span>. See <a href="#types">TypeScript</a> below.</p>
+</section>
+
+<section class="docs-section" id="observe">
+  <h2 class="ui-h2">Why one line is enough</h2>
+  <p class="docs-section-intro"><span class="ui-code">UI.observe(root)</span> watches for inserted and removed nodes and calls <span class="ui-code">UI.init()</span> and <span class="ui-code">UI.destroy()</span> on them, batched on an animation frame. That covers every way Angular puts markup on the page &mdash; <span class="ui-code">&#64;if</span> and <span class="ui-code">&#64;for</span>, <span class="ui-code">*ngIf</span> and <span class="ui-code">*ngFor</span>, router navigation, lazily-loaded routes, dialogs &mdash; without a directive on any template.</p>
+  <p>Teardown matters as much as setup. Components register cleanup with <span class="ui-code">UI.cleanup()</span>, and some of them attach listeners outside their own subtree: an open dropdown or picker registers a capture-phase <span class="ui-code">scroll</span> handler on <span class="ui-code">window</span> so it can reposition. Destroying a route without releasing that leaves a handler running on every scroll for the life of the page. The observer releases it for you.</p>
+  <div class="ui-alert ui-alert-info">
+    <div class="ui-alert-icon">i</div>
+    <div><div class="ui-alert-title">Initialising twice is harmless</div>
+    <p class="ui-alert-message">Every module guards on a <span class="ui-code">data-ui-*-ready</span> flag, so an extra <span class="ui-code">UI.init()</span> over already-built markup does nothing. You never need to check whether a region has been initialised before calling it.</p></div>
+  </div>
+</section>
+
+<section class="docs-section" id="forms">
+  <h2 class="ui-h2">Binding to reactive forms</h2>
+  <p class="docs-section-intro">Every input-bearing component keeps the real <span class="ui-code">&lt;select&gt;</span> or <span class="ui-code">&lt;input&gt;</span> you wrote and drives it, rather than replacing it with a widget of its own. So <span class="ui-code">formControlName</span>, <span class="ui-code">ngModel</span> and <span class="ui-code">[(ngModel)]</span> bind directly to framework markup, with no <span class="ui-code">ControlValueAccessor</span> to write.</p>
+
+  <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>&lt;select multiple data-ui-multiselect data-display=&quot;tags&quot;
+        data-placeholder=&quot;Select reviewers&quot; data-search=&quot;true&quot;
+        formControlName=&quot;reviewerIds&quot;&gt;
+  &#64;for (reviewer of reviewers(); track reviewer.uuid) {
+    &lt;option [value]=&quot;reviewer.uuid&quot;&gt;{{ reviewer.name }}&lt;/option&gt;
+  }
+&lt;/select&gt;
+
+&lt;div class=&quot;ui-date-picker&quot; data-ui-date-picker data-ui-placeholder=&quot;Select date&quot;&gt;
+  &lt;input type=&quot;date&quot; formControlName=&quot;issuedDate&quot;&gt;
+&lt;/div&gt;</code></pre></div>
+
+  <p>That works because of what the components dispatch on the control they own. Angular&rsquo;s built-in value accessors each listen for one specific event, and a widget that fires the wrong one updates the DOM while leaving the form model untouched &mdash; the field looks filled and submits empty. The framework fires the pair a browser fires for a real edit:</p>
+
+  <div class="ui-table-responsive">
+    <table class="ui-table ui-table-sm">
+      <thead>
+        <tr><th>Angular accessor</th><th>Applies to</th><th>Listens for</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="ui-code">DefaultValueAccessor</span></td><td>text input, textarea</td><td><span class="ui-code">input</span>, <span class="ui-code">blur</span></td></tr>
+        <tr><td><span class="ui-code">NumberValueAccessor</span></td><td><span class="ui-code">input[type=number]</span></td><td><span class="ui-code">input</span>, <span class="ui-code">blur</span></td></tr>
+        <tr><td><span class="ui-code">SelectControlValueAccessor</span></td><td><span class="ui-code">select</span></td><td><span class="ui-code">change</span>, <span class="ui-code">blur</span></td></tr>
+        <tr><td><span class="ui-code">SelectMultipleControlValueAccessor</span></td><td><span class="ui-code">select[multiple]</span></td><td><span class="ui-code">change</span>, <span class="ui-code">blur</span></td></tr>
+        <tr><td><span class="ui-code">CheckboxControlValueAccessor</span></td><td><span class="ui-code">input[type=checkbox]</span></td><td><span class="ui-code">change</span>, <span class="ui-code">blur</span></td></tr>
+        <tr><td><span class="ui-code">RadioControlValueAccessor</span></td><td><span class="ui-code">input[type=radio]</span></td><td><span class="ui-code">change</span>, <span class="ui-code">blur</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Note the split: a <span class="ui-code">&lt;select&gt;</span> is driven by <span class="ui-code">change</span>, but a <em>text</em> input is driven by <span class="ui-code">input</span> and ignores <span class="ui-code">change</span> entirely. That is why the date picker and date range, which write a formatted date into a text input, dispatch both. Anywhere a component writes a value on the user&rsquo;s behalf it calls <span class="ui-code">UI.fireChange(element)</span>, which emits a bubbling <span class="ui-code">input</span> followed by a bubbling <span class="ui-code">change</span>.</p>
+
+  <div class="ui-alert ui-alert-warning">
+    <div class="ui-alert-icon">!</div>
+    <div><div class="ui-alert-title">Setting a masked value from code does not notify the form</div>
+    <p class="ui-alert-message"><span class="ui-code">UI.mask.set(field, value)</span> writes the formatted value straight to the field without dispatching anything, on the assumption that code which sets a value already knows it did. Under Angular, prefer setting the <span class="ui-code">FormControl</span> instead &mdash; or call <span class="ui-code">UI.fireChange(field)</span> afterwards if you must write to the DOM.</p></div>
+  </div>
+
+  <p class="ui-mb-0">Server-side validation errors bind through <span class="ui-code">UI.validate.showErrors()</span>, which accepts either shape a JSON error body usually takes:</p>
+  <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>this.api.save(form.value).subscribe({
+  error: (response) =&gt; {
+    UI.validate.showErrors(this.formEl.nativeElement, response.error.errors);
+    // { licenceNo: &quot;Already taken&quot; }  or  [{ field, message }, ...]
+  },
+});</code></pre></div>
+</section>
+
+<section class="docs-section" id="async">
+  <h2 class="ui-h2">Options and rows that arrive late</h2>
+  <p class="docs-section-intro">This is the one place the integration needs help. A component builds when its element is inserted. If the element is inserted empty and Angular fills it from an HTTP response a moment later, the component built against nothing.</p>
+  <p>Every affected component exposes a refresh that rebuilds it from the current DOM:</p>
+  <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>reviewers = signal&lt;Reviewer[]&gt;([]);
+
+ngOnInit() {
+  this.api.reviewers().subscribe((list) =&gt; {
+    this.reviewers.set(list);
+    // After Angular has rendered the new &lt;option&gt; elements.
+    afterNextRender(() =&gt; UI.multiselect.refresh(this.select.nativeElement));
+  });
+}</code></pre></div>
+  <p><span class="ui-code">UI.table.refresh()</span>, <span class="ui-code">UI.selectList.refresh()</span>, <span class="ui-code">UI.chart.refresh()</span> and <span class="ui-code">UI.combobox</span> behave the same way.</p>
+  <p class="ui-mb-0">The alternative is to not have the problem: several components can fetch their own data, in which case the framework owns both the request and the render and Angular never touches the rows. See <span class="ui-code">data-ui-url</span> on <a href="components.html">tables and charts</a>, and remote option loading on the multiselect and combobox. For a table of any size this is usually the better arrangement anyway, because search, sort and paging then happen server-side.</p>
+</section>
+
+<section class="docs-section" id="services">
+  <h2 class="ui-h2">Wrapping the imperative API</h2>
+  <p class="docs-section-intro">The parts of the framework you call rather than declare &mdash; confirmations, toasts, modals &mdash; are worth a thin injectable so components depend on a typed service instead of a global. There is nothing to re-implement; these are a few lines each.</p>
+  <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>&#64;Injectable({ providedIn: 'root' })
+export class UiDialog {
+  private zone = inject(NgZone);
+
+  /** Resolves true if the user confirmed. */
+  confirm(options: UIFramework.ConfirmOptions): Promise&lt;boolean&gt; {
+    return UI.confirm(options).then((ok) =&gt; this.zone.run(() =&gt; ok));
+  }
+
+  toast(options: UIFramework.ToastOptions): void {
+    UI.toast.show(options);
+  }
+}</code></pre></div>
+  <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>async remove(licence: Licence) {
+  const ok = await this.dialog.confirm({
+    title: 'Revoke licence',
+    message: `Revoke ${licence.number}? This cannot be undone.`,
+    confirmText: 'Revoke',
+    variant: 'danger',
+  });
+  if (ok) this.api.revoke(licence.uuid).subscribe();
+}</code></pre></div>
+  <p class="ui-mb-0">The <span class="ui-code">NgZone.run()</span> is belt-and-braces while zone.js is in play, and required once the application moves to zoneless change detection. The same wrapping applies to any framework callback that ends up updating a signal or a component field.</p>
+</section>
+
+<section class="docs-section" id="css">
+  <h2 class="ui-h2">Scoped CSS and generated markup</h2>
+  <p class="docs-section-intro">Angular&rsquo;s emulated view encapsulation works by stamping a <span class="ui-code">_ngcontent-*</span> attribute onto the elements in a component&rsquo;s template, and rewriting that component&rsquo;s styles to match it. Markup the framework generates at runtime &mdash; a table toolbar, a multiselect panel, a toast &mdash; never passes through that template, so it carries no such attribute and component-scoped rules do not reach it.</p>
+  <p class="ui-mb-0">Keep <span class="ui-code">ui-framework.css</span> where it is, in the global <span class="ui-code">styles</span> array, and put overrides for generated markup either in a global stylesheet or in a component that sets <span class="ui-code">encapsulation: ViewEncapsulation.None</span>. Reaching for <span class="ui-code">::ng-deep</span> works too, but it is deprecated and global in effect regardless of how it reads.</p>
+</section>
+
+<section class="docs-section" id="types">
+  <h2 class="ui-h2">TypeScript</h2>
+  <p class="docs-section-intro">The package ships hand-written definitions at <span class="ui-code">dist/ui-framework.d.ts</span>, declaring the global <span class="ui-code">UI</span> object and a <span class="ui-code">UIFramework</span> namespace for the option and result types. They are deliberately partial: internal fields are not declared, so if something does not typecheck it is probably not public API.</p>
+  <div class="docs-code-wrap"><button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" data-docs-copy>Copy</button><pre class="ui-code-block"><code>// tsconfig.app.json
+{
+  &quot;compilerOptions&quot;: {
+    &quot;types&quot;: [&quot;ui-framework&quot;]
+  }
+}</code></pre></div>
+  <p class="ui-mb-0">Or, if you would rather not touch <span class="ui-code">types</span>, add <span class="ui-code">/// &lt;reference types=&quot;ui-framework&quot; /&gt;</span> to a single file in the project.</p>
+</section>
+
+<section class="docs-section" id="others">
+  <h2 class="ui-h2">React, Vue and Svelte</h2>
+  <p class="docs-section-intro">Nothing on this page is Angular-specific except the names. The framework holds no reference to any host framework; it reacts to nodes entering and leaving the document, which is a property of the DOM rather than of Angular.</p>
+  <p class="ui-mb-0">React implements <span class="ui-code">onChange</span> on the native <span class="ui-code">input</span> event, so the same <span class="ui-code">UI.fireChange()</span> pair that satisfies Angular satisfies React, and Vue&rsquo;s <span class="ui-code">v-model</span> listens for <span class="ui-code">input</span> on text fields and <span class="ui-code">change</span> on selects. Call <span class="ui-code">UI.observe(document.body)</span> once after mount, and use the same refresh calls when data arrives after render.</p>
+</section>
+<!-- /docs:content -->
+      <nav class="docs-pager"><a class="docs-pager-link" href="javascript.html"><span class="docs-pager-dir">Previous</span><span>JavaScript API</span></a><span></span></nav>
+      <footer class="docs-footer">UI Framework 1.17.0 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
+    </main>
+    <aside class="docs-toc">
+      <div class="docs-toc-inner">
+        <div class="docs-sidebar-title">On this page</div>
+        <a class="docs-toc-link" href="#setup">Setup</a>
+        <a class="docs-toc-link" href="#observe">Why one line is enough</a>
+        <a class="docs-toc-link" href="#forms">Binding to reactive forms</a>
+        <a class="docs-toc-link" href="#async">Options and rows that arrive late</a>
+        <a class="docs-toc-link" href="#services">Wrapping the imperative API</a>
+        <a class="docs-toc-link" href="#css">Scoped CSS and generated markup</a>
+        <a class="docs-toc-link" href="#types">TypeScript</a>
+        <a class="docs-toc-link" href="#others">React, Vue and Svelte</a>
+      </div>
+    </aside>
+  </div>
+  <script src="../dist/ui-framework.js?v=1.17.0"></script>
+  <script src="assets/search-index.js?v=1.17.0"></script>
+  <script src="assets/docs.js?v=1.17.0"></script>
+</body>
+</html>

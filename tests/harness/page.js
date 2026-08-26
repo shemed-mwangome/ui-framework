@@ -29,6 +29,26 @@ const KEYS = {
   PageDown: { code: "PageDown", keyCode: 34 },
 };
 
+/** CDP's modifier bitmask, by name. */
+const MODIFIERS = { alt: 1, ctrl: 2, control: 2, meta: 4, cmd: 4, shift: 8 };
+
+/**
+ * Builds a key descriptor for a single character, so `press("k", ["ctrl"])`
+ * works without every letter being listed in KEYS.
+ */
+function synthesiseKey(name) {
+  if (typeof name !== "string" || name.length !== 1) return null;
+  const upper = name.toUpperCase();
+
+  if (upper >= "A" && upper <= "Z") {
+    return { key: name, code: "Key" + upper, keyCode: upper.charCodeAt(0), text: name };
+  }
+  if (name >= "0" && name <= "9") {
+    return { key: name, code: "Digit" + name, keyCode: name.charCodeAt(0), text: name };
+  }
+  return null;
+}
+
 class Page {
   constructor(connection, sessionId, targetId) {
     this.connection = connection;
@@ -245,7 +265,12 @@ class Page {
     const found = await this.evaluate((sel) => {
       const el = document.querySelector(sel);
       if (!el) return false;
-      el.scrollIntoView({ block: "center", inline: "center" });
+      // "instant" overrides a page's `scroll-behavior: smooth`. Without it the
+      // scroll is still animating a frame later, the element is measured at
+      // its pre-scroll position -- often thousands of pixels outside the
+      // viewport -- and the click lands on whatever is at those coordinates,
+      // usually <html>. Silent: the click "succeeds" and nothing happens.
+      el.scrollIntoView({ block: "center", inline: "center", behavior: "instant" });
       return true;
     }, selector);
     if (!found) throw new Error("Element not found: " + selector);
@@ -308,21 +333,35 @@ class Page {
     await this.raf();
   }
 
+  /**
+   * `modifiers` is CDP's bitmask, but accepts names too: press("k", ["ctrl"]).
+   * Single letters and digits are synthesised, so shortcuts can be tested
+   * without adding every key on the keyboard to the table above.
+   */
   async press(keyName, modifiers) {
-    const key = KEYS[keyName];
+    const key = KEYS[keyName] || synthesiseKey(keyName);
     if (!key) throw new Error("Unknown key: " + keyName);
+
+    const mask = Array.isArray(modifiers)
+      ? modifiers.reduce((total, name) => total | (MODIFIERS[name.toLowerCase()] || 0), 0)
+      : modifiers || 0;
+
+    // A modified key must not carry `text`, or Chrome inserts the character
+    // as well as firing the shortcut -- Ctrl+K would type "k" into the field
+    // it just opened.
+    const suppressText = mask & (MODIFIERS.ctrl | MODIFIERS.meta);
+
     const base = {
       key: key.key || keyName,
       code: key.code,
       windowsVirtualKeyCode: key.keyCode,
       nativeVirtualKeyCode: key.keyCode,
-      modifiers: modifiers || 0,
+      modifiers: mask,
     };
+    const text = suppressText ? "" : key.text || "";
     await this.send(
       "Input.dispatchKeyEvent",
-      Object.assign({ type: key.text ? "keyDown" : "rawKeyDown" }, base, {
-        text: key.text || "",
-      })
+      Object.assign({ type: text ? "keyDown" : "rawKeyDown" }, base, { text })
     );
     await this.send("Input.dispatchKeyEvent", Object.assign({ type: "keyUp" }, base));
     await this.raf();

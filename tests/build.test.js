@@ -24,6 +24,21 @@ function read(relativePath) {
   return readFileSync(join(ROOT, relativePath), "utf8");
 }
 
+/** Every documentation page on disk, so a new one is covered the day it lands. */
+function allDocPages() {
+  return readdirSync(join(ROOT, "docs"))
+    .filter((name) => name.endsWith(".html"))
+    .sort()
+    .map((name) => "docs/" + name);
+}
+
+function allExamplePages() {
+  return readdirSync(join(ROOT, "docs/examples"))
+    .filter((name) => name.endsWith(".html"))
+    .sort()
+    .map((name) => "docs/examples/" + name);
+}
+
 test("dist/ is up to date with src/", () => {
   // Rebuild into a scratch copy and diff, so the check never mutates the repo.
   const scratch = mkdtempSync(join(tmpdir(), "ui-framework-build-"));
@@ -228,13 +243,10 @@ test("every docs/example page loads dist/ with a cache-busting version query", (
   // looks broken rather than out of date. Every page must ask for the
   // *current* version explicitly so a stale cache can never be mistaken for
   // a stale build.
-  const pages = [
-    "docs/index.html", "docs/getting-started.html", "docs/layout.html",
-    "docs/components.html", "docs/utilities.html", "docs/javascript.html",
-    "docs/examples/dashboard.html", "docs/examples/form.html",
-    "docs/examples/login.html", "docs/examples/application-form.html",
-    "docs/examples/record-register.html", "quick-start.html",
-  ];
+  // Discovered, not listed. The hand-written list went stale twice: once when
+  // theming.html was added and once for angular.html, and a page missing from
+  // it is a page this check silently does not cover.
+  const pages = [...allDocPages(), ...allExamplePages(), "quick-start.html"];
 
   // Scoped to href="..."/src="..." attributes specifically, not just the
   // literal string anywhere in the page -- several pages mention
@@ -257,13 +269,27 @@ test("every docs/example page loads dist/ with a cache-busting version query", (
   }
 });
 
-test("every docs page's version badge and footer match the current version", () => {
-  const pages = [
-    "docs/index.html", "docs/getting-started.html", "docs/layout.html",
-    "docs/components.html", "docs/utilities.html", "docs/javascript.html",
-  ];
+test("every docs page is reachable from every other docs page's sidebar", () => {
+  // Adding a page and linking it from only the page you were looking at is the
+  // easy mistake, and the result is a page that exists but cannot be navigated
+  // to. theming.html shipped that way.
+  const pages = readdirSync(join(ROOT, "docs")).filter((f) => f.endsWith(".html"));
 
   for (const page of pages) {
+    const html = read(join("docs", page));
+    const missing = pages.filter(
+      (other) => other !== page && !html.includes('href="' + other + '"')
+    );
+    assert.deepEqual(
+      missing,
+      [],
+      page + " sidebar does not link to: " + missing.join(", ")
+    );
+  }
+});
+
+test("every docs page's version badge and footer match the current version", () => {
+  for (const page of allDocPages()) {
     const html = read(page);
     assert.ok(
       html.includes(">v" + pkg.version + "<"),

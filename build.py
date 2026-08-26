@@ -2,6 +2,7 @@
 """Build the single-file distribution from modular source files."""
 
 from pathlib import Path
+import html
 import json
 import re
 
@@ -188,6 +189,238 @@ def layered_css(directory: Path, order: list[str], banner: str) -> str:
     return "\n".join(out)
 
 
+# ---------------------------------------------------------------- docs
+#
+# The docs pages are hand-written content wrapped in identical chrome:
+# topbar, sidebar, "on this page" rail, pager, footer, script tags. That
+# chrome used to be copy-pasted into all eight of them, so adding a page
+# meant editing nine files and any nav change meant editing eight -- which
+# is how docs/theming.html came to be missing from two of the sidebars.
+#
+# Now each page keeps only its content, between a pair of marker comments,
+# and the build regenerates everything around it from the tables below.
+# The pages stay ordinary standalone HTML that opens from disk; they just
+# stop being the place the navigation is maintained.
+
+DOCS_PAGES = [
+    ("index.html", "Overview"),
+    ("getting-started.html", "Getting started"),
+    ("layout.html", "Layout &amp; grid"),
+    ("components.html", "Components"),
+    ("theming.html", "Theming"),
+    ("utilities.html", "Utilities"),
+    ("javascript.html", "JavaScript API"),
+    ("angular.html", "Angular &amp; SPAs"),
+]
+
+DOCS_EXAMPLES = [
+    ("examples/dashboard.html", "Dashboard"),
+    ("examples/form.html", "Form workflow"),
+    ("examples/application-form.html", "Application form"),
+    ("examples/record-register.html", "Record register"),
+    ("examples/login.html", "Login page"),
+]
+
+CONTENT_OPEN = "<!-- docs:content -->"
+CONTENT_CLOSE = "<!-- /docs:content -->"
+
+
+def page_content(text: str) -> str:
+    """The authored part of a docs page.
+
+    Prefers the markers. Falls back to the <main>/<footer> boundary so a page
+    written before the markers existed migrates on its first build instead of
+    having to be edited by hand first.
+    """
+    if CONTENT_OPEN in text and CONTENT_CLOSE in text:
+        return text.split(CONTENT_OPEN, 1)[1].split(CONTENT_CLOSE, 1)[0].strip("\n")
+
+    body = re.search(
+        r'<main class="docs-main">(.*?)\s*<footer class="docs-footer">',
+        text,
+        re.DOTALL,
+    )
+    if not body:
+        raise SystemExit("cannot find the content region in a docs page")
+    return body.group(1).strip("\n")
+
+
+def page_sections(content: str) -> list[tuple[str, str]]:
+    """(id, heading) for each section, for the on-this-page rail and search."""
+    found = []
+    for match in re.finditer(
+        r'<section class="docs-section" id="([^"]+)">\s*<h2[^>]*>(.*?)</h2>',
+        content,
+        re.DOTALL,
+    ):
+        heading = re.sub(r"<[^>]+>", "", match.group(2))
+        found.append((match.group(1), " ".join(heading.split())))
+    return found
+
+
+def render_docs_page(index: int, content: str) -> str:
+    filename, label = DOCS_PAGES[index]
+    plain_label = re.sub(r"&amp;", "&", label)
+    sections = page_sections(content)
+
+    nav = "".join(
+        '\n      <a class="docs-sidebar-link%s" href="%s">%s</a>'
+        % (" active" if name == filename else "", name, text)
+        for name, text in DOCS_PAGES
+    )
+    examples = "".join(
+        '\n      <a class="docs-sidebar-link" href="%s">%s</a>' % (href, text)
+        for href, text in DOCS_EXAMPLES
+    )
+    toc = "".join(
+        '\n        <a class="docs-toc-link" href="#%s">%s</a>' % (anchor, text)
+        for anchor, text in sections
+    )
+
+    previous = DOCS_PAGES[index - 1] if index else None
+    following = DOCS_PAGES[index + 1] if index + 1 < len(DOCS_PAGES) else None
+    pager = ""
+    if previous or following:
+        left = (
+            '<a class="docs-pager-link" href="%s"><span class="docs-pager-dir">'
+            "Previous</span><span>%s</span></a>" % previous
+            if previous
+            else "<span></span>"
+        )
+        right = (
+            '<a class="docs-pager-link docs-pager-next" href="%s">'
+            '<span class="docs-pager-dir">Next</span><span>%s</span></a>' % following
+            if following
+            else "<span></span>"
+        )
+        pager = '\n      <nav class="docs-pager">%s%s</nav>' % (left, right)
+
+    return DOCS_TEMPLATE.format(
+        title=plain_label,
+        version=VERSION,
+        nav=nav,
+        examples=examples,
+        toc=toc,
+        toc_hidden="" if sections else ' hidden',
+        pager=pager,
+        open=CONTENT_OPEN,
+        close=CONTENT_CLOSE,
+        content=content,
+    )
+
+
+DOCS_TEMPLATE = """<!doctype html>
+<html lang="en" data-ui-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{title} · UI Framework</title>
+  <link rel="stylesheet" href="../dist/ui-framework.css?v={version}">
+  <link rel="stylesheet" href="assets/docs.css?v={version}">
+</head>
+<body class="ui-scope docs-body">
+  <header class="docs-topbar">
+    <div class="ui-d-flex ui-align-center ui-gap-2">
+      <button class="ui-btn ui-btn-icon ui-btn-ghost docs-mobile-menu" type="button" data-docs-menu aria-label="Open documentation menu">☰</button>
+      <a class="docs-brand" href="index.html"><span class="docs-logo">UI</span><span>UI Framework</span></a>
+    </div>
+    <div class="ui-d-flex ui-align-center ui-gap-2">
+      <button class="docs-search-trigger" type="button" data-docs-search aria-label="Search documentation">
+        <span class="docs-search-trigger-text">Search docs</span>
+        <span class="docs-kbd-group"><kbd class="docs-kbd">Ctrl</kbd><kbd class="docs-kbd">K</kbd></span>
+      </button>
+      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v{version}</span>
+      <button class="ui-btn ui-btn-sm ui-btn-outline-secondary" type="button" data-ui-theme-toggle>Theme</button>
+    </div>
+  </header>
+  <div class="docs-layout">
+    <aside class="docs-sidebar">
+      <div class="docs-sidebar-title">Documentation</div>{nav}
+      <div class="docs-sidebar-title">Examples</div>{examples}
+    </aside>
+    <main class="docs-main">
+{open}
+{content}
+{close}{pager}
+      <footer class="docs-footer">UI Framework {version} · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
+    </main>
+    <aside class="docs-toc"{toc_hidden}>
+      <div class="docs-toc-inner">
+        <div class="docs-sidebar-title">On this page</div>{toc}
+      </div>
+    </aside>
+  </div>
+  <script src="../dist/ui-framework.js?v={version}"></script>
+  <script src="assets/search-index.js?v={version}"></script>
+  <script src="assets/docs.js?v={version}"></script>
+</body>
+</html>
+"""
+
+
+def build_docs() -> list[str]:
+    """Regenerate every documentation page's chrome around its content."""
+    changed = []
+    for index, (filename, _) in enumerate(DOCS_PAGES):
+        page = ROOT / "docs" / filename
+        # Building dist/ must not require docs/ to be present. The "dist/ is up
+        # to date" test rebuilds into a scratch directory holding only src/,
+        # build.py and package.json, so an unconditional read here fails the
+        # whole build and the test reports that instead of comparing a byte.
+        if not page.is_file():
+            continue
+        original = page.read_text(encoding="utf-8")
+        rebuilt = render_docs_page(index, page_content(original))
+        if rebuilt != original:
+            page.write_text(rebuilt, encoding="utf-8")
+            changed.append("docs/" + filename)
+    return changed
+
+
+def build_search_index() -> None:
+    """Emit the search corpus the Ctrl+K palette filters.
+
+    Written as a script that assigns a global rather than as JSON fetched at
+    runtime, because the docs are meant to open straight off the filesystem
+    and `fetch()` of a file:// URL is blocked by every browser.
+    """
+    # Same reason as build_docs(): a bundle-only build has no docs/ to index.
+    assets = ROOT / "docs" / "assets"
+    if not assets.is_dir():
+        return
+
+    entries = []
+    for filename, label in DOCS_PAGES:
+        page = ROOT / "docs" / filename
+        if not page.is_file():
+            continue
+        text = page.read_text(encoding="utf-8")
+        content = page_content(text)
+        plain_label = re.sub(r"&amp;", "&", label)
+
+        entries.append({"page": plain_label, "title": plain_label,
+                        "href": filename, "kind": "page", "text": ""})
+
+        for anchor, heading in page_sections(content):
+            body = content.split('id="%s"' % anchor, 1)[1][:1200]
+            body = re.sub(r"<[^>]+>", " ", body)
+            # The slice starts mid-tag, just after the id's closing quote, so
+            # the first thing left after stripping tags is that tag's own ">".
+            body = " ".join(html.unescape(body).split()).lstrip("> ")[:220]
+            entries.append({
+                "page": plain_label, "title": heading,
+                "href": "%s#%s" % (filename, anchor),
+                "kind": "section", "text": body,
+            })
+
+    payload = json.dumps(entries, ensure_ascii=False, separators=(",", ":"))
+    (ROOT / "docs" / "assets" / "search-index.js").write_text(
+        "/* Generated by build.py. Do not edit. */\n"
+        "window.DOCS_INDEX = %s;\n" % payload,
+        encoding="utf-8",
+    )
+
+
 def stamp_docs() -> list[str]:
     """Rewrite the version each docs page displays and cache-busts with.
 
@@ -200,12 +433,19 @@ def stamp_docs() -> list[str]:
     "doesn't work" only for people who visited before.
 
     Version numbers are not content, so the build owns them.
+
+    Only reaches the pages the build does *not* regenerate wholesale: the
+    standalone examples and quick-start.html. The eight documentation pages
+    get their version from the chrome template instead.
+
+    quick-start.html sits at the repo root, not under docs/, and so was the
+    one page this function never reached -- it was still asking for ?v=1.10.0
+    against a 1.16 bundle. It is also the page the README sends a first-time
+    reader to, so it is the worst one to serve from a stale cache.
     """
-    # quick-start.html sits at the repo root, not under docs/, and so was the
-    # one page this function never reached -- it was still asking for ?v=1.10.0
-    # against a 1.16 bundle. It is also the page the README sends a first-time
-    # reader to, so it is the worst one to serve from a stale cache.
-    pages = sorted((ROOT / "docs").rglob("*.html")) + [ROOT / "quick-start.html"]
+    pages = sorted((ROOT / "docs" / "examples").glob("*.html")) + [
+        ROOT / "quick-start.html"
+    ]
 
     changed = []
     for page in [each for each in pages if each.is_file()]:
@@ -264,6 +504,8 @@ def main() -> None:
         (themes_out / minified).write_text(compact_css(text) + "\n", encoding="utf-8")
         built_themes += ["themes/" + name, "themes/" + minified]
 
+    rebuilt_docs = build_docs()
+    build_search_index()
     stamped = stamp_docs()
 
     print("Built v%s:" % VERSION)
@@ -277,6 +519,11 @@ def main() -> None:
         "ui-framework.d.ts",
     ) + tuple(built_themes):
         print(" - dist/%s (%d bytes)" % (name, (dist / name).stat().st_size))
+
+    if rebuilt_docs:
+        print("Rebuilt docs chrome:")
+        for name in rebuilt_docs:
+            print(" - %s" % name)
 
     if stamped:
         print("Re-stamped to v%s:" % VERSION)

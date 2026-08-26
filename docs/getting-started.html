@@ -14,6 +14,10 @@
       <a class="docs-brand" href="index.html"><span class="docs-logo">UI</span><span>UI Framework</span></a>
     </div>
     <div class="ui-d-flex ui-align-center ui-gap-2">
+      <button class="docs-search-trigger" type="button" data-docs-search aria-label="Search documentation">
+        <span class="docs-search-trigger-text">Search docs</span>
+        <span class="docs-kbd-group"><kbd class="docs-kbd">Ctrl</kbd><kbd class="docs-kbd">K</kbd></span>
+      </button>
       <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.17.0</span>
       <button class="ui-btn ui-btn-sm ui-btn-outline-secondary" type="button" data-ui-theme-toggle>Theme</button>
     </div>
@@ -21,17 +25,23 @@
   <div class="docs-layout">
     <aside class="docs-sidebar">
       <div class="docs-sidebar-title">Documentation</div>
-      <a class="docs-sidebar-link" href="index.html">Overview</a><a class="docs-sidebar-link active" href="getting-started.html">Getting started</a><a class="docs-sidebar-link" href="layout.html">Layout & grid</a><a class="docs-sidebar-link" href="components.html">Components</a><a class="docs-sidebar-link" href="theming.html">Theming</a><a class="docs-sidebar-link" href="utilities.html">Utilities</a><a class="docs-sidebar-link" href="javascript.html">JavaScript API</a>
+      <a class="docs-sidebar-link" href="index.html">Overview</a>
+      <a class="docs-sidebar-link active" href="getting-started.html">Getting started</a>
+      <a class="docs-sidebar-link" href="layout.html">Layout &amp; grid</a>
+      <a class="docs-sidebar-link" href="components.html">Components</a>
+      <a class="docs-sidebar-link" href="theming.html">Theming</a>
+      <a class="docs-sidebar-link" href="utilities.html">Utilities</a>
+      <a class="docs-sidebar-link" href="javascript.html">JavaScript API</a>
+      <a class="docs-sidebar-link" href="angular.html">Angular &amp; SPAs</a>
       <div class="docs-sidebar-title">Examples</div>
       <a class="docs-sidebar-link" href="examples/dashboard.html">Dashboard</a>
       <a class="docs-sidebar-link" href="examples/form.html">Form workflow</a>
       <a class="docs-sidebar-link" href="examples/application-form.html">Application form</a>
       <a class="docs-sidebar-link" href="examples/record-register.html">Record register</a>
       <a class="docs-sidebar-link" href="examples/login.html">Login page</a>
-      <div class="docs-sidebar-title">On this page</div><a class="docs-sidebar-link" href="#try-it">Try it in 10 seconds</a><a class="docs-sidebar-link" href="#concepts">How it works</a><a class="docs-sidebar-link" href="#bundle">Single bundle</a><a class="docs-sidebar-link" href="#modular">Modules</a><a class="docs-sidebar-link" href="#layers">Using alongside Bootstrap</a><a class="docs-sidebar-link" href="#server">Server-side integration</a><a class="docs-sidebar-link" href="#theme">Theming</a><a class="docs-sidebar-link" href="#troubleshooting">Troubleshooting</a>
     </aside>
     <main class="docs-main">
-
+<!-- docs:content -->
 <section class="docs-hero">
   <div class="docs-kicker">Installation</div>
   <h1 class="ui-display-2">Start without changing your existing theme.</h1>
@@ -168,11 +178,26 @@
     </div></div>
   </div>
 </section>
-
+<!-- /docs:content -->
+      <nav class="docs-pager"><a class="docs-pager-link" href="index.html"><span class="docs-pager-dir">Previous</span><span>Overview</span></a><a class="docs-pager-link docs-pager-next" href="layout.html"><span class="docs-pager-dir">Next</span><span>Layout &amp; grid</span></a></nav>
       <footer class="docs-footer">UI Framework 1.17.0 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
     </main>
+    <aside class="docs-toc">
+      <div class="docs-toc-inner">
+        <div class="docs-sidebar-title">On this page</div>
+        <a class="docs-toc-link" href="#try-it">New here? Try it in 10 seconds</a>
+        <a class="docs-toc-link" href="#concepts">How it works, in plain terms</a>
+        <a class="docs-toc-link" href="#bundle">Option 1: single CSS and JavaScript</a>
+        <a class="docs-toc-link" href="#modular">Option 2: reusable modules</a>
+        <a class="docs-toc-link" href="#layers">Using alongside Bootstrap or an existing stylesheet</a>
+        <a class="docs-toc-link" href="#server">Server-side integration</a>
+        <a class="docs-toc-link" href="#theme">Theme customization</a>
+        <a class="docs-toc-link" href="#troubleshooting">Troubleshooting</a>
+      </div>
+    </aside>
   </div>
   <script src="../dist/ui-framework.js?v=1.17.0"></script>
+  <script src="assets/search-index.js?v=1.17.0"></script>
   <script src="assets/docs.js?v=1.17.0"></script>
 </body>
 </html>

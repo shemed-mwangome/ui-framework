@@ -14,6 +14,10 @@
       <a class="docs-brand" href="index.html"><span class="docs-logo">UI</span><span>UI Framework</span></a>
     </div>
     <div class="ui-d-flex ui-align-center ui-gap-2">
+      <button class="docs-search-trigger" type="button" data-docs-search aria-label="Search documentation">
+        <span class="docs-search-trigger-text">Search docs</span>
+        <span class="docs-kbd-group"><kbd class="docs-kbd">Ctrl</kbd><kbd class="docs-kbd">K</kbd></span>
+      </button>
       <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.17.0</span>
       <button class="ui-btn ui-btn-sm ui-btn-outline-secondary" type="button" data-ui-theme-toggle>Theme</button>
     </div>
@@ -21,17 +25,23 @@
   <div class="docs-layout">
     <aside class="docs-sidebar">
       <div class="docs-sidebar-title">Documentation</div>
-      <a class="docs-sidebar-link" href="index.html">Overview</a><a class="docs-sidebar-link" href="getting-started.html">Getting started</a><a class="docs-sidebar-link" href="layout.html">Layout & grid</a><a class="docs-sidebar-link active" href="components.html">Components</a><a class="docs-sidebar-link" href="theming.html">Theming</a><a class="docs-sidebar-link" href="utilities.html">Utilities</a><a class="docs-sidebar-link" href="javascript.html">JavaScript API</a>
+      <a class="docs-sidebar-link" href="index.html">Overview</a>
+      <a class="docs-sidebar-link" href="getting-started.html">Getting started</a>
+      <a class="docs-sidebar-link" href="layout.html">Layout &amp; grid</a>
+      <a class="docs-sidebar-link active" href="components.html">Components</a>
+      <a class="docs-sidebar-link" href="theming.html">Theming</a>
+      <a class="docs-sidebar-link" href="utilities.html">Utilities</a>
+      <a class="docs-sidebar-link" href="javascript.html">JavaScript API</a>
+      <a class="docs-sidebar-link" href="angular.html">Angular &amp; SPAs</a>
       <div class="docs-sidebar-title">Examples</div>
       <a class="docs-sidebar-link" href="examples/dashboard.html">Dashboard</a>
       <a class="docs-sidebar-link" href="examples/form.html">Form workflow</a>
       <a class="docs-sidebar-link" href="examples/application-form.html">Application form</a>
       <a class="docs-sidebar-link" href="examples/record-register.html">Record register</a>
       <a class="docs-sidebar-link" href="examples/login.html">Login page</a>
-      <div class="docs-sidebar-title">On this page</div><a class="docs-sidebar-link" href="#buttons">Buttons</a><a class="docs-sidebar-link" href="#typography">Typography</a><a class="docs-sidebar-link" href="#forms">Forms</a><a class="docs-sidebar-link" href="#validate">Validation</a><a class="docs-sidebar-link" href="#mask">Input masks</a><a class="docs-sidebar-link" href="#selection">Selection</a><a class="docs-sidebar-link" href="#multiselect">Multi-select</a><a class="docs-sidebar-link" href="#combobox">Combobox</a><a class="docs-sidebar-link" href="#date-range">Date range</a><a class="docs-sidebar-link" href="#date-picker">Date picker</a><a class="docs-sidebar-link" href="#upload">Upload</a><a class="docs-sidebar-link" href="#save-next">Multi-step form</a><a class="docs-sidebar-link" href="#draft">Save draft</a><a class="docs-sidebar-link" href="#alerts">Alerts</a><a class="docs-sidebar-link" href="#status">Status &amp; record header</a><a class="docs-sidebar-link" href="#cards">Cards</a><a class="docs-sidebar-link" href="#charts">Charts</a><a class="docs-sidebar-link" href="#images">Images</a><a class="docs-sidebar-link" href="#tables">Tables</a><a class="docs-sidebar-link" href="#data-table">Smart tables</a><a class="docs-sidebar-link" href="#table-tools">Table tools</a><a class="docs-sidebar-link" href="#navigation">Navigation</a><a class="docs-sidebar-link" href="#tabs">Tabs</a><a class="docs-sidebar-link" href="#dropdown">Dropdown</a><a class="docs-sidebar-link" href="#accordion">Accordion</a><a class="docs-sidebar-link" href="#repeater">Repeater</a><a class="docs-sidebar-link" href="#yn">Yes / No / N-A</a><a class="docs-sidebar-link" href="#option-cards">Option cards</a><a class="docs-sidebar-link" href="#chrome">App chrome</a><a class="docs-sidebar-link" href="#tree">Tree select</a><a class="docs-sidebar-link" href="#select-list">Select list</a><a class="docs-sidebar-link" href="#filter-bar">Filter bar</a><a class="docs-sidebar-link" href="#register-patterns">Register patterns</a><a class="docs-sidebar-link" href="#offline">Offline queue</a><a class="docs-sidebar-link" href="#modal">Modal</a><a class="docs-sidebar-link" href="#confirm">Confirm dialog</a><a class="docs-sidebar-link" href="#popover">Popover &amp; copy</a><a class="docs-sidebar-link" href="#offcanvas">Offcanvas</a><a class="docs-sidebar-link" href="#tooltips">Tooltips</a><a class="docs-sidebar-link" href="#toast">Toast</a><a class="docs-sidebar-link" href="#loaders">Loaders</a><a class="docs-sidebar-link" href="#empty-stepper">Workflow UI</a><a class="docs-sidebar-link" href="#document">Document sheet</a>
     </aside>
     <main class="docs-main">
-
+<!-- docs:content -->
 <section class="docs-hero">
   <div class="docs-kicker">Component catalogue</div>
   <h1 class="ui-display-2">Live examples for every major component.</h1>
@@ -580,6 +590,37 @@
 </div>
 </div>
 <div class="docs-code-wrap">
+  <template data-docs-snippet="angular">&lt;!-- reactive forms bind to the native select; no ControlValueAccessor --&gt;
+&lt;select name="reviewerIds" multiple
+        data-ui-multiselect data-display="tags" data-max-tags="3"
+        data-placeholder="Select reviewers" data-search="true"
+        formControlName="reviewerIds"&gt;
+  @for (reviewer of reviewers(); track reviewer.uuid) {
+    &lt;option [value]="reviewer.uuid"&gt;{{ reviewer.name }}&lt;/option&gt;
+  }
+&lt;/select&gt;
+
+&lt;!-- options arriving from a later HTTP response need a rebuild --&gt;
+this.api.reviewers().subscribe(list =&gt; {
+  this.reviewers.set(list);
+  queueMicrotask(() =&gt; UI.multiselect.refresh(this.select.nativeElement));
+});</template>
+  <template data-docs-snippet="react">// The select stays the source of truth; read it on change.
+&lt;select
+  name="reviewerIds"
+  multiple
+  ref={ref}
+  data-ui-multiselect
+  data-display="tags"
+  data-placeholder="Select reviewers"
+  data-search="true"
+  onChange={e =&gt; setSelected([...e.target.selectedOptions].map(o =&gt; o.value))}
+&gt;
+  {reviewers.map(r =&gt; &lt;option key={r.uuid} value={r.uuid}&gt;{r.name}&lt;/option&gt;)}
+&lt;/select&gt;
+
+// Rebuild when the option list changes.
+useEffect(() =&gt; { UI.multiselect.refresh(ref.current); }, [reviewers]);</template>
   <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
   <pre class="ui-code-block"><code>&lt;select name=&quot;reviewerIds&quot;
         multiple
@@ -691,6 +732,22 @@
 </div>
 </div>
 <div class="docs-code-wrap">
+  <template data-docs-snippet="angular">&lt;!-- the picker writes to the input and fires input + change,
+     so DefaultValueAccessor sees it --&gt;
+&lt;div class="ui-date-range" data-ui-date-range
+     data-ui-placeholder="Select a period"&gt;
+  &lt;input type="date" formControlName="startDate"&gt;
+  &lt;input type="date" formControlName="endDate"&gt;
+&lt;/div&gt;
+
+&lt;!-- clearing from code --&gt;
+UI.dateRange.clear(this.range.nativeElement);</template>
+  <template data-docs-snippet="react">// React's onChange is the native input event, which the picker now fires.
+&lt;div className="ui-date-range" data-ui-date-range
+     data-ui-placeholder="Select a period"&gt;
+  &lt;input type="date" name="startDate" onChange={e =&gt; setStart(e.target.value)} /&gt;
+  &lt;input type="date" name="endDate" onChange={e =&gt; setEnd(e.target.value)} /&gt;
+&lt;/div&gt;</template>
   <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
   <pre class="ui-code-block"><code>&lt;!-- default: fills its column, e.g. ui-col-md-4 alongside other fields --&gt;
 &lt;div class=&quot;ui-date-range&quot; data-ui-date-range
@@ -1280,7 +1337,7 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
   <h2 class="ui-h2">Cards, list groups, and stats</h2>
   <p class="docs-section-intro">Create panels, summary cards, action lists, and dashboard counters.</p>
 
-<div class="docs-demo">
+<div class="docs-demo" data-docs-viewport>
 <div class="ui-css-grid ui-css-grid-sm">
   <article class="ui-card ui-card-hover ui-card-border-primary"><div class="ui-card-body"><h3 class="ui-card-title">Customer profile</h3><p class="ui-card-subtitle">Reusable content card</p></div></article>
   <div class="ui-stat"><div class="ui-stat-icon">✓</div><div><div class="ui-stat-value">128</div><div class="ui-stat-label">Approved accounts</div></div></div>
@@ -1783,7 +1840,7 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
   <h2 class="ui-h2">Tables</h2>
   <p class="docs-section-intro">Responsive wrappers, borders, stripes, hover states, compact rows, sticky headers, and empty states.</p>
 
-<div class="docs-demo">
+<div class="docs-demo" data-docs-viewport>
 <div class="ui-table-responsive ui-shadow-1">
   <table class="ui-table ui-table-striped ui-table-hover">
     <thead><tr><th>Site</th><th>Status</th><th>Action</th></tr></thead>
@@ -1863,7 +1920,7 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
   <h2 class="ui-h2">Smart tables</h2>
   <p class="docs-section-intro">Enhance any <code class="ui-code">.ui-table</code> with client-side search, sorting, pagination, and a page-size selector by adding <code class="ui-code">data-ui-table</code>. Mark sortable headers with <code class="ui-code">data-ui-sort="text"|"number"|"date"</code>; give a cell <code class="ui-code">data-ui-sort-value</code> when its sort key differs from its display text. Configure page sizes with <code class="ui-code">data-ui-page-sizes="5,10,25,50"</code>, or turn the selector off with <code class="ui-code">data-ui-page-size-selector="false"</code>.</p>
 
-<div class="docs-demo">
+<div class="docs-demo" data-docs-viewport>
 <div data-ui-table data-ui-page-size="5">
 <div class="ui-table-responsive ui-shadow-1">
   <table class="ui-table ui-table-striped ui-table-hover">
@@ -1935,7 +1992,7 @@ document.querySelector(&quot;[data-ui-date-picker]&quot;)
   <h2 class="ui-h2">Table selection, columns, and export</h2>
   <p class="docs-section-intro">Layered onto the same <code class="ui-code">data-ui-table</code> as the smart table: row selection with bulk actions, a column-visibility menu, sticky columns and CSV export. Export covers every row matching the current search and sort, not just the page on screen.</p>
 
-<div class="docs-demo">
+<div class="docs-demo" data-docs-viewport>
 <div data-ui-table data-ui-select data-ui-columns data-ui-export="records" data-ui-page-size="4" id="tt-demo">
   <div class="ui-table-selection" data-ui-table-selection>
     <button type="button" class="ui-btn ui-btn-sm ui-btn-outline-secondary"
@@ -2040,7 +2097,7 @@ document.getElementById(&quot;bulk&quot;).addEventListener(&quot;click&quot;, fu
   <h2 class="ui-h2">Navigation and pagination</h2>
   <p class="docs-section-intro">Navbar, links, breadcrumb, tabs, sidebar navigation, and pagination styles.</p>
 
-<div class="docs-demo">
+<div class="docs-demo" data-docs-viewport>
 <div class="ui-card">
   <nav class="ui-navbar">
     <a class="ui-navbar-brand" href="#">Admin Portal</a>
@@ -2919,7 +2976,7 @@ UI.treeSelect.selected(&quot;#treeDemo&quot;);</code></pre>
   <h2 class="ui-h2">Filter bar <span class="ui-badge ui-badge-soft-primary ui-badge-pill">1.9</span></h2>
   <p class="docs-section-intro">A register with four filterable dimensions rendered as chip rows takes four or five wrapped lines and pushes the table it filters below the fold — the user scrolls past the controls to reach the data, then scrolls back up to change them. A filter bar is one compact button per dimension, reading its own state, each opening a select list in a modal. The whole bar stays one line however many dimensions there are, and a fifth costs a button rather than a row.</p>
 
-<div class="docs-demo">
+<div class="docs-demo" data-docs-viewport>
 <div class="ui-filter-bar ui-mb-2">
   <span class="ui-filter-bar-label">Show</span>
   <div class="ui-segmented" id="filterScopeDemo">
@@ -3370,6 +3427,34 @@ UI.blocker.clear(button);                                  // enable + clear
 </div>
 </div>
 <div class="docs-code-wrap">
+  <template data-docs-snippet="angular">// UI.confirm() is already promise-based. Wrap it once so the
+// resolution re-enters Angular's zone.
+@Injectable({ providedIn: 'root' })
+export class UiDialog {
+  private zone = inject(NgZone);
+
+  confirm(options: UIFramework.ConfirmOptions): Promise&lt;boolean&gt; {
+    return UI.confirm(options).then(ok =&gt; this.zone.run(() =&gt; ok));
+  }
+}
+
+// in a component
+async revoke(licence: Licence) {
+  const ok = await this.dialog.confirm({
+    title: 'Revoke licence',
+    message: `Revoke ${licence.number}? This cannot be undone.`,
+    variant: 'danger',
+  });
+  if (ok) this.api.revoke(licence.uuid).subscribe();
+}</template>
+  <template data-docs-snippet="react">async function revoke(licence) {
+  const ok = await UI.confirm({
+    title: 'Revoke licence',
+    message: `Revoke ${licence.number}? This cannot be undone.`,
+    variant: 'danger',
+  });
+  if (ok) await api.revoke(licence.uuid);
+}</template>
   <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
   <pre class="ui-code-block"><code>UI.confirm({
   title: &quot;Revoke access&quot;,
@@ -3533,6 +3618,20 @@ UI.blocker.clear(button);                                  // enable + clear
 </div>
 </div>
 <div class="docs-code-wrap">
+  <template data-docs-snippet="angular">@Injectable({ providedIn: 'root' })
+export class UiToast {
+  show(options: UIFramework.ToastOptions) { UI.toast.show(options); }
+
+  saved(what: string) {
+    this.show({ type: 'success', title: 'Saved', message: `${what} was saved.` });
+  }
+}</template>
+  <template data-docs-snippet="react">export function useToast() {
+  return useCallback((options) =&gt; UI.toast.show(options), []);
+}
+
+// const toast = useToast();
+// toast({ type: 'success', title: 'Saved', message: 'Licence was saved.' });</template>
   <button class="ui-btn ui-btn-sm ui-btn-dark docs-copy" type="button" data-docs-copy>Copy</button>
   <pre class="ui-code-block"><code>UI.toast.show({
   type: &quot;success&quot;,
@@ -3628,7 +3727,7 @@ UI.blocker.clear(button);                                  // enable + clear
   <h2 class="ui-h2">Empty states, stepper, and timeline</h2>
   <p class="docs-section-intro">Communicate no-data states and display workflow or audit progress.</p>
 
-<div class="docs-demo">
+<div class="docs-demo" data-docs-viewport>
 <div class="ui-d-flex ui-flex-column ui-gap-5">
   <div class="ui-stepper">
     <div class="ui-step ui-complete"><div class="ui-step-marker">1</div><div class="ui-step-label">Details</div></div>
@@ -3794,32 +3893,61 @@ UI.blocker.clear(button);                                  // enable + clear
 </div>
 
 </section>
-
-
-
+<!-- /docs:content -->
+      <nav class="docs-pager"><a class="docs-pager-link" href="layout.html"><span class="docs-pager-dir">Previous</span><span>Layout &amp; grid</span></a><a class="docs-pager-link docs-pager-next" href="theming.html"><span class="docs-pager-dir">Next</span><span>Theming</span></a></nav>
       <footer class="docs-footer">UI Framework 1.17.0 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
     </main>
+    <aside class="docs-toc">
+      <div class="docs-toc-inner">
+        <div class="docs-sidebar-title">On this page</div>
+        <a class="docs-toc-link" href="#buttons">Buttons</a>
+        <a class="docs-toc-link" href="#typography">Typography</a>
+        <a class="docs-toc-link" href="#forms">Form controls</a>
+        <a class="docs-toc-link" href="#validate">Form validation</a>
+        <a class="docs-toc-link" href="#mask">Input masks</a>
+        <a class="docs-toc-link" href="#selection">Checkboxes, radios, and switches</a>
+        <a class="docs-toc-link" href="#multiselect">Multi-select with checkboxes</a>
+        <a class="docs-toc-link" href="#combobox">Combobox</a>
+        <a class="docs-toc-link" href="#date-range">Date range</a>
+        <a class="docs-toc-link" href="#date-picker">Date picker</a>
+        <a class="docs-toc-link" href="#upload">File upload</a>
+        <a class="docs-toc-link" href="#save-next">Multi-step form with save &amp; next</a>
+        <a class="docs-toc-link" href="#draft">Save draft</a>
+        <a class="docs-toc-link" href="#alerts">Alerts and badges</a>
+        <a class="docs-toc-link" href="#status">Status lexicon and record header</a>
+        <a class="docs-toc-link" href="#cards">Cards, list groups, and stats</a>
+        <a class="docs-toc-link" href="#charts">Charts</a>
+        <a class="docs-toc-link" href="#images">Images and avatars</a>
+        <a class="docs-toc-link" href="#tables">Tables</a>
+        <a class="docs-toc-link" href="#data-table">Smart tables</a>
+        <a class="docs-toc-link" href="#table-tools">Table selection, columns, and export</a>
+        <a class="docs-toc-link" href="#navigation">Navigation and pagination</a>
+        <a class="docs-toc-link" href="#tabs">Tabs</a>
+        <a class="docs-toc-link" href="#dropdown">Dropdown</a>
+        <a class="docs-toc-link" href="#accordion">Accordion and collapse</a>
+        <a class="docs-toc-link" href="#repeater">Repeater 1.14</a>
+        <a class="docs-toc-link" href="#yn">Yes / No / N-A 1.14</a>
+        <a class="docs-toc-link" href="#option-cards">Option cards, chips and bars 1.14</a>
+        <a class="docs-toc-link" href="#chrome">Application chrome 1.15</a>
+        <a class="docs-toc-link" href="#tree">Tree select</a>
+        <a class="docs-toc-link" href="#select-list">Select list 1.9</a>
+        <a class="docs-toc-link" href="#filter-bar">Filter bar 1.9</a>
+        <a class="docs-toc-link" href="#register-patterns">Register patterns 1.9</a>
+        <a class="docs-toc-link" href="#offline">Offline work queue 1.9</a>
+        <a class="docs-toc-link" href="#modal">Modal</a>
+        <a class="docs-toc-link" href="#confirm">Confirm dialog</a>
+        <a class="docs-toc-link" href="#popover">Popovers and copy to clipboard</a>
+        <a class="docs-toc-link" href="#offcanvas">Offcanvas</a>
+        <a class="docs-toc-link" href="#tooltips">Tooltips</a>
+        <a class="docs-toc-link" href="#toast">Toast notifications</a>
+        <a class="docs-toc-link" href="#loaders">Progress, spinners, and skeletons</a>
+        <a class="docs-toc-link" href="#empty-stepper">Empty states, stepper, and timeline</a>
+        <a class="docs-toc-link" href="#document">Printable document sheet</a>
+      </div>
+    </aside>
   </div>
   <script src="../dist/ui-framework.js?v=1.17.0"></script>
+  <script src="assets/search-index.js?v=1.17.0"></script>
   <script src="assets/docs.js?v=1.17.0"></script>
-  <script>
-    // The offline demo queues against a dummy URL. Left to flush, fetch("#demo")
-    // would resolve against this very page, return 200, and the item would
-    // vanish before anyone saw it -- so autoFlush is off here. In a real
-    // application leave it on; that is the whole point of the component.
-    if (window.UI && UI.offline) UI.offline.configure({ autoFlush: false });
-
-    // The clickable-chart demo shows the selection rather than navigating,
-    // so the page does not jump away from the example that produced it.
-    var linkChart = document.getElementById("docsChartLinks");
-    if (linkChart) {
-      linkChart.addEventListener("ui:chart:select", function (event) {
-        event.preventDefault();
-        document.getElementById("docsChartPicked").textContent =
-          "Selected: " + event.detail.label + " (" + event.detail.value +
-          ") — would have gone to " + event.detail.href;
-      });
-    }
-  </script>
 </body>
 </html>

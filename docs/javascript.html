@@ -14,6 +14,10 @@
       <a class="docs-brand" href="index.html"><span class="docs-logo">UI</span><span>UI Framework</span></a>
     </div>
     <div class="ui-d-flex ui-align-center ui-gap-2">
+      <button class="docs-search-trigger" type="button" data-docs-search aria-label="Search documentation">
+        <span class="docs-search-trigger-text">Search docs</span>
+        <span class="docs-kbd-group"><kbd class="docs-kbd">Ctrl</kbd><kbd class="docs-kbd">K</kbd></span>
+      </button>
       <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.17.0</span>
       <button class="ui-btn ui-btn-sm ui-btn-outline-secondary" type="button" data-ui-theme-toggle>Theme</button>
     </div>
@@ -21,17 +25,23 @@
   <div class="docs-layout">
     <aside class="docs-sidebar">
       <div class="docs-sidebar-title">Documentation</div>
-      <a class="docs-sidebar-link" href="index.html">Overview</a><a class="docs-sidebar-link" href="getting-started.html">Getting started</a><a class="docs-sidebar-link" href="layout.html">Layout & grid</a><a class="docs-sidebar-link" href="components.html">Components</a><a class="docs-sidebar-link" href="theming.html">Theming</a><a class="docs-sidebar-link" href="utilities.html">Utilities</a><a class="docs-sidebar-link active" href="javascript.html">JavaScript API</a>
+      <a class="docs-sidebar-link" href="index.html">Overview</a>
+      <a class="docs-sidebar-link" href="getting-started.html">Getting started</a>
+      <a class="docs-sidebar-link" href="layout.html">Layout &amp; grid</a>
+      <a class="docs-sidebar-link" href="components.html">Components</a>
+      <a class="docs-sidebar-link" href="theming.html">Theming</a>
+      <a class="docs-sidebar-link" href="utilities.html">Utilities</a>
+      <a class="docs-sidebar-link active" href="javascript.html">JavaScript API</a>
+      <a class="docs-sidebar-link" href="angular.html">Angular &amp; SPAs</a>
       <div class="docs-sidebar-title">Examples</div>
       <a class="docs-sidebar-link" href="examples/dashboard.html">Dashboard</a>
       <a class="docs-sidebar-link" href="examples/form.html">Form workflow</a>
       <a class="docs-sidebar-link" href="examples/application-form.html">Application form</a>
       <a class="docs-sidebar-link" href="examples/record-register.html">Record register</a>
       <a class="docs-sidebar-link" href="examples/login.html">Login page</a>
-      <div class="docs-sidebar-title">On this page</div><a class="docs-sidebar-link" href="#initialization">Initialization</a><a class="docs-sidebar-link" href="#api">Public API</a><a class="docs-sidebar-link" href="#howto">How to&hellip;</a><a class="docs-sidebar-link" href="#events">Events</a><a class="docs-sidebar-link" href="#dynamic">Dynamic content</a>
     </aside>
     <main class="docs-main">
-
+<!-- docs:content -->
 <section class="docs-hero">
   <div class="docs-kicker">Dependency-free interactions</div>
   <h1 class="ui-display-2">Declarative data attributes and a small JavaScript API.</h1>
@@ -260,11 +270,23 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 </script>
-
+<!-- /docs:content -->
+      <nav class="docs-pager"><a class="docs-pager-link" href="utilities.html"><span class="docs-pager-dir">Previous</span><span>Utilities</span></a><a class="docs-pager-link docs-pager-next" href="angular.html"><span class="docs-pager-dir">Next</span><span>Angular &amp; SPAs</span></a></nav>
       <footer class="docs-footer">UI Framework 1.17.0 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
     </main>
+    <aside class="docs-toc">
+      <div class="docs-toc-inner">
+        <div class="docs-sidebar-title">On this page</div>
+        <a class="docs-toc-link" href="#initialization">Initialization</a>
+        <a class="docs-toc-link" href="#api">Public APIs</a>
+        <a class="docs-toc-link" href="#howto">How to&hellip;</a>
+        <a class="docs-toc-link" href="#events">Custom events</a>
+        <a class="docs-toc-link" href="#dynamic">Dynamic content</a>
+      </div>
+    </aside>
   </div>
   <script src="../dist/ui-framework.js?v=1.17.0"></script>
+  <script src="assets/search-index.js?v=1.17.0"></script>
   <script src="assets/docs.js?v=1.17.0"></script>
 </body>
 </html>
