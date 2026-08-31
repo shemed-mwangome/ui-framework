@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.17.2 (2026-08-31)
+### Fixed: `.ui-touch` gave a control a thumb-sized box and phone-sized zoom
+
+The class exists for "a control tapped with a thumb, outdoors, one-handed",
+and it raised every target to 44px. It left the text alone, so a
+`.ui-control-sm` in a touch region was a 44px box holding 13px text: below the
+16px threshold at which iOS Safari zooms the viewport on focus. The officer
+hit the field easily and then had to pinch back out to reach the next one, on
+the one opt-in whose whole purpose is field use. Text fields in a `.ui-touch`
+region now go to 16px.
+
+Buttons, segments and filter buttons keep their own size. Only a focusable
+text field triggers the zoom, and `.ui-btn-sm` inside a touch region is a size
+the caller chose.
+
+This began as "apply the 1.17.1 repeater rule to `.ui-table-stack`" and
+measurement moved it: a plain `.ui-control` in a stacked cell already computes
+to 16px, because `01-base.css` gives form elements `font: inherit` and the
+root is 1rem. Stacked tables needed nothing. `.ui-touch` did, and fixing it
+there covers stacked tables, repeaters and every other field region at once.
+
 ## 1.17.1 (2026-08-31)
 ### Fixed: the stacked repeater kept desk-sized inputs on a phone
 
