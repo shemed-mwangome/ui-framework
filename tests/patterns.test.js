@@ -1,8 +1,8 @@
 "use strict";
 
 /**
- * Register patterns: the segmented scope switch, and the rule that a
- * disabled control says why it is disabled.
+ * Register patterns: the segmented scope switch, the rule that a disabled
+ * control says why it is disabled, and the touch sizing opt-in.
  */
 
 const { test } = require("node:test");
@@ -69,6 +69,61 @@ test("segments buttons default to type=button", async () => {
     const types = await page.evaluate(() =>
       Array.from(document.querySelectorAll(".ui-segment")).map((s) => s.type));
     assert.deepEqual(types, ["button", "button", "button"]);
+  });
+});
+
+/**
+ * The sizes .ui-touch is for. A stacked table is the shape that carries them
+ * in the field, and .ui-control-sm is the size that would otherwise zoom: a
+ * plain .ui-control already inherits 16px from the page.
+ */
+const TOUCH_TABLE = `
+  <div class="ui-touch">
+    <table class="ui-table ui-table-stack">
+      <thead><tr><th>Premise</th><th>Devices</th><th>Condition</th></tr></thead>
+      <tbody><tr>
+        <td data-label="Premise">Kilimanjaro Bar</td>
+        <td data-label="Devices"><input class="ui-control ui-control-sm" id="devices" value="6"></td>
+        <td data-label="Condition"><select class="ui-select ui-select-sm" id="condition">
+          <option>Working</option></select></td>
+      </tr></tbody>
+    </table>
+    <button class="ui-btn ui-btn-sm" id="open">Open</button>
+  </div>`;
+
+test("a touch region's text fields are large enough not to zoom iOS Safari", async () => {
+  await ui.page(TOUCH_TABLE, async (page) => {
+    const sizes = await page.evaluate(() =>
+      ["devices", "condition"].map((id) => {
+        const style = getComputedStyle(document.getElementById(id));
+        return { id, font: parseFloat(style.fontSize), height: parseFloat(style.minHeight) };
+      }));
+
+    sizes.forEach((size) => {
+      // Below 16px iOS zooms the viewport on focus, which undoes the 44px
+      // target this class exists to provide.
+      assert.ok(size.font >= 16, size.id + " font-size must be >= 16px, got " + size.font);
+      assert.ok(size.height >= 44, size.id + " min-height must be >= 44px, got " + size.height);
+    });
+  });
+});
+
+test("touch sizing leaves buttons at their own size", async () => {
+  // Only a focusable text field triggers the zoom, and .ui-btn-sm is a
+  // deliberate size a caller picked.
+  await ui.page(TOUCH_TABLE, async (page) => {
+    const button = await page.styles("#open", ["font-size", "min-height"]);
+    assert.notEqual(button["font-size"], "16px");
+    assert.equal(button["min-height"], "44px");
+  });
+});
+
+test("outside .ui-touch a small control keeps its small size", async () => {
+  // The opt-in is per region precisely because the same control sits on a
+  // desk at 13px.
+  await ui.page(TOUCH_TABLE.replace('class="ui-touch"', 'class="ui-desk"'), async (page) => {
+    const styles = await page.styles("#devices", ["font-size"]);
+    assert.equal(styles["font-size"], "13px");
   });
 });
 

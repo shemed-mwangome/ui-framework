@@ -329,6 +329,14 @@
 .ui-touch .ui-segment,
 .ui-touch .ui-filter-btn { min-height: 2.75rem; }
 
+/* A 44px box a thumb can hit, holding text iOS Safari zooms the viewport to
+   read, is a contradiction: the officer hits the field and then has to pinch
+   back out to reach the next one. 16px is the threshold, so a control that
+   would be smaller -- .ui-control-sm at 13px, most often -- is raised to it.
+   Buttons and segments are left alone; only a focusable text field zooms. */
+.ui-touch .ui-control,
+.ui-touch .ui-select { font-size: 16px; }
+
 .ui-touch .ui-checkbox,
 .ui-touch .ui-radio,
 .ui-touch .ui-tree-check { width: 1.35rem !important; height: 1.35rem !important; }
