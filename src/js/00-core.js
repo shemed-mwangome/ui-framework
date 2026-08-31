@@ -3,7 +3,7 @@
 
   var UI = window.UI || {};
 
-  UI.version = "1.17.0";
+  UI.version = "1.17.1";
   UI._initializers = UI._initializers || [];
 
   UI.q = function (selector, root) {

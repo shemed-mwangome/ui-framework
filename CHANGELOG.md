@@ -1,5 +1,35 @@
 # Changelog
 
+## 1.17.1 (2026-08-31)
+### Fixed: the stacked repeater kept desk-sized inputs on a phone
+
+`.ui-repeater-stack` turns each row into a card below 48rem, which is the
+whole answer to "six columns of inputs on a 360px screen". It did not resize
+the inputs themselves, so they stayed at the 12.4px the desk table uses. Any
+input under 16px makes iOS Safari zoom the viewport the moment the field takes
+focus, and the officer then has to pinch back out to reach the next field: on
+the one form in the framework whose stated purpose is capture done standing
+up. Stacked cells now go to 16px, a 2.5rem minimum height and roomier padding.
+
+The desk sizing is unchanged, and a repeater without `ui-repeater-stack` is
+left alone: that variant scrolls sideways rather than stacking, and larger
+inputs would only make it scroll further.
+
+### Fixed: a repeater select's caret was drawn on top of its own text
+
+`.ui-select` reserves 2.25rem of right padding for the arrow it paints in the
+background. The repeater's cell rule then set padding with the shorthand,
+which silently gave that room back, so a long option ran underneath the caret
+and hid it. Both the desk and stacked rules now keep the arrow's strip clear.
+
+New `tests/capture.test.js` covers both, at 375px and at desk width, using the
+documented markup so the rows come from the real `<template>` clone path. One
+of the caret tests reads the arrow's position out of the computed background
+rather than hardcoding it, so moving the caret in `06-forms.css` without
+revisiting the repeater's padding fails the suite instead of shipping. The
+test harness grew `page.viewport(w, h)` to make width media queries testable
+at all.
+
 ## 1.17.0 (2026-08-26)
 ### Fixed: a picked date never reached a reactive framework's form model
 
