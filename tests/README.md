@@ -55,6 +55,7 @@ sitting behind an open modal genuinely isn't clickable, which is what you want.
 | `page.isVisible(sel)` | Computed style **and** non-zero box |
 | `page.text/attr/value/count/styles` | Read the DOM |
 | `page.activeElement()` | What has focus |
+| `page.viewport(w, h, {mobile})` | Resize the layout viewport, so width media queries apply |
 | `page.recordEvents([...])` / `recordedEvents()` | Capture `ui:*` custom events |
 
 ## What the suite protects
@@ -78,6 +79,9 @@ cannot see:
   constraint, version consistency across five files, and the public design-token
   surface.
 - **`data-table.test.js`**: search, sort, paginate and their compositions.
+- **`capture.test.js`**: the stacked repeater's control sizing at 375px. A cell
+  input under 16px makes iOS Safari zoom the viewport on focus, which is a
+  defect no desk-width screenshot shows.
 
 ## Adding a test
 

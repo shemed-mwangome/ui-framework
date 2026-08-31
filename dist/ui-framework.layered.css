@@ -5502,6 +5502,12 @@ body.ui-scope { font-size: var(--ui-font-size, 1rem); }
   font-size: 12.4px;
 }
 
+/* The shorthand above would otherwise take back the room the caret is
+   drawn into -- it sits between 1rem and .35rem from the right edge --
+   and a long option would run underneath it. Tighter than the 2.25rem a
+   standalone select reserves, because a repeater cell has none to spare. */
+.ui-repeater-table td .ui-select { padding-right: 1.5rem; }
+
 /* The row number is the officer's reference when they are reading a
    figure off a machine and back to a colleague. Right-aligned and
    tabular so a list of twenty stays legible. */
@@ -5588,6 +5594,20 @@ body.ui-scope { font-size: var(--ui-font-size, 1rem); }
     letter-spacing: .04em;
     text-transform: uppercase;
   }
+
+  /* The desk size is the wrong size once a row is a card. iOS Safari
+     zooms the whole viewport when a focused input is under 16px, and a
+     capture form is filled in standing up, one field at a time. */
+  .ui-repeater-stack .ui-repeater-table td .ui-control,
+  .ui-repeater-stack .ui-repeater-table td .ui-select {
+    min-height: 2.5rem;
+    padding: .5rem .6rem;
+    font-size: 16px;
+  }
+
+  /* Same reason as the desk rule, one size up: the shorthand above resets
+     the padding, and 16px text wants more clearance than 12.4px did. */
+  .ui-repeater-stack .ui-repeater-table td .ui-select { padding-right: 2rem; }
 
   .ui-repeater-stack .ui-repeater-num { position: absolute; top: .4rem; right: 2.4rem; width: auto; }
   .ui-repeater-stack .ui-repeater-num::before { content: none; }

@@ -167,6 +167,24 @@ class Page {
     );
   }
 
+  /**
+   * Resizes the layout viewport, so width media queries can be tested.
+   *
+   * `mobile: true` also sets a device scale and touch, which is what makes
+   * `@media (pointer: coarse)` and friends match; width alone is enough for
+   * the framework's own breakpoints.
+   */
+  async viewport(width, height, options) {
+    options = options || {};
+    await this.send("Emulation.setDeviceMetricsOverride", {
+      width,
+      height: height || 800,
+      deviceScaleFactor: options.mobile ? 2 : 1,
+      mobile: !!options.mobile,
+    });
+    await this.raf();
+  }
+
   /** Resolves after two animation frames -- enough for CSS transitions to start. */
   raf() {
     return this.evaluate(
