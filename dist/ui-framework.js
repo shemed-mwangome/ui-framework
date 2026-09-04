@@ -1,5 +1,5 @@
 /*!
- * UI Framework v1.17.2
+ * UI Framework v1.18.0
  * Dependency-free JavaScript bundle.
  * License: MIT
  */
@@ -8,7 +8,7 @@
 
   var UI = window.UI || {};
 
-  UI.version = "1.17.2";
+  UI.version = "1.18.0";
   UI._initializers = UI._initializers || [];
 
   UI.q = function (selector, root) {

@@ -1,5 +1,5 @@
 /*!
- * UI Framework v1.17.2
+ * UI Framework v1.18.0
  * Original dependency-free CSS/JavaScript framework.
  * Prefix: ui-
  * License: MIT
@@ -20,9 +20,14 @@
   --ui-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --ui-font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
 
-  --ui-primary: #2563eb;
-  --ui-primary-hover: #1d4ed8;
-  --ui-primary-active: #1e40af;
+  /* One step deeper/more saturated than the previous #2563eb: the same
+     blue family (every consuming app already keys off this hue), just
+     more confident. A flatter, paler primary was the biggest single
+     reason solid buttons and active states read as generic-SaaS-blue
+     rather than a considered brand colour. */
+  --ui-primary: #1d4ed8;
+  --ui-primary-hover: #1e40af;
+  --ui-primary-active: #1e3a8a;
   --ui-secondary: #64748b;
   --ui-success: #16a34a;
   --ui-danger: #dc2626;
@@ -42,6 +47,15 @@
   --ui-surface-soft: #f8fafc;
   --ui-surface-muted: #f1f5f9;
   --ui-overlay: rgba(15, 23, 42, .58);
+
+  /* The page background .ui-scope actually sits on, kept separate from
+     --ui-surface-soft on purpose: -soft is reused by a dozen hover/active/
+     stripe states (table row hover, sidebar active link, modal footer...)
+     that are correctly meant to stay barely-there, and pulling it darker
+     to give the page some contrast would have darkened all of those too.
+     A white .ui-card on this tint actually separates from the page instead
+     of the 1px border doing all the work alone. */
+  --ui-page-bg: #eef1f6;
 
   --ui-primary-soft: #eff6ff;
   --ui-success-soft: #f0fdf4;
@@ -88,9 +102,18 @@
   --ui-radius-5: 1rem;
   --ui-radius-pill: 999rem;
 
+  /* -2 and -3 (the card/dropdown/popover elevations, where "does this look
+     designed" is judged) carry real presence now -- a tight, near-invisible
+     shadow was the single biggest reason a page of cards read as flat
+     bordered boxes rather than surfaces sitting above the page. Same ink
+     colour as before (rgba(15,23,42,...), already --ui-dark's rgb), just
+     more of it, plus a tighter second layer for a crisper near edge -- the
+     two-layer technique most "raised surface" design systems use instead
+     of one big soft blur. -1 (badges, inline chips) and -4 (already the
+     modal/max elevation) are left alone. */
   --ui-shadow-1: 0 1px 2px rgba(15, 23, 42, .06);
-  --ui-shadow-2: 0 4px 12px rgba(15, 23, 42, .10);
-  --ui-shadow-3: 0 12px 30px rgba(15, 23, 42, .14);
+  --ui-shadow-2: 0 8px 24px -4px rgba(15, 23, 42, .16), 0 2px 6px rgba(15, 23, 42, .08);
+  --ui-shadow-3: 0 20px 44px -8px rgba(15, 23, 42, .22), 0 4px 10px rgba(15, 23, 42, .10);
   --ui-shadow-4: 0 24px 60px rgba(15, 23, 42, .20);
 
   --ui-space-0: 0;
@@ -117,7 +140,10 @@
   --ui-transition: 200ms ease;
   --ui-transition-slow: 320ms ease;
 
-  --ui-focus-ring: 0 0 0 .2rem rgba(37, 99, 235, .20);
+  /* color-mix from --ui-primary, not a hardcoded rgba duplicate of the old
+     value: a hand-copied colour is how a token and its focus ring silently
+     drift apart the next time --ui-primary changes. */
+  --ui-focus-ring: 0 0 0 .2rem color-mix(in srgb, var(--ui-primary) 35%, transparent);
 
   --ui-z-dropdown: 1000;
   --ui-z-sticky: 1020;
@@ -133,6 +159,17 @@
 [data-ui-theme="dark"],
 .ui-theme-dark {
   color-scheme: dark;
+
+  /* --ui-primary got darker/more saturated above for light mode's sake;
+     unoverridden here it would now be a dim, low-contrast blue against a
+     dark surface. Brightened following the exact same light-to-dark shift
+     --ui-stage-1 already uses a few lines down (#2563eb -> #60a5fa) rather
+     than inventing a new curve for it. --ui-primary-active reuses the old
+     light-mode blue (#2563eb) rather than a fourth new colour. */
+  --ui-primary: #3b82f6;
+  --ui-primary-hover: #60a5fa;
+  --ui-primary-active: #2563eb;
+
   --ui-text: #e5edf7;
   --ui-text-soft: #cbd5e1;
   --ui-muted: #94a3b8;
@@ -143,6 +180,11 @@
   --ui-surface-soft: #172033;
   --ui-surface-muted: #1e293b;
   --ui-overlay: rgba(0, 0, 0, .68);
+
+  /* Reuses --ui-nav-bg's own value below rather than a new colour: same
+     "one step darker than the surface it sits under" logic as the nav
+     rail against the page, just applied to the page against a card. */
+  --ui-page-bg: #0b1220;
 
   --ui-primary-soft: rgba(37, 99, 235, .16);
   --ui-success-soft: rgba(22, 163, 74, .14);
@@ -172,8 +214,8 @@
   --ui-notice-line: #4a3f1a;
 
   --ui-shadow-1: 0 1px 2px rgba(0, 0, 0, .20);
-  --ui-shadow-2: 0 4px 12px rgba(0, 0, 0, .28);
-  --ui-shadow-3: 0 12px 30px rgba(0, 0, 0, .34);
+  --ui-shadow-2: 0 8px 24px -4px rgba(0, 0, 0, .40), 0 2px 6px rgba(0, 0, 0, .24);
+  --ui-shadow-3: 0 20px 44px -8px rgba(0, 0, 0, .48), 0 4px 10px rgba(0, 0, 0, .28);
   --ui-shadow-4: 0 24px 60px rgba(0, 0, 0, .44);
 }
 
@@ -188,7 +230,7 @@
 .ui-scope {
   margin: 0;
   color: var(--ui-text);
-  background: var(--ui-surface-soft);
+  background: var(--ui-page-bg);
   font-family: var(--ui-font-sans);
   font-size: 1rem;
   line-height: 1.5;
@@ -282,7 +324,7 @@
 .ui-h3 { font-size: clamp(1.35rem, 2.5vw, 1.75rem); }
 .ui-h4 { font-size: 1.25rem; }
 .ui-h5 { font-size: 1.05rem; }
-.ui-h6 { font-size: .9rem; text-transform: uppercase; letter-spacing: .04em; }
+.ui-h6 { font-size: .9rem; text-transform: uppercase; letter-spacing: .06em; }
 .ui-display-1 { font-size: clamp(2.75rem, 7vw, 5rem); letter-spacing: -.04em; }
 .ui-display-2 { font-size: clamp(2.25rem, 5vw, 3.75rem); letter-spacing: -.03em; }
 
@@ -542,6 +584,14 @@
   text-decoration: none;
   cursor: pointer;
   user-select: none;
+  /* Tinted from the button's own --ui-btn-bg via color-mix, not a fixed
+     colour: a solid button (primary/success/danger/...) gets a shadow that
+     reads as "this button" rather than a generic grey drop-shadow, and it
+     re-tints automatically for a custom colour set through the variable.
+     --ui-btn-bg is transparent on an outline/ghost button and white-ish on
+     .ui-btn-default, so both self-select into an invisible shadow at rest
+     with zero extra rules. */
+  box-shadow: 0 4px 12px -3px color-mix(in srgb, var(--ui-btn-bg) 40%, transparent);
   transition: color var(--ui-transition-fast),
               background var(--ui-transition-fast),
               border-color var(--ui-transition-fast),
@@ -554,6 +604,7 @@
   border-color: var(--ui-btn-hover-border);
   color: var(--ui-btn-color);
   text-decoration: none;
+  box-shadow: 0 6px 18px -3px color-mix(in srgb, var(--ui-btn-hover-bg) 50%, transparent);
 }
 
 .ui-btn:focus-visible {
@@ -561,7 +612,10 @@
   box-shadow: var(--ui-focus-ring);
 }
 
-.ui-btn:active { transform: translateY(1px); }
+.ui-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px -2px color-mix(in srgb, var(--ui-btn-hover-bg) 40%, transparent);
+}
 
 .ui-btn:disabled,
 .ui-btn.ui-disabled {
@@ -929,11 +983,18 @@ input[type="checkbox"].ui-checkbox + label::before {
               transform var(--ui-transition-fast);
 }
 
+/* A real vector tick, not two overlapping linear-gradient "strokes" at
+   fixed percentage positions -- that trick was tuned to look right at one
+   size and fell apart at any other (--ui-checkbox-lg/-xl rendered a
+   distorted arrow, not a check, because the two gradients no longer met
+   correctly once the box grew). An SVG path scales correctly at any
+   --ui-check-size with zero per-size tuning. */
 input[type="checkbox"].ui-checkbox:checked + label::before {
-  background:
-    linear-gradient(135deg, transparent 42%, #fff 42% 53%, transparent 53%) 34% 58% / 35% 45% no-repeat,
-    linear-gradient(45deg, transparent 43%, #fff 43% 56%, transparent 56%) 67% 45% / 55% 70% no-repeat,
-    var(--ui-check-color);
+  background-color: var(--ui-check-color);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23fff' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 8.5l3 3 6-7'/%3E%3C/svg%3E");
+  background-size: 68% 68%;
+  background-position: center;
+  background-repeat: no-repeat;
   border-color: var(--ui-check-color);
 }
 
@@ -1121,7 +1182,8 @@ input[type="checkbox"].ui-switch-danger + label { --ui-switch-color: var(--ui-da
 
 .ui-card {
   --ui-card-radius: var(--ui-radius-4);
-  --ui-card-shadow: var(--ui-shadow-1);
+  --ui-card-shadow: var(--ui-shadow-2);
+  --ui-card-shadow-hover: var(--ui-shadow-3);
   --ui-card-accent: transparent;
   border: 1px solid var(--ui-border);
   border-radius: var(--ui-card-radius);
@@ -1135,6 +1197,18 @@ input[type="checkbox"].ui-switch-danger + label { --ui-switch-color: var(--ui-da
      hidden` instead. */
   box-shadow: inset 0 .25rem 0 0 var(--ui-card-accent), var(--ui-card-shadow);
   overflow: hidden;
+  transition: box-shadow var(--ui-transition), transform var(--ui-transition);
+}
+
+/* A card that visibly lifts reads as a surface, not a bordered box -- the
+   single biggest lever for a page not to look flat. Kept to a 1px nudge and
+   the existing shadow scale, not a new effect, so it stays quiet at a glance
+   and doesn't fight content-heavy cards (tables, forms) for attention. A
+   page that finds this too lively for a specific card can zero it out via
+   --ui-card-shadow-hover: var(--ui-card-shadow). */
+.ui-card:hover {
+  box-shadow: inset 0 .25rem 0 0 var(--ui-card-accent), var(--ui-card-shadow-hover);
+  transform: translateY(-1px);
 }
 
 .ui-card-header,
@@ -1165,14 +1239,25 @@ input[type="checkbox"].ui-switch-danger + label { --ui-switch-color: var(--ui-da
 .ui-card-hover { transition: transform var(--ui-transition), box-shadow var(--ui-transition); }
 .ui-card-hover:hover { transform: translateY(-3px); --ui-card-shadow: var(--ui-shadow-3); }
 
+/* Same border/radius/overflow-hidden shape as .ui-card, and the same gap:
+   no shadow at all, so a standalone list-group read flat next to an
+   elevated card or stat in the same row. --ui-list-group-flush (below)
+   exists specifically for the opposite case, nested inside a card body,
+   and zeroes the shadow back out there so it doesn't double up. */
 .ui-list-group {
+  --ui-card-shadow: var(--ui-shadow-2);
+  --ui-card-shadow-hover: var(--ui-shadow-3);
   margin: 0;
   padding: 0;
   border: 1px solid var(--ui-border);
   border-radius: var(--ui-radius-3);
+  box-shadow: var(--ui-card-shadow);
   overflow: hidden;
   list-style: none;
+  transition: box-shadow var(--ui-transition);
 }
+
+.ui-list-group:hover { box-shadow: var(--ui-card-shadow-hover); }
 
 .ui-list-group-item {
   padding: .75rem 1rem;
@@ -1187,16 +1272,38 @@ input[type="checkbox"].ui-switch-danger + label { --ui-switch-color: var(--ui-da
 .ui-list-group-item-action { cursor: pointer; transition: background var(--ui-transition-fast), color var(--ui-transition-fast); }
 .ui-list-group-item-action:hover { background: var(--ui-surface-soft); color: var(--ui-primary); }
 .ui-list-group-item.ui-active { background: var(--ui-primary); color: #fff; }
-.ui-list-group-flush { border-inline: 0; border-radius: 0; }
+/* Dropped straight into a card body: the card already owns the elevation,
+   so this strips it back out along with the side borders/radius, or a
+   flush list nested in a card would double the shadow up. */
+.ui-list-group-flush {
+  border-inline: 0;
+  border-radius: 0;
+  --ui-card-shadow: none;
+  --ui-card-shadow-hover: none;
+}
 
+/* Its own component, not a .ui-card variant (a stat is a flex row, a card
+   wraps arbitrary content) -- which meant it never inherited .ui-card's
+   elevation and stayed flat and bordered-only after that pass. Same
+   shadow/radius/hover treatment applied directly so the two read as one
+   family instead of a designed card sitting next to an undesigned one. */
 .ui-stat {
+  --ui-card-shadow: var(--ui-shadow-2);
+  --ui-card-shadow-hover: var(--ui-shadow-3);
   display: flex;
   align-items: center;
   gap: .8rem;
   padding: 1rem;
   border: 1px solid var(--ui-border);
-  border-radius: var(--ui-radius-3);
+  border-radius: var(--ui-radius-4);
   background: var(--ui-surface);
+  box-shadow: var(--ui-card-shadow);
+  transition: box-shadow var(--ui-transition), transform var(--ui-transition);
+}
+
+.ui-stat:hover {
+  box-shadow: var(--ui-card-shadow-hover);
+  transform: translateY(-1px);
 }
 
 .ui-stat-icon {
@@ -1854,9 +1961,13 @@ input[type="checkbox"].ui-switch-danger + label { --ui-switch-color: var(--ui-da
 .ui-dropdown-divider { height: 1px; margin: .35rem 0; background: var(--ui-border); }
 .ui-dropdown-header { padding: .45rem .65rem; color: var(--ui-muted); font-size: .72rem; font-weight: 700; text-transform: uppercase; }
 
+/* Same border/radius/overflow-hidden shape as .ui-card, same gap: no
+   shadow, so a standalone accordion read flat next to other elevated
+   page-level surfaces. */
 .ui-accordion {
   border: 1px solid var(--ui-border);
   border-radius: var(--ui-radius-3);
+  box-shadow: var(--ui-shadow-2);
   overflow: hidden;
 }
 
@@ -3510,12 +3621,18 @@ select[data-ui-combobox]:not(.ui-combobox-native) {
 }
 
 :root {
-  --ui-chart-1: #2563eb;
-  --ui-chart-2: #16a34a;
-  --ui-chart-3: #f59e0b;
-  --ui-chart-4: #dc2626;
-  --ui-chart-5: #0891b2;
-  --ui-chart-6: #7c3aed;
+  /* One step deeper/more saturated than before, matching the same shift
+     --ui-primary got in 00-tokens.css -- a pale qualitative palette is
+     where "flat" shows up fastest, since a chart has nothing but colour to
+     read. Kept as literal values, not var(--ui-primary) etc.: this file
+     is meant to be usable standalone (see README's "Individual CSS files"
+     delivery style), so it doesn't reach into 00-tokens.css for them. */
+  --ui-chart-1: #1d4ed8;
+  --ui-chart-2: #15803d;
+  --ui-chart-3: #d97706;
+  --ui-chart-4: #b91c1c;
+  --ui-chart-5: #0e7490;
+  --ui-chart-6: #6d28d9;
 }
 
 /* ----------------------------------------------------------------- Charts */
@@ -3739,9 +3856,9 @@ select[data-ui-combobox]:not(.ui-combobox-native) {
   display: inline-flex;
   gap: .375rem;
   align-items: center;
-  padding: .2rem .55rem;
+  padding: .2rem .6rem;
   font-size: .75rem;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.4;
   white-space: nowrap;
   border: 1px solid transparent;
@@ -3763,28 +3880,37 @@ select[data-ui-combobox]:not(.ui-combobox-native) {
   border-color: var(--ui-border);
 }
 
+/* Backgrounds mix toward --ui-surface, not the --ui-*-soft tokens: those
+   are shared with hover/focus/active states across a dozen other
+   components (table row hover, sidebar active link, focus rings...) that
+   are correctly meant to stay subtle. A status chip is a small, standalone
+   piece of information and reads as washed-out at that size with the same
+   pale tint a large hover surface wants. Mixing toward --ui-surface rather
+   than transparent also keeps the chip a consistent, solid-looking colour
+   regardless of what it's sitting on, and repaints correctly in dark mode
+   for free since --ui-surface already flips there. */
 .ui-status-submitted {
   color: var(--ui-info);
-  background: var(--ui-info-soft);
+  background: color-mix(in srgb, var(--ui-info) 16%, var(--ui-surface));
   border-color: color-mix(in srgb, var(--ui-info) 30%, transparent);
 }
 
 .ui-status-under-review {
   color: var(--ui-status-under-review-text);
-  background: var(--ui-warning-soft);
+  background: color-mix(in srgb, var(--ui-warning) 18%, var(--ui-surface));
   border-color: color-mix(in srgb, var(--ui-warning) 35%, transparent);
 }
 
 .ui-status-approved,
 .ui-status-active {
   color: var(--ui-status-active-text);
-  background: var(--ui-success-soft);
+  background: color-mix(in srgb, var(--ui-success) 16%, var(--ui-surface));
   border-color: color-mix(in srgb, var(--ui-success) 30%, transparent);
 }
 
 .ui-status-rejected {
   color: var(--ui-danger);
-  background: var(--ui-danger-soft);
+  background: color-mix(in srgb, var(--ui-danger) 16%, var(--ui-surface));
   border-color: color-mix(in srgb, var(--ui-danger) 30%, transparent);
 }
 
@@ -3809,7 +3935,7 @@ select[data-ui-combobox]:not(.ui-combobox-native) {
 
 .ui-status-suspended {
   color: var(--ui-status-suspended-text);
-  background: color-mix(in srgb, var(--ui-status-suspended-accent) 14%, transparent);
+  background: color-mix(in srgb, var(--ui-status-suspended-accent) 18%, var(--ui-surface));
   border-color: color-mix(in srgb, var(--ui-status-suspended-accent) 40%, transparent);
   border-style: dashed;
 }
@@ -3834,7 +3960,8 @@ select[data-ui-combobox]:not(.ui-combobox-native) {
 .ui-record-title {
   margin: 0;
   font-size: 1.375rem;
-  font-weight: 700;
+  font-weight: 800;
+  letter-spacing: -.01em;
   line-height: 1.25;
 }
 
@@ -5344,24 +5471,37 @@ body.ui-scope { font-size: var(--ui-font-size, 1rem); }
    the procedure document people were trained on. Matching that is not
    decoration; someone who learnt that planning is blue should not have
    to relearn it here. */
+/* --ui-stage-accent(-soft/-line), not a fixed selector per phase: a real
+   workflow has however many phases its own procedure document defines --
+   four was never a natural ceiling, just how many presets shipped. The
+   four below are one-line presets a project can use as-is; a 5th/6th
+   phase needs one inline style, not a framework release:
+     <span class="ui-stage" style="--ui-stage-accent:#0d9488;
+       --ui-stage-accent-soft:#f0fdfa; --ui-stage-accent-line:#99f6e4">
+       Reconciliation</span> */
 .ui-stage {
+  --ui-stage-accent: var(--ui-muted);
+  --ui-stage-accent-soft: var(--ui-surface-muted);
+  --ui-stage-accent-line: var(--ui-border);
   display: inline-flex;
   align-items: center;
   gap: .35rem;
   margin-bottom: .35rem;
   padding: .1rem .5rem;
-  border: 1px solid transparent;
+  border: 1px solid var(--ui-stage-accent-line);
   border-radius: var(--ui-radius-pill);
+  background: var(--ui-stage-accent-soft);
+  color: var(--ui-stage-accent);
   font-size: .74rem;
   font-weight: 700;
   letter-spacing: .05em;
   text-transform: uppercase;
 }
 
-.ui-stage-1 { background: var(--ui-stage-1-soft); color: var(--ui-stage-1); border-color: var(--ui-stage-1-line); }
-.ui-stage-2 { background: var(--ui-stage-2-soft); color: var(--ui-stage-2); border-color: var(--ui-stage-2-line); }
-.ui-stage-3 { background: var(--ui-stage-3-soft); color: var(--ui-stage-3); border-color: var(--ui-stage-3-line); }
-.ui-stage-4 { background: var(--ui-stage-4-soft); color: var(--ui-stage-4); border-color: var(--ui-stage-4-line); }
+.ui-stage-1 { --ui-stage-accent: var(--ui-stage-1); --ui-stage-accent-soft: var(--ui-stage-1-soft); --ui-stage-accent-line: var(--ui-stage-1-line); }
+.ui-stage-2 { --ui-stage-accent: var(--ui-stage-2); --ui-stage-accent-soft: var(--ui-stage-2-soft); --ui-stage-accent-line: var(--ui-stage-2-line); }
+.ui-stage-3 { --ui-stage-accent: var(--ui-stage-3); --ui-stage-accent-soft: var(--ui-stage-3-soft); --ui-stage-accent-line: var(--ui-stage-3-line); }
+.ui-stage-4 { --ui-stage-accent: var(--ui-stage-4); --ui-stage-accent-soft: var(--ui-stage-4-soft); --ui-stage-accent-line: var(--ui-stage-4-line); }
 
 /* -------------------------------------------------- branded sidebar */
 
@@ -5471,9 +5611,13 @@ body.ui-scope { font-size: var(--ui-font-size, 1rem); }
 
 /* ========================================================== repeater */
 
+/* Same border/radius/overflow-hidden shape as .ui-card, same gap: no
+   shadow, so a page built from repeater + card sections had one family
+   of surfaces elevated and one flat. */
 .ui-repeater {
   border: 1px solid var(--ui-border);
   border-radius: var(--ui-radius-3);
+  box-shadow: var(--ui-shadow-2);
   overflow: hidden;
   background: var(--ui-surface);
 }
@@ -5636,7 +5780,17 @@ body.ui-scope { font-size: var(--ui-font-size, 1rem); }
   overflow: hidden;
 }
 
+/* --ui-yn-accent/-fg, not a fixed selector per value: the JS (30-capture.js)
+   already accepts any data-ui-yn-value the caller writes, but the CSS used
+   to hardcode exactly YES/NO/NA/PARTIAL as full rules. A 5th domain-specific
+   value (an "ESCALATE" answer, say) worked functionally and then rendered
+   with no visible selected state at all -- a real bug, not just a missing
+   nicety. The four common answers below are still one-line presets; a
+   project's own 5th value needs one inline style, not new framework CSS:
+     <button data-ui-yn-value="ESCALATE" style="--ui-yn-accent: var(--ui-info)">Escalate</button> */
 .ui-yn button {
+  --ui-yn-accent: var(--ui-muted);
+  --ui-yn-fg: #fff;
   padding: .26rem .7rem;
   border: 0;
   background: var(--ui-surface);
@@ -5651,10 +5805,12 @@ body.ui-scope { font-size: var(--ui-font-size, 1rem); }
 .ui-yn button:hover { background: var(--ui-surface-soft); color: var(--ui-text); }
 .ui-yn button:focus-visible { outline: 0; box-shadow: inset 0 0 0 2px var(--ui-primary); }
 
-.ui-yn button.ui-on[data-ui-yn-value="YES"] { background: var(--ui-success); color: #fff; }
-.ui-yn button.ui-on[data-ui-yn-value="NO"] { background: var(--ui-danger); color: #fff; }
-.ui-yn button.ui-on[data-ui-yn-value="NA"] { background: var(--ui-muted); color: #fff; }
-.ui-yn button.ui-on[data-ui-yn-value="PARTIAL"] { background: var(--ui-warning); color: #1f2937; }
+.ui-yn button.ui-on { background: var(--ui-yn-accent); color: var(--ui-yn-fg); }
+
+.ui-yn button[data-ui-yn-value="YES"] { --ui-yn-accent: var(--ui-success); }
+.ui-yn button[data-ui-yn-value="NO"] { --ui-yn-accent: var(--ui-danger); }
+.ui-yn button[data-ui-yn-value="NA"] { --ui-yn-accent: var(--ui-muted); }
+.ui-yn button[data-ui-yn-value="PARTIAL"] { --ui-yn-accent: var(--ui-warning); --ui-yn-fg: #1f2937; }
 
 /* ===================================================== option cards */
 

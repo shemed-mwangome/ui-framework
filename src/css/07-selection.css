@@ -38,11 +38,18 @@ input[type="checkbox"].ui-checkbox + label::before {
               transform var(--ui-transition-fast);
 }
 
+/* A real vector tick, not two overlapping linear-gradient "strokes" at
+   fixed percentage positions -- that trick was tuned to look right at one
+   size and fell apart at any other (--ui-checkbox-lg/-xl rendered a
+   distorted arrow, not a check, because the two gradients no longer met
+   correctly once the box grew). An SVG path scales correctly at any
+   --ui-check-size with zero per-size tuning. */
 input[type="checkbox"].ui-checkbox:checked + label::before {
-  background:
-    linear-gradient(135deg, transparent 42%, #fff 42% 53%, transparent 53%) 34% 58% / 35% 45% no-repeat,
-    linear-gradient(45deg, transparent 43%, #fff 43% 56%, transparent 56%) 67% 45% / 55% 70% no-repeat,
-    var(--ui-check-color);
+  background-color: var(--ui-check-color);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23fff' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 8.5l3 3 6-7'/%3E%3C/svg%3E");
+  background-size: 68% 68%;
+  background-position: center;
+  background-repeat: no-repeat;
   border-color: var(--ui-check-color);
 }
 

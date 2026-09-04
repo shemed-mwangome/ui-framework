@@ -25,24 +25,37 @@ body.ui-scope { font-size: var(--ui-font-size, 1rem); }
    the procedure document people were trained on. Matching that is not
    decoration; someone who learnt that planning is blue should not have
    to relearn it here. */
+/* --ui-stage-accent(-soft/-line), not a fixed selector per phase: a real
+   workflow has however many phases its own procedure document defines --
+   four was never a natural ceiling, just how many presets shipped. The
+   four below are one-line presets a project can use as-is; a 5th/6th
+   phase needs one inline style, not a framework release:
+     <span class="ui-stage" style="--ui-stage-accent:#0d9488;
+       --ui-stage-accent-soft:#f0fdfa; --ui-stage-accent-line:#99f6e4">
+       Reconciliation</span> */
 .ui-stage {
+  --ui-stage-accent: var(--ui-muted);
+  --ui-stage-accent-soft: var(--ui-surface-muted);
+  --ui-stage-accent-line: var(--ui-border);
   display: inline-flex;
   align-items: center;
   gap: .35rem;
   margin-bottom: .35rem;
   padding: .1rem .5rem;
-  border: 1px solid transparent;
+  border: 1px solid var(--ui-stage-accent-line);
   border-radius: var(--ui-radius-pill);
+  background: var(--ui-stage-accent-soft);
+  color: var(--ui-stage-accent);
   font-size: .74rem;
   font-weight: 700;
   letter-spacing: .05em;
   text-transform: uppercase;
 }
 
-.ui-stage-1 { background: var(--ui-stage-1-soft); color: var(--ui-stage-1); border-color: var(--ui-stage-1-line); }
-.ui-stage-2 { background: var(--ui-stage-2-soft); color: var(--ui-stage-2); border-color: var(--ui-stage-2-line); }
-.ui-stage-3 { background: var(--ui-stage-3-soft); color: var(--ui-stage-3); border-color: var(--ui-stage-3-line); }
-.ui-stage-4 { background: var(--ui-stage-4-soft); color: var(--ui-stage-4); border-color: var(--ui-stage-4-line); }
+.ui-stage-1 { --ui-stage-accent: var(--ui-stage-1); --ui-stage-accent-soft: var(--ui-stage-1-soft); --ui-stage-accent-line: var(--ui-stage-1-line); }
+.ui-stage-2 { --ui-stage-accent: var(--ui-stage-2); --ui-stage-accent-soft: var(--ui-stage-2-soft); --ui-stage-accent-line: var(--ui-stage-2-line); }
+.ui-stage-3 { --ui-stage-accent: var(--ui-stage-3); --ui-stage-accent-soft: var(--ui-stage-3-soft); --ui-stage-accent-line: var(--ui-stage-3-line); }
+.ui-stage-4 { --ui-stage-accent: var(--ui-stage-4); --ui-stage-accent-soft: var(--ui-stage-4-soft); --ui-stage-accent-line: var(--ui-stage-4-line); }
 
 /* -------------------------------------------------- branded sidebar */
 

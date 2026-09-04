@@ -4,12 +4,18 @@
  */
 
 :root {
-  --ui-chart-1: #2563eb;
-  --ui-chart-2: #16a34a;
-  --ui-chart-3: #f59e0b;
-  --ui-chart-4: #dc2626;
-  --ui-chart-5: #0891b2;
-  --ui-chart-6: #7c3aed;
+  /* One step deeper/more saturated than before, matching the same shift
+     --ui-primary got in 00-tokens.css -- a pale qualitative palette is
+     where "flat" shows up fastest, since a chart has nothing but colour to
+     read. Kept as literal values, not var(--ui-primary) etc.: this file
+     is meant to be usable standalone (see README's "Individual CSS files"
+     delivery style), so it doesn't reach into 00-tokens.css for them. */
+  --ui-chart-1: #1d4ed8;
+  --ui-chart-2: #15803d;
+  --ui-chart-3: #d97706;
+  --ui-chart-4: #b91c1c;
+  --ui-chart-5: #0e7490;
+  --ui-chart-6: #6d28d9;
 }
 
 /* ----------------------------------------------------------------- Charts */

@@ -24,6 +24,14 @@
   text-decoration: none;
   cursor: pointer;
   user-select: none;
+  /* Tinted from the button's own --ui-btn-bg via color-mix, not a fixed
+     colour: a solid button (primary/success/danger/...) gets a shadow that
+     reads as "this button" rather than a generic grey drop-shadow, and it
+     re-tints automatically for a custom colour set through the variable.
+     --ui-btn-bg is transparent on an outline/ghost button and white-ish on
+     .ui-btn-default, so both self-select into an invisible shadow at rest
+     with zero extra rules. */
+  box-shadow: 0 4px 12px -3px color-mix(in srgb, var(--ui-btn-bg) 40%, transparent);
   transition: color var(--ui-transition-fast),
               background var(--ui-transition-fast),
               border-color var(--ui-transition-fast),
@@ -36,6 +44,7 @@
   border-color: var(--ui-btn-hover-border);
   color: var(--ui-btn-color);
   text-decoration: none;
+  box-shadow: 0 6px 18px -3px color-mix(in srgb, var(--ui-btn-hover-bg) 50%, transparent);
 }
 
 .ui-btn:focus-visible {
@@ -43,7 +52,10 @@
   box-shadow: var(--ui-focus-ring);
 }
 
-.ui-btn:active { transform: translateY(1px); }
+.ui-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px -2px color-mix(in srgb, var(--ui-btn-hover-bg) 40%, transparent);
+}
 
 .ui-btn:disabled,
 .ui-btn.ui-disabled {

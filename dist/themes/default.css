@@ -1,5 +1,5 @@
 /*!
- * UI Framework v1.17.2 theme
+ * UI Framework v1.18.0 theme
  * Load after ui-framework.css. A theme is only design tokens.
  */
 /* ==========================================================================
@@ -16,9 +16,9 @@
 
 :root {
   /* ------------------------------------------------------------ brand */
-  --ui-primary: #2563eb;
-  --ui-primary-hover: #1d4ed8;
-  --ui-primary-active: #1e40af;
+  --ui-primary: #1d4ed8;
+  --ui-primary-hover: #1e40af;
+  --ui-primary-active: #1e3a8a;
   --ui-primary-soft: #eff6ff;
   --ui-primary-100: #dbeafe;
   --ui-brand-gradient-to: #60a5fa;
@@ -41,7 +41,7 @@
   --ui-surface-muted: #f1f5f9;
 
   /* ------------------------------------------------------------ stage */
-  --ui-stage-1: #2563eb; --ui-stage-1-soft: #eff6ff; --ui-stage-1-line: #dbeafe;
+  --ui-stage-1: #1d4ed8; --ui-stage-1-soft: #eff6ff; --ui-stage-1-line: #dbeafe;
   --ui-stage-2: #16a34a; --ui-stage-2-soft: #f0fdf4; --ui-stage-2-line: #dcfce7;
   --ui-stage-3: #7c3aed; --ui-stage-3-soft: #f5f3ff; --ui-stage-3-line: #ede9fe;
   --ui-stage-4: #d97706; --ui-stage-4-soft: #fffbeb; --ui-stage-4-line: #fde68a;
@@ -59,12 +59,12 @@
   --ui-notice-line: #fde68a;
 
   /* ------------------------------------------------------------ charts */
-  --ui-chart-1: #2563eb;
-  --ui-chart-2: #16a34a;
-  --ui-chart-3: #f59e0b;
-  --ui-chart-4: #dc2626;
-  --ui-chart-5: #0891b2;
-  --ui-chart-6: #7c3aed;
+  --ui-chart-1: #1d4ed8;
+  --ui-chart-2: #15803d;
+  --ui-chart-3: #d97706;
+  --ui-chart-4: #b91c1c;
+  --ui-chart-5: #0e7490;
+  --ui-chart-6: #6d28d9;
 
   /* ------------------------------------------------------------- shape */
   --ui-radius-2: .375rem;
@@ -81,6 +81,7 @@
 [data-ui-theme="dark"] {
   --ui-primary: #60a5fa;
   --ui-primary-hover: #7cb6fb;
+  --ui-primary-active: #2563eb;
   --ui-primary-soft: #12203a;
   --ui-primary-100: #1b3157;
   --ui-nav-bg: #0b1220;

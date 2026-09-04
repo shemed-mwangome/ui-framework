@@ -1,5 +1,78 @@
 # Changelog
 
+## 1.18.0 (2026-09-04)
+### Fixed: the whole surface system read as flat, bordered boxes rather than raised cards
+
+`.ui-card` shipped with `box-shadow: var(--ui-shadow-1)`, a 6%-opacity 1-2px
+blur that is barely perceptible next to a 1px border. Everything visually
+built the same way inherited the same problem: `.ui-stat`, `.ui-list-group`,
+`.ui-accordion` and `.ui-repeater` are all a structurally separate border +
+radius + `overflow: hidden` rule, not a `.ui-card` variant, so none of them
+picked up a fix aimed only at `.ui-card`. All five now share
+`--ui-card-shadow`/`--ui-card-shadow-hover` (`--ui-shadow-2`/`-3`, both
+deepened to a real two-layer shadow), with `.ui-list-group-flush` zeroing
+the shadow back out for the case nested inside a card body, so it never
+doubles up.
+
+`--ui-primary` deepened from `#2563eb` to `#1d4ed8` for the same reason a
+pale shadow read as generic: the old value is one of the most common
+"default SaaS blue" hex values on the web. Dark mode got its own explicit
+override for the first time - previously unset, it inherited the light
+value, which is exactly backwards contrast for a dark surface. `--ui-focus-ring`
+now derives from `--ui-primary` via `color-mix()` instead of a hand-copied
+`rgba()` that had already drifted out of sync with it once. `--ui-chart-1..6`
+deepened to match, in both `24-chart-popover.css` and `themes/default.css`
+(the latter would otherwise have silently reverted every one of these
+changes for any project loading it, since it restates the brand tokens as
+its own literal values).
+
+`.ui-btn`'s solid variants (primary/success/danger/...) now cast a
+`color-mix()`-tinted shadow derived from their own `--ui-btn-bg`, so every
+color re-tints for free and an outline/ghost/default button - `--ui-btn-bg:
+transparent` or near-white - self-selects into no shadow with no extra
+rules. `.ui-status-*` chips moved off the shared `--ui-*-soft` tokens (reused
+by a dozen unrelated hover/focus/stripe states that are correctly meant to
+stay pale) onto their own `color-mix()` toward `--ui-surface`, for a chip
+that reads as a deliberate, solid badge rather than washed-out text on a
+tint.
+
+### Fixed: the checkbox tick was two `linear-gradient()` "strokes" tuned to one size
+
+`:checked` painted the tick as two overlapping gradients positioned at
+fixed percentages, hand-tuned to meet correctly only at the default
+`--ui-check-size`. Any other size - `.ui-checkbox-lg`, `-xl`, or a custom
+value - rendered the two strokes out of alignment, producing a distorted
+arrow rather than a check. Replaced with an inline SVG `background-image`
+(a real vector path, `stroke-linecap: round`), which scales correctly at
+any size with no per-size tuning at all.
+
+### Added: `.ui-yn` and `.ui-stage` accept a domain's own values, not just the shipped presets
+
+Both are, underneath, "N colour-coded values a project defines" - a
+compliance checklist's own answer vocabulary, a workflow's own phases - but
+were built as a fixed number of hardcoded selectors (`YES`/`NO`/`NA`/`PARTIAL`;
+`.ui-stage-1..4`). The JS side of `.ui-yn` was already fully generic (`30-capture.js`
+reads any `data-ui-yn-value`, no hardcoded list), which made this worse than
+simple inflexibility: a 5th domain-specific answer - an `ESCALATE`, say -
+already worked functionally and then rendered with **no visible selected
+state at all**, because no CSS rule matched it.
+
+Both now read their colour from a custom property (`--ui-yn-accent`/`-fg`,
+`--ui-stage-accent`/`-soft`/`-line`) that the shipped presets set rather than
+own outright. A project's 5th value needs one inline style -
+`style="--ui-yn-accent: var(--ui-info)"` - not a framework change or a
+wait for a release.
+
+### Fixed: the docs' code-language tab bar lost its selected label on hover
+
+`.docs-code-tabs` is a dark navy bar, and its own `.ui-tab:hover` override
+set `color` for the light-on-dark tab strip but never touched `background`.
+The base framework's `.ui-tab:hover` (`12-navigation.css`) sets `background:
+var(--ui-primary-soft)`, a pale tint meant for a white page - color alone
+doesn't have the specificity to stop it, so it applied anyway, and light
+text landed on a light patch and disappeared. The docs override now also
+sets `background: transparent` on hover.
+
 ## 1.17.2 (2026-08-31)
 ### Fixed: `.ui-touch` gave a control a thumb-sized box and phone-sized zoom
 

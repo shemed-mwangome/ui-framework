@@ -40,9 +40,13 @@
 .ui-dropdown-divider { height: 1px; margin: .35rem 0; background: var(--ui-border); }
 .ui-dropdown-header { padding: .45rem .65rem; color: var(--ui-muted); font-size: .72rem; font-weight: 700; text-transform: uppercase; }
 
+/* Same border/radius/overflow-hidden shape as .ui-card, same gap: no
+   shadow, so a standalone accordion read flat next to other elevated
+   page-level surfaces. */
 .ui-accordion {
   border: 1px solid var(--ui-border);
   border-radius: var(--ui-radius-3);
+  box-shadow: var(--ui-shadow-2);
   overflow: hidden;
 }
 

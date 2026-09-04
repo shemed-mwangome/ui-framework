@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Components · UI Framework</title>
-  <link rel="stylesheet" href="../dist/ui-framework.css?v=1.17.2">
-  <link rel="stylesheet" href="assets/docs.css?v=1.17.2">
+  <link rel="stylesheet" href="../dist/ui-framework.css?v=1.18.0">
+  <link rel="stylesheet" href="assets/docs.css?v=1.18.0">
 </head>
 <body class="ui-scope docs-body">
   <header class="docs-topbar">
@@ -18,7 +18,7 @@
         <span class="docs-search-trigger-text">Search docs</span>
         <span class="docs-kbd-group"><kbd class="docs-kbd">Ctrl</kbd><kbd class="docs-kbd">K</kbd></span>
       </button>
-      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.17.2</span>
+      <span class="ui-badge ui-badge-soft-primary ui-badge-pill">v1.18.0</span>
       <button class="ui-btn ui-btn-sm ui-btn-outline-secondary" type="button" data-ui-theme-toggle>Theme</button>
     </div>
   </header>
@@ -2543,7 +2543,7 @@ document.getElementById(&quot;bulk&quot;).addEventListener(&quot;click&quot;, fu
 &lt;/div&gt;</code></pre>
 </div>
 
-<p class="docs-section-intro ui-mt-3">The value posts through the hidden input, so the control works in an ordinary form with nothing on the receiving end. <code class="ui-code">YES</code>, <code class="ui-code">NO</code>, <code class="ui-code">NA</code> and <code class="ui-code">PARTIAL</code> are styled; any other value still works but renders in the neutral state. <strong>Clicking the selected answer clears it</strong>: someone who mis-taps on a phone must be able to get back to "not answered" rather than being stuck with a wrong answer. Read with <code class="ui-code">UI.yn.value(target)</code>; listen for <code class="ui-code">ui:yn:change</code>.</p>
+<p class="docs-section-intro ui-mt-3">The value posts through the hidden input, so the control works in an ordinary form with nothing on the receiving end. <code class="ui-code">YES</code>, <code class="ui-code">NO</code>, <code class="ui-code">NA</code> and <code class="ui-code">PARTIAL</code> are one-line presets, not the only allowed answers: any button with a <code class="ui-code">data-ui-yn-value</code> works, and a domain-specific one (an <code class="ui-code">ESCALATE</code> answer, say) just needs its own accent set once&mdash;<code class="ui-code">style="--ui-yn-accent: var(--ui-info)"</code>&mdash;not a framework change. Left unset, a custom value still shows a visible selected state in neutral grey; it is never invisible. <strong>Clicking the selected answer clears it</strong>: someone who mis-taps on a phone must be able to get back to "not answered" rather than being stuck with a wrong answer. Read with <code class="ui-code">UI.yn.value(target)</code>; listen for <code class="ui-code">ui:yn:change</code>.</p>
 </section>
 
 
@@ -2630,7 +2630,7 @@ document.getElementById(&quot;bulk&quot;).addEventListener(&quot;click&quot;, fu
   <table class="ui-table ui-table-sm">
     <thead><tr><th>Class</th><th>Use</th><th>Tokens</th></tr></thead>
     <tbody>
-      <tr><td><code class="ui-code">ui-stage</code> + <code class="ui-code">ui-stage-1..4</code></td><td>Phase tag above a page title. Match the colours to whatever procedure document people were trained on: someone who learnt that planning is blue should not have to relearn it here.</td><td><code class="ui-code">--ui-stage-1</code> and <code class="ui-code">-soft</code>/<code class="ui-code">-line</code></td></tr>
+      <tr><td><code class="ui-code">ui-stage</code> + <code class="ui-code">ui-stage-1..4</code></td><td>Phase tag above a page title. Match the colours to whatever procedure document people were trained on: someone who learnt that planning is blue should not have to relearn it here. <code class="ui-code">-1..4</code> are one-line presets, not a 4-phase ceiling &mdash; a 5th phase sets its own accent inline: <code class="ui-code">style="--ui-stage-accent:#0d9488; --ui-stage-accent-soft:#f0fdfa; --ui-stage-accent-line:#99f6e4"</code>.</td><td><code class="ui-code">--ui-stage-accent</code>(<code class="ui-code">-soft</code>/<code class="ui-code">-line</code>), or the <code class="ui-code">--ui-stage-1..4</code> presets that set them</td></tr>
       <tr><td><code class="ui-code">ui-sidebar-brand</code></td><td>Branded navigation rail. Dark navigation against a light working area makes the boundary between <em>where I am</em> and <em>what I am doing</em> unmistakable on a wide monitor.</td><td><code class="ui-code">--ui-nav-bg</code>, <code class="ui-code">-fg</code>, <code class="ui-code">-active-bg</code></td></tr>
       <tr><td><code class="ui-code">ui-brandmark</code></td><td>Square logo tile, gradient from the primary.</td><td><code class="ui-code">--ui-primary</code>, <code class="ui-code">--ui-brand-gradient-to</code></td></tr>
       <tr><td><code class="ui-code">ui-notice</code></td><td>Full-width standing banner: an environment warning, a maintenance window. Flush against the top bar so it reads as chrome rather than as content to action; an alert card in the content column gets dismissed on sight. <code class="ui-code">ui-notice-danger</code> for a stronger one.</td><td><code class="ui-code">--ui-notice-bg</code>, <code class="ui-code">-fg</code>, <code class="ui-code">-line</code></td></tr>
@@ -3895,7 +3895,7 @@ export class UiToast {
 </section>
 <!-- /docs:content -->
       <nav class="docs-pager"><a class="docs-pager-link" href="layout.html"><span class="docs-pager-dir">Previous</span><span>Layout &amp; grid</span></a><a class="docs-pager-link docs-pager-next" href="theming.html"><span class="docs-pager-dir">Next</span><span>Theming</span></a></nav>
-      <footer class="docs-footer">UI Framework 1.17.2 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
+      <footer class="docs-footer">UI Framework 1.18.0 · Dependency-free · Designed for safe use alongside Bootstrap and legacy CSS themes.</footer>
     </main>
     <aside class="docs-toc">
       <div class="docs-toc-inner">
@@ -3946,8 +3946,8 @@ export class UiToast {
       </div>
     </aside>
   </div>
-  <script src="../dist/ui-framework.js?v=1.17.2"></script>
-  <script src="assets/search-index.js?v=1.17.2"></script>
-  <script src="assets/docs.js?v=1.17.2"></script>
+  <script src="../dist/ui-framework.js?v=1.18.0"></script>
+  <script src="assets/search-index.js?v=1.18.0"></script>
+  <script src="assets/docs.js?v=1.18.0"></script>
 </body>
 </html>

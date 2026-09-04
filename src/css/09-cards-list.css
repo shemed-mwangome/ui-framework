@@ -1,6 +1,7 @@
 .ui-card {
   --ui-card-radius: var(--ui-radius-4);
-  --ui-card-shadow: var(--ui-shadow-1);
+  --ui-card-shadow: var(--ui-shadow-2);
+  --ui-card-shadow-hover: var(--ui-shadow-3);
   --ui-card-accent: transparent;
   border: 1px solid var(--ui-border);
   border-radius: var(--ui-card-radius);
@@ -14,6 +15,18 @@
      hidden` instead. */
   box-shadow: inset 0 .25rem 0 0 var(--ui-card-accent), var(--ui-card-shadow);
   overflow: hidden;
+  transition: box-shadow var(--ui-transition), transform var(--ui-transition);
+}
+
+/* A card that visibly lifts reads as a surface, not a bordered box -- the
+   single biggest lever for a page not to look flat. Kept to a 1px nudge and
+   the existing shadow scale, not a new effect, so it stays quiet at a glance
+   and doesn't fight content-heavy cards (tables, forms) for attention. A
+   page that finds this too lively for a specific card can zero it out via
+   --ui-card-shadow-hover: var(--ui-card-shadow). */
+.ui-card:hover {
+  box-shadow: inset 0 .25rem 0 0 var(--ui-card-accent), var(--ui-card-shadow-hover);
+  transform: translateY(-1px);
 }
 
 .ui-card-header,
@@ -44,14 +57,25 @@
 .ui-card-hover { transition: transform var(--ui-transition), box-shadow var(--ui-transition); }
 .ui-card-hover:hover { transform: translateY(-3px); --ui-card-shadow: var(--ui-shadow-3); }
 
+/* Same border/radius/overflow-hidden shape as .ui-card, and the same gap:
+   no shadow at all, so a standalone list-group read flat next to an
+   elevated card or stat in the same row. --ui-list-group-flush (below)
+   exists specifically for the opposite case, nested inside a card body,
+   and zeroes the shadow back out there so it doesn't double up. */
 .ui-list-group {
+  --ui-card-shadow: var(--ui-shadow-2);
+  --ui-card-shadow-hover: var(--ui-shadow-3);
   margin: 0;
   padding: 0;
   border: 1px solid var(--ui-border);
   border-radius: var(--ui-radius-3);
+  box-shadow: var(--ui-card-shadow);
   overflow: hidden;
   list-style: none;
+  transition: box-shadow var(--ui-transition);
 }
+
+.ui-list-group:hover { box-shadow: var(--ui-card-shadow-hover); }
 
 .ui-list-group-item {
   padding: .75rem 1rem;
@@ -66,16 +90,38 @@
 .ui-list-group-item-action { cursor: pointer; transition: background var(--ui-transition-fast), color var(--ui-transition-fast); }
 .ui-list-group-item-action:hover { background: var(--ui-surface-soft); color: var(--ui-primary); }
 .ui-list-group-item.ui-active { background: var(--ui-primary); color: #fff; }
-.ui-list-group-flush { border-inline: 0; border-radius: 0; }
+/* Dropped straight into a card body: the card already owns the elevation,
+   so this strips it back out along with the side borders/radius, or a
+   flush list nested in a card would double the shadow up. */
+.ui-list-group-flush {
+  border-inline: 0;
+  border-radius: 0;
+  --ui-card-shadow: none;
+  --ui-card-shadow-hover: none;
+}
 
+/* Its own component, not a .ui-card variant (a stat is a flex row, a card
+   wraps arbitrary content) -- which meant it never inherited .ui-card's
+   elevation and stayed flat and bordered-only after that pass. Same
+   shadow/radius/hover treatment applied directly so the two read as one
+   family instead of a designed card sitting next to an undesigned one. */
 .ui-stat {
+  --ui-card-shadow: var(--ui-shadow-2);
+  --ui-card-shadow-hover: var(--ui-shadow-3);
   display: flex;
   align-items: center;
   gap: .8rem;
   padding: 1rem;
   border: 1px solid var(--ui-border);
-  border-radius: var(--ui-radius-3);
+  border-radius: var(--ui-radius-4);
   background: var(--ui-surface);
+  box-shadow: var(--ui-card-shadow);
+  transition: box-shadow var(--ui-transition), transform var(--ui-transition);
+}
+
+.ui-stat:hover {
+  box-shadow: var(--ui-card-shadow-hover);
+  transform: translateY(-1px);
 }
 
 .ui-stat-icon {

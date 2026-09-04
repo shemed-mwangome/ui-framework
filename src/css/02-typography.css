@@ -11,7 +11,7 @@
 .ui-h3 { font-size: clamp(1.35rem, 2.5vw, 1.75rem); }
 .ui-h4 { font-size: 1.25rem; }
 .ui-h5 { font-size: 1.05rem; }
-.ui-h6 { font-size: .9rem; text-transform: uppercase; letter-spacing: .04em; }
+.ui-h6 { font-size: .9rem; text-transform: uppercase; letter-spacing: .06em; }
 .ui-display-1 { font-size: clamp(2.75rem, 7vw, 5rem); letter-spacing: -.04em; }
 .ui-display-2 { font-size: clamp(2.25rem, 5vw, 3.75rem); letter-spacing: -.03em; }
 

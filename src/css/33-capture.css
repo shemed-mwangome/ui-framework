@@ -17,9 +17,13 @@
 
 /* ========================================================== repeater */
 
+/* Same border/radius/overflow-hidden shape as .ui-card, same gap: no
+   shadow, so a page built from repeater + card sections had one family
+   of surfaces elevated and one flat. */
 .ui-repeater {
   border: 1px solid var(--ui-border);
   border-radius: var(--ui-radius-3);
+  box-shadow: var(--ui-shadow-2);
   overflow: hidden;
   background: var(--ui-surface);
 }
@@ -182,7 +186,17 @@
   overflow: hidden;
 }
 
+/* --ui-yn-accent/-fg, not a fixed selector per value: the JS (30-capture.js)
+   already accepts any data-ui-yn-value the caller writes, but the CSS used
+   to hardcode exactly YES/NO/NA/PARTIAL as full rules. A 5th domain-specific
+   value (an "ESCALATE" answer, say) worked functionally and then rendered
+   with no visible selected state at all -- a real bug, not just a missing
+   nicety. The four common answers below are still one-line presets; a
+   project's own 5th value needs one inline style, not new framework CSS:
+     <button data-ui-yn-value="ESCALATE" style="--ui-yn-accent: var(--ui-info)">Escalate</button> */
 .ui-yn button {
+  --ui-yn-accent: var(--ui-muted);
+  --ui-yn-fg: #fff;
   padding: .26rem .7rem;
   border: 0;
   background: var(--ui-surface);
@@ -197,10 +211,12 @@
 .ui-yn button:hover { background: var(--ui-surface-soft); color: var(--ui-text); }
 .ui-yn button:focus-visible { outline: 0; box-shadow: inset 0 0 0 2px var(--ui-primary); }
 
-.ui-yn button.ui-on[data-ui-yn-value="YES"] { background: var(--ui-success); color: #fff; }
-.ui-yn button.ui-on[data-ui-yn-value="NO"] { background: var(--ui-danger); color: #fff; }
-.ui-yn button.ui-on[data-ui-yn-value="NA"] { background: var(--ui-muted); color: #fff; }
-.ui-yn button.ui-on[data-ui-yn-value="PARTIAL"] { background: var(--ui-warning); color: #1f2937; }
+.ui-yn button.ui-on { background: var(--ui-yn-accent); color: var(--ui-yn-fg); }
+
+.ui-yn button[data-ui-yn-value="YES"] { --ui-yn-accent: var(--ui-success); }
+.ui-yn button[data-ui-yn-value="NO"] { --ui-yn-accent: var(--ui-danger); }
+.ui-yn button[data-ui-yn-value="NA"] { --ui-yn-accent: var(--ui-muted); }
+.ui-yn button[data-ui-yn-value="PARTIAL"] { --ui-yn-accent: var(--ui-warning); --ui-yn-fg: #1f2937; }
 
 /* ===================================================== option cards */
 

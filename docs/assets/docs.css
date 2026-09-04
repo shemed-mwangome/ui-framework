@@ -413,7 +413,13 @@ body.docs-body {
   padding: .5rem .8rem;
 }
 
-.docs-code-tabs .ui-tab:hover { color: #e2e8f0; }
+/* Also neutralises background, not just color: the base framework's
+   .ui-tab:hover (12-navigation.css) sets background: var(--ui-primary-soft),
+   a pale tint meant for a white-page tab strip. This bar is dark navy, and
+   without an override here that pale background wins on hover (color alone
+   doesn't have the specificity to touch it) - light text lands on a light
+   patch and disappears. */
+.docs-code-tabs .ui-tab:hover { color: #e2e8f0; background: transparent; }
 
 .docs-code-tabs .ui-tab.ui-active {
   border-bottom-color: var(--ui-primary);

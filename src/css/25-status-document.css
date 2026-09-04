@@ -16,9 +16,9 @@
   display: inline-flex;
   gap: .375rem;
   align-items: center;
-  padding: .2rem .55rem;
+  padding: .2rem .6rem;
   font-size: .75rem;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.4;
   white-space: nowrap;
   border: 1px solid transparent;
@@ -40,28 +40,37 @@
   border-color: var(--ui-border);
 }
 
+/* Backgrounds mix toward --ui-surface, not the --ui-*-soft tokens: those
+   are shared with hover/focus/active states across a dozen other
+   components (table row hover, sidebar active link, focus rings...) that
+   are correctly meant to stay subtle. A status chip is a small, standalone
+   piece of information and reads as washed-out at that size with the same
+   pale tint a large hover surface wants. Mixing toward --ui-surface rather
+   than transparent also keeps the chip a consistent, solid-looking colour
+   regardless of what it's sitting on, and repaints correctly in dark mode
+   for free since --ui-surface already flips there. */
 .ui-status-submitted {
   color: var(--ui-info);
-  background: var(--ui-info-soft);
+  background: color-mix(in srgb, var(--ui-info) 16%, var(--ui-surface));
   border-color: color-mix(in srgb, var(--ui-info) 30%, transparent);
 }
 
 .ui-status-under-review {
   color: var(--ui-status-under-review-text);
-  background: var(--ui-warning-soft);
+  background: color-mix(in srgb, var(--ui-warning) 18%, var(--ui-surface));
   border-color: color-mix(in srgb, var(--ui-warning) 35%, transparent);
 }
 
 .ui-status-approved,
 .ui-status-active {
   color: var(--ui-status-active-text);
-  background: var(--ui-success-soft);
+  background: color-mix(in srgb, var(--ui-success) 16%, var(--ui-surface));
   border-color: color-mix(in srgb, var(--ui-success) 30%, transparent);
 }
 
 .ui-status-rejected {
   color: var(--ui-danger);
-  background: var(--ui-danger-soft);
+  background: color-mix(in srgb, var(--ui-danger) 16%, var(--ui-surface));
   border-color: color-mix(in srgb, var(--ui-danger) 30%, transparent);
 }
 
@@ -86,7 +95,7 @@
 
 .ui-status-suspended {
   color: var(--ui-status-suspended-text);
-  background: color-mix(in srgb, var(--ui-status-suspended-accent) 14%, transparent);
+  background: color-mix(in srgb, var(--ui-status-suspended-accent) 18%, var(--ui-surface));
   border-color: color-mix(in srgb, var(--ui-status-suspended-accent) 40%, transparent);
   border-style: dashed;
 }
@@ -111,7 +120,8 @@
 .ui-record-title {
   margin: 0;
   font-size: 1.375rem;
-  font-weight: 700;
+  font-weight: 800;
+  letter-spacing: -.01em;
   line-height: 1.25;
 }
 
